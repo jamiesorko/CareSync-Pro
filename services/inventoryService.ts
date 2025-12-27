@@ -26,17 +26,23 @@ export class InventoryService {
       ];
     }
     const { data } = await supabase.from('inventory').select('*').eq('company_id', this.companyId);
-    return data || [];
+    return (data || []).map(d => ({
+      id: d.id,
+      companyId: d.company_id,
+      name: d.name,
+      category: d.category,
+      stockLevel: d.stock_level,
+      unit: d.unit,
+      minThreshold: d.min_threshold
+    }));
   }
 
   async triggerLowStockAlert(item: InventoryItem) {
     console.log(`[SUPPLY_CHAIN_ALARM]: Low stock detected for ${item.name}. Level: ${item.stockLevel} ${item.unit}`);
-    // This would typically trigger an automated purchase order signal
   }
 
   async fulfillRequisition(staffId: string, itemId: string, quantity: number) {
     console.log(`[INVENTORY_CORE]: Fulfilling request for ${quantity} units of ${itemId} to Staff ${staffId}`);
-    // Logic to decrement stock levels in DB
   }
 }
 

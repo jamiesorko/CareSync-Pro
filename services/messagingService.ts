@@ -11,12 +11,19 @@ export class MessagingService {
 
   async getThreads(): Promise<ChatThread[]> {
     if (!supabase || !this.companyId) {
-      // Fix: Added missing companyId to mock ChatThread initialization
-      return [{ id: 'staff-global', companyId: this.companyId || 'demo', name: 'Global Roster Channel', type: 'GROUP', lastMessage: 'Biometric link active.', unreadCount: 0 }];
+      return [{ 
+        id: 'staff-global', 
+        companyId: this.companyId || 'demo', 
+        name: 'Global Roster Channel', 
+        type: 'GROUP', 
+        lastMessage: 'Biometric link active.', 
+        unreadCount: 0 
+      }];
     }
     const { data } = await supabase.from('chat_threads').select('*').eq('company_id', this.companyId);
     return (data || []).map((t: any) => ({
       id: t.id,
+      companyId: t.company_id,
       name: t.name,
       type: t.type,
       unreadCount: 0,
