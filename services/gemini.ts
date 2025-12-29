@@ -1,5 +1,5 @@
 
-import { GoogleGenAI, Modality, GenerateContentResponse, Type } from "@google/genai";
+import { GoogleGenAI, Modality, GenerateContentResponse } from "@google/genai";
 
 const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
 
@@ -55,23 +55,5 @@ export const gemini = {
     }
     const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
     return `${downloadLink}&key=${process.env.API_KEY}`;
-  },
-
-  // Structured JSON Output (e.g. for Scheduling or Triage)
-  async generateJson(prompt: string, schema: any): Promise<any> {
-    const ai = getAI();
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: schema
-      }
-    });
-    try {
-      return JSON.parse(response.text || "{}");
-    } catch {
-      return {};
-    }
   }
 };

@@ -20,11 +20,11 @@ const App: React.FC = () => {
   const renderContent = () => {
     switch (activeTab) {
       case AppTab.DASHBOARD:
-        return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} />;
+        return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} language="English" />;
       case AppTab.SCHEDULE:
-        return <ScheduleView role={user.role} clients={MOCK_CLIENTS} />;
+        return <ScheduleView role={user.role} clients={MOCK_CLIENTS} language="English" />;
       case AppTab.CLINICAL_COMMAND:
-        return <RNCommandCenter />;
+        return <RNCommandCenter language="English" />;
       case AppTab.COORDINATION:
         return <CoordinationHub language="English" blasts={{}} setBlasts={() => {}} />;
       default:
