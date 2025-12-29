@@ -25,15 +25,15 @@ export class AdvocacyService {
     console.log(`[ADVOCACY_CORE]: Scanning signal for autonomy vectors...`);
     
     const prompt = `Analyze this caregiver note for patient advocacy issues (lack of choice, disrespect, privacy concerns): "${notes}". 
-    Return JSON: { "issueDetected": boolean, "description": string, "priority": "ROUTINE|URGENT" }`;
+    Return JSON: { "issueDetected": boolean, "description": "string", "priority": "ROUTINE|URGENT" }`;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       
       if (data.issueDetected) {
         await notificationService.broadcastSignal({
-          // Fix: Changed 'INTEGRITY_AUDIT' to 'OPERATIONAL' to align with AlertSignal type definition
           type: 'OPERATIONAL',
           content: `ADVOCACY_ALARM: Potential rights violation for Client ${clientId}. ${data.description}`
         }, [CareRole.DOC, CareRole.CEO]);

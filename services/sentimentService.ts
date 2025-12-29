@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 
 export interface SentimentPulse {
@@ -26,6 +27,7 @@ export class SentimentService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       const data = JSON.parse(response.text || '{}');
       return {

@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 import { Client, RecoveryMilestone } from '../types'
 
@@ -24,6 +25,7 @@ export class RecoveryGoalOracleService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       return JSON.parse(res.text || '[]');
     } catch (e) {

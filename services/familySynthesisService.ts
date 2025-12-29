@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 
 export class FamilySynthesisService {
@@ -23,6 +24,7 @@ export class FamilySynthesisService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       return res.text || "Everything is going well with the care plan today.";
     } catch (e) {

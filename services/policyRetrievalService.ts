@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 
 export interface PolicySnippet {
@@ -23,6 +24,7 @@ export class PolicyRetrievalService {
     Provide a professional, concise clinical directive for field staff.`;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       return res.text || "Policy guidance unavailable. Contact Director of Care.";
     } catch (e) {

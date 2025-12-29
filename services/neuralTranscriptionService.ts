@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 import { Type } from "@google/genai"
 
@@ -34,6 +35,7 @@ export class NeuralTranscriptionService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {

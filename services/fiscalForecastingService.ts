@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 import { MOCK_HISTORICAL_PL } from '../data/accountingData';
 
@@ -23,9 +24,10 @@ export class FiscalForecastingService {
     
     const prompt = `Analyze these agency financials: ${JSON.stringify(MOCK_HISTORICAL_PL)}. 
     Predict next month's revenue and burn rate. Provide 1 strategic fiscal recommendation.
-    Return JSON: { "revenue": number, "burn": number, "confidence": number, "insight": string }`;
+    Return JSON: { "revenue": number, "burn": number, "confidence": number, "insight": "string" }`;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {

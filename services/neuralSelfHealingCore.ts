@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 
 export interface HealingProtocol {
@@ -26,6 +27,7 @@ export class NeuralSelfHealingCore {
     `;
 
     try {
+      // Fix: Using correct method generateAdvancedReasoning on geminiService
       const res = await geminiService.generateAdvancedReasoning(prompt);
       return JSON.parse(res.text || '[]');
     } catch (e) {

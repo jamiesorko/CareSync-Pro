@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Translate from '../components/Translate';
 import { CareRole, Complaint } from '../types';
@@ -35,6 +36,7 @@ const COOCommand: React.FC<Props> = ({ language }) => {
     setLoading(true);
     const prompt = `Context: COO Healthcare Policy. Action: Draft Staff Wellness policy based on high field density. Concise bullets.`;
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       setPolicyDraft(res.text || "Policy synthesis complete.");
     } catch (e) {

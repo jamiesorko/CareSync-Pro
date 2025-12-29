@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 
 export interface BiomarkerResult {
@@ -24,10 +25,11 @@ export class VocalBiomarkerService {
       Context: Medical Vocal Biomarker Analysis.
       Input Transcript: "${transcript}"
       Task: Analyze for markers of dysarthria (slurred speech), respiratory breathiness, or cognitive fatigue.
-      Return JSON: { "strain": number, "clarity": number, "markers": string[], "advisory": "string" }
+      Return JSON: { "strain": number, "clarity": number, "markers": ["string"], "advisory": "string" }
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {

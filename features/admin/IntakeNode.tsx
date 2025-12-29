@@ -28,13 +28,11 @@ const IntakeNode: React.FC<Props> = ({ language, onClientAdded }) => {
       try {
         const extracted = await intakeParsingService.parseReferralImage(base64);
         setParsedClient(extracted);
-        
-        // Parallel Triage Analysis
         const referralText = `${extracted.name} with conditions ${extracted.conditions?.join(', ')}. Intake from Vision Scan.`;
         const score = await predictiveTriageService.calculateAcuityGravity(referralText);
         setTriage(score);
       } catch (err) {
-        alert("Extraction Failed. Re-orient camera or use manual intake.");
+        alert("Extraction Failed. Manual intake required.");
       } finally {
         setParsing(false);
       }
@@ -44,14 +42,13 @@ const IntakeNode: React.FC<Props> = ({ language, onClientAdded }) => {
 
   const handleConfirm = () => {
     if (!parsedClient) return;
-    // Fix: Added missing anonymizedId and sector properties to satisfy Client interface
     const client: Client = {
       id: Math.random().toString(36).substring(7),
       companyId: 'csp-demo',
       anonymizedId: `C${Math.floor(100 + Math.random() * 900)}`,
       name: parsedClient.name || 'Unknown Patient',
       address: parsedClient.address || 'TBD',
-      sector: 'General',
+      sector: 'Regional_Node',
       phone: 'TBD',
       time: '08:00 AM',
       date: 'Daily',
@@ -79,25 +76,25 @@ const IntakeNode: React.FC<Props> = ({ language, onClientAdded }) => {
     setParsedClient(null);
     setTriage(null);
     setImage(null);
-    alert("CENSUS_SYNC: Patient authorized with Gravity Score " + (triage?.gravityScore || '--'));
+    alert("CENSUS_SYNC: Patient authorized and locked into Ledger.");
   };
 
   return (
-    <div className="bg-slate-900 border border-white/10 rounded-[4rem] p-12 shadow-2xl relative overflow-hidden flex flex-col min-h-[650px] animate-in slide-in-from-bottom-6">
+    <div className="bg-slate-900 border border-white/10 rounded-[4rem] p-12 shadow-2xl relative overflow-hidden flex flex-col min-h-[600px]">
       <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
         <span className="text-9xl font-black italic uppercase">Intake</span>
       </div>
 
       <div className="flex justify-between items-start mb-16 relative z-10">
         <div>
-           <h3 className="text-3xl font-black text-white italic tracking-tighter uppercase leading-none">Neural_Intake_Intercept</h3>
-           <p className="text-[9px] font-bold text-sky-400 uppercase tracking-widest mt-4">Autonomous Referral Ingestion & Extraction Core</p>
+           <h3 className="text-3xl font-black text-white italic tracking-tighter uppercase leading-none">Neural_Intake_Station</h3>
+           <p className="text-[10px] font-bold text-sky-400 uppercase tracking-widest mt-4">Autonomous Referral Ingestion Core</p>
         </div>
         <button 
           onClick={() => fileInputRef.current?.click()}
           className="px-10 py-4 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:scale-[1.02] active:scale-95 transition-all"
         >
-          DROPSHIP_REFERRAL_IMAGE
+          Drop_Referral_Vector
         </button>
         <input ref={fileInputRef} type="file" hidden onChange={handleUpload} accept="image/*" />
       </div>
@@ -107,10 +104,10 @@ const IntakeNode: React.FC<Props> = ({ language, onClientAdded }) => {
             {image ? (
               <img src={image} className="w-full h-full object-cover" />
             ) : (
-              <>
-                 <span className="text-6xl mb-6 group-hover:scale-110 transition-transform">📄</span>
+              <div className="text-center">
+                 <span className="text-7xl mb-6 block group-hover:scale-110 transition-transform">📄</span>
                  <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Awaiting Hospital Vector</p>
-              </>
+              </div>
             )}
          </div>
 
@@ -118,38 +115,26 @@ const IntakeNode: React.FC<Props> = ({ language, onClientAdded }) => {
             {parsing ? (
               <div className="flex-1 flex flex-col items-center justify-center space-y-8">
                  <div className="w-16 h-16 border-4 border-sky-500/10 border-t-sky-500 rounded-full animate-spin"></div>
-                 <p className="text-[10px] font-black text-sky-500 uppercase tracking-[0.6em] animate-pulse">Extracting_Clinical_Entities</p>
+                 <p className="text-[10px] font-black text-sky-500 uppercase tracking-[0.6em] animate-pulse">Extracting_Entities</p>
               </div>
             ) : parsedClient ? (
-              <div className="flex-1 space-y-10 animate-in fade-in duration-700">
-                 
-                 <div className="grid grid-cols-2 gap-4">
-                    <div className="p-8 bg-white/[0.03] border border-white/5 rounded-3xl">
-                       <p className="text-[7px] font-black text-sky-500 uppercase">Patient_Name</p>
-                       <p className="text-2xl font-black text-white uppercase italic tracking-tighter">{parsedClient.name}</p>
-                    </div>
-                    <div className="p-8 bg-rose-600/10 border border-rose-500/20 rounded-3xl">
-                       <p className="text-[7px] font-black text-rose-400 uppercase">Acuity_Triage</p>
-                       <p className="text-3xl font-black text-white italic tracking-tighter">{triage?.priority || '--'}</p>
-                    </div>
-                 </div>
-
+              <div className="flex-1 space-y-10 animate-in fade-in">
                  <div className="p-8 bg-white/[0.03] border border-white/5 rounded-3xl">
-                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4 italic">Predictive_Gravity_Audit</p>
-                    <p className="text-sm text-slate-200 font-medium italic mb-4">"{triage?.riskReasoning}"</p>
-                    <p className="text-[10px] text-sky-400 font-black uppercase">Gravity Score: {triage?.gravityScore}%</p>
+                    <p className="text-[7px] font-black text-sky-500 uppercase mb-2">Patient_Found</p>
+                    <p className="text-3xl font-black text-white uppercase italic tracking-tighter">{parsedClient.name}</p>
                  </div>
-
+                 <div className="p-8 bg-rose-600/10 border border-rose-500/20 rounded-3xl">
+                    <p className="text-[7px] font-black text-rose-400 uppercase mb-2">Neural_Triage</p>
+                    <p className="text-3xl font-black text-white italic tracking-tighter">{triage?.priority || 'SYNCING'}</p>
+                 </div>
                  <div className="mt-auto grid grid-cols-2 gap-4">
-                    <button onClick={() => { setImage(null); setParsedClient(null); }} className="py-5 bg-white/5 border border-white/10 text-slate-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:text-white">Discard</button>
-                    <button onClick={handleConfirm} className="py-5 bg-emerald-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-emerald-500/20 hover:scale-105 active:scale-95 transition-all">Authorize_Intake</button>
+                    <button onClick={() => { setImage(null); setParsedClient(null); }} className="py-5 bg-white/5 border border-white/10 text-slate-500 rounded-2xl font-black text-[10px] uppercase">Discard</button>
+                    <button onClick={handleConfirm} className="py-5 bg-emerald-600 text-white rounded-2xl font-black text-[10px] uppercase shadow-xl">Authorize_Intake</button>
                  </div>
               </div>
             ) : (
-              <div className="flex-1 flex flex-col items-center justify-center text-center opacity-20 px-12">
-                 <p className="text-sm font-medium leading-relaxed">
-                   Ingest any referral document from Epic, PCC, or handwritten discharge notes. Neural Vision extracts patient identity and acuity markers immediately.
-                 </p>
+              <div className="flex-1 flex items-center justify-center text-center opacity-20 px-12 italic">
+                 <p className="text-sm font-medium leading-relaxed">Neural Vision extracts patient identity and acuity markers from hospital discharge notes in real-time.</p>
               </div>
             )}
          </div>

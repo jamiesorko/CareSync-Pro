@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 
 export interface TrainingROI {
@@ -29,6 +30,7 @@ export class NeuralProtocolValidator {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {

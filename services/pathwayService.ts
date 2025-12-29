@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 import { Client } from '../types';
 
@@ -24,13 +25,14 @@ export class PathwayService {
     const prompt = `
       Patient: ${client.name}
       Conditions: ${client.conditions.join(', ')}
-      Mobility: ${client.mobilityStatus.transferMethod}
+      Mobility: ${client.mobilityStatus?.transferMethod || 'Unknown'}
       
       Task: Design a 3-phase clinical pathway (Weeks 1-4, 5-8, 9-12).
       Return JSON: { "phases": [ { "weeks": "string", "focus": "string", "milestones": ["string"], "strategy": "string" } ] }
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return (data.phases || []).map((p: any) => ({

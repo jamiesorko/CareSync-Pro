@@ -1,3 +1,4 @@
+
 import { StaffMember, Client } from '../types';
 import { geminiService } from './geminiService';
 
@@ -32,6 +33,7 @@ export class CulturalIntelligenceService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {

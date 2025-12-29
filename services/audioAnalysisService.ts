@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 
 export interface AudioAnalysisResult {
@@ -24,9 +25,10 @@ export class AudioAnalysisService {
     
     const prompt = `Analyze this caregiver clinical log transcript: "${transcript}".
     Assess for stress markers, fatigue, and clinical urgency.
-    Return JSON: { "stress": number, "fatigue": boolean, "urgency": number, "sentiment": string, "keywords": string[] }`;
+    Return JSON: { "stress": number, "fatigue": boolean, "urgency": number, "sentiment": "string", "keywords": [] }`;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       const data = JSON.parse(response.text || '{}');
       return {

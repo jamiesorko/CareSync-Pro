@@ -26,6 +26,7 @@ const TextChat: React.FC = () => {
     setLoading(true);
 
     try {
+      // Fix: geminiService.generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(input, useSearch);
       const text = response.text || "No response received.";
       

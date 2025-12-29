@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 
 export class NeuralKnowledgeService {
@@ -25,6 +26,7 @@ export class NeuralKnowledgeService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       return response.text || "Protocol guidance currently unavailable for this vector.";
     } catch (e) {

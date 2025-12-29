@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 import { Client } from '../types';
 
@@ -31,6 +32,7 @@ export class CarePlanOptimizationService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       const data = JSON.parse(response.text || '{}');
       return (data.optimizations || []).map((o: any) => ({

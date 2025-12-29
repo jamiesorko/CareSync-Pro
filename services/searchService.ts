@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 import { clinicalService } from './clinicalService';
 import { dbService } from './dbService';
@@ -26,6 +27,7 @@ export class SearchService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const classification = await geminiService.generateText(prompt, false);
       // Logic would then route to specific DB tables
       return {

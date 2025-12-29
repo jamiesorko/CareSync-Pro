@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 import { visitService } from './visitService';
 
@@ -30,6 +31,7 @@ export class ExpenseForensicsService {
   async auditReceipt(base64: string): Promise<string> {
     const prompt = "Extract Total Amount, Date, and Merchant from this receipt image. Return ONLY JSON.";
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       return res.text || "{}";
     } catch (e) {

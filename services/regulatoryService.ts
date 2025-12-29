@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 
 export interface RegulatoryUpdate {
@@ -23,9 +24,10 @@ export class RegulatoryService {
     console.log(`[NEURAL_COMPLIANCE]: Interpreting regulatory signal.`);
     
     const prompt = `Analyze this healthcare regulatory update: "${rawUpdateText}". 
-    Identify the impact on a home care agency. Return JSON: { "title": string, "impact": "LOW|MED|HIGH", "summary": string, "action": string }`;
+    Identify the impact on a home care agency. Return JSON: { "title": "string", "impact": "LOW|MED|HIGH", "summary": "string", "action": "string" }`;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {

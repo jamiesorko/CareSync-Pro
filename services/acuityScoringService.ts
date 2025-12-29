@@ -1,3 +1,4 @@
+
 import { Client, RiskScore } from '../types';
 
 export class AcuityScoringService {
@@ -14,9 +15,9 @@ export class AcuityScoringService {
     let score = 1;
 
     // Mobility Vector
-    if (client.mobilityStatus.isBedridden) score += 3;
-    if (client.mobilityStatus.dementia) score += 2;
-    if (client.mobilityStatus.transferMethod === 'Mechanical') score += 1;
+    if (client.mobilityStatus?.isBedridden) score += 3;
+    if (client.mobilityStatus?.dementia) score += 2;
+    if (client.mobilityStatus?.transferMethod === 'Mechanical') score += 1;
 
     // Condition Complexity Vector
     if (client.conditions.length > 3) score += 1;

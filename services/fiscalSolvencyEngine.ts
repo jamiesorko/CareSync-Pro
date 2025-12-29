@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 
 export interface EconomicSimulation {
@@ -29,6 +30,7 @@ export class FiscalSolvencyEngine {
     `;
 
     try {
+      // Fix: Using correct method generateAdvancedReasoning on geminiService
       const res = await geminiService.generateAdvancedReasoning(prompt);
       const data = JSON.parse(res.text || '{}');
       return {

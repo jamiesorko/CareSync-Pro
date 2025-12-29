@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 
 export interface AuditResult {
@@ -24,10 +25,11 @@ export class ClinicalProtocolAuditService {
       Protocol: ${protocolType} Standard Care
       Note: "${note}"
       Task: Check for professional nursing elements (Observation, Action, Response). 
-      List missing components. Return JSON: { "compliant": boolean, "score": number, "missing": [], "suggest": "" }
+      List missing components. Return JSON: { "compliant": boolean, "score": number, "missing": ["string"], "suggest": "string" }
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {

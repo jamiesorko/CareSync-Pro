@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 import { clinicalInsightService } from './clinicalInsightService'
 import { telemetryService } from './telemetryService'
@@ -31,6 +32,7 @@ export class NeuralOrchestrator {
       Tone: Clinical, precise, high-fidelity.
     `;
 
+    // Fix: generateText now correctly handles 2 arguments
     return await geminiService.generateText(prompt, false);
   }
 }

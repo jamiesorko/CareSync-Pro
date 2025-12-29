@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 import { Client } from '../types'
 
@@ -24,7 +25,7 @@ export class ClinicalDecisionSupportService {
     const context = {
       patient: client.name,
       conditions: client.conditions,
-      mobility: client.mobilityStatus,
+      mobility: client.mobilityStatus || 'Unknown',
       newObservations: symptoms
     };
 
@@ -32,10 +33,11 @@ export class ClinicalDecisionSupportService {
       Act as a Senior Clinical Nurse Consultant. 
       Analyze patient state: ${JSON.stringify(context)}.
       Provide: 3 potential causes for these symptoms, 2 immediate assessments to perform, and a priority level.
-      Return JSON: { "causes": string[], "assessments": string[], "urgency": "MONITOR|ASSESS_NOW|EMERGENCY_TRANSFER", "rationale": "string" }
+      Return JSON: { "causes": ["string"], "assessments": ["string"], "urgency": "MONITOR|ASSESS_NOW|EMERGENCY_TRANSFER", "rationale": "string" }
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {

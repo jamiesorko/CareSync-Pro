@@ -15,6 +15,7 @@ class SystemService {
     List exactly 2 clinical risk factors.`;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       const text = response.text || "LOW";
       return {

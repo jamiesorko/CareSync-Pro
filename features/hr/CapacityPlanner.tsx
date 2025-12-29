@@ -22,6 +22,7 @@ const CapacityPlanner: React.FC<Props> = ({ language }) => {
     };
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(
         `Action: Strategic Capacity Analysis. 
         Data: ${JSON.stringify(mockDemandData)}

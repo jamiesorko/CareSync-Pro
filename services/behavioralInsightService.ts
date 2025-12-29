@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 import { Client } from '../types'
 
@@ -24,7 +25,7 @@ export class BehavioralInsightService {
     if (rawNotes.length === 0) return [];
 
     const prompt = `
-      Patient: ${client.name} (Dementia Diagnosis: ${client.mobilityStatus.dementia})
+      Patient: ${client.name} (Dementia Diagnosis: ${client.mobilityStatus?.dementia || 'False'})
       Conditions: ${client.conditions.join(', ')}
       Source Material: "${rawNotes.join(' | ')}"
       
@@ -33,6 +34,7 @@ export class BehavioralInsightService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return data.patterns || [];

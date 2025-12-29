@@ -1,9 +1,9 @@
 {
-  "name": "CareSync Pro",
-  "description": "Neural Healthcare ERP",
   "requestFramePermissions": [
     "camera",
     "microphone",
     "geolocation"
-  ]
+  ],
+  "name": "CareSync Pro",
+  "description": ""
 }

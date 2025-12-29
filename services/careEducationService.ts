@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 import { Client } from '../types';
 
@@ -23,13 +24,14 @@ export class CareEducationService {
     
     const prompt = `
       Patient Conditions: ${client.conditions.join(', ')}
-      Mobility: ${client.mobilityStatus.transferMethod}
+      Mobility: ${client.mobilityStatus?.transferMethod || 'Unknown'}
       
       Task: Generate a 'Family Survival Guide' for this patient's care advocates.
       Return JSON: { "title": "string", "checklist": ["string"], "triggers": ["string"], "strategies": ["string"] }
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {

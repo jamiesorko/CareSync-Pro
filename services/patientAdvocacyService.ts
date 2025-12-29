@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 import { Client } from '../types';
 
@@ -26,6 +27,7 @@ export class PatientAdvocacyService {
     Return JSON: { "alerts": [ { "type": "DIGNITY|CONSENT|PRIVACY", "severity": "LOW|MED|HIGH", "observation": "string", "remediation": "string" } ] }`;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return (data.alerts || []).map((a: any) => ({

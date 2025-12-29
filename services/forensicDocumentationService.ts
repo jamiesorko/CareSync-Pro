@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 import { telemetryService } from './telemetryService'
 
@@ -33,12 +34,13 @@ export class ForensicDocumentationService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {
         id: Math.random().toString(36).substring(7),
         isFlagged: !!data.flag,
-        discrepancyType: data.type,
+        discrepancyType: data.type as any,
         score: data.score || 100,
         clinicalNotes: data.notes || "Note integrity validated."
       };

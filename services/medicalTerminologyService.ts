@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 
 export class MedicalTerminologyService {
@@ -20,6 +21,7 @@ export class MedicalTerminologyService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       return res.text || jargonText;
     } catch (e) {

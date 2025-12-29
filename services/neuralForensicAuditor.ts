@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 import { Client } from '../types'
 
@@ -32,6 +33,7 @@ export class NeuralForensicAuditor {
     `;
 
     try {
+      // Fix: Using correct method generateAdvancedReasoning on geminiService
       const res = await geminiService.generateAdvancedReasoning(prompt);
       const data = JSON.parse(res.text || '{}');
       

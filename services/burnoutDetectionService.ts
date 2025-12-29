@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 import { StaffMember } from '../types';
 
@@ -24,7 +25,7 @@ export class BurnoutDetectionService {
     const context = {
       weeklyHours: staff.weeklyHours,
       role: staff.role,
-      lastSeen: staff.lastSeen,
+      lastSeen: staff.lastSeen || 'Unknown',
       sentimentPulse: sentimentScore
     };
 
@@ -33,6 +34,7 @@ export class BurnoutDetectionService {
     Format: JSON { "score": number, "indicators": string[], "strategy": string }`;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       const data = JSON.parse(response.text || '{}');
       return {

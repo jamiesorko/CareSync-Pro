@@ -29,12 +29,12 @@ export class OutbreakService {
     Return JSON { "isCluster": boolean, "type": "string", "severity": "MONITOR|ACTIVE", "recommendation": "string" }`;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       const data = JSON.parse(response.text || '{}');
       
       if (data.isCluster) {
         await notificationService.broadcastSignal({
-          // Fix: Changed 'MEDICAL' to 'CLINICAL' to align with AlertSignal type definition
           type: 'CLINICAL',
           content: `OUTBREAK_DETECTION: Potential ${data.type} cluster detected. Vector control initiated.`
         }, [CareRole.RN, CareRole.DOC]);

@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 import { protocolService } from './protocolService';
 
@@ -26,6 +27,7 @@ export class RegulatoryDriftService {
     Identify gaps. Return JSON: { "drift": "LOW|MED|HIGH", "gap": "string", "recommendation": "string" }`;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       const data = JSON.parse(response.text || '{}');
       

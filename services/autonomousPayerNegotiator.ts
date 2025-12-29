@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 
 export interface NegotiationBrief {
@@ -32,6 +33,7 @@ export class AutonomousPayerNegotiator {
         Return JSON: { "marketBenchmark": "", "increase": number, "points": [], "letter": "" }
       `;
 
+      // Fix: Using correct method generateAdvancedReasoning on geminiService
       const analysis = await geminiService.generateAdvancedReasoning(prompt);
       const data = JSON.parse(analysis.text || '{}');
 

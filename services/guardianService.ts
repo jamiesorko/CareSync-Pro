@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Modality, LiveServerMessage } from "@google/genai";
 import { encode } from '../utils/audioHelpers';
 
@@ -42,9 +43,7 @@ export class GuardianService {
           const content = message.serverContent;
           if (!content) return;
           
-          const outputText = content.outputTranscription?.text || "";
-          const inputText = content.inputTranscription?.text || "";
-          const textValue: string = outputText || inputText || "";
+          const textValue = content.outputTranscription?.text || content.inputTranscription?.text || "";
 
           if (textValue) {
             const lowText = textValue.toLowerCase();

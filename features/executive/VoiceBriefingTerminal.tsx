@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { geminiService } from '../../services/geminiService';
 import { decode, decodeAudioData } from '../../utils/audioHelpers';
@@ -24,6 +25,7 @@ const VoiceBriefingTerminal: React.FC<Props> = ({ language }) => {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       const text = response.text || "Operations nominal. Fiscal vectors stable. Resource core aligned.";
       setBriefingText(text);

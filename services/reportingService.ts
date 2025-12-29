@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 import { analyticsService } from './analyticsService';
 
@@ -24,6 +25,7 @@ export class ReportingService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       return response.text || "Report generation vector failed.";
     } catch (e) {

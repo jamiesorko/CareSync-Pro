@@ -1,3 +1,4 @@
+
 import { supabase } from '../lib/supabase';
 import { geminiService } from './geminiService';
 
@@ -26,6 +27,7 @@ export class FraudDetectionService {
     Return JSON: { "alerts": [ { "type": "string", "severity": "string", "description": "string", "actorId": "string" } ] }`;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return data.alerts || [];

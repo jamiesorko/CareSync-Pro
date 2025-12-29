@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 
 export interface TriageScore {
@@ -28,10 +29,11 @@ export class PredictiveTriageService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {
-        priority: data.priority || 'P3',
+        priority: (data.priority || 'P3') as any,
         gravityScore: data.score || 50,
         riskReasoning: data.reason || "Baseline acuity detected.",
         recommendedOnboardingWindow: data.window || "72 Hours"

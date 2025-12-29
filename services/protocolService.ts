@@ -1,3 +1,4 @@
+
 import { supabase } from '../lib/supabase';
 import { geminiService } from './geminiService';
 
@@ -22,6 +23,7 @@ export class ProtocolService {
     const prompt = `As a Director of Care, explain the mandatory protocol for: ${scenario}. Use professional clinical language.`;
     
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       return response.text || "Standard protocol not found. Contact DOC.";
     } catch (e) {

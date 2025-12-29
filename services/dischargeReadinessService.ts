@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 import { Client } from '../types'
 
@@ -25,10 +26,11 @@ export class DischargeReadinessService {
       Patient: ${client.name}
       Data: ${JSON.stringify(stabilityHistory)}
       Task: Predict readiness for discharge (0-100%). Identify 2 remaining barriers.
-      Return JSON: { "score": number, "barriers": [], "date": "YYYY-MM-DD" }
+      Return JSON: { "score": number, "barriers": ["string"], "date": "YYYY-MM-DD" }
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {

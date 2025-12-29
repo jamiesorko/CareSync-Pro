@@ -1,3 +1,4 @@
+
 import { supabase } from '../lib/supabase';
 import { geminiService } from './geminiService';
 import { Client } from '../types';
@@ -18,7 +19,7 @@ export class IntakeService {
     const prompt = "Extract Patient Name, DOB, Address, Primary Conditions, and Mobility Status from this medical referral. Return ONLY valid JSON.";
     
     try {
-      // In a real scenario, we'd use multimodal input
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       const data = JSON.parse(response.text || "{}");
       return {

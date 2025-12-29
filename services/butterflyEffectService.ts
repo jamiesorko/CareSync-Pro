@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 import { ContingencyPlan, StaffMember } from '../types'
 
@@ -19,10 +20,11 @@ export class ButterflyEffectService {
       Staff ID: ${failedStaffId}
       Remaining Visits: ${JSON.stringify(remainingSchedule)}
       Task: Identify the 3 most impacted patients. Suggest 2 rescuers within a 5km radius. 
-      Estimate delay variance in minutes. Return JSON: { "impactedClients": [], "suggestedRescuers": [], "etaVariance": number }
+      Estimate delay variance in minutes. Return JSON: { "impactedClients": ["string"], "suggestedRescuers": ["string"], "etaVariance": number }
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {

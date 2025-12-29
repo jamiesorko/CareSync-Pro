@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 import { StaffMember, Client } from '../types';
 
@@ -26,6 +27,7 @@ export class PredictionService {
     Forecast clinical stability for the next 7 days based on current care plan density.`;
     
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       return response.text || "Stability confirmed.";
     } catch (e) {

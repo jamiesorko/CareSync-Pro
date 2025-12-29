@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 
 export class ClinicalTranslationService {
@@ -25,6 +26,7 @@ export class ClinicalTranslationService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       return response.text || text;
     } catch (e) {

@@ -1,3 +1,4 @@
+
 import { supabase } from '../lib/supabase';
 import { geminiService } from './geminiService';
 import { Applicant } from '../types';
@@ -19,6 +20,7 @@ export class RecruitmentService {
     Rate their clinical proficiency and culture fit from 0-100. Return ONLY the number for the overall score.`;
     
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       const score = parseInt(response.text?.trim() || "0");
       return isNaN(score) ? 50 : score;

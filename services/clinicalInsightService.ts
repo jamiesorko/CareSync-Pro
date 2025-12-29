@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 import { Client, RiskScore } from '../types';
 
@@ -23,6 +24,7 @@ export class ClinicalInsightService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       return response.text || "Clinical trend signal unavailable.";
     } catch (e) {

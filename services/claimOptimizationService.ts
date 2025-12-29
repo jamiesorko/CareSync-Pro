@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 
 export interface OptimizationResult {
@@ -23,9 +24,10 @@ export class ClaimOptimizationService {
     
     const prompt = `Review this clinical summary: "${clinicalSummary}" for an insurance claim of $${claimData.amount}.
     Identify clinical keywords required by major payors to avoid denials.
-    Return JSON: { "probability": number, "missing": string[], "phrasing": "string", "delta": number }`;
+    Return JSON: { "probability": number, "missing": ["string"], "phrasing": "string", "delta": number }`;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {

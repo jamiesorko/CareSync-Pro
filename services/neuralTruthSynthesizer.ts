@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 import { Client } from '../types'
 
@@ -31,13 +32,14 @@ export class NeuralTruthSynthesizer {
     `;
 
     try {
+      // Fix: Using correct method generateAdvancedReasoning on geminiService
       const res = await geminiService.generateAdvancedReasoning(prompt);
       const data = JSON.parse(res.text || '{}');
       return {
         clientId: client.id,
         consensusAssessment: data.truth || "Maintenance of current care plan.",
         identifiedDelta: data.delta || "No significant contradiction detected.",
-        safetyPriorityLevel: data.safety || 'WATCH',
+        safetyPriorityLevel: (data.safety || 'WATCH') as any,
         suggestedDocAction: data.action || "Continue standard oversight."
       };
     } catch (e) {

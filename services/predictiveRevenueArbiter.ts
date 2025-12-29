@@ -1,10 +1,11 @@
-import { geminiService } from './geminiService'
 
-export interface PreClaimAudit {
-  denialRiskScore: number; // 0-1
-  missingClinicalJustification: string[];
-  suggestedPhrasing: string;
-  expectedRevenueValue: number;
+import { geminiService } from './geminiService';
+
+export interface RevenueProjection {
+  expectedRevenue: number;
+  unbilledPotential: number;
+  denialRiskScore: number;
+  recommendations: string[];
 }
 
 export class PredictiveRevenueArbiter {
@@ -14,32 +15,25 @@ export class PredictiveRevenueArbiter {
     this.companyId = id;
   }
 
-  /**
-   * Audits a draft invoice against the patient's shift notes to ensure medical necessity.
-   */
-  async auditDraftClaim(claimData: any, encounterNotes: string[]): Promise<PreClaimAudit> {
-    console.log(`[FISCAL_GUARD]: Pre-flighting claim vector for submission.`);
+  async forecastRevenue(visitData: any[]): Promise<RevenueProjection> {
+    const prompt = `Analyze this visit data for revenue potential and billing risks: ${JSON.stringify(visitData)}`;
     
-    const prompt = `
-      Claim: $${claimData.amount} for "${claimData.serviceType}"
-      Clinical Evidence: "${encounterNotes.join(' | ')}"
-      
-      Task: Act as a Payor Auditor. Predict the chance this claim is denied. 
-      Identify 2 missing clinical keywords needed for approval.
-      Return JSON: { "risk": number, "missing": [], "phrasing": "string", "value": number }
-    `;
-
     try {
-      const res = await geminiService.generateAdvancedReasoning(prompt);
-      const data = JSON.parse(res.text || '{}');
+      const response = await geminiService.generateText(prompt, false);
+      // Mocked logic for demo purposes
       return {
-        denialRiskScore: data.risk || 0.1,
-        missingClinicalJustification: data.missing || [],
-        suggestedPhrasing: data.phrasing || "Standard documentation applied.",
-        expectedRevenueValue: data.value || claimData.amount
+        expectedRevenue: 125000,
+        unbilledPotential: 14200,
+        denialRiskScore: 12,
+        recommendations: ["Ensure all Sector 4 wound care notes include primary measurements.", "Audit GPS timestamps for Staff-ID R201."]
       };
     } catch (e) {
-      return { denialRiskScore: 0, missingClinicalJustification: [], suggestedPhrasing: "Error", expectedRevenueValue: 0 };
+      return {
+        expectedRevenue: 0,
+        unbilledPotential: 0,
+        denialRiskScore: 0,
+        recommendations: ["Revenue engine offline."]
+      };
     }
   }
 }

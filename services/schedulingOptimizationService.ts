@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 import { StaffMember, Client } from '../types';
 
@@ -26,6 +27,7 @@ export class SchedulingOptimizationService {
     Return a formal deployment directive.`;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       return response.text || "Solver failure: Manual scheduling required.";
     } catch (e) {

@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 
 export interface EngagementPulse {
@@ -25,6 +26,7 @@ export class PatientEngagementService {
     Return JSON: { "loyalty": number, "risk": "LOW|MED|HIGH", "frustration": "string", "action": "string" }`;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {

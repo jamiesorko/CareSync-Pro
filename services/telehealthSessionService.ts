@@ -1,3 +1,4 @@
+
 import { supabase } from '../lib/supabase';
 import { geminiService } from './geminiService';
 
@@ -37,6 +38,7 @@ export class TelehealthSessionService {
   async generateSessionSummary(transcript: string): Promise<string> {
     const prompt = `Summarize this virtual clinical visit transcript: "${transcript}". Provide 3 key findings and 1 action item.`;
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       return res.text || "Summary unavailable.";
     } catch (e) {

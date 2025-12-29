@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 import { StaffMember, Client } from '../types';
 
@@ -28,6 +29,7 @@ export class MatchingService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const response = await geminiService.generateText(prompt, false);
       const data = JSON.parse(response.text || '{"score":0, "reason": "Error"}');
       return {

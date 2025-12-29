@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService';
 import { Client, Medication } from '../types';
 
@@ -22,7 +23,7 @@ export class MedicationSafetyService {
     
     const context = {
       conditions: client.conditions,
-      medications: client.medications.map(m => `${m.name} ${m.dosage}`),
+      medications: (client.medications || []).map((m: Medication) => `${m.name} ${m.dosage}`),
     };
 
     const prompt = `
@@ -35,6 +36,7 @@ export class MedicationSafetyService {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return data.flags || [];

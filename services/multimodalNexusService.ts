@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 import { ClinicalTruthVector } from '../types'
 
@@ -22,10 +23,11 @@ export class MultimodalNexusService {
       Has Image: ${!!visionBase64}
       
       Predict patient acuity (0-100) and list top 3 diagnostic signals.
-      Return JSON: { "acuity": number, "signals": string[], "level": "TOTAL_SYNTHESIS" }
+      Return JSON: { "acuity": number, "signals": ["string"], "level": "TOTAL_SYNTHESIS" }
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {

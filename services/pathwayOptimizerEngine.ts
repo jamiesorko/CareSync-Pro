@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 
 export interface PathwayAdjustment {
@@ -28,6 +29,7 @@ export class PathwayOptimizerEngine {
     `;
 
     try {
+      // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '[]');
       return data.map((d: any) => ({
