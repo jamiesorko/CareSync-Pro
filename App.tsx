@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
 import { CareRole, AppTab } from './types';
-import AppShell from './components/AppShell';
-import Dashboard from './features/Dashboard';
 import Login from './features/Login';
-import RNCommandCenter from './features/rn/RNCommandCenter';
+import Layout from './components/Layout';
+import Dashboard from './features/Dashboard';
 import ScheduleView from './features/ScheduleView';
-import CareReport from './features/CareReport';
+import RNCommandCenter from './features/rn/RNCommandCenter';
+import CoordinationHub from './features/CoordinationHub';
 import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
 
 const App: React.FC = () => {
@@ -18,29 +18,34 @@ const App: React.FC = () => {
   }
 
   const renderContent = () => {
-    const lang = "English";
-    switch(activeTab) {
+    switch (activeTab) {
       case AppTab.DASHBOARD:
-        return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} language={lang} />;
-      case AppTab.CLINICAL_COMMAND:
-        return <RNCommandCenter language={lang} />;
+        return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} />;
       case AppTab.SCHEDULE:
-        return <ScheduleView role={user.role} clients={MOCK_CLIENTS} language={lang} onVisitSignal={()=>{}} onMissedClock={()=>{}} onAlert={()=>{}} />;
-      case AppTab.INCIDENT_REPORTS:
-        return <CareReport role={user.role} language={lang} clients={MOCK_CLIENTS} />;
+        return <ScheduleView role={user.role} clients={MOCK_CLIENTS} />;
+      case AppTab.CLINICAL_COMMAND:
+        return <RNCommandCenter />;
+      case AppTab.COORDINATION:
+        return <CoordinationHub language="English" blasts={{}} setBlasts={() => {}} />;
       default:
         return (
-          <div className="h-full flex items-center justify-center opacity-10">
-            <h1 className="text-4xl font-black uppercase tracking-[1em] italic">Bridge_Inert</h1>
+          <div className="flex items-center justify-center h-full opacity-20 text-2xl font-black italic uppercase tracking-widest">
+            Module_Not_Implemented
           </div>
         );
     }
   };
 
   return (
-    <AppShell activeTab={activeTab} setActiveTab={setActiveTab} user={user} onLogout={() => setUser(null)}>
+    <Layout 
+      activeTab={activeTab} 
+      setActiveTab={setActiveTab} 
+      activeRole={user.role} 
+      staffName={user.name}
+      onLogout={() => { setUser(null); setActiveTab(AppTab.DASHBOARD); }}
+    >
       {renderContent()}
-    </AppShell>
+    </Layout>
   );
 };
 
