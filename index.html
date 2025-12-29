@@ -25,21 +25,23 @@
             height: 100vh;
         }
 
-        .alaya-shadow { shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-        .data-table-header { border-bottom: 2px solid var(--alaya-primary); }
-        
-        /* Fixed scrolling area for the app feel */
-        .app-content-area {
-            height: calc(100vh - 64px);
-            overflow-y: auto;
-            scrollbar-width: thin;
-        }
-
-        .widget-tile {
+        .alaya-card {
             background: white;
             border: 1px solid var(--alaya-border);
             border-radius: 4px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .app-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+        }
+        
+        .app-scroll::-webkit-scrollbar { width: 6px; }
+        .app-scroll::-webkit-scrollbar-track { background: transparent; }
+        .app-scroll::-webkit-scrollbar-thumb { 
+            background-color: #cbd5e1; 
+            border-radius: 20px;
         }
     </style>
 <script type="importmap">
@@ -50,11 +52,11 @@
     "react-dom/client": "https://esm.sh/react-dom@^19.0.0/client",
     "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
     "lucide-react": "https://esm.sh/lucide-react@0.453.0",
-    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.89.0",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-    "vite": "https://esm.sh/vite@^7.3.0",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.89.0",
+    "vite": "https://esm.sh/vite@^7.3.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
     "next": "https://esm.sh/next@^16.1.1"
   }
 }

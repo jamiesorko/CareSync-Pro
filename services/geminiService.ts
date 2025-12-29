@@ -1,36 +1,32 @@
 
-import { GoogleGenAI, Modality } from "@google/genai";
+import { GoogleGenAI, Modality, GenerateContentResponse } from "@google/genai";
 
 export class GeminiService {
-  /**
-   * Internal helper to always get a fresh instance of GoogleGenAI.
-   * This ensures we use the most up-to-date API key (especially important for Veo/selected keys).
-   */
   private getAI() {
     return new GoogleGenAI({ apiKey: process.env.API_KEY as string });
   }
 
-  // Used by TextChat, CapacityPlanner, systemService, clinicalInsightService, reportingService, intakeService, predictionService, searchService, protocolService, sentimentService, recruitmentService, matchingService, burnoutDetectionService, regulatoryService, schedulingOptimizationService, triageService, outbreakService, audioAnalysisService, regulatoryDriftService, advocacyService, interventionService, clinicalDecisionSupportService, fiscalForecastingService, carePlanOptimizationService, telehealthSessionService, fraudDetectionService, patientEngagementService, staffDevelopmentService, predictiveStaffingService, patientAdvocacyService, claimOptimizationService, clinicalSummaryService, incidentTrendService, referralManagementService, policyRetrievalService, pathwayService, sdohService, clinicalTranslationService, clinicalValidationService, familySynthesisService, revenueCaptureService, careEducationService, salesFunnelService, culturalIntelligenceService, medicationSafetyService, neuralHandoverService, biometricAnomalyService, policyBridgeService, behavioralInsightService, medicalTerminologyService, churnNeuralService, expenseForensicsService, medReconService, clinicalProtocolAuditService, dischargeReadinessService, butterflyEffectService, competencyAuditService, recoveryGoalOracleService, fiscalLeakageService, vocalBiomarkerService, multimodalNexusService, cohortAnalysisService, neuralTranscriptionService, predictiveTriageService, forensicDocumentationService, neuralOrchestrator, neuralKnowledgeService, clinicalBoardService, financialReconciliationService, neuralPolicyGenerator, clinicalTrajectoryService, neuralRecruitmentNexus, outcomeForecastingService, clinicalTruthService, documentationAssistantService, staffRetentionEngine, clinicalCognitionService, interventionEfficacyEngine, neuralTrainingService, clinicalSimulationEngine, outcomeBenchmarkingService, clinicalWorkflowSynthesizer, fleetAcuityRebalancer, neuralProtocolValidator, VoiceBriefingTerminal
-  async generateText(prompt: string, useSearch: boolean = false) {
+  async generateText(prompt: string, useSearch: boolean = false): Promise<GenerateContentResponse> {
     const ai = this.getAI();
-    const config: any = {};
-    if (useSearch) {
-      config.tools = [{ googleSearch: {} }];
-    }
-    const response = await ai.models.generateContent({
+    const config: any = {
       model: 'gemini-3-flash-preview',
       contents: prompt,
-      config
-    });
-    return response;
+    };
+    if (useSearch) {
+      config.config = {
+        tools: [{ googleSearch: {} }]
+      };
+    }
+    return await ai.models.generateContent(config);
   }
 
-  // Used by ImageLab
-  async generateImage(prompt: string) {
+  async generateImage(prompt: string): Promise<string | null> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
-      contents: prompt,
+      contents: {
+        parts: [{ text: prompt }]
+      }
     });
     for (const part of response.candidates?.[0]?.content?.parts || []) {
       if (part.inlineData) {
@@ -40,8 +36,7 @@ export class GeminiService {
     return null;
   }
 
-  // Used by VideoLab, patientWellnessService, clinicalVideoGenerator
-  async generateVideo(prompt: string) {
+  async generateVideo(prompt: string): Promise<string> {
     const ai = this.getAI();
     let operation = await ai.models.generateVideos({
       model: 'veo-3.1-fast-generate-preview',
@@ -60,17 +55,16 @@ export class GeminiService {
     return `${downloadLink}&key=${process.env.API_KEY}`;
   }
 
-  // Used by SpeechLab, autonomousReportingOrchestrator, clinicalContinuityForge, VoiceBriefingTerminal
-  async generateSpeech(text: string, voiceName: string = 'Kore') {
+  async generateSpeech(text: string, voice: string): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
-      contents: [{ parts: [{ text }] }],
+      contents: [{ parts: [{ text: `Say cheerfully: ${text}` }] }],
       config: {
         responseModalities: [Modality.AUDIO],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: { voiceName },
+            prebuiltVoiceConfig: { voiceName: voice },
           },
         },
       },
@@ -78,8 +72,7 @@ export class GeminiService {
     return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || "";
   }
 
-  // Used by Translate.tsx
-  async translate(text: string, targetLanguage: string) {
+  async translate(text: string, targetLanguage: string): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -88,23 +81,38 @@ export class GeminiService {
     return response.text || text;
   }
 
-  // Used by CEOFinancials.tsx
-  async getFinancialStrategy(context: any) {
+  async generateAdvancedReasoning(prompt: string): Promise<GenerateContentResponse> {
     const ai = this.getAI();
-    const response = await ai.models.generateContent({
+    return await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
-      contents: `Analyze these financials and provide a concise strategic recommendation: ${JSON.stringify(context)}`,
+      contents: prompt,
+      config: {
+        thinkingConfig: { thinkingBudget: 20000 }
+      }
     });
-    return response.text || "";
   }
 
-  // Used by AIScheduler.tsx
-  async generateSecureSchedule(clients: any[], staff: any[]) {
+  async getFinancialStrategy(context: any): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
-      contents: `Generate an optimal schedule for these clients and staff: Clients: ${JSON.stringify(clients)}, Staff: ${JSON.stringify(staff)}. Return JSON array of objects with keys: clientName, clientId, clientAddress, staffName, staffId, staffRole, scheduledTime, reasoning, weeklyLoad.`,
-      config: { responseMimeType: "application/json" }
+      contents: `Generate a financial strategy based on this context: ${JSON.stringify(context)}`,
+      config: {
+        thinkingConfig: { thinkingBudget: 10000 }
+      }
+    });
+    return response.text || "Strategy unavailable.";
+  }
+
+  async generateSecureSchedule(clients: any[], staff: any[]): Promise<any[]> {
+    const ai = this.getAI();
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-pro-preview',
+      contents: `Generate a secure schedule for these clients and staff: ${JSON.stringify({ clients, staff })}. Return JSON array of objects with keys: clientId, staffId, scheduledTime, reasoning.`,
+      config: {
+        responseMimeType: "application/json",
+        thinkingConfig: { thinkingBudget: 15000 }
+      }
     });
     try {
       return JSON.parse(response.text || '[]');
@@ -113,12 +121,11 @@ export class GeminiService {
     }
   }
 
-  // Used by NeuralScribe.tsx
-  async extractClinicalInsights(transcript: string) {
+  async extractClinicalInsights(transcript: string): Promise<any> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `Extract clinical insights from this transcript: "${transcript}". Include vitals like heartRate and bp if mentioned. Return JSON.`,
+      contents: `Extract clinical insights from this transcript: ${transcript}. Return JSON with vitals (heartRate, bp).`,
       config: { responseMimeType: "application/json" }
     });
     try {
@@ -128,21 +135,18 @@ export class GeminiService {
     }
   }
 
-  // Used by WarRoom.tsx, laborMarketService, healthIntelligenceService, etc.
-  async getMarketIntelligence(query: string) {
+  async getMarketIntelligence(query: string): Promise<GenerateContentResponse> {
     const ai = this.getAI();
-    const response = await ai.models.generateContent({
+    return await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: query,
       config: {
         tools: [{ googleSearch: {} }]
       }
     });
-    return response;
   }
 
-  // Used by VisionDiagnostics.tsx, imageValidationService, autonomousWoundNavigator
-  async analyzeHazardImage(base64: string, prompt: string = "Analyze this clinical image for hazards or anomalies.") {
+  async analyzeHazardImage(base64: string, prompt: string = "Analyze this image for clinical hazards or anomalies."): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
@@ -153,55 +157,39 @@ export class GeminiService {
         ]
       }
     });
-    return response.text || "";
+    return response.text || "Analysis failed.";
   }
 
-  // Used by documentService, clinicalEthicsConsultant, fiscalIntegrityOracle, etc.
-  async generateAdvancedReasoning(prompt: string) {
-    const ai = this.getAI();
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: prompt,
-      config: {
-        thinkingConfig: { thinkingBudget: 24000 }
-      }
-    });
-    return response;
-  }
-
-  // Used by NeuralSelfHealingStation.tsx
-  async runSelfRepairAudit(ledger: any) {
+  async runSelfRepairAudit(mockLedger: any): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `Audit this ledger for logic drift and suggest remediation: ${JSON.stringify(ledger)}. Return JSON with "remediation" key.`,
+      contents: `Perform a self-repair audit on this ledger data: ${JSON.stringify(mockLedger)}. Return JSON with remediation field.`,
       config: { responseMimeType: "application/json" }
     });
     return response.text || "{}";
   }
 
-  async generateClinicalInsight(prompt: string) {
+  async generateOperationalInsight(prompt: string) {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: prompt,
       config: {
-        systemInstruction: "You are an advanced Clinical Intelligence Engine. Provide high-density, professional directives based on clinical data.",
+        systemInstruction: "You are an Enterprise Healthcare Strategy Analyst. Provide high-density, concise clinical and operational insights.",
         temperature: 0.7,
       }
     });
     return response.text;
   }
 
-  async analyzeClinicalImage(base64: string, prompt: string) {
+  async analyzeClinicalRisk(context: any) {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-image',
-      contents: {
-        parts: [
-          { inlineData: { data: base64, mimeType: 'image/jpeg' } },
-          { text: prompt }
-        ]
+      model: 'gemini-3-pro-preview',
+      contents: `Analyze this clinical context for readmission risk and documentation drift: ${JSON.stringify(context)}`,
+      config: {
+        thinkingConfig: { thinkingBudget: 16000 }
       }
     });
     return response.text;
