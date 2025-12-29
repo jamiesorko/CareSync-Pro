@@ -1,10 +1,9 @@
-
 {
   "requestFramePermissions": [
     "camera",
     "microphone",
     "geolocation"
   ],
-  "name": "CareSync Enterprise",
+  "name": "CareSync-Pro",
   "description": "High-density operational matrix for clinical fleet management."
 }

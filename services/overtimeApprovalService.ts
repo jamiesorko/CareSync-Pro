@@ -28,6 +28,7 @@ class OvertimeApprovalService {
     };
     this.queue.push(newReq);
 
+    // Fix: Using correct CareRole.ACCOUNTANT which is now defined in types.ts
     await notificationService.broadcastSignal({
       type: 'FISCAL',
       content: `OVERTIME_CONSENSUS_REQ: ${staffName} (${units} units). Dual-lock authorization required.`
@@ -41,6 +42,7 @@ class OvertimeApprovalService {
     if (!req) return null;
 
     if (role === CareRole.COORDINATOR) req.opsLock = true;
+    // Fix: Using correct CareRole.ACCOUNTANT which is now defined in types.ts
     if (role === CareRole.ACCOUNTANT) req.fiscalLock = true;
 
     if (req.opsLock && req.fiscalLock) {

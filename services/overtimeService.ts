@@ -26,6 +26,7 @@ class OvertimeService {
       status: 'PENDING'
     };
     this.requests.push(req);
+    // Fix: Using correct CareRole.ACCOUNTANT which is now defined in types.ts
     await notificationService.broadcastSignal({
       type: 'FISCAL',
       content: `OVERTIME_CONSENSUS_REQ: ${name} (${units} units). Requires dual-lock auth.`
@@ -37,6 +38,7 @@ class OvertimeService {
     const req = this.requests.find(r => r.id === id);
     if (!req) return null;
     if (role === CareRole.COORDINATOR) req.opsLock = true;
+    // Fix: Using correct CareRole.ACCOUNTANT which is now defined in types.ts
     if (role === CareRole.ACCOUNTANT) req.fiscalLock = true;
     if (req.opsLock && req.fiscalLock) req.status = 'AUTHORIZED';
     return req;
