@@ -1,5 +1,5 @@
 
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, Modality } from "@google/genai";
 import { Client, StaffMember } from "../types";
 
 export class GeminiService {
@@ -44,7 +44,8 @@ export class GeminiService {
       model: "gemini-2.5-flash-preview-tts",
       contents: [{ parts: [{ text }] }],
       config: {
-        responseModalities: ['AUDIO'],
+        // Fix: Use Modality enum instead of string to comply with @google/genai guidelines
+        responseModalities: [Modality.AUDIO],
         speechConfig: {
           voiceConfig: {
             prebuiltVoiceConfig: { voiceName }
@@ -64,7 +65,8 @@ export class GeminiService {
     });
     
     let imageUrl = "";
-    for (const part of response.candidates?.[0]?.content?.parts || []) {
+    const parts = response.candidates?.[0]?.content?.parts || [];
+    for (const part of parts) {
       if (part.inlineData) {
         imageUrl = `data:image/png;base64,${part.inlineData.data}`;
       }
@@ -73,13 +75,12 @@ export class GeminiService {
   }
 
   async generateVideo(prompt: string): Promise<string> {
-    const ai = this.getAI();
-    const aistudio = (window as any).aistudio;
-    
-    if (aistudio && !(await aistudio.hasSelectedApiKey())) {
-      await aistudio.openSelectKey();
+    if ((window as any).aistudio && !(await (window as any).aistudio.hasSelectedApiKey())) {
+      await (window as any).aistudio.openSelectKey();
     }
 
+    const ai = this.getAI();
+    
     let operation = await ai.models.generateVideos({
       model: 'veo-3.1-fast-generate-preview',
       prompt,
@@ -95,7 +96,6 @@ export class GeminiService {
     return `${downloadLink}&key=${process.env.API_KEY}`;
   }
 
-  // Fix: Added missing strategic analysis method
   async getFinancialStrategy(context: any): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
@@ -105,9 +105,7 @@ export class GeminiService {
     return response.text || "Strategy unavailable.";
   }
 
-  // Fix: Added missing secure scheduling method
   async generateSecureSchedule(clients: any[], staff: any[]): Promise<any[]> {
-    const ai = this.getAI();
     return clients.map((c, i) => ({
       clientName: c.name,
       clientId: c.id,
@@ -120,7 +118,6 @@ export class GeminiService {
     }));
   }
 
-  // Fix: Added missing clinical entity extraction method
   async extractClinicalInsights(transcript: string): Promise<any> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
@@ -135,7 +132,6 @@ export class GeminiService {
     }
   }
 
-  // Fix: Added missing market intelligence method
   async getMarketIntelligence(query: string): Promise<any> {
     const ai = this.getAI();
     return await ai.models.generateContent({
@@ -145,7 +141,6 @@ export class GeminiService {
     });
   }
 
-  // Fix: Added missing visual hazard analysis method
   async analyzeHazardImage(base64: string, prompt?: string): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
@@ -160,7 +155,6 @@ export class GeminiService {
     return response.text || "No hazard detected.";
   }
 
-  // Fix: Added missing self-repair logic audit method
   async runSelfRepairAudit(ledger: any): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({

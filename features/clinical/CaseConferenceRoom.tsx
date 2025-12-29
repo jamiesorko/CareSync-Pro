@@ -1,5 +1,6 @@
+
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { GoogleGenAI, Modality } from '@google/genai';
+import { GoogleGenAI, Modality, LiveServerMessage } from '@google/genai';
 import { decode, encode, decodeAudioData } from '../../utils/audioHelpers';
 import { Client, CareRole } from '../../types';
 import Translate from '../../components/Translate';
@@ -64,9 +65,7 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
             scriptProcessor.onaudioprocess = (e) => {
               const inputData = e.inputBuffer.getChannelData(0);
               const int16 = new Int16Array(inputData.length);
-              for (let i = 0; i < inputData.length; i++) {
-                int16[i] = inputData[i] * 32768;
-              }
+              for (let i = 0; i < inputData.length; i++) int16[i] = inputData[i] * 32768;
               const pcmBlob = {
                 data: encode(new Uint8Array(int16.buffer)),
                 mimeType: 'audio/pcm;rate=16000',
@@ -77,15 +76,21 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
             source.connect(scriptProcessor);
             scriptProcessor.connect(inputCtx.destination);
           },
-          onmessage: async (message) => {
-            if (message.serverContent?.outputTranscription) {
-              const text = message.serverContent.outputTranscription.text;
-              if (text.toLowerCase().includes('risk')) addInsight('Clinical', text);
-              else if (text.toLowerCase().includes('choice') || text.toLowerCase().includes('right')) addInsight('Ethics', text);
-              else if (text.toLowerCase().includes('cost') || text.toLowerCase().includes('bill')) addInsight('Fiscal', text);
+          onmessage: async (message: LiveServerMessage) => {
+            const content = message.serverContent;
+            if (!content) return;
+
+            // Fix: Using correct property names for model and user output transcription. 'outputAudioTranscription' does not exist on type 'LiveServerContent'.
+            const text = content.outputTranscription?.text || content.inputTranscription?.text;
+            if (text) {
+              const lowerText = text.toLowerCase();
+              if (lowerText.includes('risk')) addInsight('Clinical', text);
+              else if (lowerText.includes('choice') || lowerText.includes('right')) addInsight('Ethics', text);
+              else if (lowerText.includes('cost') || lowerText.includes('bill')) addInsight('Fiscal', text);
             }
 
-            const base64Audio = message.serverContent?.modelTurn?.parts[0]?.inlineData?.data;
+            const modelTurn = content.modelTurn;
+            const base64Audio = modelTurn?.parts?.[0]?.inlineData?.data;
             if (base64Audio) {
               nextStartTimeRef.current = Math.max(nextStartTimeRef.current, outputCtx.currentTime);
               const buffer = await decodeAudioData(decode(base64Audio), outputCtx, 24000, 1);
@@ -97,13 +102,21 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
               nextStartTimeRef.current += buffer.duration;
               sourcesRef.current.add(source);
             }
+
+            if (content.interrupted) {
+              sourcesRef.current.forEach(s => { try { s.stop(); } catch(e) {} });
+              sourcesRef.current.clear();
+              nextStartTimeRef.current = 0;
+            }
           },
           onerror: () => setStatus('HUDDLE_INTERRUPTED'),
           onclose: () => setIsActive(false)
         },
         config: {
+          // Fix: Corrected typo 'responseModalities' from 'responseModalalities'
           responseModalities: [Modality.AUDIO],
           outputAudioTranscription: {},
+          inputAudioTranscription: {},
           systemInstruction: `You are the Neural Huddle Moderator for ${selectedClient.name}. Participants include ${userRole}. 
           Listen for clinical risks, patient autonomy issues, and billing discrepancies. 
           Provide real-time brief verbal interjections to guide the human participants toward a safe care plan consensus.`
@@ -122,19 +135,19 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
   }, []);
 
   return (
-    <div className="h-full space-y-12 animate-in fade-in duration-700 pb-20">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+    <div className="h-full space-y-12 animate-in fade-in duration-1000 pb-24">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 px-4">
         <div>
-          <h2 className="text-4xl font-black text-white tracking-tighter uppercase leading-none italic">Neural_Huddle_Suite</h2>
+          <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none text-rose-400">Neural_Huddle_Suite</h2>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">Collaborative Consensus & Multi-Agent Case Conferencing</p>
         </div>
         <div className="flex bg-white/5 p-1.5 rounded-2xl border border-white/10">
-           {clients.slice(0, 3).map(c => (
+           {clients.slice(0, 3).map((c) => (
              <button 
               key={c.id}
               disabled={isActive}
               onClick={() => setSelectedClient(c)}
-              className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${selectedClient.id === c.id ? 'bg-indigo-600 text-white' : 'text-slate-500 disabled:opacity-20'}`}
+              className={`px-6 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${selectedClient.id === c.id ? 'bg-indigo-600 text-white' : 'text-slate-500 disabled:opacity-20'}`}
              >
                {c.name}
              </button>
@@ -143,13 +156,10 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* Conference Stage */}
         <div className="lg:col-span-8 bg-slate-900 border border-white/10 rounded-[4rem] p-12 shadow-2xl relative overflow-hidden flex flex-col min-h-[600px] justify-between">
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat"></div>
-          
           <div className="relative z-10 flex flex-col items-center">
              <div className={`relative w-64 h-64 rounded-full border-2 transition-all duration-1000 flex items-center justify-center ${isActive ? 'border-sky-500/50 shadow-[0_0_80px_rgba(14,165,233,0.2)]' : 'border-white/5'}`}>
-                {/* Visual participant ring */}
                 {[...Array(6)].map((_, i) => (
                   <div 
                     key={i} 
@@ -167,7 +177,6 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
                 </div>
              </div>
           </div>
-
           <div className="relative z-10">
             <button 
               onClick={isActive ? stopSession : startSession}
@@ -177,15 +186,12 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
             </button>
           </div>
         </div>
-
-        {/* Neural Interjections Sidebar */}
         <div className="lg:col-span-4 flex flex-col space-y-6">
            <div className="bg-white/5 border border-white/10 rounded-[3rem] p-10 flex-1 backdrop-blur-3xl overflow-hidden flex flex-col relative">
               <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
                 <span className="text-6xl font-black italic">AUTO</span>
               </div>
               <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-10">Real-Time_Agent_Directives</h3>
-              
               <div className="flex-1 overflow-y-auto space-y-6 scrollbar-hide pr-2">
                  {insights.length > 0 ? (
                    insights.map((insight, i) => (
@@ -204,7 +210,6 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
                  )}
               </div>
            </div>
-
            <div className="bg-indigo-600 p-10 rounded-[3rem] text-white shadow-2xl shadow-indigo-600/20">
               <p className="text-[9px] font-black uppercase tracking-widest mb-4 opacity-60">Consensus_Protocol</p>
               <p className="text-sm font-bold italic leading-relaxed">

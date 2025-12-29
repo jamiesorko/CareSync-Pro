@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { DeviceReading } from '../types';
 
@@ -31,6 +32,7 @@ export class HardwareVisionService {
     `;
 
     try {
+      // Fix: Removed responseMimeType from gemini-2.5-flash-image config as it's not supported for nano banana models.
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
         contents: {
@@ -38,8 +40,7 @@ export class HardwareVisionService {
             { inlineData: { data: base64Image, mimeType: 'image/jpeg' } },
             { text: prompt }
           ]
-        },
-        config: { responseMimeType: "application/json" }
+        }
       });
 
       const data = JSON.parse(response.text || '{}');

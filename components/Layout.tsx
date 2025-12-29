@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { AppTab, CareRole, Company } from '../types';
 import Translate from './Translate';
@@ -24,7 +23,7 @@ const Layout: React.FC<LayoutProps> = ({
   children 
 }) => {
   const [isCommandOpen, setIsCommandOpen] = useState(false);
-  const roles = Object.values(CareRole);
+  const roles = Object.values(CareRole) as CareRole[];
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -50,11 +49,11 @@ const Layout: React.FC<LayoutProps> = ({
     }
   };
 
-  const tabs = Object.values(AppTab);
+  const tabs = Object.values(AppTab) as AppTab[];
   const filteredTabs = tabs.filter(tab => {
     if (activeRole === CareRole.CEO) return true;
     if (tab === AppTab.COMPANY_SETTINGS) return false;
-    if (!company.activeModules?.includes(tab)) return false;
+    if (!company.activeModules?.includes(tab.toString())) return false;
     if ([AppTab.DASHBOARD, AppTab.MESSAGES].includes(tab)) return true;
 
     switch (activeRole) {
@@ -89,7 +88,6 @@ const Layout: React.FC<LayoutProps> = ({
         />
       )}
 
-      {/* Sidebar */}
       <aside className="w-72 bg-slate-900 border-r border-white/5 flex flex-col hidden lg:flex">
         <div className="p-8 border-b border-white/5">
           <div className="flex items-center space-x-3 mb-6">
@@ -115,7 +113,7 @@ const Layout: React.FC<LayoutProps> = ({
               className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2 text-sm font-medium text-slate-200 outline-none cursor-pointer"
             >
               {roles.map(role => (
-                <option key={role} value={role} className="bg-slate-900">{role}</option>
+                <option key={String(role)} value={role} className="bg-slate-900">{role}</option>
               ))}
             </select>
           </div>
@@ -124,9 +122,10 @@ const Layout: React.FC<LayoutProps> = ({
         <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto scrollbar-hide">
           {filteredTabs.map((tab) => {
             const isActive = activeTab === tab;
+            const tabStr = String(tab);
             return (
               <button
-                key={tab}
+                key={tabStr}
                 onClick={() => setActiveTab(tab)}
                 className={`w-full text-left px-4 py-3 rounded-xl text-xs font-semibold transition-all flex items-center group ${
                   isActive 
@@ -135,7 +134,7 @@ const Layout: React.FC<LayoutProps> = ({
                 }`}
               >
                 <div className={`w-1.5 h-1.5 rounded-full mr-4 transition-all ${isActive ? 'bg-indigo-500 scale-100' : 'bg-transparent scale-0'}`}></div>
-                <Translate targetLanguage={language}>{tab}</Translate>
+                <Translate targetLanguage={language}>{tabStr}</Translate>
               </button>
             );
           })}
@@ -151,18 +150,17 @@ const Layout: React.FC<LayoutProps> = ({
                 <p className={`text-[10px] font-medium uppercase tracking-tight truncate ${getRoleColor(activeRole)}`}>{activeRole}</p>
               </div>
            </div>
-           <button onClick={onLogout} className="w-full py-3 rounded-xl text-xs font-bold text-rose-500 hover:bg-rose-500/10 transition-colors border border-rose-500/20">
+           <button onPointerUp={onLogout} className="w-full py-3 rounded-xl text-xs font-bold text-rose-500 hover:bg-rose-500/10 transition-colors border border-rose-500/20">
               Sign Out Terminal
            </button>
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         <header className="h-16 border-b border-white/5 bg-slate-950/50 backdrop-blur-md flex items-center justify-between px-8 z-20">
             <div className="flex items-center space-x-4">
                 <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em]">
-                    {activeTab}
+                    {String(activeTab)}
                 </h2>
                 <button 
                   onClick={() => setIsCommandOpen(true)}

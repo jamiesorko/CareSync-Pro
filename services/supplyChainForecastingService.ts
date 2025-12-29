@@ -1,5 +1,6 @@
 
-import { inventoryService, InventoryItem } from './inventoryService';
+import { inventoryService } from './inventoryService';
+import { InventoryItem } from '../types';
 
 export interface SupplyForecast {
   itemId: string;
@@ -24,8 +25,8 @@ export class SupplyChainForecastingService {
     
     const stock = await inventoryService.getStockLevels();
     
-    return stock.map(item => ({
-      itemId: item.id, // Fixed: accessing id from InventoryItem
+    return stock.map((item: InventoryItem): SupplyForecast => ({
+      itemId: item.id,
       itemName: item.name,
       estimatedStockOutDate: '2025-11-20',
       requiredReplenishment: item.minThreshold * 2,

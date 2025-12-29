@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Company, AppTab } from '../../types';
 import Translate from '../../components/Translate';
@@ -15,13 +14,14 @@ const CompanySettings: React.FC<Props> = ({ company, setCompany, language }) => 
   const [color, setColor] = useState(company.brandColor || '#0ea5e9');
   const [isSaving, setIsSaving] = useState(false);
 
-  const availableModules = Object.values(AppTab).filter(t => t !== AppTab.ORG_COMMAND);
+  const availableModules = (Object.values(AppTab) as AppTab[]).filter(t => t !== AppTab.ORG_COMMAND);
 
-  const handleToggleModule = (mod: string) => {
-    const current = company.activeModules || [];
-    const updated = current.includes(mod) 
-      ? current.filter(m => m !== mod) 
-      : [...current, mod];
+  const handleToggleModule = (mod: AppTab) => {
+    const current = (company.activeModules || []) as string[];
+    const modStr = String(mod);
+    const updated = current.includes(modStr) 
+      ? current.filter(m => m !== modStr) 
+      : [...current, modStr];
     setCompany({ ...company, activeModules: updated });
   };
 
@@ -79,17 +79,22 @@ const CompanySettings: React.FC<Props> = ({ company, setCompany, language }) => 
         <div className="bg-slate-900 border border-white/10 rounded-[3rem] p-10 backdrop-blur-3xl shadow-2xl">
           <h3 className="text-xl font-black text-white mb-8 tracking-tighter uppercase italic">Feature_Matrix</h3>
           <div className="space-y-3 max-h-[300px] overflow-y-auto scrollbar-hide pr-2">
-            {availableModules.map(mod => (
-              <label key={mod} className="flex items-center justify-between p-4 bg-white/[0.03] border border-white/5 rounded-xl cursor-pointer hover:bg-white/10 transition-all group">
-                <span className="text-[10px] font-black text-slate-400 group-hover:text-white uppercase tracking-tighter transition-colors">{mod}</span>
-                <input 
-                  type="checkbox" 
-                  checked={company.activeModules?.includes(mod)}
-                  onChange={() => handleToggleModule(mod)}
-                  className="w-4 h-4 rounded bg-slate-800 border-white/10 text-sky-500"
-                />
-              </label>
-            ))}
+            {availableModules.map((mod: AppTab) => {
+              const modStr = String(mod);
+              return (
+                <label key={modStr} className="flex items-center justify-between p-4 bg-white/[0.03] border border-white/5 rounded-xl cursor-pointer hover:bg-white/10 transition-all group">
+                  <span className="text-[10px] font-black text-slate-400 group-hover:text-white uppercase tracking-tighter transition-colors">
+                    <Translate targetLanguage={language}>{modStr}</Translate>
+                  </span>
+                  <input 
+                    type="checkbox" 
+                    checked={company.activeModules?.includes(modStr)}
+                    onChange={() => handleToggleModule(mod)}
+                    className="w-4 h-4 rounded bg-slate-800 border-white/10 text-sky-500"
+                  />
+                </label>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -102,7 +107,7 @@ const CompanySettings: React.FC<Props> = ({ company, setCompany, language }) => 
         <button 
           onClick={handleSave}
           disabled={isSaving}
-          className="px-12 py-5 bg-white text-black rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
+          className="px-12 py-5 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
         >
           {isSaving ? 'SYNCHRONIZING...' : 'AUTHORIZE_ORG_PULSE'}
         </button>

@@ -11,7 +11,7 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<AppTab>(AppTab.DASHBOARD);
 
   if (!user || !company) {
-    return <Login onLogin={(role, name, comp) => {
+    return <Login onLogin={(role: CareRole, name: string, comp: Company) => {
       setUser({ name, role });
       setCompany(comp);
     }} />;
@@ -31,7 +31,7 @@ const App: React.FC = () => {
       activeTab={activeTab} 
       setActiveTab={setActiveTab}
       activeRole={user.role}
-      setActiveRole={(role) => setUser({ ...user, role })}
+      setActiveRole={(role: CareRole) => setUser({ ...user, role })}
       staffName={user.name}
       language="English"
       company={company}

@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoogleGenAI, Modality, LiveServerMessage } from '@google/genai';
 import { decode, encode, decodeAudioData } from '../utils/audioHelpers';
@@ -70,36 +69,38 @@ const AIConsult: React.FC<Props> = ({ role, onClose, language }) => {
             const content = message.serverContent;
             if (!content) return;
 
-            if (content.outputTranscription) {
-              setTranscript(prev => [...prev.slice(-10), `[CORE]: ${content.outputTranscription?.text || ''}`]);
+            if (content.outputTranscription?.text) {
+              setTranscript(prev => [...prev.slice(-10), `[CORE]: ${content.outputTranscription.text}`]);
             }
-            if (content.inputTranscription) {
-              setTranscript(prev => [...prev.slice(-10), `[OPERATOR]: ${content.inputTranscription?.text || ''}`]);
+            if (content.inputTranscription?.text) {
+              setTranscript(prev => [...prev.slice(-10), `[OPERATOR]: ${content.inputTranscription.text}`]);
             }
 
-            const base64Audio = content.modelTurn?.parts?.[0]?.inlineData?.data;
-            if (base64Audio) {
-              nextStartTimeRef.current = Math.max(nextStartTimeRef.current, outputCtx.currentTime);
-              const buffer = await decodeAudioData(decode(base64Audio), outputCtx, 24000, 1);
-              const source = outputCtx.createBufferSource();
-              source.buffer = buffer;
-              source.connect(outputCtx.destination);
-              source.onended = () => sourcesRef.current.delete(source);
-              source.start(nextStartTimeRef.current);
-              nextStartTimeRef.current += buffer.duration;
-              sourcesRef.current.add(source);
+            const modelTurn = content.modelTurn;
+            if (modelTurn?.parts && modelTurn.parts.length > 0) {
+              const base64Audio = modelTurn.parts[0].inlineData?.data;
+              if (base64Audio) {
+                nextStartTimeRef.current = Math.max(nextStartTimeRef.current, outputCtx.currentTime);
+                const buffer = await decodeAudioData(decode(base64Audio), outputCtx, 24000, 1);
+                const source = outputCtx.createBufferSource();
+                source.buffer = buffer;
+                source.connect(outputCtx.destination);
+                source.onended = () => sourcesRef.current.delete(source);
+                source.start(nextStartTimeRef.current);
+                nextStartTimeRef.current += buffer.duration;
+                sourcesRef.current.add(source);
+              }
             }
 
             if (content.interrupted) {
-              sourcesRef.current.forEach(s => s.stop());
+              sourcesRef.current.forEach(s => {
+                try { s.stop(); } catch(err) {}
+              });
               sourcesRef.current.clear();
               nextStartTimeRef.current = 0;
             }
           },
-          onerror: (e) => {
-            console.error(e);
-            setStatus('Link Interrupted');
-          },
+          onerror: () => setStatus('Link Interrupted'),
           onclose: () => setIsActive(false)
         },
         config: {
@@ -127,7 +128,7 @@ const AIConsult: React.FC<Props> = ({ role, onClose, language }) => {
         <div className="p-8 border-b border-white/5 flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <div className={`w-3 h-3 rounded-full ${isActive ? 'bg-sky-500 animate-ping' : 'bg-slate-700'}`}></div>
-            <h3 className="text-xl font-black text-white uppercase"><Translate targetLanguage={language}>Neural_Consult</Translate></h3>
+            <h3 className="text-xl font-black text-white uppercase">Neural_Consult</h3>
           </div>
           <button onClick={onClose} className="text-slate-500 font-bold hover:text-white transition-colors">✕</button>
         </div>
@@ -142,7 +143,7 @@ const AIConsult: React.FC<Props> = ({ role, onClose, language }) => {
         </div>
 
         <div className="p-10 border-t border-white/5">
-          <button onClick={isActive ? stopSession : startSession} className={`w-full py-6 rounded-2xl font-black text-xs tracking-[0.3em] transition-all ${isActive ? 'bg-rose-500/20 text-rose-500 animate-pulse' : 'bg-white text-black hover:scale-[1.01] active:scale-95'}`}>
+          <button onClick={isActive ? stopSession : startSession} className={`w-full py-6 rounded-2xl font-black text-xs tracking-[0.3em] transition-all ${isActive ? 'bg-rose-500/20 text-rose-500 animate-pulse' : 'bg-white text-black hover:scale-[1.01] active:scale-95 transition-all'}`}>
             <Translate targetLanguage={language}>{isActive ? 'TERMINATE_SIGNAL' : 'OPEN_NEURAL_LINK'}</Translate>
           </button>
         </div>

@@ -1,4 +1,4 @@
-import { GoogleGenAI, Modality } from "@google/genai";
+import { GoogleGenAI, Modality, LiveServerMessage } from "@google/genai";
 import { encode } from '../utils/audioHelpers';
 
 export interface SafetyPulse {
@@ -24,28 +24,40 @@ export class GuardianService {
         onopen: () => {
           const source = inputCtx.createMediaStreamSource(stream);
           const scriptProcessor = inputCtx.createScriptProcessor(4096, 1, 1);
-          scriptProcessor.onaudioprocess = (e) => {
+          scriptProcessor.onaudioprocess = (e: AudioProcessingEvent) => {
             const inputData = e.inputBuffer.getChannelData(0);
             const int16 = new Int16Array(inputData.length);
             for (let i = 0; i < inputData.length; i++) int16[i] = inputData[i] * 32768;
-            sessionPromise.then(session => session.sendRealtimeInput({ media: { data: encode(new Uint8Array(int16.buffer)), mimeType: 'audio/pcm;rate=16000' } }));
+            sessionPromise.then(session => session.sendRealtimeInput({ 
+              media: { 
+                data: encode(new Uint8Array(int16.buffer)), 
+                mimeType: 'audio/pcm;rate=16000' 
+              } 
+            }));
           };
           source.connect(scriptProcessor);
           scriptProcessor.connect(inputCtx.destination);
         },
-        onmessage: async (message) => {
-          if (message.serverContent?.outputTranscription) {
-            const text = message.serverContent.outputTranscription.text;
-            const isAggressive = text.toLowerCase().includes('stop') || text.toLowerCase().includes('help');
+        onmessage: async (message: LiveServerMessage) => {
+          const content = message.serverContent;
+          if (!content) return;
+          
+          const outputText = content.outputTranscription?.text || "";
+          const inputText = content.inputTranscription?.text || "";
+          const textValue: string = outputText || inputText || "";
+
+          if (textValue) {
+            const lowText = textValue.toLowerCase();
+            const isAggressive = lowText.includes('stop') || lowText.includes('help') || lowText.includes('get out');
             onPulse({
               aggressionScore: isAggressive ? 85 : 10,
               environmentRisk: 10,
-              aiCommentary: text,
+              aiCommentary: textValue,
               status: isAggressive ? 'WARNING' : 'SAFE'
             });
           }
         },
-        onerror: (e) => console.error(e),
+        onerror: (e: any) => console.error(e),
         onclose: () => console.log("Escort finished")
       },
       config: {
