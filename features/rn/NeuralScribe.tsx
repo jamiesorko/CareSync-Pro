@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI, Modality } from '@google/genai';
 import { encode, decode, decodeAudioData } from '../../utils/audioHelpers';
@@ -42,7 +43,7 @@ const NeuralScribe: React.FC<Props> = ({ language }) => {
         },
         onmessage: (msg) => {
           if (msg.serverContent?.inputTranscription) {
-            setTranscript(prev => prev + " " + msg.serverContent.inputTranscription.text);
+            setTranscript(prev => prev + " " + msg.serverContent?.inputTranscription?.text);
           }
         },
         onclose: () => setIsActive(false)

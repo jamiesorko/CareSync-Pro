@@ -1,12 +1,12 @@
 import React from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
-import { AppTab, CareRole } from '../types';
+import { AppTab, CareRole, User } from '../types';
 
 interface Props {
   activeTab: AppTab;
   setActiveTab: (tab: AppTab) => void;
-  user: { name: string; role: CareRole };
+  user: User;
   onLogout: () => void;
   children: React.ReactNode;
 }

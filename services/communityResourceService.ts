@@ -30,14 +30,14 @@ export class CommunityResourceService {
       return chunks.map((chunk: any) => {
         if (chunk.maps) {
           return {
-            name: chunk.maps.title,
+            name: chunk.maps.title || "Unknown Resource",
             address: "Refer to map",
             category: type,
-            uri: chunk.maps.uri
-          };
+            uri: chunk.maps.uri || ""
+          } as CommunityResource;
         }
         return null;
-      }).filter(Boolean);
+      }).filter((res): res is CommunityResource => res !== null);
     } catch (e) {
       return [];
     }

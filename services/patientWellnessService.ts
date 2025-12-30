@@ -86,10 +86,10 @@ export class PatientWellnessService {
   async generateZenVideo(prompt: string): Promise<string> {
     const ai = new GoogleGenAI({ apiKey: this.getApiKey() });
     
-    // Check key selection for Veo
-    if (window.aistudio) {
-      const hasKey = await window.aistudio.hasSelectedApiKey();
-      if (!hasKey) await window.aistudio.openSelectKey();
+    // Check key selection for Veo with safe cast
+    if ((window as any).aistudio) {
+      const hasKey = await (window as any).aistudio.hasSelectedApiKey();
+      if (!hasKey) await (window as any).aistudio.openSelectKey();
     }
 
     let operation = await ai.models.generateVideos({

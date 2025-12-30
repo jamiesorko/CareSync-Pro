@@ -1,8 +1,7 @@
-
 'use client';
 
 import React, { useState } from 'react';
-import { CareRole, AppTab } from '../types';
+import { CareRole, AppTab, User } from '../types';
 import Login from '../features/Login';
 import Layout from '../components/Layout';
 import Dashboard from '../features/Dashboard';
@@ -12,11 +11,11 @@ import CareReport from '../features/CareReport';
 import { MOCK_CLIENTS, MOCK_STAFF } from '../data/careData';
 
 export default function Home() {
-  const [user, setUser] = useState<{ name: string; role: CareRole } | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState<AppTab>(AppTab.DASHBOARD);
 
   if (!user) {
-    return <Login onLogin={(role, name) => setUser({ name, role })} />;
+    return <Login onLogin={(u: User) => setUser(u)} />;
   }
 
   const renderContent = () => {

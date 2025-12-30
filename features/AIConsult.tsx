@@ -70,10 +70,10 @@ const AIConsult: React.FC<Props> = ({ role, onClose, language }) => {
             if (!content) return;
 
             if (content.outputTranscription?.text) {
-              setTranscript(prev => [...prev.slice(-10), `[CORE]: ${content.outputTranscription.text}`]);
+              setTranscript(prev => [...prev.slice(-10), `[CORE]: ${content.outputTranscription?.text}`]);
             }
             if (content.inputTranscription?.text) {
-              setTranscript(prev => [...prev.slice(-10), `[OPERATOR]: ${content.inputTranscription.text}`]);
+              setTranscript(prev => [...prev.slice(-10), `[OPERATOR]: ${content.inputTranscription?.text}`]);
             }
 
             const modelTurn = content.modelTurn;

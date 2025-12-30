@@ -63,10 +63,10 @@ const LiveLab: React.FC = () => {
             if (!content) return;
 
             if (content.outputTranscription?.text) {
-              setTranscripts(prev => [...prev.slice(-10), `Model: ${content.outputTranscription.text}`]);
+              setTranscripts(prev => [...prev.slice(-10), `Model: ${content.outputTranscription?.text}`]);
             }
             if (content.inputTranscription?.text) {
-              setTranscripts(prev => [...prev.slice(-10), `You: ${content.inputTranscription.text}`]);
+              setTranscripts(prev => [...prev.slice(-10), `You: ${content.inputTranscription?.text}`]);
             }
 
             const modelTurn = content.modelTurn;

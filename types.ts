@@ -541,7 +541,6 @@ export interface AfterActionReview {
   trainingForge: any[];
 }
 
-/* Added missing EthicsConsult interface */
 export interface EthicsConsult {
   id: string;
   timestamp: string;
@@ -552,7 +551,6 @@ export interface EthicsConsult {
   legislativeGuardrail: string;
 }
 
-/* Added missing TrainingModule interface */
 export interface TrainingModule {
   id: string;
   title: string;

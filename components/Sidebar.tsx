@@ -1,11 +1,14 @@
 
 import React from 'react';
-import { AppTab } from '../types';
+import { AppTab, CareRole, User } from '../types';
 import { LayoutDashboard, ShieldAlert, Users, Briefcase } from 'lucide-react';
 
 interface Props {
   activeTab: AppTab;
   setActiveTab: (tab: AppTab) => void;
+  staffName?: string;
+  role?: CareRole;
+  user?: User;
 }
 
 const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
