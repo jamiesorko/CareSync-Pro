@@ -10,7 +10,7 @@ const Login: React.FC<Props> = ({ onLogin }) => {
   const personas: User[] = [
     { name: 'Jamie Sorko', role: CareRole.CEO },
     { name: 'Tom Hardy', role: CareRole.RN },
-    { name: 'Samwise Gamgee', role: CareRole.RPN },
+    { name: 'Sarah Jenkins', role: CareRole.RPN },
     { name: 'Elena R.', role: CareRole.PSW },
     { name: 'Marcus Bell', role: CareRole.HSS },
     { name: 'Robert Johnson', role: CareRole.COORDINATOR }

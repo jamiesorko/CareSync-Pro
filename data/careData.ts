@@ -8,38 +8,35 @@ export const MOCK_STAFF: StaffMember[] = [
     role: CareRole.RN, 
     status: 'ONLINE', 
     weeklyHours: 40,
-    anonymizedId: 'R-101',
+    anonymizedId: 'RN-701',
     homeSector: 'Sector 4',
     availability: 'Full-time',
     restrictedClientIds: [],
-    hourlyRate: 55,
-    lastSeen: '2025-10-15T08:00:00Z'
-  },
-  { 
-    id: 's3', 
-    name: 'Samwise Gamgee', 
-    role: CareRole.RPN, 
-    status: 'IN_FIELD', 
-    weeklyHours: 35,
-    anonymizedId: 'N-303',
-    homeSector: 'Sector 4',
-    availability: 'Full-time',
-    restrictedClientIds: [],
-    hourlyRate: 42,
-    lastSeen: '2025-10-15T09:30:00Z'
+    hourlyRate: 55
   },
   { 
     id: 's2', 
-    name: 'Linda White', 
+    name: 'Sarah Jenkins', 
+    role: CareRole.RPN, 
+    status: 'IN_FIELD', 
+    weeklyHours: 35,
+    anonymizedId: 'RPN-802',
+    homeSector: 'Sector 4',
+    availability: 'Full-time',
+    restrictedClientIds: [],
+    hourlyRate: 42
+  },
+  { 
+    id: 's3', 
+    name: 'Elena Rodriguez', 
     role: CareRole.PSW, 
     status: 'IN_FIELD', 
     weeklyHours: 38,
-    anonymizedId: 'P-202',
+    anonymizedId: 'PSW-202',
     homeSector: 'Sector 1',
     availability: 'Part-time',
     restrictedClientIds: [],
-    hourlyRate: 25,
-    lastSeen: '2025-10-15T10:15:00Z'
+    hourlyRate: 25
   },
   { 
     id: 's4', 
@@ -47,12 +44,11 @@ export const MOCK_STAFF: StaffMember[] = [
     role: CareRole.HSS, 
     status: 'ONLINE', 
     weeklyHours: 30,
-    anonymizedId: 'H-404',
+    anonymizedId: 'HSS-404',
     homeSector: 'Sector 2',
     availability: 'Full-time',
     restrictedClientIds: [],
-    hourlyRate: 32,
-    lastSeen: '2025-10-15T11:00:00Z'
+    hourlyRate: 32
   }
 ];
 
@@ -62,37 +58,36 @@ export const MOCK_CLIENTS: Client[] = [
     name: 'Robert Johnson',
     address: '42 Wallaby Way, Toronto, ON',
     phone: '416-555-1234',
-    conditions: ['Post-Op Hip', 'Hypertension', 'T2 Diabetes'],
-    description: 'High-acuity post-surgical patient requiring multi-discipline stabilization.',
+    conditions: ['Post-Op Hip', 'T2 Diabetes', 'Hypertension'],
+    description: 'High-acuity post-surgical patient. Requires stabilization and mobility support.',
     carePlans: { 
-      [CareRole.PSW]: [
-        'Assisted Bed Bath', 
-        'Hoyer Transfer to Chair', 
-        'Meal Setup & Hydration', 
-        'Apply Lower Limb Compression Socks'
-      ],
       [CareRole.RN]: [
-        'Advanced Surgical Site Assessment (Hip)', 
-        'IV Site Patency & Infection Sweep', 
-        'Medication Reconciliation & Verification', 
-        'Discharge Readiness Evaluation (Independence Slope)',
-        'Clinical Briefing with Family Advocate'
+        'Surgical Site Assessment (Hip)', 
+        'IV Patency & Infection Sweep', 
+        'Advanced Medication Reconciliation', 
+        'Teaching: Anticoagulant Protocol',
+        'Direct Report to Attending Physician'
       ],
       [CareRole.RPN]: [
         'Subcutaneous Insulin Administration',
-        'Wound Dressing Change (Clean-Tech Protocol)',
-        'Daily Vital Signs Baseline Logging',
-        'Practical Nursing Pain Assessment'
+        'Wound Dressing Change (Clean-Tech)',
+        'Vital Signs Baseline Logging',
+        'Oral Medication Pass & Verification'
+      ],
+      [CareRole.PSW]: [
+        'Assisted Bed Bath & Perineal Care', 
+        'Hoyer Transfer to Wheelchair', 
+        'Meal Setup & Supervised Hydration', 
+        'Lower Limb Dressing Assistance'
       ],
       [CareRole.HSS]: [
-        'Home Safety Environmental Forensic Audit',
-        'Community Resource PT Linkage Coordination',
-        'Social Isolation Vulnerability Scan',
-        'Grocery Assistance Log & Nutrition Alignment'
+        'Home Safety Forensic Audit',
+        'Community PT Linkage Coordination',
+        'Grocery Assistance Log'
       ]
     },
     currentVisitStatus: 'IDLE',
-    anonymizedId: 'C-001',
+    anonymizedId: 'C-901',
     sector: 'Sector 4',
     time: '08:00 AM',
     mobilityStatus: {
@@ -104,56 +99,6 @@ export const MOCK_CLIENTS: Client[] = [
       transferMethod: 'Mechanical'
     },
     isInitialVisit: false,
-    medications: [],
-    blacklistStaffIds: [],
-    risk: {
-      level: 'HIGH',
-      factors: ['Post-Op', 'Diabetes'],
-      lastAssessed: '2025-10-14'
-    }
-  },
-  {
-    id: 'c2',
-    name: 'Alice Cooper',
-    address: '101 Bay St, Toronto, ON',
-    phone: '416-555-9876',
-    conditions: ['Early Onset Dementia', 'Arthritis'],
-    description: 'Patient requires cognitive redirection and safety monitoring.',
-    carePlans: { 
-      [CareRole.PSW]: [
-        'Morning Grooming & Oral Care', 
-        'Gentle Range of Motion Exercises (Legs)',
-        'Guided Neighborhood Walk (15m)',
-        'Cognitive Stimulation Activity (Puzzle)'
-      ],
-      [CareRole.RN]: [
-        'Neuro-Cognitive Personality Drift Baseline',
-        'Psychotropic Medication Review (Efficacy Check)',
-        'Supervisor Support Protocol Initializer'
-      ],
-      [CareRole.RPN]: [
-        'Daily Vitals Log (BP/Pulse Focus)',
-        'Oral Medication Administration',
-        'Joint Swelling Assessment (Knees/Hands)'
-      ],
-      [CareRole.HSS]: [
-        'Dementia-Friendly Dwelling Mapping',
-        'Family Caregiver Respite Resource Intercept'
-      ]
-    },
-    currentVisitStatus: 'IDLE',
-    anonymizedId: 'C-002',
-    sector: 'Sector 1',
-    time: '10:30 AM',
-    mobilityStatus: {
-      isBedridden: false,
-      useWheelchair: false,
-      useWalker: true,
-      dementia: true,
-      liftType: 'None',
-      transferMethod: '1-Person Assist'
-    },
-    isInitialVisit: true,
     medications: [],
     blacklistStaffIds: []
   }

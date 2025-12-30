@@ -17,9 +17,9 @@ const ProfessionalTerminal: React.FC<Props> = ({ clients, role, staffName }) => 
 
   const getRoleBranding = () => {
     switch (role) {
-      case CareRole.RN: return { title: 'CLINICAL_INTEL_NODE', color: 'text-sky-400', theme: 'bg-sky-600', sub: 'Nursing Leadership & Advanced Assessment' };
-      case CareRole.RPN: return { title: 'CLINICAL_PRACTICAL_NODE', color: 'text-cyan-400', theme: 'bg-cyan-600', sub: 'Nursing Practice & Clinical Stabilization' };
-      case CareRole.HSS: return { title: 'BIO_SOCIAL_NEXUS', color: 'text-purple-400', theme: 'bg-purple-600', sub: 'Social Determinants & Resource Coordination' };
+      case CareRole.RN: return { title: 'CLINICAL_INTEL_NODE', color: 'text-sky-400', theme: 'bg-sky-600', sub: 'Nursing Leadership & Critical Assessment' };
+      case CareRole.RPN: return { title: 'CLINICAL_PRACTICE_NODE', color: 'text-cyan-400', theme: 'bg-cyan-600', sub: 'Nursing Practice & Stabilization' };
+      case CareRole.HSS: return { title: 'BIO_SOCIAL_NEXUS', color: 'text-purple-400', theme: 'bg-purple-600', sub: 'Social Determinants & Resource Linkage' };
       default: return { title: 'FIELD_STATION_ALPHA', color: 'text-orange-500', theme: 'bg-orange-600', sub: 'Personal Support & ADL Care' };
     }
   };
