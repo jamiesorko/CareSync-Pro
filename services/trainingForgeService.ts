@@ -1,5 +1,4 @@
-
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import { TrainingModule, StaffMember } from '../types';
 
 export class TrainingForgeService {

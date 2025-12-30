@@ -1,4 +1,3 @@
-
 import { GoogleGenAI } from "@google/genai";
 import { Client, HuddleSignal } from '../types';
 

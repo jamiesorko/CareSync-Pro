@@ -1,4 +1,3 @@
-
 import { GoogleGenAI } from "@google/genai";
 import { Client, EthicsConsult } from '../types';
 
@@ -9,11 +8,7 @@ export class ClinicalEthicsAdvisoryService {
 
   async arbitrateDilemma(client: Client, scenario: string): Promise<EthicsConsult> {
     const ai = new GoogleGenAI({ apiKey: this.getApiKey() });
-    
-    const prompt = `
-      Bio-Ethicist. Patient: ${client.name}. Scenario: "${scenario}".
-      JSON: { "conflict": "", "perspectives": [], "directive": "", "guardrail": "" }
-    `;
+    const prompt = `Bio-Ethicist. Patient: ${client.name}. Scenario: "${scenario}". JSON: { "conflict": "", "perspectives": [], "directive": "", "guardrail": "" }`;
 
     try {
       const response = await ai.models.generateContent({
