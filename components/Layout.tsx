@@ -3,7 +3,6 @@ import React from 'react';
 import { AppTab, CareRole } from '../types';
 import Sidebar from './Sidebar';
 import Header from './Header';
-import { ChevronRight } from 'lucide-react';
 
 interface Props {
   activeTab: AppTab;
@@ -16,30 +15,20 @@ interface Props {
 
 const Layout: React.FC<Props> = ({ activeTab, setActiveTab, activeRole, staffName, onLogout, children }) => {
   return (
-    <div className="flex h-screen w-full bg-[#f4f7fa]">
+    <div className="flex h-screen w-full bg-[#010411] text-slate-100 overflow-hidden">
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
         staffName={staffName} 
         role={activeRole} 
       />
-
       <div className="flex-1 flex flex-col h-full overflow-hidden">
-        <Header 
-          activeTab={activeTab} 
-          onLogout={onLogout} 
-        />
-
-        <div className="flex-1 overflow-y-auto app-scroll p-6 lg:p-8">
-          <div className="max-w-[1600px] mx-auto space-y-4">
-            <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">
-              <span>Main Menu</span>
-              <ChevronRight size={10} />
-              <span className="text-[#005596]">{activeTab}</span>
-            </nav>
+        <Header activeTab={activeTab} onLogout={onLogout} />
+        <main className="flex-1 overflow-y-auto p-8 scrollbar-hide">
+          <div className="max-w-7xl mx-auto animate-in fade-in duration-500">
             {children}
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );

@@ -3,37 +3,8 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --alaya-primary: #005596;
-  --alaya-secondary: #002d5b;
-  --alaya-bg: #f4f7fa;
-  --alaya-border: #dae1e7;
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--alaya-bg);
-  color: #333;
-  margin: 0;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.alaya-card {
-  background: white;
-  border: 1px solid var(--alaya-border);
-  border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-}
-
-.app-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
-}
-
-.app-scroll::-webkit-scrollbar { width: 6px; }
-.app-scroll::-webkit-scrollbar-track { background: transparent; }
-.app-scroll::-webkit-scrollbar-thumb { 
-  background-color: #cbd5e1; 
-  border-radius: 20px;
+@layer base {
+  body {
+    @apply bg-[#010411] text-slate-100;
+  }
 }
