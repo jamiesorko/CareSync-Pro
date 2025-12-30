@@ -3,14 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Client, CareRole, AlertType } from '../../types';
 import Translate from '../../components/Translate';
 import NeuralScribe from '../rn/NeuralScribe';
-import { ShieldAlert, Clock, MapPin, CheckCircle2, Stethoscope, Activity, HeartPulse, UserCheck } from 'lucide-react';
+import { ShieldAlert, Clock, MapPin, CheckCircle2, Stethoscope, Activity, HeartPulse, UserCheck, Edit3 } from 'lucide-react';
 
 interface Props {
   client: Client;
   onClockOut: () => void;
   onAlert: (type: AlertType, content: string) => void;
   language: string;
-  role: CareRole; // Crucial: Passed from terminal
+  role: CareRole; 
 }
 
 const PSWVisitConsole: React.FC<Props> = ({ client, onClockOut, onAlert, language, role }) => {
@@ -73,13 +73,26 @@ const PSWVisitConsole: React.FC<Props> = ({ client, onClockOut, onAlert, languag
                  </div>
               </div>
            </div>
-           <button onClick={handleFinalize} className={`px-10 py-5 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-2xl transition-all ${isNurse ? 'bg-sky-600' : isSocial ? 'bg-purple-600' : 'bg-rose-600'}`}>
+           <button onClick={handleFinalize} className={`px-10 py-5 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl transition-all ${isNurse ? 'bg-sky-600' : isSocial ? 'bg-purple-600' : 'bg-rose-600'}`}>
              <CheckCircle2 size={14} className="inline mr-2" /> {isNurse ? 'CLOSE_ENCOUNTER' : 'CLOCK_OUT'}
            </button>
         </div>
 
         {/* Dynamic Care Matrix */}
         <div className="bg-white/5 border border-white/10 rounded-[3.5rem] p-12 relative overflow-hidden">
+           {/* Persistent Coordinator Instructions */}
+           {client.coordinatorInstructions && (
+             <div className="mb-10 p-8 bg-indigo-600/10 border border-indigo-500/30 rounded-[2.5rem] animate-in slide-in-from-top-4 shadow-xl">
+                <div className="flex items-center gap-3 mb-4">
+                   <Edit3 size={16} className="text-indigo-400" />
+                   <h4 className="text-xs font-black text-indigo-400 uppercase tracking-widest italic">Coordinator_Directive</h4>
+                </div>
+                <p className="text-sm text-white font-bold italic leading-relaxed">
+                  "{client.coordinatorInstructions}"
+                </p>
+             </div>
+           )}
+
            <h3 className="text-xl font-black text-white italic tracking-tighter uppercase flex items-center gap-4 mb-12">
               <ShieldAlert size={20} className={isNurse ? 'text-sky-400' : isSocial ? 'text-purple-400' : 'text-orange-400'} />
               {isNurse ? 'Clinical_Practice_Directives' : isSocial ? 'Social_Intercept_Tasks' : 'Personal_Support_Routine'}
@@ -131,8 +144,8 @@ const PSWVisitConsole: React.FC<Props> = ({ client, onClockOut, onAlert, languag
                <button onClick={() => triggerSignal('FALL', "Detail Patient Fall incident:")} className="p-6 bg-rose-600 text-white rounded-3xl font-black text-[10px] uppercase text-left shadow-xl hover:scale-105 transition-all">
                   Patient Fall / Impact
                </button>
-               <button onClick={() => triggerSignal('BEDSORE', "Specify location of Skin Breakdown:")} className="p-6 bg-slate-900 border border-white/10 text-rose-400 rounded-3xl font-black text-[10px] uppercase text-left hover:bg-rose-600 hover:text-white transition-all">
-                  Skin Integrity Issue
+               <button onClick={() => triggerSignal('COMPLAINT', "Details of subject complaint or friction:")} className="p-6 bg-slate-900 border border-white/10 text-rose-400 rounded-3xl font-black text-[10px] uppercase text-left hover:bg-rose-600 hover:text-white transition-all">
+                  Subject Complaint
                </button>
              </>
            )}

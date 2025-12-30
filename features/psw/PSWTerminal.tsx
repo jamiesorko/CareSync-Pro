@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Client, AppTab } from '../../types';
+import { Client, AppTab, CareRole } from '../../types';
 import PSWRoster from './PSWRoster';
 import PSWVisitConsole from './PSWVisitConsole';
 import PSWSelfService from './PSWSelfService';
@@ -13,7 +13,6 @@ interface Props {
 const PSWTerminal: React.FC<Props> = ({ clients }) => {
   const [view, setView] = useState<'ROSTER' | 'VISIT' | 'SELF'>('ROSTER');
   const [activeClient, setActiveClient] = useState<Client | null>(null);
-  const activeStaff = MOCK_STAFF[1]; // Linda White
 
   const handleStartVisit = (client: Client) => {
     setActiveClient(client);
@@ -54,6 +53,7 @@ const PSWTerminal: React.FC<Props> = ({ clients }) => {
           <PSWVisitConsole 
             client={activeClient} 
             language="English"
+            role={CareRole.PSW}
             onClockOut={handleEndVisit}
             onAlert={(type, content) => console.log(`Alert: ${type} - ${content}`)}
           />

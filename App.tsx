@@ -8,6 +8,7 @@ import ScheduleView from './features/ScheduleView';
 import RNCommand from './features/rn/RNCommand';
 import PatientHub from './features/client/PatientHub';
 import ProfessionalTerminal from './features/terminal/ProfessionalTerminal';
+import CoordinationHub from './features/CoordinationHub';
 import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
 
 const App: React.FC = () => {
@@ -17,17 +18,18 @@ const App: React.FC = () => {
   if (!user) return <Login onLogin={setUser} />;
 
   const renderContent = () => {
-    // RPN added to field staff array
     const isFieldStaff = [CareRole.PSW, CareRole.RN, CareRole.RPN, CareRole.HSS].includes(user.role as any);
 
     switch (activeTab) {
       case AppTab.DASHBOARD:
         if (user.role === CareRole.CEO) return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} language="English" />;
         if (isFieldStaff) return <ProfessionalTerminal role={user.role as CareRole} staffName={user.name} clients={MOCK_CLIENTS} />;
-        if (user.role === CareRole.COORDINATOR) return <PatientHub clients={MOCK_CLIENTS} />;
+        if (user.role === CareRole.COORDINATOR) return <CoordinationHub language="English" />;
         return <RNCommand clients={MOCK_CLIENTS} role={user.role} />;
       case AppTab.SCHEDULE:
         return <ScheduleView role={user.role} clients={MOCK_CLIENTS} language="English" />;
+      case AppTab.COORDINATION:
+        return <CoordinationHub language="English" />;
       case AppTab.CLINICAL_COMMAND:
         return <RNCommand clients={MOCK_CLIENTS} role={user.role} />;
       default:

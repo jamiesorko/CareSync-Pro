@@ -18,7 +18,7 @@ const AdminPortal: React.FC<Props> = ({ language, role, clients, setClients }) =
   const handleIntake = (e: React.FormEvent) => {
     e.preventDefault();
     const id = (clients.length + 1).toString();
-    // Fixed: Use valid Client interface properties
+    // Fixed: Use valid Client interface properties, removed 'date'
     const client: Client = {
       id,
       companyId: 'demo-company',
@@ -28,7 +28,6 @@ const AdminPortal: React.FC<Props> = ({ language, role, clients, setClients }) =
       sector: 'General',
       phone: newClient.phone,
       time: '09:00 AM',
-      date: 'Monday',
       conditions: newClient.conditions.split(','),
       mobilityStatus: {
         isBedridden: false,
@@ -41,9 +40,9 @@ const AdminPortal: React.FC<Props> = ({ language, role, clients, setClients }) =
       isInitialVisit: true,
       description: 'Newly onboarded client.',
       carePlans: {},
-      medications: [],
       blacklistStaffIds: [],
-      currentVisitStatus: 'IDLE'
+      currentVisitStatus: 'IDLE',
+      medications: []
     };
     setClients(prev => [...prev, client]);
     setShowIntake(false);

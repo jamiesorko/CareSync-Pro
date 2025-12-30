@@ -4,51 +4,42 @@ import { Client, CareRole, StaffMember } from '../types';
 export const MOCK_STAFF: StaffMember[] = [
   { 
     id: 's1', 
-    name: 'Tom Hardy', 
-    role: CareRole.RN, 
+    name: 'Elena Rodriguez', 
+    role: CareRole.PSW, 
     status: 'ONLINE', 
-    weeklyHours: 40,
-    anonymizedId: 'RN-701',
-    homeSector: 'Sector 4',
-    availability: 'Full-time',
+    weeklyHours: 38,
+    anonymizedId: 'P-202',
+    homeSector: 'Woodbridge',
+    availability: '08:00-20:00',
     restrictedClientIds: [],
-    hourlyRate: 55
+    specialties: ['Dementia', 'Hoyer Lifts'],
+    hourlyRate: 25
   },
   { 
     id: 's2', 
     name: 'Sarah Jenkins', 
-    role: CareRole.RPN, 
+    role: CareRole.PSW, 
     status: 'IN_FIELD', 
-    weeklyHours: 35,
-    anonymizedId: 'RPN-802',
-    homeSector: 'Sector 4',
-    availability: 'Full-time',
+    weeklyHours: 42,
+    anonymizedId: 'P-404',
+    homeSector: 'Scarborough',
+    availability: '08:00-20:00',
     restrictedClientIds: [],
-    hourlyRate: 42
+    specialties: ['Palliative', 'Post-Op'],
+    hourlyRate: 24
   },
   { 
     id: 's3', 
-    name: 'Elena Rodriguez', 
-    role: CareRole.PSW, 
-    status: 'IN_FIELD', 
-    weeklyHours: 38,
-    anonymizedId: 'PSW-202',
-    homeSector: 'Sector 1',
-    availability: 'Part-time',
-    restrictedClientIds: [],
-    hourlyRate: 25
-  },
-  { 
-    id: 's4', 
-    name: 'Marcus Bell', 
-    role: CareRole.HSS, 
+    name: 'Tom Hardy', 
+    role: CareRole.RN, 
     status: 'ONLINE', 
-    weeklyHours: 30,
-    anonymizedId: 'HSS-404',
-    homeSector: 'Sector 2',
+    weeklyHours: 35,
+    anonymizedId: 'R-701',
+    homeSector: 'Toronto',
     availability: 'Full-time',
     restrictedClientIds: [],
-    hourlyRate: 32
+    specialties: ['Wound Care', 'IV Therapy'],
+    hourlyRate: 55
   }
 ];
 
@@ -56,39 +47,16 @@ export const MOCK_CLIENTS: Client[] = [
   {
     id: 'c1',
     name: 'Robert Johnson',
-    address: '42 Wallaby Way, Toronto, ON',
+    address: '42 Wallaby Way, Woodbridge, ON',
+    sector: 'Woodbridge',
     phone: '416-555-1234',
-    conditions: ['Post-Op Hip', 'T2 Diabetes', 'Hypertension'],
-    description: 'High-acuity post-surgical patient. Requires stabilization and mobility support.',
+    conditions: ['Post-Op Hip', 'T2 Diabetes'],
     carePlans: { 
-      [CareRole.RN]: [
-        'Surgical Site Assessment (Hip)', 
-        'IV Patency & Infection Sweep', 
-        'Advanced Medication Reconciliation', 
-        'Teaching: Anticoagulant Protocol',
-        'Direct Report to Attending Physician'
-      ],
-      [CareRole.RPN]: [
-        'Subcutaneous Insulin Administration',
-        'Wound Dressing Change (Clean-Tech)',
-        'Vital Signs Baseline Logging',
-        'Oral Medication Pass & Verification'
-      ],
-      [CareRole.PSW]: [
-        'Assisted Bed Bath & Perineal Care', 
-        'Hoyer Transfer to Wheelchair', 
-        'Meal Setup & Supervised Hydration', 
-        'Lower Limb Dressing Assistance'
-      ],
-      [CareRole.HSS]: [
-        'Home Safety Forensic Audit',
-        'Community PT Linkage Coordination',
-        'Grocery Assistance Log'
-      ]
+      [CareRole.PSW]: ['Assisted Bed Bath', 'Hoyer Transfer'],
+      [CareRole.RN]: ['Surgical Site Assessment']
     },
     currentVisitStatus: 'IDLE',
     anonymizedId: 'C-901',
-    sector: 'Sector 4',
     time: '08:00 AM',
     mobilityStatus: {
       isBedridden: true,
@@ -99,7 +67,33 @@ export const MOCK_CLIENTS: Client[] = [
       transferMethod: 'Mechanical'
     },
     isInitialVisit: false,
-    medications: [],
-    blacklistStaffIds: []
+    description: 'Post-op stabilization.',
+    blacklistStaffIds: [],
+    coordinatorInstructions: 'Please ensure floor is clear of rugs before transfer.'
+  },
+  {
+    id: 'c2',
+    name: 'Alice Cooper',
+    address: '101 Bay St, Scarborough, ON',
+    sector: 'Scarborough',
+    phone: '416-555-9876',
+    conditions: ['Dementia'],
+    carePlans: { 
+      [CareRole.PSW]: ['Cognitive Stimulation', 'Neighborhood Walk']
+    },
+    currentVisitStatus: 'IDLE',
+    anonymizedId: 'C-902',
+    time: '10:30 AM',
+    mobilityStatus: {
+      isBedridden: false,
+      useWheelchair: false,
+      useWalker: true,
+      dementia: true,
+      liftType: 'None',
+      transferMethod: '1-Person Assist'
+    },
+    isInitialVisit: true,
+    description: 'Early onset cognitive drift.',
+    blacklistStaffIds: ['s1'] // Elena is blacklisted for Alice
   }
 ];
