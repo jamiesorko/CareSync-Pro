@@ -7,8 +7,7 @@ import Dashboard from './features/Dashboard';
 import ScheduleView from './features/ScheduleView';
 import RNCommand from './features/rn/RNCommand';
 import PatientHub from './features/client/PatientHub';
-import HSSCommand from './features/hss/HSSCommand';
-import PSWTerminal from './features/psw/PSWTerminal';
+import ProfessionalTerminal from './features/terminal/ProfessionalTerminal';
 import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
 
 const App: React.FC = () => {
@@ -18,11 +17,12 @@ const App: React.FC = () => {
   if (!user) return <Login onLogin={setUser} />;
 
   const renderContent = () => {
+    const isFieldStaff = [CareRole.PSW, CareRole.RN, CareRole.RPN, CareRole.HSS].includes(user.role as any);
+
     switch (activeTab) {
       case AppTab.DASHBOARD:
         if (user.role === CareRole.CEO) return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} language="English" />;
-        if (user.role === CareRole.PSW) return <PSWTerminal clients={MOCK_CLIENTS} />;
-        if (user.role === CareRole.HSS) return <HSSCommand clients={MOCK_CLIENTS} />;
+        if (isFieldStaff) return <ProfessionalTerminal role={user.role as CareRole} staffName={user.name} clients={MOCK_CLIENTS} />;
         if (user.role === CareRole.COORDINATOR) return <PatientHub clients={MOCK_CLIENTS} />;
         return <RNCommand clients={MOCK_CLIENTS} role={user.role} />;
       case AppTab.SCHEDULE:
