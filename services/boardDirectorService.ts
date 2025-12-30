@@ -7,33 +7,18 @@ export class BoardDirectorService {
     return process.env.API_KEY || '';
   }
 
-  /**
-   * Synthesizes all agency metrics and market grounded signals into a Chairman's Mandate.
-   */
   async synthesizeMandate(agencyMetrics: any, region: string): Promise<ChairmanMandate> {
     const ai = new GoogleGenAI({ apiKey: this.getApiKey() });
-    
-    // Search Grounding for macro-economic/regulatory outlook
-    const query = `Healthcare labor market trends, insurance reimbursement shifts, and nursing liability laws in ${region}, Ontario October 2025.`;
+    const query = `Healthcare labor market trends in ${region}, Ontario October 2025.`;
     
     const prompt = `
-      Act as the Board of Directors Chairman for a Neural-Enabled Healthcare Fleet.
-      Agency Stats: ${JSON.stringify(agencyMetrics)}
-      Regional Intel Query: ${query}
-      
-      Task: Perform a Systemic Institutional Audit.
-      1. Synthesize the "State of the Agency" (Tone: Formal, Strategic).
-      2. Identify 3 points of "Institutional Fragility" (Where will the agency break if unchecked?).
-      3. Issue 3 "Non-Negotiable Directives" for the CEO.
-      4. Calculate a Strategic Risk Index (0-100).
-      
-      Return JSON: { 
-        "state": "", 
-        "fragility": [], 
-        "directives": [ { "title": "", "action": "", "impact": "" } ],
-        "risk": number,
-        "sentiment": "Market outlook grounded summary"
-      }
+      Act as Board Chairman. Agency Stats: ${JSON.stringify(agencyMetrics)}. Region: ${region}.
+      Task: Institutional Audit.
+      1. State of Agency.
+      2. 3 Fragility Points.
+      3. 3 Directives.
+      4. Risk Index (0-100).
+      Return JSON: { "state": "", "fragility": [], "directives": [], "risk": number, "sentiment": "" }
     `;
 
     try {
@@ -43,7 +28,7 @@ export class BoardDirectorService {
         config: { 
           tools: [{ googleSearch: {} }],
           responseMimeType: "application/json",
-          thinkingConfig: { thinkingBudget: 32768 }
+          thinkingConfig: { thinkingBudget: 24576 }
         }
       });
 
@@ -52,15 +37,23 @@ export class BoardDirectorService {
         id: Math.random().toString(36).substring(7),
         companyId: 'csp-demo',
         timestamp: new Date().toISOString(),
-        stateOfAgency: data.state || "Stable operational baseline.",
-        institutionalFragilityPoints: data.fragility || ["Information silo risk."],
+        stateOfAgency: data.state || "Stable baseline.",
+        institutionalFragilityPoints: data.fragility || [],
         nonNegotiableDirectives: data.directives || [],
-        strategicRiskIndex: data.risk || 12,
-        marketSentimentGrounded: data.sentiment || "Regional health vectors are evolving."
+        strategicRiskIndex: data.risk || 0,
+        marketSentimentGrounded: data.sentiment || "Stable outlook."
       };
     } catch (e) {
-      console.error("Board Director synthesis failure:", e);
-      throw e;
+      return {
+        id: 'error-mandate',
+        companyId: 'csp-demo',
+        timestamp: new Date().toISOString(),
+        stateOfAgency: "Synthesis failed.",
+        institutionalFragilityPoints: [],
+        nonNegotiableDirectives: [],
+        strategicRiskIndex: 0,
+        marketSentimentGrounded: "Signal lost."
+      };
     }
   }
 }

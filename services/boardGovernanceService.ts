@@ -11,16 +11,9 @@ export class BoardGovernanceService {
     const ai = new GoogleGenAI({ apiKey: this.getApiKey() });
     
     const prompt = `
-      Act as the Chairman of the Board for a multi-national healthcare agency.
-      Operational Data: ${JSON.stringify(metrics)}
-      
-      Task: Synthesize Institutional Vitality.
-      1. Calculate a Strategic Risk Index (0-100).
-      2. Identify 3 'Fragility Points' where the agency is at risk of regulatory or fiscal collapse.
-      3. Issue 3 'Non-Negotiable Directives' for the executive team.
-      4. Grounded Market Sentiment: Use search to find current nursing liability trends in Ontario.
-      
-      Return JSON: { "risk": number, "fragility": [], "directives": [{ "title": "", "action": "", "impact": "" }], "sentiment": "" }
+      Act as Board Chairman. Stats: ${JSON.stringify(metrics)}.
+      Task: Vitality Synthesis.
+      Return JSON: { "risk": number, "fragility": [], "directives": [], "sentiment": "" }
     `;
 
     try {
@@ -30,7 +23,7 @@ export class BoardGovernanceService {
         config: { 
           tools: [{ googleSearch: {} }],
           responseMimeType: "application/json",
-          thinkingConfig: { thinkingBudget: 32768 }
+          thinkingConfig: { thinkingBudget: 15000 }
         }
       });
 
@@ -39,15 +32,23 @@ export class BoardGovernanceService {
         id: Math.random().toString(36).substring(7),
         companyId: 'csp-demo',
         timestamp: new Date().toISOString(),
-        stateOfAgency: "Synthesis complete. Vitality vectors aligned.",
+        stateOfAgency: "Synthesis complete.",
         institutionalFragilityPoints: data.fragility || [],
         nonNegotiableDirectives: data.directives || [],
         strategicRiskIndex: data.risk || 0,
-        marketSentimentGrounded: data.sentiment || "Market signal stable."
+        marketSentimentGrounded: data.sentiment || "Nominal."
       };
     } catch (e) {
-      console.error("Board intelligence bottleneck:", e);
-      throw e;
+      return {
+        id: 'error-vitality',
+        companyId: 'csp-demo',
+        timestamp: new Date().toISOString(),
+        stateOfAgency: "Synthesis interrupted.",
+        institutionalFragilityPoints: [],
+        nonNegotiableDirectives: [],
+        strategicRiskIndex: 0,
+        marketSentimentGrounded: "Unknown."
+      };
     }
   }
 }

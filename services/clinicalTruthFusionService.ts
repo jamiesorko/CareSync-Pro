@@ -9,20 +9,7 @@ export class ClinicalTruthFusionService {
 
   async fusePatientSignals(client: Client, transcript: string, vitals: any): Promise<HuddleSignal> {
     const ai = new GoogleGenAI({ apiKey: this.getApiKey() });
-    const prompt = `
-      Act as a Lead Clinical Diagnostic Auditor.
-      Patient: ${client.name} (Conditions: ${client.conditions.join(', ')})
-      Vitals: ${JSON.stringify(vitals)}
-      Transcript: "${transcript}"
-      
-      Task: Perform a Multimodal Signal Fusion.
-      1. Synthesize the "Total Clinical Truth".
-      2. Detect contradictions between human report and telemetry.
-      3. Identify subtle "Biometric Drift".
-      4. Issue exactly one remediation directive.
-      
-      Return JSON: { "truth": "", "contradiction": boolean, "drift": "", "directive": "", "confidence": number }
-    `;
+    const prompt = `Clinical Auditor. Signals: ${transcript}. Vitals: ${JSON.stringify(vitals)}. JSON: { "truth": "", "contradiction": boolean, "drift": "", "directive": "", "confidence": number }`;
 
     try {
       const response = await ai.models.generateContent({
@@ -30,7 +17,7 @@ export class ClinicalTruthFusionService {
         contents: prompt,
         config: { 
           responseMimeType: "application/json",
-          thinkingConfig: { thinkingBudget: 15000 } 
+          thinkingConfig: { thinkingBudget: 10000 } 
         }
       });
       const data = JSON.parse(response.text || '{}');
@@ -38,14 +25,23 @@ export class ClinicalTruthFusionService {
         id: Math.random().toString(36).substring(7),
         companyId: 'csp-demo',
         clientId: client.id,
-        truthSynthesis: data.truth || "Stability maintained.",
+        truthSynthesis: data.truth || "Stable.",
         contradictionDetected: !!data.contradiction,
-        biometricDrift: data.drift || "Nominal baseline.",
-        remediationDirective: data.directive || "Continue standard care.",
-        confidence: data.confidence || 0.9
+        biometricDrift: data.drift || "None.",
+        remediationDirective: data.directive || "Continue.",
+        confidence: data.confidence || 0
       };
     } catch (e) {
-      throw e;
+      return {
+        id: 'err-fusion',
+        companyId: 'csp-demo',
+        clientId: client.id,
+        truthSynthesis: "Error.",
+        contradictionDetected: false,
+        biometricDrift: "N/A",
+        remediationDirective: "Manual audit.",
+        confidence: 0
+      };
     }
   }
 }

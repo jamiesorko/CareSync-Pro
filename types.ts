@@ -545,14 +545,15 @@ export interface BlastStatus {
     // added for CoordinationHub
 }
 
-export interface AIStudio {
-  hasSelectedApiKey: () => Promise<boolean>;
-  openSelectKey: () => Promise<void>;
-}
-
+// Fix: Moved AIStudio definition inside declare global and removed the redundant export
+// to resolve "Subsequent property declarations must have the same type" conflict with environment types.
 declare global {
+  interface AIStudio {
+    hasSelectedApiKey: () => Promise<boolean>;
+    openSelectKey: () => Promise<void>;
+  }
+
   interface Window {
-    // Fix: Made aistudio optional to match potential external declarations and resolve identical modifier errors.
     aistudio?: AIStudio;
   }
 }

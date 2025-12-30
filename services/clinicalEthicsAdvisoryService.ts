@@ -7,24 +7,12 @@ export class ClinicalEthicsAdvisoryService {
     return process.env.API_KEY || '';
   }
 
-  /**
-   * Performs an ethical equilibrium analysis using Gemini 3 Pro.
-   */
   async arbitrateDilemma(client: Client, scenario: string): Promise<EthicsConsult> {
     const ai = new GoogleGenAI({ apiKey: this.getApiKey() });
     
     const prompt = `
-      Act as a Lead Bio-Ethicist. 
-      Patient: ${client.name} (Conditions: ${client.conditions.join(', ')})
-      Scenario: "${scenario}"
-      
-      Task: Resolve the moral conflict between Patient Autonomy and Clinical Duty of Care.
-      1. Define the primary moral conflict.
-      2. Analyze perspectives for Patient, Caregiver, and Agency.
-      3. Forge a 'Consensus Directive' maximizing safety and dignity.
-      4. Reference one Ontario health law guardrail.
-      
-      Return JSON: { "conflict": "", "perspectives": [ { "entity": "", "focus": "", "risk": "" } ], "directive": "", "guardrail": "" }
+      Bio-Ethicist. Patient: ${client.name}. Scenario: "${scenario}".
+      JSON: { "conflict": "", "perspectives": [], "directive": "", "guardrail": "" }
     `;
 
     try {
@@ -33,7 +21,7 @@ export class ClinicalEthicsAdvisoryService {
         contents: prompt,
         config: { 
           responseMimeType: "application/json",
-          thinkingConfig: { thinkingBudget: 24576 } 
+          thinkingConfig: { thinkingBudget: 15000 } 
         }
       });
 
@@ -43,13 +31,22 @@ export class ClinicalEthicsAdvisoryService {
         companyId: 'csp-demo',
         timestamp: new Date().toISOString(),
         dilemma: scenario,
-        moralConflict: data.conflict || "Conflict detected.",
+        moralConflict: data.conflict || "Conflict found.",
         stakeholderPerspectives: data.perspectives || [],
-        consensusDirective: data.directive || "Follow baseline protocol.",
-        legislativeGuardrail: data.guardrail || "Standard clinical standards apply."
+        consensusDirective: data.directive || "Standard protocol.",
+        legislativeGuardrail: data.guardrail || "Health Care Consent Act."
       };
     } catch (e) {
-      throw e;
+      return {
+        id: 'err-ethics',
+        companyId: 'csp-demo',
+        timestamp: new Date().toISOString(),
+        dilemma: scenario,
+        moralConflict: "Error.",
+        stakeholderPerspectives: [],
+        consensusDirective: "Manual audit.",
+        legislativeGuardrail: "N/A"
+      };
     }
   }
 }

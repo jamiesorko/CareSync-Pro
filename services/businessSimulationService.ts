@@ -10,16 +10,8 @@ export class BusinessSimulationService {
   async runScenarioSimulation(prompt: string): Promise<StrategicScenario> {
     const ai = new GoogleGenAI({ apiKey: this.getApiKey() });
     const requestPrompt = `
-      Act as a Lead Healthcare CFO.
-      Scenario: "${prompt}"
-      
-      Task: Perform 12-month Monte Carlo simulation.
-      1. Predict Revenue, Burn, Retention monthly.
-      2. Fatal Failure Point.
-      3. Mitigation strategy.
-      4. Risk Index (0-100).
-      
-      Return JSON: { "title": "", "projection": [], "failurePoint": "", "mitigation": "", "risk": number }
+      Healthcare CFO. Scenario: "${prompt}".
+      12-month simulation. JSON: { "title": "", "projection": [], "failurePoint": "", "mitigation": "", "risk": number }
     `;
 
     try {
@@ -28,27 +20,29 @@ export class BusinessSimulationService {
         contents: requestPrompt,
         config: { 
           responseMimeType: "application/json",
-          thinkingConfig: { thinkingBudget: 24576 } 
+          thinkingConfig: { thinkingBudget: 10000 } 
         }
       });
       const data = JSON.parse(response.text || '{}');
       return {
         id: Math.random().toString(36).substring(7),
         companyId: 'csp-demo',
-        title: data.title || "Scenario",
-        projection: data.projection?.map((p: any) => ({
-          month: p.month,
-          revenue: p.rev,
-          burnRate: p.burn,
-          staffRetention: p.retention,
-          netReserve: p.reserve
-        })) || [],
-        failurePoint: data.failurePoint || "Stable horizon.",
-        mitigationStrategy: data.mitigation || "Maintain buffers.",
+        title: data.title || "Strategic Forecast",
+        projection: data.projection || [],
+        failurePoint: data.failurePoint || "N/A",
+        mitigationStrategy: data.mitigation || "N/A",
         riskIndex: data.risk || 0
       };
     } catch (e) {
-      throw e;
+      return {
+        id: 'error-sim',
+        companyId: 'csp-demo',
+        title: "Simulation Failure",
+        projection: [],
+        failurePoint: "N/A",
+        mitigationStrategy: "N/A",
+        riskIndex: 0
+      };
     }
   }
 }
