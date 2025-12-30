@@ -1,41 +1,78 @@
-import { supabase } from '../lib/supabase';
-import { TrainingRecord, LeaveRequest, AlertType } from '../types';
+
+import { StaffMember, LeaveRequest, CareRole, AlertType } from '../types';
 
 export class HRService {
-  private companyId: string | null = null;
-
-  setContext(id: string) {
-    this.companyId = id;
-  }
-
-  async submitHRRequest(request: { type: AlertType; details: string; staffId: string }): Promise<void> {
-    console.log(`[HR_MATRIX]: Signal [${request.type}] received for Staff ${request.staffId}`);
+  /**
+   * Calculates a granular payroll breakdown.
+   */
+  calculateDetailedPayroll(staff: StaffMember, hours: number) {
+    const rate = staff.hourlyRate || 25;
+    const gross = hours * rate;
     
-    if (supabase && this.companyId) {
-      const { error } = await supabase.from('hr_requests').insert([{
-        company_id: this.companyId,
-        staff_id: request.staffId,
-        request_type: request.type,
-        details: request.details,
-        status: 'SUBMITTED'
-      }]);
-      if (error) throw error;
-    }
+    const fedTax = gross * 0.15;
+    const provTax = gross * 0.05;
+    const cpp = gross * 0.0595;
+    const ei = gross * 0.0163;
+    const unionDues = staff.role === CareRole.PSW ? 25.00 : 45.00;
+    const insurance = 18.50; // Flat monthly benefit deduction
+    const vacationPay = gross * 0.04; // 4% accrual
+
+    const net = gross - fedTax - provTax - cpp - ei - unionDues - insurance;
+
+    return {
+      gross,
+      deductions: fedTax + provTax + cpp + ei + unionDues + insurance,
+      net,
+      vacationAccrued: vacationPay,
+      breakdown: { fedTax, provTax, cpp, ei, unionDues, insurance }
+    };
   }
 
-  async getTrainingCompliance(staffId: string): Promise<TrainingRecord[]> {
-    // Demo implementation for field staff
-    return [
-      { id: 'tr-01', companyId: 'demo', staffId, staffName: 'User', moduleName: 'Infection Control 2025', isMandatory: true, isCompleted: true, dueDate: '2025-12-31' },
-      { id: 'tr-02', companyId: 'demo', staffId, staffName: 'User', moduleName: 'Safe Lifts & Hoyer Protocol', isMandatory: true, isCompleted: false, dueDate: '2025-10-25' }
-    ];
+  /**
+   * Analyzes a vacation request against regional fleet density.
+   */
+  assessLeaveSecurity(request: LeaveRequest, staffPool: StaffMember[]): { recommended: boolean; risk: number; reason: string } {
+    const sectorStaff = staffPool.filter(s => s.homeSector === 'Woodbridge' && s.status !== 'OFFLINE');
+    const capacity = sectorStaff.length;
+    
+    // Heuristic: If capacity in sector is < 3, denying is recommended.
+    const risk = capacity < 3 ? 85 : 15;
+    const recommended = risk < 40;
+
+    return {
+      recommended,
+      risk,
+      reason: recommended 
+        ? "Sector density optimal for coverage." 
+        : "Critical staffing gap detected in target sector for these dates."
+    };
   }
 
-  async getTaxDocuments(staffId: string) {
-    return [
-      { id: 't4-2024', name: '2024 T4 Statement', type: 'T4_REQUEST', year: 2024 },
-      { id: 't4-2023', name: '2023 T4 Statement', type: 'T4_REQUEST', year: 2023 }
-    ];
+  /**
+   * Generates hiring requirements based on patient flow.
+   */
+  recommendHiring(pendingIntakes: number, activeCensus: number): { pswNeeded: number; rnNeeded: number; reason: string } {
+    const totalLoad = pendingIntakes + activeCensus;
+    const idealPswRatio = 12; // 1 PSW per 12 clients
+    const idealRnRatio = 40;  // 1 RN per 40 clients
+    
+    const pswNeeded = Math.ceil(totalLoad / idealPswRatio);
+    const rnNeeded = Math.ceil(totalLoad / idealRnRatio);
+
+    return {
+      pswNeeded,
+      rnNeeded,
+      reason: `Based on a census growth of ${pendingIntakes} units, node expansion requires ${pswNeeded} new PSW units to maintain 98% quality.`
+    };
+  }
+
+  /**
+   * Submits a formal HR request to the Resource Core.
+   */
+  // Added submitHRRequest to fix property does not exist error in PSWSelfService.tsx
+  async submitHRRequest(data: { staffId: string; type: AlertType; details: string }): Promise<void> {
+    console.log(`[RESOURCE_CORE]: HR Request signal received. Type: ${data.type}`, data);
+    // In production, this would persist to a database or trigger a workflow.
   }
 }
 

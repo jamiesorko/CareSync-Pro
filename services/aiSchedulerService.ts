@@ -28,7 +28,7 @@ export class AISchedulerService {
     }
 
     // 5. Training/Condition Match
-    // Fix: Corrected typo 'specialspecialties' to 'specialties'
+    // Fixed: Corrected typo 'specialspecialties' to 'specialties'
     const hasConditionTraining = client.conditions.some(c => 
       staff.specialties?.some(s => s.toLowerCase().includes(c.toLowerCase())) ||
       (client.mobilityStatus.dementia && staff.specialties.includes("Dementia"))

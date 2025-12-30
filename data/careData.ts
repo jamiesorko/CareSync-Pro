@@ -13,7 +13,8 @@ export const MOCK_STAFF: StaffMember[] = [
     availability: '08:00-20:00',
     restrictedClientIds: [],
     specialties: ['Dementia', 'Hoyer Lifts'],
-    hourlyRate: 25
+    hourlyRate: 25,
+    disciplinaryCount: 0
   },
   { 
     id: 's2', 
@@ -26,7 +27,8 @@ export const MOCK_STAFF: StaffMember[] = [
     availability: '08:00-20:00',
     restrictedClientIds: [],
     specialties: ['Palliative', 'Post-Op'],
-    hourlyRate: 24
+    hourlyRate: 24,
+    disciplinaryCount: 2
   },
   { 
     id: 's3', 
@@ -39,7 +41,8 @@ export const MOCK_STAFF: StaffMember[] = [
     availability: 'Full-time',
     restrictedClientIds: [],
     specialties: ['Wound Care', 'IV Therapy'],
-    hourlyRate: 55
+    hourlyRate: 55,
+    disciplinaryCount: 0
   }
 ];
 
@@ -70,30 +73,5 @@ export const MOCK_CLIENTS: Client[] = [
     description: 'Post-op stabilization.',
     blacklistStaffIds: [],
     coordinatorInstructions: 'Please ensure floor is clear of rugs before transfer.'
-  },
-  {
-    id: 'c2',
-    name: 'Alice Cooper',
-    address: '101 Bay St, Scarborough, ON',
-    sector: 'Scarborough',
-    phone: '416-555-9876',
-    conditions: ['Dementia'],
-    carePlans: { 
-      [CareRole.PSW]: ['Cognitive Stimulation', 'Neighborhood Walk']
-    },
-    currentVisitStatus: 'IDLE',
-    anonymizedId: 'C-902',
-    time: '10:30 AM',
-    mobilityStatus: {
-      isBedridden: false,
-      useWheelchair: false,
-      useWalker: true,
-      dementia: true,
-      liftType: 'None',
-      transferMethod: '1-Person Assist'
-    },
-    isInitialVisit: true,
-    description: 'Early onset cognitive drift.',
-    blacklistStaffIds: ['s1'] // Elena is blacklisted for Alice
   }
 ];

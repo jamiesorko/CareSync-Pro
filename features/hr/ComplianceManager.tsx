@@ -1,88 +1,47 @@
 
 import React, { useState } from 'react';
 import { Certificate, TrainingRecord } from '../../types';
-import Translate from '../../components/Translate';
+import { ShieldAlert, Send, Clock, UserX } from 'lucide-react';
 
-interface Props {
-  language: string;
-  isHR: boolean;
-}
-
-const ComplianceManager: React.FC<Props> = ({ language, isHR }) => {
+const ComplianceManager: React.FC = () => {
   const [certs] = useState<Certificate[]>([
-    // Added companyId to satisfy Certificate interface
-    { id: 'ct1', companyId: 'demo-company', staffId: 's1', staffName: 'Elena R.', type: 'First Aid/CPR', expiryDate: '2025-11-01', status: 'WARNING' },
-    { id: 'ct2', companyId: 'demo-company', staffId: 's3', staffName: 'Sarah J.', type: 'Police Clearance', expiryDate: '2025-10-20', status: 'EXPIRED' },
+    { id: 'c-1', companyId: 'csp', staffId: 's2', staffName: 'Sarah Jenkins', type: 'Vulnerable Sector Check', expiryDate: '2025-10-14', status: 'SUSPENDED' },
+    { id: 'c-2', companyId: 'csp', staffId: 's1', staffName: 'Elena Rodriguez', type: 'First Aid/CPR', expiryDate: '2025-11-01', status: 'WARNING' }
   ]);
 
-  const [trainings] = useState<TrainingRecord[]>([
-    // Added companyId to satisfy TrainingRecord interface
-    { id: 'tr1', companyId: 'demo-company', staffId: 's1', staffName: 'Elena R.', moduleName: 'Workplace Safety v4', isMandatory: true, isCompleted: true, dueDate: '2025-10-15' },
-    { id: 'tr2', companyId: 'demo-company', staffId: 's3', staffName: 'Sarah J.', moduleName: 'Dementia Care', isMandatory: true, isCompleted: false, dueDate: '2025-10-10' },
-  ]);
-
-  const handleNotifyCerts = () => {
-    alert("Broadcasting Critical Renewal Alerts: SMS/Email sent to all staff with nearing expirations. Employment suspension enforced past cutoff.");
-  };
-
-  const handleNotifyTraining = () => {
-    alert("Signal Burst: Mandatory training notifications sent to all personnel. Non-compliant staff flagged for RN Supervisor/HR Manager review.");
+  const handleSignal = () => {
+    alert("SIGNAL_BURST: Mandatory Training Deadline broadcast to all terminals. Non-compliant nodes flagged for RN Supervisor review.");
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-in fade-in">
-      <div className="bg-white/5 border border-white/10 rounded-[3rem] p-10 backdrop-blur-3xl">
-        <div className="flex justify-between items-center mb-8">
-          <h3 className="text-xl font-black text-white tracking-tighter uppercase italic">Certification Guard</h3>
-          {isHR && (
-            <button onClick={handleNotifyCerts} className="text-[9px] font-black text-sky-400 border border-sky-400/20 px-3 py-1 rounded-lg uppercase tracking-widest hover:bg-sky-400/10 transition-all">
-              Notify All Expirations
-            </button>
-          )}
-        </div>
-        
-        <div className="space-y-4">
-          {certs.map(cert => (
-            <div key={cert.id} className={`p-6 rounded-2xl border flex justify-between items-center ${cert.status === 'EXPIRED' ? 'bg-rose-500/10 border-rose-500/20' : 'bg-white/5 border-white/5'}`}>
-              <div>
-                <p className="text-[10px] font-black text-slate-500 uppercase">{cert.staffName}</p>
-                <p className="text-sm font-black text-white italic uppercase tracking-tighter">{cert.type}</p>
-              </div>
-              <div className="text-right">
-                <p className={`text-[9px] font-black uppercase ${cert.status === 'EXPIRED' ? 'text-rose-500' : 'text-amber-500'}`}>Expiry: {cert.expiryDate}</p>
-                <p className="text-[8px] font-bold text-slate-600 mt-1 uppercase tracking-widest">{cert.status === 'EXPIRED' ? 'SUSPENSION RISK' : 'RENEWAL REQ'}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="bg-white/5 border border-white/10 rounded-[3rem] p-10 backdrop-blur-3xl">
-        <div className="flex justify-between items-center mb-8">
-          <h3 className="text-xl font-black text-white tracking-tighter uppercase italic">Training Matrix</h3>
-          {isHR && (
-            <button onClick={handleNotifyTraining} className="text-[9px] font-black text-sky-400 border border-sky-400/20 px-3 py-1 rounded-lg uppercase tracking-widest hover:bg-sky-400/10 transition-all">
-              Flag Non-Compliant
-            </button>
-          )}
+    <div className="space-y-10 animate-in fade-in duration-700">
+      <div className="bg-slate-900 border border-white/10 rounded-[4rem] p-12 shadow-2xl relative overflow-hidden flex flex-col lg:flex-row gap-12">
+        <div className="lg:w-1/3 space-y-6">
+           <h3 className="text-2xl font-black text-white italic tracking-tighter uppercase leading-none">Compliance_Sentinel</h3>
+           <p className="text-sm text-slate-500 italic font-medium">Monitoring 142 certificates across the fleet. Suspension protocol active for Sector 1 drift.</p>
+           <button onClick={handleSignal} className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-indigo-500 transition-all flex items-center justify-center gap-3">
+             <Send size={14} /> Send_Training_Signal
+           </button>
         </div>
 
-        <div className="space-y-4">
-          {trainings.map(tr => (
-            <div key={tr.id} className="p-6 bg-white/5 border border-white/5 rounded-2xl flex justify-between items-center">
-              <div className="flex items-center space-x-4">
-                <div className={`w-2 h-2 rounded-full ${tr.isCompleted ? 'bg-emerald-500' : 'bg-rose-500 animate-pulse'}`}></div>
-                <div>
-                  <p className="text-[10px] font-black text-slate-500 uppercase">{tr.staffName}</p>
-                  <p className="text-sm font-black text-white italic uppercase tracking-tighter">{tr.moduleName}</p>
+        <div className="flex-1 space-y-4">
+           {certs.map(cert => (
+             <div key={cert.id} className={`p-8 rounded-[3rem] border flex flex-col md:flex-row justify-between items-center gap-6 transition-all ${cert.status === 'SUSPENDED' ? 'bg-rose-600/10 border-rose-500 shadow-[0_0_40px_rgba(244,63,94,0.1)]' : 'bg-white/[0.03] border-white/5'}`}>
+                <div className="flex items-center gap-6">
+                   <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${cert.status === 'SUSPENDED' ? 'bg-rose-600 text-white animate-pulse' : 'bg-white/10 text-slate-400'}`}>
+                      {cert.status === 'SUSPENDED' ? <UserX size={24} /> : <Clock size={24} />}
+                   </div>
+                   <div>
+                      <h4 className="text-xl font-black text-white italic uppercase tracking-tighter leading-none">{cert.staffName}</h4>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase mt-2">{cert.type}</p>
+                   </div>
                 </div>
-              </div>
-              <div className="text-right">
-                <p className="text-[9px] font-black text-slate-400 uppercase">Due: {tr.dueDate}</p>
-                {!tr.isCompleted && <span className="text-[7px] bg-rose-500/10 text-rose-500 px-1 py-0.5 rounded font-black">FLAGGED TO RN</span>}
-              </div>
-            </div>
-          ))}
+                <div className="text-right">
+                   <p className={`text-[10px] font-black uppercase ${cert.status === 'SUSPENDED' ? 'text-rose-500' : 'text-amber-500'}`}>{cert.status}</p>
+                   <p className="text-lg font-black text-white italic tracking-tighter mt-1">Exp: {cert.expiryDate}</p>
+                </div>
+             </div>
+           ))}
         </div>
       </div>
     </div>

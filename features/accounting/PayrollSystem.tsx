@@ -1,67 +1,60 @@
 
-import React, { useState } from 'react';
-import Translate from '../../components/Translate';
-import { PayrollRecord } from '../../data/accountingData';
-import PayrollTable from './PayrollTable';
+import React from 'react';
+import { MOCK_STAFF } from '../../data/careData';
+import { hrService } from '../../services/hrService';
+import { DollarSign, FileText, ShieldInfo, Users } from 'lucide-react';
 
-interface Props {
-  language: string;
-  records?: PayrollRecord[]; // Now accepts records from live state
-}
-
-const PayrollSystem: React.FC<Props> = ({ language, records = [] }) => {
-  const [missedShifts] = useState([
-    { id: 'ms1', staffName: 'Sarah J.', clientName: 'Robert Miller', date: '2025-10-15', verified: false }
-  ]);
-
-  const verifyWithClient = (shift: any) => {
-    const confirmation = window.confirm(`Initiate Secure Verification Signal to ${shift.clientName}?`);
-    if (confirmation) alert(`Signal Dispatched to ${shift.clientName}.`);
-  };
+const PayrollSystem: React.FC = () => {
+  const formatCAD = (n: number) => new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(n);
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-700">
-      {missedShifts.length > 0 && (
-        <section className="bg-rose-600/10 border border-rose-500/20 rounded-[3rem] p-8 backdrop-blur-3xl shadow-2xl relative overflow-hidden">
-          <div className="flex items-center space-x-3 mb-6">
-            <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></div>
-            <h3 className="text-xl font-black text-rose-500 italic tracking-tighter uppercase leading-none">Payroll_Gating_Alerts</h3>
-          </div>
-          <div className="space-y-4">
-            {missedShifts.map(ms => (
-              <div key={ms.id} className="p-6 bg-white/[0.03] border border-white/5 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4">
-                <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 bg-rose-500/20 rounded-xl flex items-center justify-center text-rose-500 font-black text-[10px]">!</div>
-                  <p className="text-xs font-black text-white italic">Unverified GPS Log: {ms.staffName} @ {ms.clientName}</p>
-                </div>
-                <button onClick={() => verifyWithClient(ms)} className="px-6 py-2.5 bg-white text-black text-[9px] font-black uppercase rounded-xl hover:scale-105 transition-all shadow-xl">Secure Verification</button>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <section className="space-y-6">
-        <div className="flex justify-between items-end px-4">
-          <h3 className="text-xl font-black text-white italic tracking-tighter uppercase leading-none">Payroll_Disbursement_Ledger</h3>
-          <p className="text-xs font-black text-sky-400 uppercase">Oct 01 - Oct 15, 2025</p>
-        </div>
+    <div className="space-y-10 animate-in fade-in duration-700">
+      <div className="bg-slate-900 border border-white/10 rounded-[4rem] p-12 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-12 opacity-5"><DollarSign size={200} /></div>
         
-        <PayrollTable 
-          records={records} 
-          onUpdate={() => {}} // In Supabase mode, updates would happen via DBService
-          language={language} 
-        />
+        <h3 className="text-3xl font-black text-white italic tracking-tighter uppercase mb-12">Institutional_Disbursement_Engine</h3>
+        
+        <div className="space-y-6">
+          {MOCK_STAFF.map(s => {
+            const payroll = hrService.calculateDetailedPayroll(s, 80); // Bi-weekly 80h default
+            return (
+              <div key={s.id} className="p-10 bg-white/[0.03] border border-white/5 rounded-[3rem] group hover:bg-white/5 transition-all">
+                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
+                  <div className="space-y-2">
+                    <h4 className="text-2xl font-black text-white italic uppercase tracking-tighter">{s.name}</h4>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{s.role} • 80.00 Units</p>
+                  </div>
 
-        <div className="flex justify-end gap-4 pt-6">
-           <button className="px-10 py-5 bg-white/5 border border-white/10 text-slate-400 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-white/10 transition-all">
-             Export_T4_Audit
-           </button>
-           <button className="px-12 py-5 bg-emerald-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-[0_0_40px_rgba(16,185,129,0.3)] hover:scale-105 active:scale-95 transition-all">
-             Initialize_Electronic_Transfer
-           </button>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div className="text-center md:text-left">
+                       <p className="text-[8px] font-black text-slate-600 uppercase mb-1">Gross_Liquid</p>
+                       <p className="text-xl font-black text-white">{formatCAD(payroll.gross)}</p>
+                    </div>
+                    <div className="text-center md:text-left">
+                       <p className="text-[8px] font-black text-rose-500 uppercase mb-1">Stat_Deductions</p>
+                       <p className="text-xl font-black text-rose-400">-{formatCAD(payroll.deductions)}</p>
+                    </div>
+                    <div className="text-center md:text-left">
+                       <p className="text-[8px] font-black text-indigo-400 uppercase mb-1">Union_&_Ins</p>
+                       <p className="text-xl font-black text-indigo-400">-{formatCAD(payroll.breakdown.unionDues + payroll.breakdown.insurance)}</p>
+                    </div>
+                    <div className="text-center md:text-right">
+                       <p className="text-[8px] font-black text-emerald-400 uppercase mb-1">Net_Disbursement</p>
+                       <p className="text-3xl font-black text-emerald-400 italic">{formatCAD(payroll.net)}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-8 pt-8 border-t border-white/5 flex flex-wrap gap-6 opacity-40 group-hover:opacity-100 transition-opacity">
+                   <div className="flex items-center gap-2"><FileText size={12} /> <span className="text-[9px] font-bold uppercase">Tax_T4_Vector</span></div>
+                   <div className="flex items-center gap-2"><ShieldInfo size={12} /> <span className="text-[9px] font-bold uppercase">Insurance_Sync</span></div>
+                   <div className="flex items-center gap-2"><Users size={12} /> <span className="text-[9px] font-bold uppercase">Union_Checkoff_Logged</span></div>
+                </div>
+              </div>
+            );
+          })}
         </div>
-      </section>
+      </div>
     </div>
   );
 };
