@@ -15,7 +15,7 @@ interface Props {
 
 const Layout: React.FC<Props> = ({ activeTab, setActiveTab, activeRole, staffName, onLogout, children }) => {
   return (
-    <div className="flex h-screen w-full bg-[#010411] text-slate-100 overflow-hidden">
+    <div className="flex h-screen w-full bg-[#020617] text-slate-200 overflow-hidden">
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
@@ -24,8 +24,8 @@ const Layout: React.FC<Props> = ({ activeTab, setActiveTab, activeRole, staffNam
       />
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         <Header activeTab={activeTab} onLogout={onLogout} />
-        <main className="flex-1 overflow-y-auto p-8 scrollbar-hide">
-          <div className="max-w-7xl mx-auto animate-in fade-in duration-500">
+        <main className="flex-1 overflow-y-auto p-6 scrollbar-hide">
+          <div className="max-w-6xl mx-auto animate-in fade-in duration-500">
             {children}
           </div>
         </main>
