@@ -34,7 +34,14 @@ export interface RiskScore {
   lastAssessed: string;
 }
 
-/* Updated Client interface to include missing properties used in data/careData.ts and other features */
+export interface Medication {
+  id: string;
+  name: string;
+  dosage: string;
+  frequency: string;
+  route: string;
+}
+
 export interface Client {
   id: string;
   companyId?: string;
@@ -79,22 +86,6 @@ export interface StaffMember {
   lastSeen?: string;
 }
 
-export interface PatientDailySynthesis {
-  headline: string;
-  accomplishments: string[];
-  visitorToday: string;
-  tomorrowPreview: string;
-  soothingNote: string;
-}
-
-export interface ZenVideoPrompt {
-  prompt: string;
-  mood: string;
-  estimatedDuration: number;
-}
-
-/* Added missing exported types to fix module export errors */
-
 export interface Message {
   role: 'user' | 'model';
   text: string;
@@ -107,7 +98,7 @@ export interface GeneratedImage {
   prompt: string;
 }
 
-export type AlertType = 'FALL' | 'CHOKING' | 'MEDICAL' | 'UNSAFE_ENV' | 'BOOK_OFF' | 'VACATION' | 'LOA' | 'AVAILABILITY' | 'INSURANCE_Q' | 'RESTRICTION' | 'T4_REQUEST' | 'CLINICAL' | 'OPERATIONAL' | 'FISCAL' | 'INTEGRITY_AUDIT';
+export type AlertType = 'FALL' | 'CHOKING' | 'MEDICAL' | 'UNSAFE_ENV' | 'BOOK_OFF' | 'VACATION' | 'LOA' | 'AVAILABILITY' | 'INSURANCE_Q' | 'RESTRICTION' | 'T4_REQUEST' | 'CLINICAL' | 'OPERATIONAL' | 'FISCAL' | 'INTEGRITY_AUDIT' | 'BEDSORE' | 'NOT_SEEN' | 'SWELLING' | 'SUPPLY_REQ' | 'PAYROLL_DISPUTE';
 
 export interface AlertSignal {
   id: string;
@@ -238,14 +229,6 @@ export interface InventoryItem extends BaseEntity {
   minThreshold: number;
 }
 
-export interface Medication {
-  id: string;
-  name: string;
-  dosage: string;
-  frequency: string;
-  route: string;
-}
-
 export interface OncallShift extends BaseEntity {
   staffId: string;
   staffName: string;
@@ -361,21 +344,6 @@ export interface OutbreakZone {
   intensity: number;
   mandatoryPPE: string[];
   advisory: string;
-}
-
-export interface MarketThreat {
-  competitor: string;
-  wageOffer: string;
-  bonus: string;
-  sector: string;
-}
-
-export interface StaffLoyaltyRisk {
-  staffId: string;
-  riskLevel: 'LOW' | 'MED' | 'HIGH' | 'CRITICAL';
-  vulnerabilityFactors: string[];
-  suggestedPremium: number;
-  rationale: string;
 }
 
 export interface HuddleSignal extends BaseEntity {
@@ -542,11 +510,43 @@ export interface RegulatoryPatch extends BaseEntity {
 }
 
 export interface BlastStatus {
-    // added for CoordinationHub
 }
 
-// Fix: Moved AIStudio definition inside declare global and removed the redundant export
-// to resolve "Subsequent property declarations must have the same type" conflict with environment types.
+export interface PatientDailySynthesis {
+  headline: string;
+  accomplishments: string[];
+  visitorToday: string;
+  tomorrowPreview: string;
+  soothingNote: string;
+}
+
+export interface ZenVideoPrompt {
+  prompt: string;
+  mood: string;
+  estimatedDuration: number;
+}
+
+/**
+ * Interface representing a competitor hiring threat identified via market intelligence.
+ */
+export interface MarketThreat {
+  competitor: string;
+  wageOffer: string;
+  bonus: string;
+  sector: string;
+}
+
+/**
+ * Interface representing calculated staff loyalty and resignation risk.
+ */
+export interface StaffLoyaltyRisk {
+  staffId: string;
+  riskLevel: 'LOW' | 'MED' | 'HIGH' | 'CRITICAL';
+  vulnerabilityFactors: string[];
+  suggestedPremium: number;
+  rationale: string;
+}
+
 declare global {
   interface AIStudio {
     hasSelectedApiKey: () => Promise<boolean>;
