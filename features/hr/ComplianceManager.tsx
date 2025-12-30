@@ -3,7 +3,12 @@ import React, { useState } from 'react';
 import { Certificate, TrainingRecord } from '../../types';
 import { ShieldAlert, Send, Clock, UserX } from 'lucide-react';
 
-const ComplianceManager: React.FC = () => {
+interface Props {
+  language?: string;
+  isHR?: boolean;
+}
+
+const ComplianceManager: React.FC<Props> = ({ language, isHR }) => {
   const [certs] = useState<Certificate[]>([
     { id: 'c-1', companyId: 'csp', staffId: 's2', staffName: 'Sarah Jenkins', type: 'Vulnerable Sector Check', expiryDate: '2025-10-14', status: 'SUSPENDED' },
     { id: 'c-2', companyId: 'csp', staffId: 's1', staffName: 'Elena Rodriguez', type: 'First Aid/CPR', expiryDate: '2025-11-01', status: 'WARNING' }
@@ -19,9 +24,11 @@ const ComplianceManager: React.FC = () => {
         <div className="lg:w-1/3 space-y-6">
            <h3 className="text-2xl font-black text-white italic tracking-tighter uppercase leading-none">Compliance_Sentinel</h3>
            <p className="text-sm text-slate-500 italic font-medium">Monitoring 142 certificates across the fleet. Suspension protocol active for Sector 1 drift.</p>
-           <button onClick={handleSignal} className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-indigo-500 transition-all flex items-center justify-center gap-3">
-             <Send size={14} /> Send_Training_Signal
-           </button>
+           {isHR && (
+             <button onClick={handleSignal} className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-indigo-500 transition-all flex items-center justify-center gap-3">
+               <Send size={14} /> Send_Training_Signal
+             </button>
+           )}
         </div>
 
         <div className="flex-1 space-y-4">

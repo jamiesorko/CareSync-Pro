@@ -106,6 +106,7 @@ export interface Client {
   currentVisitStatus?: 'IDLE' | 'IN_PROGRESS' | 'COMPLETED';
   risk?: RiskScore;
   coordinatorInstructions?: string;
+  docInstructions?: string;
   medications?: Medication[];
 }
 

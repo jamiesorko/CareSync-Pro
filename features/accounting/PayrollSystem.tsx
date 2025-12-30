@@ -2,9 +2,13 @@
 import React from 'react';
 import { MOCK_STAFF } from '../../data/careData';
 import { hrService } from '../../services/hrService';
-import { DollarSign, FileText, ShieldInfo, Users } from 'lucide-react';
+import { DollarSign, FileText, ShieldCheck, Users } from 'lucide-react';
 
-const PayrollSystem: React.FC = () => {
+interface Props {
+  language?: string;
+}
+
+const PayrollSystem: React.FC<Props> = ({ language }) => {
   const formatCAD = (n: number) => new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(n);
 
   return (
@@ -47,7 +51,7 @@ const PayrollSystem: React.FC = () => {
                 
                 <div className="mt-8 pt-8 border-t border-white/5 flex flex-wrap gap-6 opacity-40 group-hover:opacity-100 transition-opacity">
                    <div className="flex items-center gap-2"><FileText size={12} /> <span className="text-[9px] font-bold uppercase">Tax_T4_Vector</span></div>
-                   <div className="flex items-center gap-2"><ShieldInfo size={12} /> <span className="text-[9px] font-bold uppercase">Insurance_Sync</span></div>
+                   <div className="flex items-center gap-2"><ShieldCheck size={12} /> <span className="text-[9px] font-bold uppercase">Insurance_Sync</span></div>
                    <div className="flex items-center gap-2"><Users size={12} /> <span className="text-[9px] font-bold uppercase">Union_Checkoff_Logged</span></div>
                 </div>
               </div>

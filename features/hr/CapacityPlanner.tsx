@@ -3,7 +3,11 @@ import React from 'react';
 import { hrService } from '../../services/hrService';
 import { TrendingUp, Users, UserCheck } from 'lucide-react';
 
-const CapacityPlanner: React.FC = () => {
+interface Props {
+  language?: string;
+}
+
+const CapacityPlanner: React.FC<Props> = ({ language }) => {
   const recommendation = hrService.recommendHiring(12, 142); // Example input
 
   return (

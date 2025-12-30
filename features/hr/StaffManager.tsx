@@ -5,7 +5,11 @@ import { hrService } from '../../services/hrService';
 import { LeaveRequest, StaffMember } from '../../types';
 import { AlertTriangle, CalendarCheck, ShieldCheck, UserX } from 'lucide-react';
 
-const StaffManager: React.FC = () => {
+interface Props {
+  language?: string;
+}
+
+const StaffManager: React.FC<Props> = ({ language }) => {
   const [requests] = useState<LeaveRequest[]>([
     { id: 'lr-1', companyId: 'csp', staffId: 's1', staffName: 'Elena Rodriguez', type: 'VACATION', option1: { start: '2025-12-01', end: '2025-12-07' }, status: 'PENDING', timestamp: 'Oct 15', coverageRisk: 15 }
   ]);
