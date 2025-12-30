@@ -1,10 +1,9 @@
-
 {
   "requestFramePermissions": [
     "camera",
     "microphone",
     "geolocation"
   ],
-  "name": "CareSync-Pro Institutional",
+  "name": "CareSync-Pro ",
   "description": "Enterprise-grade clinical fleet management for caresync-pro.com"
 }
