@@ -32,7 +32,7 @@ export class MessagingService {
   }
 
   async getMessages(threadId: string): Promise<ChatMessage[]> {
-    if (!supabase) return [];
+    if (!supabase || !this.companyId) return [];
     const { data } = await supabase
       .from('chat_messages')
       .select('*, staff(name)')
@@ -41,6 +41,7 @@ export class MessagingService {
     
     return (data || []).map((m: any) => ({
       id: m.id,
+      companyId: this.companyId || 'demo',
       senderId: m.sender_id,
       senderName: m.staff?.name || 'System',
       text: m.content,

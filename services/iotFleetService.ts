@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { IoTAsset } from '../types';
 
@@ -41,6 +42,7 @@ export class IoTFleetService {
       const data = JSON.parse(response.text || '{}');
       return {
         id: asset.id || 'iot-000',
+        companyId: 'csp-demo',
         name: asset.name || 'Unknown Asset',
         type: asset.type || 'HARDWARE',
         status: data.status || 'FAULT',
@@ -50,6 +52,7 @@ export class IoTFleetService {
     } catch (e) {
       return {
         id: asset.id || 'iot-000',
+        companyId: 'csp-demo',
         name: asset.name || 'Unknown Asset',
         type: asset.type || 'HARDWARE',
         status: 'FAULT',

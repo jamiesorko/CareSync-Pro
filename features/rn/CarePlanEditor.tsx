@@ -16,9 +16,9 @@ const CarePlanEditor: React.FC<Props> = ({ language }) => {
   
   // Available forms to link
   const availableForms: FormRequirement[] = [
-    { id: 'f1', name: 'Wound Assessment v2', submissionTarget: 'RN_SUPERVISOR', isMandatory: true },
-    { id: 'f2', name: 'Medication Refusal Form', submissionTarget: 'DOC', isMandatory: true },
-    { id: 'f3', name: 'Home Care Incident Log', submissionTarget: 'HOME_CARE_AUTH', isMandatory: false },
+    { id: 'f1', companyId: 'demo-company', name: 'Wound Assessment v2', submissionTarget: 'RN_SUPERVISOR', isMandatory: true },
+    { id: 'f2', companyId: 'demo-company', name: 'Medication Refusal Form', submissionTarget: 'DOC', isMandatory: true },
+    { id: 'f3', companyId: 'demo-company', name: 'Home Care Incident Log', submissionTarget: 'HOME_CARE_AUTH', isMandatory: false },
   ];
 
   const rolesToEdit = [CareRole.RN, CareRole.RPN, CareRole.PSW, CareRole.HSS];
@@ -136,7 +136,7 @@ const CarePlanEditor: React.FC<Props> = ({ language }) => {
                    value={newTask}
                    onChange={(e) => setNewTask(e.target.value)}
                    placeholder="Enter new clinical directive or use voice dictation..."
-                   className="w-full h-32 p-6 bg-white/5 border border-white/10 rounded-[2rem] text-sm text-white focus:outline-none focus:border-rose-500 transition-all placeholder:text-slate-700"
+                   className="w-full h-32 p-6 bg-white/5 border border-white/10 rounded-[2rem] text-sm text-white focus:outline-none focus:border-rose-500 transition-all placeholder:text-slate-700 italic"
                  />
                  <button 
                    onClick={handleAddTask}

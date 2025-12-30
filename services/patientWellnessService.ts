@@ -25,9 +25,10 @@ export class PatientWellnessService {
   async generateZenVideo(prompt: string): Promise<string> {
     const ai = new GoogleGenAI({ apiKey: this.getApiKey() });
     
-    if (window.aistudio) {
-      const hasKey = await window.aistudio.hasSelectedApiKey();
-      if (!hasKey) await window.aistudio.openSelectKey();
+    const win = window as any;
+    if (win.aistudio) {
+      const hasKey = await win.aistudio.hasSelectedApiKey();
+      if (!hasKey) await win.aistudio.openSelectKey();
     }
 
     let operation = await ai.models.generateVideos({

@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { ReclamationCase } from '../types';
 
@@ -43,7 +44,7 @@ export class FiscalDefenseService {
         status: 'READY'
       };
     } catch (e) {
-      return { status: 'QUEUED' };
+      return { status: 'PENDING' };
     }
   }
 }
