@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { ChairmanMandate } from '../types';
 
@@ -36,6 +37,7 @@ export class BoardGovernanceService {
       const data = JSON.parse(response.text || '{}');
       return {
         id: Math.random().toString(36).substring(7),
+        companyId: 'csp-demo',
         timestamp: new Date().toISOString(),
         stateOfAgency: "Synthesis complete. Vitality vectors aligned.",
         institutionalFragilityPoints: data.fragility || [],

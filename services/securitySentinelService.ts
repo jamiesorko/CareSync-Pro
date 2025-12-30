@@ -1,3 +1,4 @@
+
 import { supabase } from '../lib/supabase'
 import { SecurityProbe } from '../types'
 
@@ -20,6 +21,7 @@ export class SecuritySentinelService {
 
     const probe: SecurityProbe = {
       id: Math.random().toString(36).substring(7),
+      companyId: 'csp-demo',
       actorId,
       action,
       resourcePath,

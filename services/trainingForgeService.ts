@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { TrainingModule, StaffMember } from '../types';
 
@@ -39,6 +40,7 @@ export class TrainingForgeService {
       const data = JSON.parse(response.text || '{}');
       return {
         id: Math.random().toString(36).substring(7),
+        companyId: 'csp-demo',
         title: data.title || "Clinical Mastery Protocol",
         targetSkill: gapDescription,
         conceptBrief: data.brief || "Focus on documentation integrity.",

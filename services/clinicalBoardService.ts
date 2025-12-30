@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 import { Client, ClinicalBoardReview } from '../types'
 
@@ -34,6 +35,8 @@ export class ClinicalBoardService {
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {
+        id: Math.random().toString(36).substring(7),
+        companyId: 'csp-demo',
         clientId: client.id,
         timestamp: new Date().toISOString(),
         caseSummary: data.summary || "Case review initialized.",
@@ -42,6 +45,8 @@ export class ClinicalBoardService {
       };
     } catch (e) {
       return {
+        id: 'err-board',
+        companyId: 'csp-demo',
         clientId: client.id,
         timestamp: new Date().toISOString(),
         caseSummary: "Board review failure.",

@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { Client, EthicsConsult } from '../types';
 
@@ -39,6 +40,7 @@ export class ClinicalEthicsAdvisoryService {
       const data = JSON.parse(response.text || '{}');
       return {
         id: Math.random().toString(36).substring(7),
+        companyId: 'csp-demo',
         timestamp: new Date().toISOString(),
         dilemma: scenario,
         moralConflict: data.conflict || "Conflict detected.",

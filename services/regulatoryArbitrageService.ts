@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { RegulatoryPatch } from '../types';
 
@@ -44,6 +45,7 @@ export class RegulatoryArbitrageService {
       const data = JSON.parse(response.text || '{}');
       return [{
         id: Math.random().toString(36).substring(7),
+        companyId: 'csp-demo',
         newLawReference: data.law || "Emerging Mandate",
         affectedSOPs: data.affected || ["Global Compliance Vector"],
         autoDraftedRevision: data.draft || "Drafting complete. Awaiting review.",

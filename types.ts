@@ -552,6 +552,7 @@ export interface AIStudio {
 
 declare global {
   interface Window {
-    aistudio: AIStudio;
+    // Fix: Made aistudio optional to match potential external declarations and resolve identical modifier errors.
+    aistudio?: AIStudio;
   }
 }

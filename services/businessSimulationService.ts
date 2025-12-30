@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { StrategicScenario } from '../types';
 
@@ -33,6 +34,7 @@ export class BusinessSimulationService {
       const data = JSON.parse(response.text || '{}');
       return {
         id: Math.random().toString(36).substring(7),
+        companyId: 'csp-demo',
         title: data.title || "Scenario",
         projection: data.projection?.map((p: any) => ({
           month: p.month,

@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { Client, NexusConsensus } from '../types';
 
@@ -51,6 +52,7 @@ export class ClinicalInterdisciplinaryService {
       const data = JSON.parse(response.text || '{}');
       return {
         id: Math.random().toString(36).substring(7),
+        companyId: 'csp-demo',
         clientId: client.id,
         specialistInputs: data.directives?.map((d: any) => ({ role: d.role, directive: d.dir, conflict: d.conflict })) || [],
         unifiedCareVector: data.vector || "Maintenance protocol.",

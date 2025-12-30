@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { ChairmanMandate } from '../types';
 
@@ -49,6 +50,7 @@ export class BoardDirectorService {
       const data = JSON.parse(response.text || '{}');
       return {
         id: Math.random().toString(36).substring(7),
+        companyId: 'csp-demo',
         timestamp: new Date().toISOString(),
         stateOfAgency: data.state || "Stable operational baseline.",
         institutionalFragilityPoints: data.fragility || ["Information silo risk."],
