@@ -15,39 +15,42 @@ const ProfessionalTerminal: React.FC<Props> = ({ clients, role, staffName }) => 
   const [view, setView] = useState<'ROSTER' | 'VISIT' | 'SELF'>('ROSTER');
   const [activeClient, setActiveClient] = useState<Client | null>(null);
 
-  // Determine accent color based on professional scope
-  const getRoleTheme = () => {
+  const getRoleBranding = () => {
     switch (role) {
-      case CareRole.RN: case CareRole.RPN: return 'text-sky-400 border-sky-500/20 bg-sky-600';
-      case CareRole.HSS: return 'text-purple-400 border-purple-500/20 bg-purple-600';
-      default: return 'text-orange-500 border-orange-500/20 bg-orange-600';
+      case CareRole.RN: return { title: 'CLINICAL_INTEL_NODE', color: 'text-sky-400', theme: 'bg-sky-600', sub: 'Nursing Leadership & Advanced Assessment' };
+      case CareRole.RPN: return { title: 'CLINICAL_PRACTICAL_NODE', color: 'text-cyan-400', theme: 'bg-cyan-600', sub: 'Nursing Practice & Clinical Stabilization' };
+      case CareRole.HSS: return { title: 'BIO_SOCIAL_NEXUS', color: 'text-purple-400', theme: 'bg-purple-600', sub: 'Social Determinants & Resource Coordination' };
+      default: return { title: 'FIELD_STATION_ALPHA', color: 'text-orange-500', theme: 'bg-orange-600', sub: 'Personal Support & ADL Care' };
     }
   };
 
-  const theme = getRoleTheme();
-  const themeColor = theme.split(' ').pop();
+  const branding = getRoleBranding();
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-700">
-      <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-        <div>
-          <h1 className={`text-5xl font-black tracking-tighter uppercase italic leading-none ${theme.split(' ')[0]}`}>
-            {role === CareRole.RN || role === CareRole.RPN ? 'CLINICAL_NODE' : role === CareRole.HSS ? 'SOCIAL_NEXUS' : 'STATION_ALPHA'}
-          </h1>
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em] mt-2">
-            {role} Operational Command • {staffName}
+    <div className="space-y-12 animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 px-4">
+        <div className="space-y-2">
+          <div className="flex items-center gap-3">
+             <div className={`w-2 h-2 rounded-full ${branding.color.replace('text-', 'bg-')} animate-pulse`}></div>
+             <h1 className={`text-5xl font-black tracking-tighter uppercase italic leading-none ${branding.color}`}>
+               {branding.title}
+             </h1>
+          </div>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em]">
+            {branding.sub} • {staffName}
           </p>
         </div>
-        <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10 backdrop-blur-xl shadow-sm">
+        
+        <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10 backdrop-blur-xl shadow-2xl">
           <button 
             onClick={() => setView('ROSTER')}
-            className={`px-8 py-3 rounded-xl text-[9px] font-black uppercase transition-all ${view === 'ROSTER' ? `${themeColor} text-white shadow-xl` : 'text-slate-500 hover:text-white'}`}
+            className={`px-10 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${view === 'ROSTER' ? `${branding.theme} text-white shadow-xl` : 'text-slate-500 hover:text-white'}`}
           >
-            Roster
+            My_Roster
           </button>
           <button 
             onClick={() => setView('SELF')}
-            className={`px-8 py-3 rounded-xl text-[9px] font-black uppercase transition-all ${view === 'SELF' ? `${themeColor} text-white shadow-xl` : 'text-slate-500 hover:text-white'}`}
+            className={`px-10 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${view === 'SELF' ? `${branding.theme} text-white shadow-xl` : 'text-slate-500 hover:text-white'}`}
           >
             Self_Service
           </button>
@@ -65,8 +68,9 @@ const ProfessionalTerminal: React.FC<Props> = ({ clients, role, staffName }) => 
           <PSWVisitConsole 
             client={activeClient} 
             language="English"
+            role={role}
             onClockOut={() => { setActiveClient(null); setView('ROSTER'); }}
-            onAlert={(type, content) => console.log(`Alert: ${type} - ${content}`)}
+            onAlert={(type, content) => console.log(`[SIGNAL]: ${type} - ${content}`)}
           />
         )}
         {view === 'SELF' && <PSWSelfService language="English" />}

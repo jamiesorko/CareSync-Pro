@@ -17,6 +17,7 @@ const App: React.FC = () => {
   if (!user) return <Login onLogin={setUser} />;
 
   const renderContent = () => {
+    // RPN added to field staff array
     const isFieldStaff = [CareRole.PSW, CareRole.RN, CareRole.RPN, CareRole.HSS].includes(user.role as any);
 
     switch (activeTab) {
