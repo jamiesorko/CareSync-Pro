@@ -2,147 +2,132 @@
 import React, { useState, useEffect } from 'react';
 import { Client, CareRole, AlertType } from '../../types';
 import Translate from '../../components/Translate';
-import { clinicalService } from '../../services/clinicalService';
-import HandoverStudio from './HandoverStudio';
+import NeuralScribe from '../rn/NeuralScribe';
 
 interface Props {
   client: Client;
-  onClockOut: (durationMinutes: number) => void;
-  onAlert: (type: AlertType, content: string, target: 'COORDINATOR' | 'SUPERVISOR' | 'BOTH') => void;
+  onClockOut: () => void;
+  onAlert: (type: AlertType, content: string) => void;
   language: string;
 }
 
 const PSWVisitConsole: React.FC<Props> = ({ client, onClockOut, onAlert, language }) => {
   const [elapsed, setElapsed] = useState(0);
   const [checkedTasks, setCheckedTasks] = useState<Record<number, boolean>>({});
-  const [showHandover, setShowHandover] = useState(false);
-  const [visitNote, setVisitNote] = useState('');
+  const [initialRating, setInitialRating] = useState<boolean | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => setElapsed(e => e + 1), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  const formatTime = (s: number) => {
-    const m = Math.floor(s / 60);
-    const sec = s % 60;
-    return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
-  };
-
-  const handleFinalize = async () => {
+  const handleFinalize = () => {
     const minutes = Math.floor(elapsed / 60);
-    await clinicalService.auditVisitDuration(client.id, minutes);
-    onClockOut(minutes);
+    const isAM = new Date().getHours() < 12;
+    const minRequired = isAM ? 20 : 15;
+
+    if (minutes < minRequired) {
+      alert(`AI_ALERT: Visit duration (${minutes}m) below compliance floor (${minRequired}m). Flagging for HR follow-up.`);
+    }
+    
+    if (client.isInitialVisit && initialRating === null) {
+      alert("Please rate if you would like to return to this client.");
+      return;
+    }
+
+    onClockOut();
   };
 
-  const triggerAlert = (type: AlertType, label: string) => {
-    const content = prompt(`Protocol: Describe ${label} details:`);
-    if (content) {
-      onAlert(type, content, ['FALL', 'CHOKING', 'MEDICAL', 'UNSAFE_ENV'].includes(type) ? 'BOTH' : 'COORDINATOR');
-    }
+  const triggerAlert = (type: AlertType, promptText: string) => {
+    const detail = prompt(`CRITICAL SIGNAL: ${promptText}`);
+    if (detail) onAlert(type, detail);
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 max-w-5xl mx-auto pb-24">
-      {showHandover && (
-        <HandoverStudio 
-          client={client} 
-          lastNote={visitNote || "Care delivered according to protocol."} 
-          language={language}
-          onCancel={() => setShowHandover(false)}
-          onFinalize={handleFinalize}
-        />
-      )}
-
-      {/* Deployment HUD */}
-      <div className="bg-slate-900 border border-white/5 rounded-3xl p-8 flex flex-col md:flex-row justify-between items-center gap-8 shadow-2xl">
-        <div className="flex items-center space-x-8">
-          <div className="px-6 py-4 bg-indigo-600 rounded-2xl flex flex-col items-center justify-center shadow-xl shadow-indigo-500/20">
-            <span className="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mb-1">Session</span>
-            <span className="text-3xl font-mono font-bold text-white tracking-tighter">{formatTime(elapsed)}</span>
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-white tracking-tight">{client.name}</h2>
-            <p className="text-slate-400 text-sm font-medium">{client.address}</p>
-          </div>
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 animate-in fade-in duration-700">
+      
+      {/* Session Command HUD */}
+      <div className="lg:col-span-8 space-y-8">
+        <div className="bg-slate-900 border border-white/10 rounded-[4rem] p-10 shadow-2xl flex flex-col md:flex-row justify-between items-center gap-8">
+           <div className="flex items-center gap-10">
+              <div className="w-32 h-32 rounded-full border-4 border-orange-500/30 flex items-center justify-center relative">
+                 <div className="absolute inset-0 bg-orange-500/10 rounded-full animate-pulse"></div>
+                 <p className="text-3xl font-black italic text-white font-mono">{Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, '0')}</p>
+              </div>
+              <div>
+                 <h2 className="text-4xl font-black text-white italic tracking-tighter uppercase leading-none">{client.name}</h2>
+                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">{client.address}</p>
+              </div>
+           </div>
+           <div className="flex gap-3">
+              <button onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(client.address)}`)} className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl">Tactical_GPS</button>
+              <button onClick={handleFinalize} className="px-10 py-4 bg-rose-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-2xl shadow-rose-600/30 hover:bg-rose-500 transition-all">Clock_Out</button>
+           </div>
         </div>
-        
-        <div className="flex gap-3">
-          <button onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(client.address)}`)} className="px-6 py-3 bg-slate-800 border border-white/10 text-white rounded-xl text-xs font-bold hover:bg-slate-700 transition-colors uppercase tracking-widest">Tactical GPS</button>
-          <button onClick={() => setShowHandover(true)} className="px-8 py-3 bg-rose-600 text-white rounded-xl text-xs font-bold shadow-lg shadow-rose-500/20 hover:bg-rose-500 transition-colors uppercase tracking-widest">Clock Out</button>
-        </div>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-8 space-y-8">
-          {/* Directives */}
-          <div className="bg-slate-900 border border-white/5 rounded-3xl p-8 shadow-xl">
-            <div className="flex justify-between items-center mb-8">
-              <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">Clinical Directives</h3>
-              <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">{Object.keys(checkedTasks).length} / {(client.carePlans[CareRole.PSW] || []).length} Verified</span>
-            </div>
-            <div className="space-y-3 mb-8">
-              {(client.carePlans[CareRole.PSW] || []).map((task, i) => (
-                <label key={i} className={`flex items-center space-x-4 p-6 rounded-2xl cursor-pointer transition-all border ${checkedTasks[i] ? 'bg-emerald-500/5 border-emerald-500/20 opacity-70' : 'bg-white/5 border-transparent hover:bg-white/10'}`}>
-                  <input 
+        {/* Clinical Directives */}
+        <div className="bg-white/5 border border-white/10 rounded-[3.5rem] p-10">
+           <h3 className="text-xl font-black text-white italic tracking-tighter uppercase mb-10">Care_Plan_Protocol</h3>
+           <div className="space-y-4 mb-10">
+              {(client.carePlans[CareRole.PSW] || ["Standard Care Protocol"]).map((task, i) => (
+                <label key={i} className={`flex items-center gap-6 p-6 rounded-2xl border transition-all cursor-pointer ${checkedTasks[i] ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-white/[0.02] border-white/5 hover:bg-white/5'}`}>
+                   <input 
                     type="checkbox" 
-                    checked={!!checkedTasks[i]}
+                    checked={!!checkedTasks[i]} 
                     onChange={() => setCheckedTasks(prev => ({...prev, [i]: !prev[i]}))}
-                    className="w-5 h-5 rounded border-white/10 bg-transparent text-indigo-500 focus:ring-indigo-500" 
-                  />
-                  <p className={`text-sm font-medium ${checkedTasks[i] ? 'text-emerald-400 line-through italic' : 'text-slate-200 font-bold'}`}>{task}</p>
+                    className="w-6 h-6 rounded bg-black border-white/10 text-emerald-500"
+                   />
+                   <p className={`text-sm font-bold italic ${checkedTasks[i] ? 'text-emerald-400 line-through' : 'text-slate-300'}`}>{task}</p>
                 </label>
               ))}
-            </div>
-            
-            <div className="pt-8 border-t border-white/5">
-              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Shift Narrative</p>
-              <textarea 
-                value={visitNote}
-                onChange={(e) => setVisitNote(e.target.value)}
-                placeholder="Ingest clinical summary for next operative..."
-                className="w-full bg-slate-800 border border-white/10 rounded-2xl p-6 text-sm text-white focus:border-indigo-500 outline-none transition-all placeholder:text-slate-600 italic"
-                rows={4}
-              />
-            </div>
-          </div>
+           </div>
+
+           {client.isInitialVisit && (
+             <div className="p-8 bg-orange-600/10 border border-orange-500/20 rounded-3xl">
+                <p className="text-[9px] font-black text-orange-400 uppercase tracking-widest mb-6 italic">Initial_Visit_Review</p>
+                <p className="text-sm font-bold text-white mb-6 italic">"Would you like to be scheduled with this client again?"</p>
+                <div className="flex gap-4">
+                   <button onClick={() => setInitialRating(true)} className={`flex-1 py-3 rounded-xl font-black text-[10px] uppercase transition-all ${initialRating === true ? 'bg-emerald-600 text-white' : 'bg-white/5 text-slate-500 border border-white/10'}`}>Yes_Return</button>
+                   <button onClick={() => setInitialRating(false)} className={`flex-1 py-3 rounded-xl font-black text-[10px] uppercase transition-all ${initialRating === false ? 'bg-rose-600 text-white' : 'bg-white/5 text-slate-500 border border-white/10'}`}>No_Restrict</button>
+                </div>
+             </div>
+           )}
         </div>
 
-        {/* Sidebar */}
-        <div className="lg:col-span-4 space-y-6">
-          <div className="bg-rose-500/5 border border-rose-500/20 rounded-[3rem] p-10 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-8 opacity-5">
-                <span className="text-6xl font-black italic">SOS</span>
-            </div>
-            <h3 className="text-xs font-black text-rose-500 uppercase tracking-[0.3em] mb-8 italic">Field Incident Link</h3>
-            <div className="grid grid-cols-1 gap-3">
-              {[
-                { type: 'FALL', label: 'Fall / Burn / Choking' },
-                { type: 'MEDICAL', label: 'Medical Emergency' },
-                { type: 'UNSAFE_ENV', label: 'Environmental Hazard' },
-                { type: 'BOOK_OFF', label: 'Emergency Book-Off' }
-              ].map(alert => (
-                <button 
-                  key={alert.type}
-                  onClick={() => triggerAlert(alert.type as AlertType, alert.label)}
-                  className={`p-6 rounded-2xl text-left transition-all group border ${alert.type === 'BOOK_OFF' ? 'bg-amber-600/10 border-amber-500/20 hover:bg-amber-500/20' : 'bg-slate-900 border-white/5 hover:bg-rose-600 hover:border-white shadow-md'}`}
-                >
-                  <p className={`text-xs font-black uppercase tracking-widest ${alert.type === 'BOOK_OFF' ? 'text-amber-500' : 'text-slate-300 group-hover:text-white'}`}>{alert.label}</p>
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          <div className="bg-slate-900 border border-white/5 p-10 rounded-[3rem] shadow-xl">
-            <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em] mb-4 italic">Emergency_Contact</p>
-            <p className="text-xl font-black text-white tracking-tighter">{client.phone}</p>
-            <div className="mt-8 flex gap-2">
-                <button className="flex-1 py-3 bg-white/5 rounded-xl text-[10px] font-black uppercase text-slate-400 border border-white/5">Text</button>
-                <button className="flex-1 py-3 bg-white/5 rounded-xl text-[10px] font-black uppercase text-slate-400 border border-white/5">Call</button>
-            </div>
-          </div>
+        <NeuralScribe language={language} />
+      </div>
+
+      {/* Signal Intercepts Sidebar */}
+      <div className="lg:col-span-4 space-y-6">
+        <div className="bg-rose-600/10 border border-rose-500/20 rounded-[3rem] p-10 shadow-2xl flex flex-col gap-3">
+           <h3 className="text-xs font-black uppercase tracking-widest text-rose-500 mb-6 italic">Incident_Signal_Burst</h3>
+           <button onClick={() => triggerAlert('FALL', "Specify: Fall, Burn, Choking or other medical detail.")} className="p-6 bg-rose-600 text-white rounded-2xl font-black text-[10px] uppercase text-left group hover:scale-105 transition-all">
+              <span className="block mb-1 opacity-60">Clinical</span>
+              Fall / Burn / Choking
+           </button>
+           <button onClick={() => triggerAlert('CLINICAL', "Specify Bedsore/Swelling LOCATION.")} className="p-6 bg-slate-900 border border-white/5 text-rose-400 rounded-2xl font-black text-[10px] uppercase text-left hover:bg-rose-600 hover:text-white transition-all">
+              <span className="block mb-1 opacity-60">Integrity</span>
+              Bedsore / Swelling
+           </button>
+           <button onClick={() => triggerAlert('UNSAFE_ENV', "Specify why environment is unsafe for CARE.")} className="p-6 bg-slate-900 border border-white/5 text-slate-300 rounded-2xl font-black text-[10px] uppercase text-left hover:bg-rose-600 hover:text-white transition-all">
+              <span className="block mb-1 opacity-60">Environmental</span>
+              Unsafe for Care Plan
+           </button>
+           <button onClick={() => triggerAlert('UNSAFE_ENV', "Specify why environment is unsafe for YOU.")} className="p-6 bg-slate-900 border border-white/5 text-slate-300 rounded-2xl font-black text-[10px] uppercase text-left hover:bg-rose-600 hover:text-white transition-all">
+              <span className="block mb-1 opacity-60">Safety</span>
+              Unsafe for Worker
+           </button>
+        </div>
+
+        <div className="bg-amber-600/10 border border-amber-500/20 rounded-[3rem] p-10 flex flex-col gap-3">
+           <h3 className="text-xs font-black uppercase tracking-widest text-amber-500 mb-6 italic">Operational_Alerts</h3>
+           <button onClick={() => triggerAlert('MEDICAL', "Awaiting instructions from Coordinator.")} className="p-6 bg-amber-600 text-white rounded-2xl font-black text-[10px] uppercase text-left shadow-xl">
+              <span className="block mb-1 opacity-60">Presence</span>
+              Not Seen / Not Found
+           </button>
         </div>
       </div>
+
     </div>
   );
 };
