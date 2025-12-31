@@ -9,7 +9,6 @@ import {
   UserRoundSearch, 
   WalletMinimal, 
   ChevronLeft, 
-  ChevronRight,
   Menu
 } from 'lucide-react';
 
@@ -25,21 +24,20 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const menu = [
-    { id: AppTab.DASHBOARD, icon: LayoutDashboard, label: 'Ops Dashboard' },
+    { id: AppTab.DASHBOARD, icon: LayoutDashboard, label: 'Operations' },
     { id: AppTab.CLINICAL_COMMAND, icon: ShieldAlert, label: 'Clinical Core' },
-    { id: AppTab.COORDINATION, icon: Users, label: 'Census Logistics' },
+    { id: AppTab.COORDINATION, icon: Users, label: 'Logistics' },
     { id: AppTab.HR_HUB, icon: UserRoundSearch, label: 'Resource Core' },
     { id: AppTab.FINANCE, icon: WalletMinimal, label: 'Fiscal Ledger' },
-    { id: AppTab.ORG_COMMAND, icon: Briefcase, label: 'Instance Admin' },
+    { id: AppTab.ORG_COMMAND, icon: Briefcase, label: 'Admin Hub' },
   ];
 
   return (
     <aside 
-      className={`bg-black border-r border-white/10 flex flex-col transition-all duration-500 ease-in-out z-50 h-screen ${
+      className={`bg-black border-r border-white/10 flex flex-col transition-all duration-300 ease-in-out z-50 h-screen shrink-0 ${
         isExpanded ? 'w-64' : 'w-20'
       }`}
     >
-      {/* Header Toggle */}
       <div className="h-20 flex items-center justify-center border-b border-white/5">
         <button 
           onClick={() => setIsExpanded(!isExpanded)}
@@ -49,7 +47,6 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
         </button>
       </div>
 
-      {/* Nav Items */}
       <nav className="flex-1 flex flex-col gap-2 p-4 overflow-y-auto scrollbar-hide">
         {menu.map((item) => (
           <button
@@ -65,7 +62,7 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
             <div className="shrink-0">
               <item.icon size={20} strokeWidth={2.5} />
             </div>
-            <span className={`font-bold text-[11px] uppercase tracking-widest whitespace-nowrap transition-opacity duration-300 ${
+            <span className={`font-bold text-[11px] uppercase tracking-widest whitespace-nowrap transition-opacity duration-200 ${
               isExpanded ? 'opacity-100' : 'opacity-0 pointer-events-none absolute left-20'
             }`}>
               {item.label}
@@ -80,7 +77,6 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
         ))}
       </nav>
 
-      {/* Bottom Branding */}
       <div className={`p-6 border-t border-white/5 transition-opacity ${isExpanded ? 'opacity-100' : 'opacity-0'}`}>
         <p className="text-[8px] font-black text-slate-700 uppercase tracking-[0.4em]">CareSync_Pro_v4</p>
       </div>

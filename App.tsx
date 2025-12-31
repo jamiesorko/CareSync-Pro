@@ -23,7 +23,6 @@ const App: React.FC = () => {
     const isFieldStaff = [CareRole.PSW, CareRole.RN, CareRole.RPN, CareRole.HSS].includes(user.role as any);
     const lang = "English";
 
-    // Direct Portal Access Logic
     switch (activeTab) {
       case AppTab.DASHBOARD:
         if (user.role === CareRole.CEO) return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} language={lang} />;
@@ -57,15 +56,17 @@ const App: React.FC = () => {
   };
 
   return (
-    <Layout 
-      activeTab={activeTab} 
-      setActiveTab={setActiveTab} 
-      activeRole={user.role} 
-      staffName={user.name} 
-      onLogout={() => { setUser(null); setActiveTab(AppTab.DASHBOARD); }}
-    >
-      {renderContent()}
-    </Layout>
+    <div className="h-screen w-screen overflow-hidden bg-[#020617]">
+      <Layout 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        activeRole={user.role} 
+        staffName={user.name} 
+        onLogout={() => { setUser(null); setActiveTab(AppTab.DASHBOARD); }}
+      >
+        {renderContent()}
+      </Layout>
+    </div>
   );
 };
 

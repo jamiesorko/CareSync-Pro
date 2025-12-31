@@ -90,7 +90,7 @@ const AccountingHub: React.FC<Props> = ({ language, alerts, setAlerts, clients }
             </div>
 
             <div className="lg:col-span-4 space-y-6">
-              <div className="bg-indigo-600 p-10 rounded-[3rem] text-white shadow-2xl relative overflow-hidden group">
+              <div className="bg-indigo-600 p-10 rounded-[3rem] text-white shadow-2xl relative overflow-hidden group h-fit">
                  <h3 className="text-xs font-black uppercase tracking-widest mb-10 opacity-60 italic">Aging_Telemetry</h3>
                  <div className="space-y-10 relative z-10">
                     <div className="flex justify-between items-baseline">
@@ -124,8 +124,8 @@ const AccountingHub: React.FC<Props> = ({ language, alerts, setAlerts, clients }
   };
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-700 pb-24 h-full">
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 px-4">
+    <div className="space-y-12 animate-in fade-in duration-700 h-full overflow-y-auto scrollbar-hide pb-24 px-4">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
         <div>
           <h2 className="text-4xl font-black text-white tracking-tighter uppercase leading-none italic">Fiscal_Ledger</h2>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-3 italic">Institutional Financial Forensics & Capital Flux</p>
