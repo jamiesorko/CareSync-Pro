@@ -22,8 +22,8 @@ export interface HydratedScheduleEntry {
 
 export class AnonymizationService {
   /**
-   * Prepares the absolute minimum data required for the AI to make a match.
-   * Strips all Names and Personal Identifiers.
+   * LAYER 1: IDENTITY MASKING
+   * LAYER 2: FISCAL GENERALIZATION
    */
   prepareAnonymizedPayload(clients: Client[], staff: StaffMember[]) {
     const clientMap: Record<string, Client> = {};
@@ -31,15 +31,16 @@ export class AnonymizationService {
 
     const scrubbedClients = clients.map(c => {
       clientMap[c.id] = c;
-      // Find what role is actually needed for this client based on carePlans
       const requiredRole = Object.keys(c.carePlans).find(role => c.carePlans[role].length > 0) || CareRole.PSW;
       
       return {
         id: c.id, // e.g., C1
         address: c.address,
-        sector: c.sector, // e.g., Mississauga
+        sector: c.sector,
         requiredRole: requiredRole,
-        preferredTime: c.time
+        preferredTime: c.time,
+        // LAYER 2: Masking high-value patient tags
+        acuityMagnitude: c.mobilityStatus.isBedridden ? 'ALPHA_HIGH' : 'BETA_STD'
       };
     });
 
@@ -48,9 +49,11 @@ export class AnonymizationService {
       return {
         id: s.id, // e.g., P1, RN1
         role: s.role,
-        homeSector: s.homeSector, // e.g., Mississauga
-        availability: s.availability, // e.g., 09:00-17:00
-        currentLoad: s.weeklyHours
+        homeSector: s.homeSector,
+        availability: s.availability,
+        currentLoad: s.weeklyHours,
+        // LAYER 2: Generalizing hourly costs to Tiers
+        costTier: (s.hourlyRate || 0) > 40 ? 'TIER_EXECUTIVE' : 'TIER_FIELD'
       };
     });
 
@@ -60,9 +63,6 @@ export class AnonymizationService {
     };
   }
 
-  /**
-   * Replaces AI-returned IDs with real names for the human interface.
-   */
   hydrateSchedule(
     aiOutput: AnonymizedScheduleEntry[], 
     lookups: { clientMap: Record<string, Client>, staffMap: Record<string, StaffMember> }
