@@ -17,8 +17,9 @@ const AdminPortal: React.FC<Props> = ({ language, role, clients, setClients }) =
 
   const handleIntake = (e: React.FormEvent) => {
     e.preventDefault();
-    const id = (clients.length + 1).toString();
-    // Fixed: Use valid Client interface properties, removed 'date'
+    // Prefix client ID with C
+    const id = "C" + (clients.length + 1);
+    
     const client: Client = {
       id,
       companyId: 'demo-company',

@@ -42,13 +42,13 @@ const IntakeNode: React.FC<Props> = ({ language, onClientAdded }) => {
 
   const handleConfirm = () => {
     if (!parsedClient) return;
+    // Client ID prefixed with C
     const client: Client = {
-      id: Math.random().toString(36).substring(7),
+      id: "C" + Math.floor(Math.random() * 10000),
       companyId: 'csp-demo',
       anonymizedId: `C${Math.floor(100 + Math.random() * 900)}`,
       name: parsedClient.name || 'Unknown Patient',
       address: parsedClient.address || 'TBD',
-      // Fix: Changed 'Regional_Node' to 'General' to align with Client sector type
       sector: 'General',
       phone: 'TBD',
       time: '08:00 AM',

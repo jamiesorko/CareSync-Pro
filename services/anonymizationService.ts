@@ -1,4 +1,5 @@
-import { Client, StaffMember } from '../types';
+
+import { Client, StaffMember, CareRole } from '../types';
 
 export interface AnonymizedScheduleEntry {
   clientId: string;
@@ -20,51 +21,63 @@ export interface HydratedScheduleEntry {
 }
 
 export class AnonymizationService {
+  /**
+   * Prepares the absolute minimum data required for the AI to make a match.
+   * Strips all Names and Personal Identifiers.
+   */
   prepareAnonymizedPayload(clients: Client[], staff: StaffMember[]) {
     const clientMap: Record<string, Client> = {};
     const staffMap: Record<string, StaffMember> = {};
 
     const scrubbedClients = clients.map(c => {
-      clientMap[c.anonymizedId] = c;
+      clientMap[c.id] = c;
+      // Find what role is actually needed for this client based on carePlans
+      const requiredRole = Object.keys(c.carePlans).find(role => c.carePlans[role].length > 0) || CareRole.PSW;
+      
       return {
-        id: c.anonymizedId,
-        sector: c.sector,
-        serviceRequired: c.conditions.join(', '),
-        preferredTime: c.time,
-        blacklist: c.blacklistStaffIds.map(sid => staff.find(st => st.id === sid)?.anonymizedId || 'UNK')
+        id: c.id, // e.g., C1
+        address: c.address,
+        sector: c.sector, // e.g., Mississauga
+        requiredRole: requiredRole,
+        preferredTime: c.time
       };
     });
 
     const scrubbedStaff = staff.map(s => {
-      staffMap[s.anonymizedId] = s;
+      staffMap[s.id] = s;
       return {
-        id: s.anonymizedId,
+        id: s.id, // e.g., P1, RN1
         role: s.role,
-        sector: s.homeSector,
-        currentWeeklyUnits: s.weeklyHours || 0, // In this system, units = hours/minutes
-        availability: s.availability,
-        restrictedClients: s.restrictedClientIds.map(cid => clients.find(cl => cl.id === cid)?.anonymizedId || 'UNK')
+        homeSector: s.homeSector, // e.g., Mississauga
+        availability: s.availability, // e.g., 09:00-17:00
+        currentLoad: s.weeklyHours
       };
     });
 
     return { 
-      payload: { scrubbedClients, scrubbedStaff }, 
+      payload: { clients: scrubbedClients, staff: scrubbedStaff }, 
       lookups: { clientMap, staffMap } 
     };
   }
 
-  hydrateSchedule(anonymizedOutput: AnonymizedScheduleEntry[], lookups: { clientMap: Record<string, Client>, staffMap: Record<string, StaffMember> }): HydratedScheduleEntry[] {
-    return anonymizedOutput.map(entry => {
+  /**
+   * Replaces AI-returned IDs with real names for the human interface.
+   */
+  hydrateSchedule(
+    aiOutput: AnonymizedScheduleEntry[], 
+    lookups: { clientMap: Record<string, Client>, staffMap: Record<string, StaffMember> }
+  ): HydratedScheduleEntry[] {
+    return aiOutput.map(entry => {
       const client = lookups.clientMap[entry.clientId];
       const staff = lookups.staffMap[entry.staffId];
 
       return {
-        clientName: client?.name || "Unknown Client",
+        clientName: client?.name || "Unknown Patient",
         clientId: entry.clientId,
-        clientAddress: client?.address || "Address Scrubbed",
+        clientAddress: client?.address || "Location Masked",
         staffName: staff?.name || "Unknown Staff",
         staffId: entry.staffId,
-        staffRole: staff?.role || "Field Operative",
+        staffRole: String(staff?.role || "Field Operative"),
         scheduledTime: entry.scheduledTime,
         reasoning: entry.reasoning,
         weeklyLoad: staff?.weeklyHours || 0

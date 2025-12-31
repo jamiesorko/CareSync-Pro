@@ -6,7 +6,6 @@ import { financialService } from '../../services/financialService';
 import { coordinationService } from '../../services/coordinationService';
 import { emailService, InternalEmail } from '../../services/emailService';
 import { AlertType } from '../../types';
-// Add missing ShieldAlert and CheckCircle2 to the lucide-react imports to fix line 170 and 171 errors
 import { Mail, Briefcase, GraduationCap, Vault, Plus, Send, FileText, ShoppingCart, Clock, ShieldAlert, CheckCircle2 } from 'lucide-react';
 
 interface Props {
@@ -20,7 +19,8 @@ const PSWSelfService: React.FC<Props> = ({ language }) => {
   const handleHRAction = async (type: AlertType) => {
     const details = prompt(`Initiating [${type}]: Enter tactical request details:`);
     if (details) {
-      await hrService.submitHRRequest({ type, details, staffId: 'psw-1' });
+      // Using P1 as a representative PSW ID
+      await hrService.submitHRRequest({ type, details, staffId: 'P1' });
       alert(`SIGNAL_LOCKED: Request transmitted to Resource Core.`);
     }
   };
@@ -29,7 +29,7 @@ const PSWSelfService: React.FC<Props> = ({ language }) => {
     const item = prompt("Specify item needed (Gloves, Wound Kits, PPE, etc.):");
     const qty = prompt("Quantity:");
     if (item && qty) {
-      await financialService.submitSupplyRequest({ staffId: 'psw-1', item, quantity: parseInt(qty) });
+      await financialService.submitSupplyRequest({ staffId: 'P1', item, quantity: parseInt(qty) });
       alert("SIGNAL_LOCKED: Supply directive routed to Accounting.");
     }
   };
@@ -37,7 +37,7 @@ const PSWSelfService: React.FC<Props> = ({ language }) => {
   const handleBookOff = async (urgent: boolean) => {
     const reason = prompt(urgent ? "URGENT_BOOK_OFF (<24h notice): Reason:" : "ADVANCE_BOOK_OFF: Reason:");
     if (reason) {
-      await coordinationService.signalBookOff({ staffId: 'psw-1', reason, isUrgent: urgent });
+      await coordinationService.signalBookOff({ staffId: 'P1', reason, isUrgent: urgent });
       alert(urgent ? "⚠️ ALERT: Schedule revision request broadcast to Dispatch." : "Request queued for coordination review.");
     }
   };
@@ -168,9 +168,7 @@ const PSWSelfService: React.FC<Props> = ({ language }) => {
              {[
                { label: '2024 T4 Statement', icon: FileText, action: 'T4_REQUEST' },
                { label: 'Recent Paystub', icon: Clock, action: 'PAYROLL' },
-               // ShieldAlert is now properly imported from lucide-react
                { label: 'Insurance Policy', icon: ShieldAlert, action: 'INSURANCE_Q' },
-               // CheckCircle2 is now properly imported from lucide-react
                { label: 'Credentials Scan', icon: CheckCircle2, action: 'AVAILABILITY' }
              ].map((doc, i) => (
                <div key={i} className="p-10 bg-white/5 border border-white/10 rounded-[3rem] text-center flex flex-col items-center justify-between group hover:bg-white/10 transition-all h-72 shadow-2xl">

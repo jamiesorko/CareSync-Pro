@@ -86,7 +86,8 @@ export interface Client {
   anonymizedId: string;
   name: string;
   address: string;
-  sector: 'Woodbridge' | 'Scarborough' | 'Toronto' | 'Vaughan' | 'General';
+  // Added 'Mississauga' to sector type
+  sector: 'Woodbridge' | 'Scarborough' | 'Toronto' | 'Vaughan' | 'General' | 'Mississauga';
   phone: string;
   time: string;
   conditions: string[];
@@ -116,7 +117,8 @@ export interface StaffMember {
   status: 'ONLINE' | 'OFFLINE' | 'IN_FIELD';
   weeklyHours: number;
   anonymizedId: string;
-  homeSector: 'Woodbridge' | 'Scarborough' | 'Toronto' | 'Vaughan';
+  // Added 'Mississauga' to homeSector type
+  homeSector: 'Woodbridge' | 'Scarborough' | 'Toronto' | 'Vaughan' | 'Mississauga';
   availability: string;
   restrictedClientIds: string[];
   specialties: string[];

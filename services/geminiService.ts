@@ -1,51 +1,58 @@
 
-import { GoogleGenAI, Modality, GenerateContentResponse } from "@google/genai";
+import { GoogleGenAI, Modality, GenerateContentResponse, Type } from "@google/genai";
 
 export class GeminiService {
+  // Initialize AI using named parameter for apiKey per guidelines.
   private getAI() {
     return new GoogleGenAI({ apiKey: process.env.API_KEY as string });
   }
 
+  // Basic Text Generation with optional Search Grounding.
   async generateText(prompt: string, useSearch: boolean = false): Promise<GenerateContentResponse> {
     const ai = this.getAI();
-    const config: any = {
+    return await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: prompt,
-    };
-    if (useSearch) {
-      config.config = {
-        tools: [{ googleSearch: {} }]
-      };
-    }
-    return await ai.models.generateContent(config);
+      config: useSearch ? { tools: [{ googleSearch: {} }] } : undefined,
+    });
   }
 
-  async generateImage(prompt: string): Promise<string | null> {
+  // Advanced Reasoning / Thinking using Gemini 3 Pro.
+  async generateAdvancedReasoning(prompt: string): Promise<GenerateContentResponse> {
+    const ai = this.getAI();
+    return await ai.models.generateContent({
+      model: 'gemini-3-pro-preview',
+      contents: prompt,
+      config: {
+        thinkingConfig: { thinkingBudget: 15000 }
+      }
+    });
+  }
+
+  // Image Generation using nano banana series models.
+  async generateImage(prompt: string): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
-      contents: {
-        parts: [{ text: prompt }]
-      }
+      contents: { parts: [{ text: prompt }] },
+      config: { imageConfig: { aspectRatio: "1:1" } }
     });
+    // Iterate through parts to find the image part per guidelines.
     for (const part of response.candidates?.[0]?.content?.parts || []) {
       if (part.inlineData) {
         return `data:image/png;base64,${part.inlineData.data}`;
       }
     }
-    return null;
+    return "";
   }
 
+  // Video Generation using Veo models.
   async generateVideo(prompt: string): Promise<string> {
     const ai = this.getAI();
     let operation = await ai.models.generateVideos({
       model: 'veo-3.1-fast-generate-preview',
       prompt: prompt,
-      config: {
-        numberOfVideos: 1,
-        resolution: '720p',
-        aspectRatio: '16:9'
-      }
+      config: { numberOfVideos: 1, resolution: '720p', aspectRatio: '16:9' }
     });
     while (!operation.done) {
       await new Promise(resolve => setTimeout(resolve, 10000));
@@ -55,16 +62,17 @@ export class GeminiService {
     return `${downloadLink}&key=${process.env.API_KEY}`;
   }
 
-  async generateSpeech(text: string, voice: string): Promise<string> {
+  // Text-to-Speech generation.
+  async generateSpeech(text: string, voiceName: string = 'Kore'): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
-      contents: [{ parts: [{ text: `Say cheerfully: ${text}` }] }],
+      contents: [{ parts: [{ text }] }],
       config: {
         responseModalities: [Modality.AUDIO],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: voice },
+            prebuiltVoiceConfig: { voiceName },
           },
         },
       },
@@ -72,81 +80,39 @@ export class GeminiService {
     return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || "";
   }
 
+  // Translation helper using flash model.
   async translate(text: string, targetLanguage: string): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `Translate the following text to ${targetLanguage}: "${text}". Return only the translation.`,
+      contents: `Translate the following text to ${targetLanguage}: "${text}"`,
     });
     return response.text || text;
   }
 
-  async generateAdvancedReasoning(prompt: string): Promise<GenerateContentResponse> {
-    const ai = this.getAI();
-    return await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: prompt,
-      config: {
-        thinkingConfig: { thinkingBudget: 20000 }
-      }
-    });
-  }
-
+  // Strategic reasoning for financials.
   async getFinancialStrategy(context: any): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
-      contents: `Generate a financial strategy based on this context: ${JSON.stringify(context)}`,
-      config: {
-        thinkingConfig: { thinkingBudget: 10000 }
-      }
+      contents: `Analyze these financials and provide a strategy: ${JSON.stringify(context)}`,
+      config: { thinkingConfig: { thinkingBudget: 5000 } }
     });
-    return response.text || "Strategy unavailable.";
+    return response.text || "No strategy available.";
   }
 
-  async generateSecureSchedule(clients: any[], staff: any[]): Promise<any[]> {
-    const ai = this.getAI();
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: `Generate a secure schedule for these clients and staff: ${JSON.stringify({ clients, staff })}. Return JSON array of objects with keys: clientId, staffId, scheduledTime, reasoning.`,
-      config: {
-        responseMimeType: "application/json",
-        thinkingConfig: { thinkingBudget: 15000 }
-      }
-    });
-    try {
-      return JSON.parse(response.text || '[]');
-    } catch {
-      return [];
-    }
-  }
-
-  async extractClinicalInsights(transcript: string): Promise<any> {
-    const ai = this.getAI();
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: `Extract clinical insights from this transcript: ${transcript}. Return JSON with vitals (heartRate, bp).`,
-      config: { responseMimeType: "application/json" }
-    });
-    try {
-      return JSON.parse(response.text || '{}');
-    } catch {
-      return {};
-    }
-  }
-
+  // Market intelligence via search grounding.
   async getMarketIntelligence(query: string): Promise<GenerateContentResponse> {
     const ai = this.getAI();
     return await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: query,
-      config: {
-        tools: [{ googleSearch: {} }]
-      }
+      config: { tools: [{ googleSearch: {} }] },
     });
   }
 
-  async analyzeHazardImage(base64: string, prompt: string = "Analyze this image for clinical hazards or anomalies."): Promise<string> {
+  // Vision analysis helper for hazards.
+  async analyzeHazardImage(base64: string, prompt: string = "Analyze this clinical hazard image."): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
@@ -157,42 +123,57 @@ export class GeminiService {
         ]
       }
     });
-    return response.text || "Analysis failed.";
+    return response.text || "No analysis provided.";
   }
 
-  async runSelfRepairAudit(mockLedger: any): Promise<string> {
-    const ai = this.getAI();
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: `Perform a self-repair audit on this ledger data: ${JSON.stringify(mockLedger)}. Return JSON with remediation field.`,
-      config: { responseMimeType: "application/json" }
-    });
-    return response.text || "{}";
-  }
-
-  async generateOperationalInsight(prompt: string) {
-    const ai = this.getAI();
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: prompt,
-      config: {
-        systemInstruction: "You are an Enterprise Healthcare Strategy Analyst. Provide high-density, concise clinical and operational insights.",
-        temperature: 0.7,
-      }
-    });
-    return response.text;
-  }
-
-  async analyzeClinicalRisk(context: any) {
+  // Self-repair logic audit via JSON response.
+  async runSelfRepairAudit(ledger: any): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
-      contents: `Analyze this clinical context for readmission risk and documentation drift: ${JSON.stringify(context)}`,
+      contents: `Run a self-repair audit on this ledger: ${JSON.stringify(ledger)}. Return JSON: { "remediation": "string" }`,
       config: {
-        thinkingConfig: { thinkingBudget: 16000 }
+        responseMimeType: "application/json",
+        thinkingConfig: { thinkingBudget: 5000 }
       }
     });
-    return response.text;
+    return response.text || '{"remediation": "No drift detected."}';
+  }
+
+  /**
+   * Generates a schedule using strictly anonymized data.
+   * Enforces Location Lock, Availability Lock, and Role Parity.
+   */
+  async generateSecureSchedule(anonymizedData: any): Promise<any[]> {
+    const ai = this.getAI();
+    const systemInstruction = `
+      You are the Neural Dispatch Engine for CareSync Pro.
+      SECURITY PROTOCOL: You only receive IDs and locations. Do not invent names.
+      
+      CONSTRAINTS:
+      1. LOCATION LOCK: Only schedule staff in the sector they work in (e.g., if Staff sector is 'Woodbridge', they only see clients in 'Woodbridge').
+      2. AVAILABILITY LOCK: Only schedule staff within their specific availability window (e.g., 08:00-20:00).
+      3. ROLE PARITY: You MUST match the required role. If a client requires 'Personal Support Worker', only assign staff IDs starting with 'P'. If 'Registered Nurse', only IDs starting with 'RN'.
+      4. SHIFT DURATION: Assume each visit is 3 hours unless specified.
+      
+      OUTPUT: Return a JSON array of assignments.
+    `;
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-pro-preview',
+      contents: `Generate a valid roster for the following anonymized vector: ${JSON.stringify(anonymizedData)}`,
+      config: {
+        systemInstruction,
+        responseMimeType: "application/json",
+        thinkingConfig: { thinkingBudget: 15000 }
+      }
+    });
+
+    try {
+      return JSON.parse(response.text || '[]');
+    } catch {
+      return [];
+    }
   }
 }
 
