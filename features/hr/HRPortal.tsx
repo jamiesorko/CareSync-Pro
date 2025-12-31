@@ -21,8 +21,8 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
 
   const tabs = [
     { id: 'NEXUS', label: 'Workforce Nexus' },
-    { id: 'STAFF', label: 'Staff Mastery' },
-    { id: 'COMPLIANCE', label: 'Compliance' },
+    { id: 'STAFF', label: 'Roster Logic' },
+    { id: 'COMPLIANCE', label: 'Verification' },
     { id: 'RETENTION', label: 'Retention' },
   ];
 
@@ -35,15 +35,15 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
     <div className="space-y-12 animate-in fade-in duration-700 h-full overflow-y-auto scrollbar-hide pb-24 px-4">
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
         <div>
-          <h2 className="text-4xl font-black text-white tracking-tighter uppercase leading-none italic">Resource_Core</h2>
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-3 italic">Institutional Human Capital & Compliance Mastery</p>
+          <h2 className="text-5xl font-black text-white tracking-tighter uppercase leading-none italic text-indigo-400">Resource_Core</h2>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-3 italic">Autonomous Human Capital Management Terminal</p>
         </div>
         <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 overflow-x-auto scrollbar-hide shadow-xl">
           {tabs.map(tab => (
             <button 
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase whitespace-nowrap transition-all ${
+              className={`px-8 py-3 rounded-xl text-[9px] font-black uppercase whitespace-nowrap transition-all ${
                 activeTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'
               }`}
             >
@@ -54,7 +54,7 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
             <button 
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase whitespace-nowrap transition-all ${
+              className={`px-8 py-3 rounded-xl text-[9px] font-black uppercase whitespace-nowrap transition-all ${
                 activeTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'
               }`}
             >

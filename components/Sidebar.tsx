@@ -24,7 +24,7 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const menu = [
-    { id: AppTab.DASHBOARD, icon: LayoutDashboard, label: 'Operations' },
+    { id: AppTab.DASHBOARD, icon: LayoutDashboard, label: 'Ops Dashboard' },
     { id: AppTab.CLINICAL_COMMAND, icon: ShieldAlert, label: 'Clinical Core' },
     { id: AppTab.COORDINATION, icon: Users, label: 'Logistics' },
     { id: AppTab.HR_HUB, icon: UserRoundSearch, label: 'Resource Core' },
@@ -60,16 +60,16 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
             }`}
           >
             <div className="shrink-0">
-              <item.icon size={20} strokeWidth={2.5} />
+              <item.icon size={18} strokeWidth={2.5} />
             </div>
-            <span className={`font-bold text-[11px] uppercase tracking-widest whitespace-nowrap transition-opacity duration-200 ${
+            <span className={`font-bold text-[10px] uppercase tracking-[0.2em] whitespace-nowrap transition-opacity duration-200 ${
               isExpanded ? 'opacity-100' : 'opacity-0 pointer-events-none absolute left-20'
             }`}>
               {item.label}
             </span>
             
             {!isExpanded && (
-              <div className="absolute left-full ml-4 px-3 py-2 bg-slate-800 text-white text-[10px] font-black rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[100] border border-white/10 shadow-2xl">
+              <div className="absolute left-full ml-4 px-3 py-2 bg-slate-800 text-white text-[9px] font-black rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[100] border border-white/10 shadow-2xl">
                 {item.label}
               </div>
             )}
@@ -78,7 +78,7 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
       </nav>
 
       <div className={`p-6 border-t border-white/5 transition-opacity ${isExpanded ? 'opacity-100' : 'opacity-0'}`}>
-        <p className="text-[8px] font-black text-slate-700 uppercase tracking-[0.4em]">CareSync_Pro_v4</p>
+        <p className="text-[7px] font-black text-slate-700 uppercase tracking-[0.5em]">CP_v4_Sovereign</p>
       </div>
     </aside>
   );

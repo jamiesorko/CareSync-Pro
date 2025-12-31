@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CareRole, User, AppTab } from './types';
 import Login from './features/Login';
 import Layout from './components/Layout';
@@ -17,6 +17,16 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<AppTab>(AppTab.DASHBOARD);
   const [alerts, setAlerts] = useState<any[]>([]);
 
+  // Automatic Routing Logic
+  useEffect(() => {
+    if (!user) return;
+    
+    if (user.role === CareRole.ACCOUNTANT) setActiveTab(AppTab.FINANCE);
+    else if (user.role === CareRole.HR_SPECIALIST) setActiveTab(AppTab.HR_HUB);
+    else if (user.role === CareRole.COORDINATOR) setActiveTab(AppTab.COORDINATION);
+    else setActiveTab(AppTab.DASHBOARD);
+  }, [user]);
+
   if (!user) return <Login onLogin={setUser} />;
 
   const renderContent = () => {
@@ -27,8 +37,7 @@ const App: React.FC = () => {
       case AppTab.DASHBOARD:
         if (user.role === CareRole.CEO) return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} language={lang} />;
         if (isFieldStaff) return <ProfessionalTerminal role={user.role as CareRole} staffName={user.name} clients={MOCK_CLIENTS} />;
-        if (user.role === CareRole.COORDINATOR) return <CoordinationHub language={lang} />;
-        return <RNCommand clients={MOCK_CLIENTS} role={user.role} />;
+        return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} language={lang} />;
       
       case AppTab.HR_HUB:
         return <HRPortal role={user.role} language={lang} />;
@@ -56,7 +65,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-[#020617]">
+    <div className="h-screen w-screen overflow-hidden bg-[#020617] text-slate-200">
       <Layout 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
