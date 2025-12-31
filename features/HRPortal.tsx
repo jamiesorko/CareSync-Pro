@@ -16,51 +16,51 @@ interface Props {
 }
 
 const HRPortal: React.FC<Props> = ({ role, language }) => {
-  const [activeTab, setActiveTab] = useState<'HIRING' | 'COMPLIANCE' | 'CAPACITY' | 'STAFF' | 'NEXUS' | 'RETENTION'>('NEXUS');
+  const [activeTab, setActiveTab] = useState<'NEXUS' | 'HIRING' | 'COMPLIANCE' | 'CAPACITY' | 'STAFF' | 'RETENTION'>('NEXUS');
   const isHR = [CareRole.HR_SPECIALIST, CareRole.CEO, CareRole.COO].includes(role);
+
+  const tabs = [
+    { id: 'NEXUS', label: 'Workforce Nexus' },
+    { id: 'STAFF', label: 'Staff Mastery' },
+    { id: 'COMPLIANCE', label: 'Compliance' },
+    { id: 'RETENTION', label: 'Retention' },
+  ];
+
+  const adminTabs = [
+    { id: 'HIRING', label: 'Recruitment' },
+    { id: 'CAPACITY', label: 'Forecasting' },
+  ];
 
   return (
     <div className="space-y-12 animate-in fade-in duration-700 pb-24 h-full">
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 px-4">
         <div>
           <h2 className="text-4xl font-black text-white tracking-tighter uppercase leading-none italic">Resource_Core</h2>
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2 italic">Institutional Human Capital & Compliance Stewardship</p>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-3 italic">Institutional Human Capital & Financial Stewardship</p>
         </div>
-        <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 overflow-x-auto scrollbar-hide">
-          <button 
-            onClick={() => setActiveTab('NEXUS')}
-            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase whitespace-nowrap transition-all ${activeTab === 'NEXUS' ? 'bg-indigo-600 text-white shadow-xl' : 'text-slate-500 hover:text-white'}`}
-          >
-            Workforce Nexus
-          </button>
-          <button 
-            onClick={() => setActiveTab('STAFF')}
-            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase whitespace-nowrap transition-all ${activeTab === 'STAFF' ? 'bg-indigo-600 text-white shadow-xl' : 'text-slate-500 hover:text-white'}`}
-          >
-            Staff Mastery
-          </button>
-          <button 
-            onClick={() => setActiveTab('COMPLIANCE')}
-            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase whitespace-nowrap transition-all ${activeTab === 'COMPLIANCE' ? 'bg-indigo-600 text-white shadow-xl' : 'text-slate-500 hover:text-white'}`}
-          >
-            Compliance
-          </button>
-          {isHR && (
-            <>
-              <button 
-                onClick={() => setActiveTab('HIRING')}
-                className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase whitespace-nowrap transition-all ${activeTab === 'HIRING' ? 'bg-indigo-600 text-white shadow-xl' : 'text-slate-500 hover:text-white'}`}
-              >
-                Recruitment
-              </button>
-              <button 
-                onClick={() => setActiveTab('CAPACITY')}
-                className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase whitespace-nowrap transition-all ${activeTab === 'CAPACITY' ? 'bg-indigo-600 text-white shadow-xl' : 'text-slate-500 hover:text-white'}`}
-              >
-                Forecasting
-              </button>
-            </>
-          )}
+        <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 overflow-x-auto scrollbar-hide shadow-xl">
+          {tabs.map(tab => (
+            <button 
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase whitespace-nowrap transition-all ${
+                activeTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'
+              }`}
+            >
+              <Translate targetLanguage={language}>{tab.label}</Translate>
+            </button>
+          ))}
+          {isHR && adminTabs.map(tab => (
+            <button 
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase whitespace-nowrap transition-all ${
+                activeTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'
+              }`}
+            >
+              <Translate targetLanguage={language}>{tab.label}</Translate>
+            </button>
+          ))}
         </div>
       </div>
 

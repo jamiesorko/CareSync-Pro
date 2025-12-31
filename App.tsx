@@ -15,7 +15,7 @@ import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState<AppTab>(AppTab.DASHBOARD);
-  const [alerts, setAlerts] = useState<any[]>([]); // Shared billing/HR alerts
+  const [alerts, setAlerts] = useState<any[]>([]);
 
   if (!user) return <Login onLogin={setUser} />;
 
@@ -40,7 +40,7 @@ const App: React.FC = () => {
       case AppTab.FINANCE:
         return <AccountingHub language={lang} alerts={alerts} setAlerts={setAlerts} clients={MOCK_CLIENTS} />;
       default:
-        return <div className="p-8 text-slate-500 italic">Operational node active. Use sidebar for navigation.</div>;
+        return <div className="p-8 text-slate-500 italic uppercase font-black tracking-widest text-center py-40 opacity-20">Operational_Node_Inert</div>;
     }
   };
 

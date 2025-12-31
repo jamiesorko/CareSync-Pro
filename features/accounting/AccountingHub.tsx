@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Translate from '../../components/Translate';
 import { BillingAlert, Client } from '../../types';
 import PayrollSystem from './PayrollSystem';
@@ -7,6 +7,8 @@ import AccountsReceivable from './AccountsReceivable';
 import AccountsPayable from './AccountsPayable';
 import RevenueRecoveryNexus from './RevenueRecoveryNexus';
 import FiscalHealthCockpit from './FiscalHealthCockpit';
+import PayrollTable from './PayrollTable';
+import { MOCK_PAYROLL } from '../../data/accountingData';
 
 interface Props {
   language: string;
@@ -37,7 +39,12 @@ const AccountingHub: React.FC<Props> = ({ language, alerts, setAlerts, clients }
   const renderSubContent = () => {
     switch (activeSubTab) {
       case 'PAYROLL':
-        return <PayrollSystem language={language} />;
+        return (
+          <div className="space-y-12">
+            <PayrollSystem language={language} />
+            <PayrollTable records={MOCK_PAYROLL} language={language} onUpdate={() => {}} />
+          </div>
+        );
       case 'FORENSICS':
         return <FiscalHealthCockpit language={language} />;
       case 'RECEIVABLE':
@@ -115,18 +122,20 @@ const AccountingHub: React.FC<Props> = ({ language, alerts, setAlerts, clients }
 
   return (
     <div className="space-y-12 animate-in fade-in duration-700 pb-24 h-full">
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 px-4">
         <div>
           <h2 className="text-4xl font-black text-white tracking-tighter uppercase leading-none italic">Fiscal_Ledger</h2>
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2 italic">Institutional Financial Forensics & Capital Flux</p>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-3 italic">Institutional Financial Forensics & Capital Flux</p>
         </div>
         
-        <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 overflow-x-auto scrollbar-hide shadow-sm">
+        <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 overflow-x-auto scrollbar-hide shadow-xl">
           {tabs.map(tab => (
             <button 
               key={tab.id}
               onClick={() => setActiveSubTab(tab.id as any)}
-              className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeSubTab === tab.id ? 'bg-indigo-600 text-white shadow-xl' : 'text-slate-500 hover:text-white'}`}
+              className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
+                activeSubTab === tab.id ? 'bg-indigo-600 text-white shadow-xl' : 'text-slate-500 hover:text-white'
+              }`}
             >
               <Translate targetLanguage={language}>{tab.label}</Translate>
             </button>
