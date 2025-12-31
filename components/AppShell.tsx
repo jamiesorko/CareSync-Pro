@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
@@ -14,10 +15,12 @@ interface Props {
 const AppShell: React.FC<Props> = ({ activeTab, setActiveTab, user, onLogout, children }) => {
   return (
     <div className="flex h-screen w-full bg-[#f1f5f9] overflow-hidden text-slate-900">
+      {/* Fix: Pass required staffName and role props to Sidebar based on its component definition */}
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
-        user={user} 
+        staffName={user.name}
+        role={user.role} 
       />
       
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden relative">

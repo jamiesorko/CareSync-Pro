@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { AppTab, CareRole, User } from '../types';
+import { AppTab, CareRole } from '../types';
 import { 
   LayoutDashboard, 
   ShieldAlert, 
@@ -9,28 +9,59 @@ import {
   UserRoundSearch, 
   WalletMinimal, 
   ChevronLeft, 
-  Menu
+  Menu,
+  CalendarDays
 } from 'lucide-react';
 
 interface Props {
   activeTab: AppTab;
   setActiveTab: (tab: AppTab) => void;
   staffName?: string;
-  role?: CareRole;
-  user?: User;
+  role: CareRole; // activeRole is required for filtering
 }
 
-const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
+const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const menu = [
+  const fullMenu = [
     { id: AppTab.DASHBOARD, icon: LayoutDashboard, label: 'Ops Dashboard' },
+    { id: AppTab.SCHEDULE, icon: CalendarDays, label: 'Global Schedule' },
     { id: AppTab.CLINICAL_COMMAND, icon: ShieldAlert, label: 'Clinical Core' },
     { id: AppTab.COORDINATION, icon: Users, label: 'Logistics' },
     { id: AppTab.HR_HUB, icon: UserRoundSearch, label: 'Resource Core' },
     { id: AppTab.FINANCE, icon: WalletMinimal, label: 'Fiscal Ledger' },
     { id: AppTab.ORG_COMMAND, icon: Briefcase, label: 'Admin Hub' },
   ];
+
+  // Logic to filter menu based on role permissions
+  // Fix: Utilizing a switch statement for reliable type narrowing across CareRole enums.
+  const filteredMenu = fullMenu.filter(item => {
+    switch (role) {
+      case CareRole.PSW:
+      case CareRole.RN:
+      case CareRole.RPN:
+      case CareRole.HSS:
+        return item.id === AppTab.DASHBOARD || item.id === AppTab.SCHEDULE;
+      
+      case CareRole.ACCOUNTANT:
+        return [AppTab.DASHBOARD, AppTab.FINANCE].includes(item.id);
+      
+      case CareRole.HR_SPECIALIST:
+        return [AppTab.DASHBOARD, AppTab.HR_HUB].includes(item.id);
+      
+      case CareRole.COORDINATOR:
+        return [AppTab.DASHBOARD, AppTab.SCHEDULE, AppTab.COORDINATION, AppTab.CLINICAL_COMMAND].includes(item.id);
+      
+      case CareRole.CEO:
+      case CareRole.COO:
+      case CareRole.DOC:
+        // Strategic and operational oversight roles see full menu
+        return true;
+        
+      default:
+        return true;
+    }
+  });
 
   return (
     <aside 
@@ -48,7 +79,7 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
       </div>
 
       <nav className="flex-1 flex flex-col gap-2 p-4 overflow-y-auto scrollbar-hide">
-        {menu.map((item) => (
+        {filteredMenu.map((item) => (
           <button
             key={item.id}
             onClick={() => setActiveTab(item.id)}
