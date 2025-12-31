@@ -8,7 +8,7 @@ import CapacityPlanner from './CapacityPlanner';
 import StaffManager from './StaffManager';
 import WorkforceNexus from './WorkforceNexus';
 import RetentionIntelligence from './RetentionIntelligence';
-import PayrollSystem from '../accounting/PayrollSystem';
+import { MOCK_STAFF } from '../../data/careData';
 
 interface Props {
   role: CareRole;
@@ -16,14 +16,14 @@ interface Props {
 }
 
 const HRPortal: React.FC<Props> = ({ role, language }) => {
-  const [activeTab, setActiveTab] = useState<'NEXUS' | 'HIRING' | 'COMPLIANCE' | 'CAPACITY' | 'STAFF' | 'PAYROLL'>('NEXUS');
-  const isHR = role === CareRole.HR_SPECIALIST || role === CareRole.CEO;
+  const [activeTab, setActiveTab] = useState<'NEXUS' | 'HIRING' | 'COMPLIANCE' | 'CAPACITY' | 'STAFF' | 'RETENTION'>('NEXUS');
+  const isHR = [CareRole.HR_SPECIALIST, CareRole.CEO, CareRole.COO].includes(role);
 
   const tabs = [
     { id: 'NEXUS', label: 'Workforce Nexus' },
     { id: 'STAFF', label: 'Staff Mastery' },
     { id: 'COMPLIANCE', label: 'Compliance' },
-    { id: 'PAYROLL', label: 'Financials' },
+    { id: 'RETENTION', label: 'Retention' },
   ];
 
   const adminTabs = [
@@ -33,18 +33,18 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
 
   return (
     <div className="space-y-12 animate-in fade-in duration-700 pb-24 h-full">
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 px-4">
         <div>
           <h2 className="text-4xl font-black text-white tracking-tighter uppercase leading-none italic">Resource_Core</h2>
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2 italic">Institutional human capital & financial stewardship</p>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-3 italic">Institutional Human Capital & Compliance Management</p>
         </div>
-        <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl overflow-x-auto scrollbar-hide shadow-sm">
+        <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 overflow-x-auto scrollbar-hide shadow-xl">
           {tabs.map(tab => (
             <button 
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
-                activeTab === tab.id ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30' : 'text-slate-500 hover:text-white'
+              className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase whitespace-nowrap transition-all ${
+                activeTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'
               }`}
             >
               <Translate targetLanguage={language}>{tab.label}</Translate>
@@ -54,7 +54,7 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
             <button 
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
+              className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase whitespace-nowrap transition-all ${
                 activeTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'
               }`}
             >
@@ -64,13 +64,13 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
         </div>
       </div>
 
-      <div className="min-h-[600px]">
-        {activeTab === 'NEXUS' && <WorkforceNexus staff={[]} language={language} />}
-        {activeTab === 'STAFF' && <StaffManager />}
-        {activeTab === 'COMPLIANCE' && <ComplianceManager />}
+      <div className="min-h-[600px] animate-in slide-in-from-bottom-4 duration-500">
+        {activeTab === 'NEXUS' && <WorkforceNexus staff={MOCK_STAFF} language={language} />}
+        {activeTab === 'STAFF' && <StaffManager language={language} />}
+        {activeTab === 'COMPLIANCE' && <ComplianceManager language={language} isHR={isHR} />}
         {activeTab === 'HIRING' && isHR && <HiringHub language={language} />}
-        {activeTab === 'CAPACITY' && isHR && <CapacityPlanner />}
-        {activeTab === 'PAYROLL' && <PayrollSystem />}
+        {activeTab === 'CAPACITY' && isHR && <CapacityPlanner language={language} />}
+        {activeTab === 'RETENTION' && <RetentionIntelligence staff={MOCK_STAFF} language={language} />}
       </div>
     </div>
   );

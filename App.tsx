@@ -8,7 +8,7 @@ import ScheduleView from './features/ScheduleView';
 import RNCommand from './features/rn/RNCommand';
 import ProfessionalTerminal from './features/terminal/ProfessionalTerminal';
 import CoordinationHub from './features/CoordinationHub';
-import HRPortal from './features/HRPortal';
+import HRPortal from './features/hr/HRPortal';
 import AccountingHub from './features/accounting/AccountingHub';
 import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
 
@@ -40,7 +40,7 @@ const App: React.FC = () => {
       case AppTab.FINANCE:
         return <AccountingHub language={lang} alerts={alerts} setAlerts={setAlerts} clients={MOCK_CLIENTS} />;
       default:
-        return <div className="p-8 text-slate-500 italic uppercase font-black tracking-widest text-center py-40 opacity-20">Operational_Node_Inert</div>;
+        return <div className="p-20 text-slate-500 italic uppercase font-black tracking-widest text-center opacity-20">Operational_Node_Inert</div>;
     }
   };
 

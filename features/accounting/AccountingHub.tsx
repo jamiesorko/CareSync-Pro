@@ -12,15 +12,15 @@ import { MOCK_PAYROLL } from '../../data/accountingData';
 
 interface Props {
   language: string;
-  alerts: BillingAlert[];
-  setAlerts: React.Dispatch<React.SetStateAction<BillingAlert[]>>;
+  alerts: any[];
+  setAlerts: React.Dispatch<React.SetStateAction<any[]>>;
   clients: Client[];
 }
 
 type AccountingTab = 'AUDIT' | 'PAYROLL' | 'FORENSICS' | 'RECEIVABLE' | 'PAYABLE' | 'RECOVERY';
 
 const AccountingHub: React.FC<Props> = ({ language, alerts, setAlerts, clients }) => {
-  const [activeSubTab, setActiveSubTab] = useState<AccountingTab>('AUDIT');
+  const [activeSubTab, setActiveSubTab] = useState<AccountingTab>('PAYROLL');
 
   const resolveAlert = (id: string) => {
     setAlerts(prev => prev.filter(a => a.id !== id));
@@ -28,9 +28,9 @@ const AccountingHub: React.FC<Props> = ({ language, alerts, setAlerts, clients }
   };
 
   const tabs = [
-    { id: 'AUDIT', label: 'Audit Queue' },
     { id: 'PAYROLL', label: 'Payroll Core' },
-    { id: 'FORENSICS', label: 'Forensics' },
+    { id: 'FORENSICS', label: 'Fiscal Health' },
+    { id: 'AUDIT', label: 'Audit Queue' },
     { id: 'RECEIVABLE', label: 'A/R' },
     { id: 'PAYABLE', label: 'A/P' },
     { id: 'RECOVERY', label: 'Recovery' }
@@ -40,9 +40,12 @@ const AccountingHub: React.FC<Props> = ({ language, alerts, setAlerts, clients }
     switch (activeSubTab) {
       case 'PAYROLL':
         return (
-          <div className="space-y-12">
+          <div className="space-y-12 animate-in fade-in duration-500">
             <PayrollSystem language={language} />
-            <PayrollTable records={MOCK_PAYROLL} language={language} onUpdate={() => {}} />
+            <div className="mx-4">
+               <h3 className="text-xl font-black text-white italic uppercase tracking-tighter mb-8">Detailed_Disbursement_Ledger</h3>
+               <PayrollTable records={MOCK_PAYROLL} language={language} onUpdate={() => {}} />
+            </div>
           </div>
         );
       case 'FORENSICS':
@@ -56,7 +59,7 @@ const AccountingHub: React.FC<Props> = ({ language, alerts, setAlerts, clients }
       case 'AUDIT':
       default:
         return (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 animate-in fade-in duration-500">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 animate-in fade-in duration-500 px-4">
             <div className="lg:col-span-8 space-y-6">
               <div className="bg-slate-900 border border-white/10 rounded-[3rem] p-10 shadow-2xl">
                 <h3 className="text-xl font-black text-white italic tracking-tighter uppercase mb-10">Audit_Verification_Stack</h3>

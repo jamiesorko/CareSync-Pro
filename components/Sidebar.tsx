@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { AppTab, CareRole, User } from '../types';
-import { LayoutDashboard, ShieldAlert, Users, Briefcase, UserRoundSearch, WalletMinimal, LogOut } from 'lucide-react';
+import { LayoutDashboard, ShieldAlert, Users, Briefcase, UserRoundSearch, WalletMinimal } from 'lucide-react';
 
 interface Props {
   activeTab: AppTab;
