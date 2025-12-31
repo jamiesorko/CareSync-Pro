@@ -8,8 +8,8 @@ import ScheduleView from './features/ScheduleView';
 import RNCommand from './features/rn/RNCommand';
 import ProfessionalTerminal from './features/terminal/ProfessionalTerminal';
 import CoordinationHub from './features/CoordinationHub';
-import HRPortal from './features/hr/HRPortal';
-import AccountingHub from './features/accounting/AccountingHub';
+import HRTerminal from './features/hr/HRTerminal';
+import AccountingTerminal from './features/accounting/AccountingTerminal';
 import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
 
 const App: React.FC = () => {
@@ -17,7 +17,7 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<AppTab>(AppTab.DASHBOARD);
   const [alerts, setAlerts] = useState<any[]>([]);
 
-  // Automatic Routing Logic
+  // Automatic Routing Logic for Sovereignty
   useEffect(() => {
     if (!user) return;
     
@@ -33,17 +33,30 @@ const App: React.FC = () => {
     const isFieldStaff = [CareRole.PSW, CareRole.RN, CareRole.RPN, CareRole.HSS].includes(user.role as any);
     const lang = "English";
 
-    switch (activeTab) {
-      case AppTab.DASHBOARD:
-        if (user.role === CareRole.CEO) return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} language={lang} />;
-        if (isFieldStaff) return <ProfessionalTerminal role={user.role as CareRole} staffName={user.name} clients={MOCK_CLIENTS} />;
+    // Sovereign Dashboard Logic
+    if (activeTab === AppTab.DASHBOARD) {
+      if (user.role === CareRole.CEO) {
         return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} language={lang} />;
-      
+      }
+      if (isFieldStaff) {
+        return <ProfessionalTerminal role={user.role as CareRole} staffName={user.name} clients={MOCK_CLIENTS} />;
+      }
+      if (user.role === CareRole.HR_SPECIALIST) {
+        return <HRTerminal language={lang} staffName={user.name} />;
+      }
+      if (user.role === CareRole.ACCOUNTANT) {
+        return <AccountingTerminal language={lang} staffName={user.name} clients={MOCK_CLIENTS} />;
+      }
+      return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} language={lang} />;
+    }
+
+    // Explicit Tab Routing
+    switch (activeTab) {
       case AppTab.HR_HUB:
-        return <HRPortal role={user.role} language={lang} />;
+        return <HRTerminal language={lang} staffName={user.name} />;
         
       case AppTab.FINANCE:
-        return <AccountingHub language={lang} alerts={alerts} setAlerts={setAlerts} clients={MOCK_CLIENTS} />;
+        return <AccountingTerminal language={lang} staffName={user.name} clients={MOCK_CLIENTS} />;
         
       case AppTab.COORDINATION:
         return <CoordinationHub language={lang} />;
