@@ -27,7 +27,7 @@ const Layout: React.FC<Props> = ({ activeTab, setActiveTab, activeRole, staffNam
         <Header activeTab={activeTab} onLogout={onLogout} />
         
         <main className="flex-1 overflow-y-auto scrollbar-hide">
-          <div className="w-full h-full p-6 lg:p-10 animate-in fade-in slide-in-from-bottom-2 duration-700">
+          <div className="w-full h-full p-4 lg:p-6 animate-in fade-in slide-in-from-bottom-2 duration-700">
             {children}
           </div>
         </main>
