@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Translate from '../../components/Translate';
 import { BillingAlert, Client } from '../../types';
@@ -5,7 +6,7 @@ import PayrollSystem from './PayrollSystem';
 import AccountsReceivable from './AccountsReceivable';
 import AccountsPayable from './AccountsPayable';
 import RevenueRecoveryNexus from './RevenueRecoveryNexus';
-import { revenueCycleService } from '../../services/revenueCycleService';
+import FiscalHealthCockpit from './FiscalHealthCockpit';
 
 interface Props {
   language: string;
@@ -14,64 +15,62 @@ interface Props {
   clients: Client[];
 }
 
-type AccountingTab = 'VERIFICATION' | 'PAYROLL' | 'RECEIVABLE' | 'PAYABLE' | 'RECOVERY';
+type AccountingTab = 'AUDIT' | 'PAYROLL' | 'FORENSICS' | 'RECEIVABLE' | 'PAYABLE' | 'RECOVERY';
 
 const AccountingHub: React.FC<Props> = ({ language, alerts, setAlerts, clients }) => {
-  const [activeSubTab, setActiveSubTab] = useState<AccountingTab>('VERIFICATION');
-  const [agingReport, setAgingReport] = useState<any>(null);
-
-  useEffect(() => {
-    revenueCycleService.getAgingReport().then(setAgingReport);
-  }, []);
+  const [activeSubTab, setActiveSubTab] = useState<AccountingTab>('AUDIT');
 
   const resolveAlert = (id: string) => {
     setAlerts(prev => prev.filter(a => a.id !== id));
-    alert("Record synchronized. Ledger updated.");
+    alert("Fiscal record synchronized. Entry committed to ledger.");
   };
 
   const tabs = [
-    { id: 'VERIFICATION', label: 'Audit Queue' },
-    { id: 'PAYROLL', label: 'Payroll' },
+    { id: 'AUDIT', label: 'Audit Queue' },
+    { id: 'PAYROLL', label: 'Payroll Core' },
+    { id: 'FORENSICS', label: 'Forensics' },
     { id: 'RECEIVABLE', label: 'A/R' },
     { id: 'PAYABLE', label: 'A/P' },
-    { id: 'RECOVERY', label: 'Forensic Recovery' }
+    { id: 'RECOVERY', label: 'Recovery' }
   ];
 
   const renderSubContent = () => {
     switch (activeSubTab) {
       case 'PAYROLL':
         return <PayrollSystem language={language} />;
+      case 'FORENSICS':
+        return <FiscalHealthCockpit language={language} />;
       case 'RECEIVABLE':
         return <AccountsReceivable language={language} />;
       case 'PAYABLE':
         return <AccountsPayable language={language} />;
       case 'RECOVERY':
         return <RevenueRecoveryNexus language={language} />;
-      case 'VERIFICATION':
+      case 'AUDIT':
       default:
         return (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-in fade-in duration-500">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 animate-in fade-in duration-500">
             <div className="lg:col-span-8 space-y-6">
-              <div className="bg-slate-900 border border-white/5 rounded-2xl p-8 shadow-sm">
-                <h3 className="text-lg font-bold text-white mb-8 tracking-tight">Audit Verification Queue</h3>
+              <div className="bg-slate-900 border border-white/10 rounded-[3rem] p-10 shadow-2xl">
+                <h3 className="text-xl font-black text-white italic tracking-tighter uppercase mb-10">Audit_Verification_Stack</h3>
                 <div className="space-y-4">
                   {alerts.length === 0 ? (
-                    <div className="py-24 text-center opacity-50 space-y-4">
-                       <span className="text-4xl">📄</span>
-                       <p className="text-sm font-medium italic">Ledger integrity validated. No exceptions found.</p>
+                    <div className="py-32 text-center opacity-30 italic">
+                       <span className="text-4xl mb-6 block">📄</span>
+                       <p className="text-sm font-black uppercase tracking-widest">Financial node integrity verified. No pending exceptions.</p>
                     </div>
                   ) : (
                     alerts.map(alert => (
-                      <div key={alert.id} className="p-6 bg-slate-800/50 border border-white/5 rounded-xl flex justify-between items-center group hover:border-white/20 transition-all">
+                      <div key={alert.id} className="p-8 bg-white/[0.03] border border-white/5 rounded-3xl flex justify-between items-center group hover:bg-white/5 transition-all">
                         <div>
-                          <p className="text-sm font-bold text-white">{alert.staffName} • {alert.clientName}</p>
-                          <p className="text-[10px] font-semibold text-rose-500 uppercase tracking-widest mt-1">{alert.type}</p>
+                          <p className="text-lg font-black text-white italic uppercase tracking-tighter">{alert.staffName} • {alert.clientName}</p>
+                          <p className="text-[10px] font-bold text-rose-500 uppercase tracking-widest mt-2">{alert.type}</p>
                         </div>
                         <button 
                           onClick={() => resolveAlert(alert.id)} 
-                          className="px-5 py-2 bg-indigo-600 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-md hover:bg-indigo-500"
+                          className="px-8 py-4 bg-indigo-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-xl"
                         >
-                          Verify Record
+                          Verify Entry
                         </button>
                       </div>
                     ))
@@ -81,33 +80,31 @@ const AccountingHub: React.FC<Props> = ({ language, alerts, setAlerts, clients }
             </div>
 
             <div className="lg:col-span-4 space-y-6">
-              {agingReport && (
-                <div className="bg-indigo-600 p-8 rounded-2xl text-white shadow-xl shadow-indigo-500/20">
-                  <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] mb-8 opacity-70">Aging Telemetry</h3>
-                  <div className="space-y-6">
+              <div className="bg-indigo-600 p-10 rounded-[3rem] text-white shadow-2xl relative overflow-hidden group">
+                 <h3 className="text-xs font-black uppercase tracking-widest mb-10 opacity-60 italic">Aging_Telemetry</h3>
+                 <div className="space-y-10 relative z-10">
                     <div className="flex justify-between items-baseline">
-                      <span className="text-[10px] font-semibold uppercase opacity-60">Total Outstanding</span>
-                      <span className="text-3xl font-bold tracking-tight">${agingReport.totalOutstanding.toLocaleString()}</span>
+                      <span className="text-[9px] font-black uppercase opacity-60">Total Receivables</span>
+                      <span className="text-4xl font-black italic tracking-tighter">$142,500</span>
                     </div>
-                    <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
-                       <div className="h-full bg-white w-[82%] shadow-[0_0_10px_white]"></div>
+                    <div className="w-full h-1.5 bg-white/20 rounded-full overflow-hidden">
+                       <div className="h-full bg-white w-[82%] shadow-[0_0_15px_white]"></div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+                    <div className="grid grid-cols-2 gap-6">
                        <div>
-                         <p className="text-[9px] font-bold uppercase opacity-50 mb-1">Collection</p>
-                         <p className="text-lg font-bold">{agingReport.collectionRate}%</p>
+                         <p className="text-[8px] font-black uppercase opacity-50 mb-2">Collection Rate</p>
+                         <p className="text-2xl font-black italic">97.2%</p>
                        </div>
                        <div>
-                         <p className="text-[9px] font-bold uppercase opacity-50 mb-1">Avg DSO</p>
-                         <p className="text-lg font-bold">{agingReport.avgDaysSalesOutstanding}D</p>
+                         <p className="text-[8px] font-black uppercase opacity-50 mb-2">Avg DSO</p>
+                         <p className="text-2xl font-black italic">18.4 D</p>
                        </div>
                     </div>
-                  </div>
-                </div>
-              )}
+                 </div>
+              </div>
               
-              <button className="w-full py-4 bg-slate-900 border border-white/5 text-slate-400 rounded-xl text-[10px] font-bold uppercase tracking-wider hover:bg-slate-800 transition-all flex items-center justify-center gap-3">
-                <span>Export Regulatory Bundle</span>
+              <button className="w-full py-6 bg-slate-900 border border-white/5 text-slate-500 rounded-3xl font-black text-[10px] uppercase tracking-widest hover:text-white transition-all flex items-center justify-center gap-4">
+                <span>EXPORT_REGULATORY_BUNDLE</span>
                 <span className="text-xs">📥</span>
               </button>
             </div>
@@ -117,19 +114,19 @@ const AccountingHub: React.FC<Props> = ({ language, alerts, setAlerts, clients }
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 pb-24">
+    <div className="space-y-12 animate-in fade-in duration-700 pb-24 h-full">
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Institutional Ledger</h2>
-          <p className="text-sm text-slate-500">Financial forensics and capital flux management</p>
+          <h2 className="text-4xl font-black text-white tracking-tighter uppercase leading-none italic">Fiscal_Ledger</h2>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2 italic">Institutional Financial Forensics & Capital Flux</p>
         </div>
         
-        <div className="flex bg-slate-900 p-1 rounded-xl border border-white/5 overflow-x-auto scrollbar-hide shadow-sm">
+        <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 overflow-x-auto scrollbar-hide shadow-sm">
           {tabs.map(tab => (
             <button 
               key={tab.id}
               onClick={() => setActiveSubTab(tab.id as any)}
-              className={`px-5 py-2.5 rounded-lg text-[10px] font-bold uppercase tracking-tight whitespace-nowrap transition-all ${activeSubTab === tab.id ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:text-slate-300'}`}
+              className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeSubTab === tab.id ? 'bg-indigo-600 text-white shadow-xl' : 'text-slate-500 hover:text-white'}`}
             >
               <Translate targetLanguage={language}>{tab.label}</Translate>
             </button>
