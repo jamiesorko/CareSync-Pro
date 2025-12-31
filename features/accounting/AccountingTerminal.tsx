@@ -27,16 +27,16 @@ const AccountingTerminal: React.FC<Props> = ({ language, staffName, clients }) =
   ];
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-700 h-full overflow-y-auto scrollbar-hide">
+    <div className="space-y-10 animate-in fade-in duration-700 h-full overflow-y-auto scrollbar-hide">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 px-4">
         <div className="space-y-2">
           <div className="flex items-center gap-3">
-             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+             <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
              <h1 className="text-5xl font-black tracking-tighter uppercase italic leading-none text-emerald-500">
-               FISCAL_LEDGER_TERMINAL
+               FISCAL_OMEGA_NODE
              </h1>
           </div>
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em]">
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
             Institutional Capital Forensics • {staffName}
           </p>
         </div>
@@ -55,7 +55,7 @@ const AccountingTerminal: React.FC<Props> = ({ language, staffName, clients }) =
         </div>
       </div>
 
-      <div className="min-h-[600px] px-4 pb-20 font-mono">
+      <div className="min-h-[600px] px-4 pb-24 font-mono">
         {activeSubTab === 'PAYROLL' && <PayrollSystem language={language} />}
         {activeSubTab === 'HEALTH' && <FiscalHealthCockpit language={language} />}
         {activeSubTab === 'RECOVERY' && <RevenueRecoveryNexus language={language} />}

@@ -24,7 +24,11 @@ const App: React.FC = () => {
     if (user.role === CareRole.ACCOUNTANT) setActiveTab(AppTab.FINANCE);
     else if (user.role === CareRole.HR_SPECIALIST) setActiveTab(AppTab.HR_HUB);
     else if (user.role === CareRole.COORDINATOR) setActiveTab(AppTab.COORDINATION);
-    else setActiveTab(AppTab.DASHBOARD);
+    else if (user.role === CareRole.PSW || user.role === CareRole.RN || user.role === CareRole.RPN || user.role === CareRole.HSS) {
+      setActiveTab(AppTab.DASHBOARD);
+    } else {
+      setActiveTab(AppTab.DASHBOARD);
+    }
   }, [user]);
 
   if (!user) return <Login onLogin={setUser} />;

@@ -27,16 +27,16 @@ const HRTerminal: React.FC<Props> = ({ language, staffName }) => {
   ];
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-700 h-full overflow-y-auto scrollbar-hide">
+    <div className="space-y-10 animate-in fade-in duration-700 h-full overflow-y-auto scrollbar-hide">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 px-4">
         <div className="space-y-2">
           <div className="flex items-center gap-3">
-             <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
+             <div className="w-3 h-3 rounded-full bg-indigo-500 animate-pulse shadow-[0_0_15px_rgba(99,102,241,0.5)]"></div>
              <h1 className="text-5xl font-black tracking-tighter uppercase italic leading-none text-indigo-400">
-               RESOURCE_CORE_TERMINAL
+               RESOURCE_SIGMA_NODE
              </h1>
           </div>
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em]">
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
             Human Capital Stewardship • {staffName}
           </p>
         </div>
@@ -55,7 +55,7 @@ const HRTerminal: React.FC<Props> = ({ language, staffName }) => {
         </div>
       </div>
 
-      <div className="min-h-[600px] px-4 pb-20">
+      <div className="min-h-[600px] px-4 pb-24">
         {activeSubTab === 'NEXUS' && <WorkforceNexus staff={MOCK_STAFF} language={language} />}
         {activeSubTab === 'STAFF' && <StaffManager language={language} />}
         {activeSubTab === 'COMPLIANCE' && <ComplianceManager language={language} isHR={true} />}
