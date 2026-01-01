@@ -17,7 +17,7 @@ interface Props {
   activeTab: AppTab;
   setActiveTab: (tab: AppTab) => void;
   staffName?: string;
-  role: CareRole; // activeRole is required for filtering
+  role: CareRole;
 }
 
 const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role }) => {
@@ -26,15 +26,13 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role }) => {
   const fullMenu = [
     { id: AppTab.DASHBOARD, icon: LayoutDashboard, label: 'Ops Dashboard' },
     { id: AppTab.SCHEDULE, icon: CalendarDays, label: 'Global Schedule' },
-    { id: AppTab.CLINICAL_COMMAND, icon: ShieldAlert, label: 'Clinical Core' },
-    { id: AppTab.COORDINATION, icon: Users, label: 'Logistics' },
+    { id: AppTab.CLINICAL_COMMAND, icon: ShieldAlert, label: 'Clinical Command' },
+    { id: AppTab.COORDINATION, icon: Users, label: 'Dispatch Grid' },
     { id: AppTab.HR_HUB, icon: UserRoundSearch, label: 'Resource Core' },
     { id: AppTab.FINANCE, icon: WalletMinimal, label: 'Fiscal Ledger' },
     { id: AppTab.ORG_COMMAND, icon: Briefcase, label: 'Admin Hub' },
   ];
 
-  // Logic to filter menu based on role permissions
-  // Fix: Utilizing a switch statement for reliable type narrowing across CareRole enums.
   const filteredMenu = fullMenu.filter(item => {
     switch (role) {
       case CareRole.PSW:
@@ -55,7 +53,6 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role }) => {
       case CareRole.CEO:
       case CareRole.COO:
       case CareRole.DOC:
-        // Strategic and operational oversight roles see full menu
         return true;
         
       default:
@@ -98,12 +95,6 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role }) => {
             }`}>
               {item.label}
             </span>
-            
-            {!isExpanded && (
-              <div className="absolute left-full ml-4 px-3 py-2 bg-slate-800 text-white text-[9px] font-black rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[100] border border-white/10 shadow-2xl">
-                {item.label}
-              </div>
-            )}
           </button>
         ))}
       </nav>

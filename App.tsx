@@ -10,12 +10,13 @@ import ProfessionalTerminal from './features/terminal/ProfessionalTerminal';
 import CoordinationHub from './features/CoordinationHub';
 import HRTerminal from './features/hr/HRTerminal';
 import AccountingTerminal from './features/accounting/AccountingTerminal';
+import COOTerminal from './features/executive/COOTerminal';
+import DOCPortal from './features/clinical/DOCPortal';
 import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState<AppTab>(AppTab.DASHBOARD);
-  const [alerts, setAlerts] = useState<any[]>([]);
 
   // Automatic Routing Logic for Sovereignty
   useEffect(() => {
@@ -24,6 +25,8 @@ const App: React.FC = () => {
     if (user.role === CareRole.ACCOUNTANT) setActiveTab(AppTab.FINANCE);
     else if (user.role === CareRole.HR_SPECIALIST) setActiveTab(AppTab.HR_HUB);
     else if (user.role === CareRole.COORDINATOR) setActiveTab(AppTab.COORDINATION);
+    else if (user.role === CareRole.COO) setActiveTab(AppTab.DASHBOARD);
+    else if (user.role === CareRole.DOC) setActiveTab(AppTab.CLINICAL_COMMAND);
     else if (user.role === CareRole.PSW || user.role === CareRole.RN || user.role === CareRole.RPN || user.role === CareRole.HSS) {
       setActiveTab(AppTab.DASHBOARD);
     } else {
@@ -41,6 +44,9 @@ const App: React.FC = () => {
     if (activeTab === AppTab.DASHBOARD) {
       if (user.role === CareRole.CEO) {
         return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} language={lang} />;
+      }
+      if (user.role === CareRole.COO) {
+        return <COOTerminal language={lang} staffName={user.name} clients={MOCK_CLIENTS} staff={MOCK_STAFF} />;
       }
       if (isFieldStaff) {
         return <ProfessionalTerminal role={user.role as CareRole} staffName={user.name} clients={MOCK_CLIENTS} />;
@@ -66,6 +72,9 @@ const App: React.FC = () => {
         return <CoordinationHub language={lang} />;
         
       case AppTab.CLINICAL_COMMAND:
+        if (user.role === CareRole.DOC) {
+          return <DOCPortal language={lang} staffName={user.name} clients={MOCK_CLIENTS} />;
+        }
         return <RNCommand clients={MOCK_CLIENTS} role={user.role} />;
         
       case AppTab.SCHEDULE:
