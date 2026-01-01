@@ -32,7 +32,6 @@ export class HardwareVisionService {
     `;
 
     try {
-      // Fix: Removed responseMimeType from gemini-2.5-flash-image config as it's not supported for nano banana models.
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
         contents: {
