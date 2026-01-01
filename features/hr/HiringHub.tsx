@@ -5,7 +5,7 @@ import Translate from '../../components/Translate';
 import { CheckCircle, XCircle, UserPlus, FileText } from 'lucide-react';
 
 interface Props {
-  language: string;
+  language?: string;
 }
 
 const HiringHub: React.FC<Props> = ({ language }) => {

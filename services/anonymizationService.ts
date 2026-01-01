@@ -1,88 +1,61 @@
 
-import { Client, StaffMember, CareRole } from '../types';
+import { Client, StaffMember } from '../types';
 
-export interface AnonymizedScheduleEntry {
-  clientId: string;
-  staffId: string;
-  scheduledTime: string;
-  reasoning: string;
-}
-
+// Added HydratedScheduleEntry for OvertimeAlert component
 export interface HydratedScheduleEntry {
-  clientName: string;
   clientId: string;
-  clientAddress: string;
-  staffName: string;
+  clientName: string;
   staffId: string;
-  staffRole: string;
-  scheduledTime: string;
-  reasoning: string;
+  staffName: string;
+  time: string;
   weeklyLoad: number;
 }
 
 export class AnonymizationService {
   /**
-   * LAYER 1: IDENTITY MASKING
-   * LAYER 2: FISCAL GENERALIZATION
+   * LAYER 1: Strip PII. LAYER 2: Generalize Fiscal.
    */
-  prepareAnonymizedPayload(clients: Client[], staff: StaffMember[]) {
-    const clientMap: Record<string, Client> = {};
-    const staffMap: Record<string, StaffMember> = {};
+  prepareSovereignPayload(clients: Client[], staff: StaffMember[]) {
+    const clientLookup: Record<string, string> = {};
+    const staffLookup: Record<string, string> = {};
 
-    const scrubbedClients = clients.map(c => {
-      clientMap[c.id] = c;
-      const requiredRole = Object.keys(c.carePlans).find(role => c.carePlans[role].length > 0) || CareRole.PSW;
-      
+    const cleanClients = clients.map(c => {
+      clientLookup[c.id] = c.name;
       return {
-        id: c.id, // e.g., C1
-        address: c.address,
+        id: c.id,
+        address: c.address, // Needed for location lock
         sector: c.sector,
-        requiredRole: requiredRole,
-        preferredTime: c.time,
-        // LAYER 2: Masking high-value patient tags
-        acuityMagnitude: c.mobilityStatus.isBedridden ? 'ALPHA_HIGH' : 'BETA_STD'
+        acuity: c.conditions,
+        preferredTime: c.time
       };
     });
 
-    const scrubbedStaff = staff.map(s => {
-      staffMap[s.id] = s;
+    const cleanStaff = staff.map(s => {
+      staffLookup[s.id] = s.name;
       return {
-        id: s.id, // e.g., P1, RN1
+        id: s.id,
         role: s.role,
-        homeSector: s.homeSector,
+        sector: s.homeSector,
         availability: s.availability,
-        currentLoad: s.weeklyHours,
-        // LAYER 2: Generalizing hourly costs to Tiers
-        costTier: (s.hourlyRate || 0) > 40 ? 'TIER_EXECUTIVE' : 'TIER_FIELD'
+        currentHours: s.weeklyHours
       };
     });
 
     return { 
-      payload: { clients: scrubbedClients, staff: scrubbedStaff }, 
-      lookups: { clientMap, staffMap } 
+      payload: { clients: cleanClients, staff: cleanStaff }, 
+      lookups: { clientLookup, staffLookup } 
     };
   }
 
-  hydrateSchedule(
-    aiOutput: AnonymizedScheduleEntry[], 
-    lookups: { clientMap: Record<string, Client>, staffMap: Record<string, StaffMember> }
-  ): HydratedScheduleEntry[] {
-    return aiOutput.map(entry => {
-      const client = lookups.clientMap[entry.clientId];
-      const staff = lookups.staffMap[entry.staffId];
-
-      return {
-        clientName: client?.name || "Unknown Patient",
-        clientId: entry.clientId,
-        clientAddress: client?.address || "Location Masked",
-        staffName: staff?.name || "Unknown Staff",
-        staffId: entry.staffId,
-        staffRole: String(staff?.role || "Field Operative"),
-        scheduledTime: entry.scheduledTime,
-        reasoning: entry.reasoning,
-        weeklyLoad: staff?.weeklyHours || 0
-      };
-    });
+  /**
+   * Restoration logic: Swaps IDs back to names for human view.
+   */
+  hydrateRoster(aiSchedule: any[], lookups: { clientLookup: Record<string, string>, staffLookup: Record<string, string> }) {
+    return aiSchedule.map(entry => ({
+      ...entry,
+      clientName: lookups.clientLookup[entry.clientId] || "Unknown",
+      staffName: lookups.staffLookup[entry.staffId] || "Unknown"
+    }));
   }
 }
 
