@@ -66,6 +66,7 @@ const IntakeNode: React.FC<Props> = ({ language, onClientAdded }) => {
       carePlans: {},
       medications: [],
       blacklistStaffIds: [],
+      currentVisitStatus: 'IDLE',
       risk: triage ? {
         level: triage.priority === 'P1' || triage.priority === 'P2' ? 'CRITICAL' : 'LOW',
         factors: [triage.riskReasoning],

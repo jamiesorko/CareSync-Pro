@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Client, SyntheticInsight, DeviceReading, RegulatoryPatch } from '../../types';
 import { syntheticHistoryService } from '../../services/syntheticHistoryService';
@@ -83,7 +84,7 @@ const MoatBreakerHUD: React.FC<Props> = ({ language, clients }) => {
            </div>
 
            {insight && (
-             <div className="flex-1 space-y-10 relative z-10 animate-in slide-in-from-bottom-8">
+             <div className="flex-1 space-y-10 relative z-10 animate-in slide-in-from-bottom-8 duration-700">
                 <div className="p-8 bg-white/[0.03] border border-white/5 rounded-3xl">
                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4">Scientific Peer Correlation</p>
                    <p className="text-sm text-slate-200 leading-relaxed font-medium italic">"{insight.globalPeerComparison}"</p>
@@ -93,7 +94,7 @@ const MoatBreakerHUD: React.FC<Props> = ({ language, clients }) => {
                    <p className="text-sm text-white italic font-bold">"{insight.predictedLongTermTrajectory}"</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                   {insight.scientificCitations.map((c, i) => (
+                   {insight.scientificCitations.map((c: { title: string; uri: string }, i: number) => (
                      <a key={i} href={c.uri} target="_blank" className="px-3 py-1 bg-white/5 border border-white/10 rounded text-[8px] font-black text-sky-400 uppercase italic">Source: {c.title}</a>
                    ))}
                 </div>

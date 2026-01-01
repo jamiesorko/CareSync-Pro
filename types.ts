@@ -541,3 +541,27 @@ export interface OncallShift {
   endTime: string;
   tier: 'PRIMARY' | 'SECONDARY';
 }
+
+export interface SyntheticInsight {
+  patientId: string;
+  globalPeerComparison: string;
+  predictedLongTermTrajectory: string;
+  scientificCitations: { title: string; uri: string }[];
+}
+
+export interface DeviceReading {
+  deviceName: string;
+  detectedValue: string;
+  standardizedMetric: string;
+  confidence: number;
+  fhirMappedJson: string;
+}
+
+export interface RegulatoryPatch {
+  id: string;
+  companyId: string;
+  newLawReference: string;
+  affectedSOPs: string[];
+  autoDraftedRevision: string;
+  complianceDeadline: string;
+}
