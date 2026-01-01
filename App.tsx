@@ -27,9 +27,7 @@ const App: React.FC = () => {
     else if (user.role === CareRole.COORDINATOR) setActiveTab(AppTab.COORDINATION);
     else if (user.role === CareRole.COO) setActiveTab(AppTab.DASHBOARD);
     else if (user.role === CareRole.DOC) setActiveTab(AppTab.CLINICAL_COMMAND);
-    else if (user.role === CareRole.PSW || user.role === CareRole.RN || user.role === CareRole.RPN || user.role === CareRole.HSS) {
-      setActiveTab(AppTab.DASHBOARD);
-    } else {
+    else {
       setActiveTab(AppTab.DASHBOARD);
     }
   }, [user]);

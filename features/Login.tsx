@@ -9,6 +9,8 @@ interface Props {
 const Login: React.FC<Props> = ({ onLogin }) => {
   const personas: User[] = [
     { name: 'Jamie Sorko', role: CareRole.CEO },
+    { name: 'Michael Scott', role: CareRole.COO },
+    { name: 'Sarah Walker', role: CareRole.DOC },
     { name: 'Tom Hardy', role: CareRole.RN },
     { name: 'Elena R.', role: CareRole.PSW },
     { name: 'Toby Flenderson', role: CareRole.HR_SPECIALIST },
