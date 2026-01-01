@@ -1,66 +1,76 @@
 
 import React from 'react';
 import { Client } from '../../types';
-import { MoreHorizontal, ChevronRight, User, MapPin } from 'lucide-react';
+// Added Clock to the imports from lucide-react to fix the "Cannot find name 'Clock'" error
+import { MoreHorizontal, ChevronRight, Binary, MapPin, Activity, Clock } from 'lucide-react';
 
 interface Props {
   clients: Client[];
 }
 
 const SignalLog: React.FC<Props> = ({ clients }) => (
-  <div className="overflow-x-auto">
+  <div className="overflow-x-auto scrollbar-hide">
     <table className="w-full text-left border-collapse">
       <thead>
-        <tr className="bg-slate-50 border-b border-slate-200">
-          <th className="px-6 py-3 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Subject Dossier</th>
-          <th className="px-6 py-3 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Scheduled Window</th>
-          <th className="px-6 py-3 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Clinical Status</th>
-          <th className="px-6 py-3 text-right text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Command</th>
+        <tr className="border-b border-white/5">
+          <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">Target_Dossier</th>
+          <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">Temporal_Window</th>
+          <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">Acuity_State</th>
+          <th className="px-8 py-4 text-right text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">Action</th>
         </tr>
       </thead>
-      <tbody className="divide-y divide-slate-100">
+      <tbody className="divide-y divide-white/5">
         {clients.map(client => (
-          <tr key={client.id} className="hover:bg-slate-50 transition-colors group cursor-pointer bg-white">
-            <td className="px-6 py-4">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400">
-                  <User size={14} />
+          <tr key={client.id} className="hover:bg-white/[0.03] transition-all group cursor-pointer">
+            <td className="px-8 py-5">
+              <div className="flex items-center gap-5">
+                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-500 group-hover:border-indigo-500/50 group-hover:text-indigo-400 transition-all">
+                  <Binary size={18} />
                 </div>
                 <div>
-                  <p className="text-[13px] font-bold text-slate-900 leading-none mb-1 group-hover:text-[#005596] transition-colors">{client.name}</p>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[9px] font-black text-slate-400 uppercase">{client.anonymizedId}</span>
-                    <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
-                    <span className="text-[9px] text-slate-400 font-medium">{client.sector}</span>
+                  <p className="text-[14px] font-black text-white tracking-tight leading-none mb-1.5 uppercase italic group-hover:text-glow-indigo transition-all">{client.name}</p>
+                  <div className="flex items-center gap-3">
+                    <span className="text-[10px] font-black text-slate-600 uppercase tech-mono tracking-widest">{client.anonymizedId}</span>
+                    <div className="w-1 h-1 bg-slate-800 rounded-full"></div>
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{client.sector}</span>
                   </div>
                 </div>
               </div>
             </td>
-            <td className="px-6 py-4">
-              <div className="flex items-center gap-2">
-                <MapPin size={12} className="text-slate-300" />
-                <p className="text-[12px] font-bold text-slate-700">{client.time}</p>
-              </div>
-              <p className="text-[9px] text-slate-400 font-bold uppercase ml-5 mt-1">Verified Node</p>
-            </td>
-            <td className="px-6 py-4">
+            <td className="px-8 py-5">
               <div className="flex items-center gap-3">
-                <div className={`w-2 h-2 rounded-full ${
-                  client.currentVisitStatus === 'IN_PROGRESS' ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-slate-300'
-                }`}></div>
-                <span className={`text-[10px] font-black uppercase tracking-widest ${
-                  client.currentVisitStatus === 'IN_PROGRESS' ? 'text-emerald-700' : 'text-slate-400'
+                <Clock size={14} className="text-indigo-500/40" />
+                <p className="text-[13px] font-black text-slate-300 tech-mono">{client.time}</p>
+              </div>
+              <div className="flex items-center gap-2 mt-1.5 ml-6">
+                <div className="w-1.5 h-1.5 rounded-sm bg-emerald-500/20 border border-emerald-500/30"></div>
+                <p className="text-[9px] text-slate-600 font-bold uppercase tracking-widest">Verified_Sync</p>
+              </div>
+            </td>
+            <td className="px-8 py-5">
+              <div className="flex items-center gap-4">
+                <div className={`w-2.5 h-2.5 rounded-full relative ${
+                  client.currentVisitStatus === 'IN_PROGRESS' 
+                    ? 'bg-emerald-500 shadow-[0_0_12px_#10b981]' 
+                    : 'bg-slate-700'
                 }`}>
-                  {client.currentVisitStatus?.replace('_', ' ') || 'IDLE'}
+                  {client.currentVisitStatus === 'IN_PROGRESS' && (
+                    <div className="absolute inset-0 bg-emerald-500 rounded-full animate-ping opacity-40"></div>
+                  )}
+                </div>
+                <span className={`text-[11px] font-black uppercase tracking-[0.2em] ${
+                  client.currentVisitStatus === 'IN_PROGRESS' ? 'text-emerald-400 italic' : 'text-slate-600'
+                }`}>
+                  {client.currentVisitStatus?.replace('_', ' ') || 'STANDBY'}
                 </span>
               </div>
             </td>
-            <td className="px-6 py-4 text-right">
-              <div className="flex items-center gap-2 justify-end opacity-0 group-hover:opacity-100 transition-all">
-                  <button className="p-2 text-slate-400 hover:text-[#005596] hover:bg-[#005596]/10 rounded">
-                    <MoreHorizontal size={18} />
+            <td className="px-8 py-5 text-right">
+              <div className="flex items-center gap-2 justify-end opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
+                  <button className="p-2.5 text-slate-500 hover:text-white hover:bg-white/5 rounded-xl border border-transparent hover:border-white/10 transition-all">
+                    <Activity size={18} />
                   </button>
-                  <button className="p-2 text-slate-400 hover:text-[#005596] hover:bg-[#005596]/10 rounded">
+                  <button className="p-2.5 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all">
                     <ChevronRight size={18} />
                   </button>
               </div>

@@ -1,26 +1,69 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CareSync Pro | Institutional Node</title>
+    <title>CareSync Pro | Strategic Node</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+      
+      :root {
+        --bg-deep: #020617;
+        --accent-glow: rgba(99, 102, 241, 0.15);
+      }
+
       body { 
-        font-family: 'Inter', sans-serif; 
-        background: #020617; 
+        font-family: 'Plus Jakarta Sans', sans-serif; 
+        background: var(--bg-deep); 
         color: #f8fafc;
-        font-size: 13px; /* Reduced for professional density */
+        font-size: 13px;
+        overflow: hidden;
       }
-      .alaya-card {
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        backdrop-filter: blur(12px);
+
+      .tech-mono { font-family: 'JetBrains Mono', monospace; }
+
+      .glass-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
       }
+
+      .glow-border {
+        position: relative;
+      }
+      .glow-border::after {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        background: linear-gradient(45deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+        border-radius: inherit;
+        z-index: -1;
+        pointer-events: none;
+      }
+
+      .grid-bg {
+        background-image: 
+          linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-size: 40px 40px;
+      }
+
       .scrollbar-hide::-webkit-scrollbar { display: none; }
       .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-      input, textarea, select { font-size: 13px !important; }
+
+      @keyframes scan {
+        from { transform: translateY(-100%); }
+        to { transform: translateY(100%); }
+      }
+      .scanner-line {
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #6366f1, transparent);
+        animation: scan 3s linear infinite;
+        opacity: 0.3;
+      }
     </style>
 <script type="importmap">
 {
@@ -30,18 +73,22 @@
     "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
     "@google/genai": "https://esm.sh/@google/genai@0.2.1",
     "lucide-react": "https://esm.sh/lucide-react@0.453.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
-    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.89.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
     "vite": "https://esm.sh/vite@^7.3.0",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.89.0"
   }
 }
 </script>
 <link rel="stylesheet" href="/index.css">
 </head>
-<body class="h-screen overflow-hidden">
-    <div id="root" class="h-full"></div>
+<body class="h-screen w-screen relative grid-bg">
+    <!-- Orbital Glows -->
+    <div class="fixed -top-40 -right-40 w-96 h-96 bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none"></div>
+    <div class="fixed -bottom-40 -left-40 w-96 h-96 bg-emerald-600/10 blur-[120px] rounded-full pointer-events-none"></div>
+    
+    <div id="root" class="h-full relative z-10"></div>
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>

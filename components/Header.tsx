@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { AppTab } from '../types';
-import { Search, Bell, Settings, LogOut, ChevronDown } from 'lucide-react';
+import { Search, Bell, Settings, Command, UserCircle } from 'lucide-react';
 
 interface Props {
   activeTab: AppTab;
@@ -10,41 +10,57 @@ interface Props {
 
 const Header: React.FC<Props> = ({ activeTab, onLogout }) => {
   return (
-    <header className="h-16 bg-white border-b border-[#dae1e7] flex items-center justify-between px-8 shrink-0 z-40">
-      <div className="flex items-center gap-6 flex-1">
-        <div className="hidden lg:flex items-center gap-3 bg-slate-50 border border-slate-200 px-4 py-1.5 rounded w-[450px] focus-within:border-[#005596] transition-all">
-          <Search size={16} className="text-slate-400" />
+    <header className="h-20 bg-transparent border-b border-white/5 flex items-center justify-between px-8 shrink-0 z-40">
+      <div className="flex items-center gap-8 flex-1">
+        <div className="flex flex-col">
+          <p className="text-[9px] font-black text-indigo-500 uppercase tracking-[0.4em] mb-0.5">Active_Node</p>
+          <h2 className="text-sm font-black uppercase tracking-widest text-white italic">{activeTab}</h2>
+        </div>
+
+        <div className="hidden lg:flex items-center gap-3 bg-white/[0.03] border border-white/10 px-5 py-2.5 rounded-2xl w-[500px] focus-within:border-indigo-500/50 focus-within:bg-white/[0.05] transition-all group">
+          <Search size={16} className="text-slate-500 group-focus-within:text-indigo-400" />
           <input 
             type="text" 
-            placeholder="Search clients, employees, or forms..." 
-            className="bg-transparent border-none text-[13px] text-slate-700 outline-none w-full placeholder:text-slate-400"
+            placeholder="Search Global Roster, Census, or System Directives..." 
+            className="bg-transparent border-none text-xs text-slate-200 outline-none w-full placeholder:text-slate-600 font-medium"
           />
+          <div className="flex items-center gap-1.5 px-2 py-1 bg-white/5 rounded-lg border border-white/5">
+            <Command size={10} className="text-slate-500" />
+            <span className="text-[9px] font-bold text-slate-500">K</span>
+          </div>
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-100 rounded text-emerald-700">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          <span className="text-[10px] font-bold uppercase tracking-wider">Live</span>
+      <div className="flex items-center gap-5">
+        <div className="flex flex-col items-end hidden sm:flex">
+          <p className="text-[10px] font-black text-white uppercase tracking-tighter">Institutional Node_v4.5</p>
+          <p className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest tech-mono">Latency: 14ms</p>
         </div>
 
-        <div className="h-6 w-px bg-slate-200 mx-2"></div>
+        <div className="h-8 w-px bg-white/5 mx-2"></div>
 
-        <button className="p-2 text-slate-400 hover:text-[#005596] relative">
-          <Bell size={20} />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
-        </button>
-
-        <button className="p-2 text-slate-400 hover:text-[#005596]">
-          <Settings size={20} />
-        </button>
+        <div className="flex items-center gap-2">
+          <button className="p-2.5 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all relative group">
+            <Bell size={18} />
+            <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-indigo-500 rounded-full border border-black shadow-[0_0_8px_#6366f1]"></span>
+          </button>
+          
+          <button className="p-2.5 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all">
+            <Settings size={18} />
+          </button>
+        </div>
 
         <button 
           onClick={onLogout}
-          className="ml-4 flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-200 text-slate-600 hover:text-rose-600 hover:bg-rose-50 rounded transition-all text-xs font-bold uppercase"
+          className="flex items-center gap-3 pl-2 pr-4 py-2 bg-white/5 border border-white/10 hover:border-indigo-500/30 rounded-2xl transition-all group"
         >
-          <LogOut size={16} />
-          <span>Logout</span>
+          <div className="w-8 h-8 rounded-full bg-indigo-600/20 flex items-center justify-center text-indigo-400">
+            <UserCircle size={20} />
+          </div>
+          <div className="text-left">
+            <p className="text-[9px] font-black text-slate-500 uppercase leading-none">Security_ID</p>
+            <p className="text-[10px] font-black text-white uppercase tracking-tighter">Jamie Sorko</p>
+          </div>
         </button>
       </div>
     </header>

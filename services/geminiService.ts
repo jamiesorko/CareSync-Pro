@@ -2,22 +2,28 @@
 import { GoogleGenAI, Modality, GenerateContentResponse, Type } from "@google/genai";
 
 export class GeminiService {
-  // Initialize AI using named parameter for apiKey per guidelines.
   private getAI() {
     return new GoogleGenAI({ apiKey: process.env.API_KEY as string });
   }
 
-  // Basic Text Generation with optional Search Grounding.
+  /**
+   * SOVEREIGNTY PROTOCOL: Scrubbing PII before neural inference.
+   */
+  private scrubIntent(prompt: string): string {
+    return prompt.replace(/\b[A-Z][a-z]+ [A-Z][a-z]+\b/g, "[SUBJECT_IDENTIFIER_MASKED]");
+  }
+
   async generateText(prompt: string, useSearch: boolean = false): Promise<GenerateContentResponse> {
     const ai = this.getAI();
+    const scrubbed = this.scrubIntent(prompt);
+    
     return await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: prompt,
+      contents: scrubbed,
       config: useSearch ? { tools: [{ googleSearch: {} }] } : undefined,
     });
   }
 
-  // Advanced Reasoning / Thinking using Gemini 3 Pro.
   async generateAdvancedReasoning(prompt: string): Promise<GenerateContentResponse> {
     const ai = this.getAI();
     return await ai.models.generateContent({
@@ -29,7 +35,6 @@ export class GeminiService {
     });
   }
 
-  // Image Generation using nano banana series models.
   async generateImage(prompt: string): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
@@ -37,7 +42,6 @@ export class GeminiService {
       contents: { parts: [{ text: prompt }] },
       config: { imageConfig: { aspectRatio: "1:1" } }
     });
-    // Iterate through parts to find the image part per guidelines.
     for (const part of response.candidates?.[0]?.content?.parts || []) {
       if (part.inlineData) {
         return `data:image/png;base64,${part.inlineData.data}`;
@@ -46,7 +50,6 @@ export class GeminiService {
     return "";
   }
 
-  // Video Generation using Veo models.
   async generateVideo(prompt: string): Promise<string> {
     const ai = this.getAI();
     let operation = await ai.models.generateVideos({
@@ -62,7 +65,6 @@ export class GeminiService {
     return `${downloadLink}&key=${process.env.API_KEY}`;
   }
 
-  // Text-to-Speech generation.
   async generateSpeech(text: string, voiceName: string = 'Kore'): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
@@ -80,7 +82,6 @@ export class GeminiService {
     return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || "";
   }
 
-  // Translation helper using flash model.
   async translate(text: string, targetLanguage: string): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
@@ -90,7 +91,6 @@ export class GeminiService {
     return response.text || text;
   }
 
-  // Strategic reasoning for financials.
   async getFinancialStrategy(context: any): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
@@ -101,7 +101,6 @@ export class GeminiService {
     return response.text || "No strategy available.";
   }
 
-  // Market intelligence via search grounding.
   async getMarketIntelligence(query: string): Promise<GenerateContentResponse> {
     const ai = this.getAI();
     return await ai.models.generateContent({
@@ -111,7 +110,6 @@ export class GeminiService {
     });
   }
 
-  // Vision analysis helper for hazards.
   async analyzeHazardImage(base64: string, prompt: string = "Analyze this clinical hazard image."): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
@@ -126,7 +124,6 @@ export class GeminiService {
     return response.text || "No analysis provided.";
   }
 
-  // Self-repair logic audit via JSON response.
   async runSelfRepairAudit(ledger: any): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
@@ -140,10 +137,6 @@ export class GeminiService {
     return response.text || '{"remediation": "No drift detected."}';
   }
 
-  /**
-   * Generates a schedule using strictly anonymized data.
-   * Enforces Location Lock, Availability Lock, and Role Parity.
-   */
   async generateSecureSchedule(anonymizedData: any): Promise<any[]> {
     const ai = this.getAI();
     const systemInstruction = `
@@ -151,10 +144,9 @@ export class GeminiService {
       SECURITY PROTOCOL: You only receive IDs and locations. Do not invent names.
       
       CONSTRAINTS:
-      1. LOCATION LOCK: Only schedule staff in the sector they work in (e.g., if Staff sector is 'Woodbridge', they only see clients in 'Woodbridge').
-      2. AVAILABILITY LOCK: Only schedule staff within their specific availability window (e.g., 08:00-20:00).
-      3. ROLE PARITY: You MUST match the required role. If a client requires 'Personal Support Worker', only assign staff IDs starting with 'P'. If 'Registered Nurse', only IDs starting with 'RN'.
-      4. SHIFT DURATION: Assume each visit is 3 hours unless specified.
+      1. LOCATION LOCK: Only schedule staff in the sector they work in.
+      2. AVAILABILITY LOCK: Only schedule staff within their window.
+      3. ROLE PARITY: Match required roles based on ID prefixes.
       
       OUTPUT: Return a JSON array of assignments.
     `;
