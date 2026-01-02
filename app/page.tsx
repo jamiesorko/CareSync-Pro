@@ -23,7 +23,8 @@ export default function Home() {
     const lang = "English";
     switch (activeTab) {
       case AppTab.DASHBOARD:
-        return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} language={lang} />;
+        // Fix: Pass missing setActiveTab prop to Dashboard component to fulfill required interface
+        return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} language={lang} setActiveTab={setActiveTab} />;
       case AppTab.SCHEDULE:
         return <ScheduleView role={user.role} clients={MOCK_CLIENTS} language={lang} />;
       case AppTab.CLINICAL_COMMAND:

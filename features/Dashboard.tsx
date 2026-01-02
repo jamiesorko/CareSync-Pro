@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { CareRole, Client, StaffMember } from '../types';
+import { AppTab, CareRole, Client, StaffMember } from '../types';
 import MetricNode from './dashboard/MetricNode';
 import SignalLog from './dashboard/SignalLog';
+import CommandGrid from './dashboard/CommandGrid';
 import { 
   Users, 
   Activity, 
@@ -20,11 +21,14 @@ interface Props {
   clients: Client[];
   staff: StaffMember[];
   language: string;
+  setActiveTab: (tab: AppTab) => void;
 }
 
-const Dashboard: React.FC<Props> = ({ staffName, clients, staff }) => {
+const Dashboard: React.FC<Props> = ({ staffName, role, clients, staff, setActiveTab }) => {
+  const isExec = [CareRole.CEO, CareRole.COO, CareRole.DOC].includes(role);
+
   return (
-    <div className="space-y-8 pb-10">
+    <div className="space-y-8 pb-20">
       {/* Header Panel */}
       <div className="glass-card p-10 rounded-[3.5rem] flex flex-col lg:flex-row justify-between items-center gap-8 relative overflow-hidden group">
         <div className="absolute top-0 left-0 w-full h-1 scanner-line"></div>
@@ -57,6 +61,10 @@ const Dashboard: React.FC<Props> = ({ staffName, clients, staff }) => {
         </div>
       </div>
 
+      {isExec && (
+        <CommandGrid setActiveTab={setActiveTab} />
+      )}
+
       {/* KPI Matrix */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <MetricNode label="Active Census" value={clients.length.toString()} icon={Users} trend="+2 Nodes" trendType="positive" />
@@ -66,7 +74,6 @@ const Dashboard: React.FC<Props> = ({ staffName, clients, staff }) => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Execution Ledger */}
         <div className="lg:col-span-8">
            <div className="glass-card rounded-[3rem] overflow-hidden">
               <div className="px-8 py-5 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
@@ -82,7 +89,6 @@ const Dashboard: React.FC<Props> = ({ staffName, clients, staff }) => {
            </div>
         </div>
         
-        {/* Intelligence Streams */}
         <div className="lg:col-span-4 space-y-6">
           <div className="glass-card p-8 rounded-[3rem] relative overflow-hidden">
              <div className="flex items-center gap-3 mb-8">
@@ -101,20 +107,6 @@ const Dashboard: React.FC<Props> = ({ staffName, clients, staff }) => {
                 ))}
              </div>
              <button className="w-full mt-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] hover:text-white hover:bg-white/10 transition-all">Clear_Session_Alarms</button>
-          </div>
-
-          <div className="glass-card p-8 rounded-[3rem] bg-indigo-600 shadow-[0_0_40px_rgba(99,102,241,0.2)] text-white group cursor-pointer hover:scale-[1.02] transition-all">
-             <div className="flex items-center gap-3 mb-6">
-               <Binary size={18} className="opacity-60" />
-               <h4 className="text-[11px] font-black uppercase tracking-[0.3em] opacity-60">Neural_Market_Intel</h4>
-             </div>
-             <p className="text-base font-bold leading-relaxed italic mb-8 group-hover:text-glow-indigo">
-               "Regional viral surge detected in Sector 1. Roster protocol auto-updated with mandatory PPE directives."
-             </p>
-             <div className="flex justify-between items-center pt-6 border-t border-white/20">
-               <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Confidence: 94%</span>
-               <span className="text-xs">→</span>
-             </div>
           </div>
         </div>
       </div>
