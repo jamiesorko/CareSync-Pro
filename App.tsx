@@ -25,7 +25,6 @@ const App: React.FC = () => {
     if (user.role === CareRole.ACCOUNTANT) setActiveTab(AppTab.FINANCE);
     else if (user.role === CareRole.HR_SPECIALIST) setActiveTab(AppTab.HR_HUB);
     else if (user.role === CareRole.COORDINATOR) setActiveTab(AppTab.COORDINATION);
-    else if (user.role === CareRole.COO) setActiveTab(AppTab.DASHBOARD);
     else if (user.role === CareRole.DOC) setActiveTab(AppTab.CLINICAL_COMMAND);
     else {
       setActiveTab(AppTab.DASHBOARD);
@@ -81,15 +80,15 @@ const App: React.FC = () => {
       default:
         return (
           <div className="flex flex-col items-center justify-center h-full opacity-20">
-             <h2 className="text-4xl font-black italic uppercase tracking-widest">Node_Initialized</h2>
-             <p className="text-xs font-bold uppercase mt-4">Operational Status: Ready for Intercept</p>
+             <h2 className="text-4xl font-black italic uppercase tracking-widest text-white">Sector_Offline</h2>
+             <p className="text-[10px] font-bold uppercase mt-4 text-slate-500">Operational Node: Awaiting Ingress</p>
           </div>
         );
     }
   };
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-[#020617] text-slate-200">
+    <div className="h-screen w-screen overflow-hidden bg-[#020617] text-slate-200 selection:bg-indigo-500/30">
       <Layout 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
@@ -97,7 +96,9 @@ const App: React.FC = () => {
         staffName={user.name} 
         onLogout={() => { setUser(null); setActiveTab(AppTab.DASHBOARD); }}
       >
-        {renderContent()}
+        <div className="h-full w-full animate-in fade-in zoom-in-95 duration-500">
+          {renderContent()}
+        </div>
       </Layout>
     </div>
   );

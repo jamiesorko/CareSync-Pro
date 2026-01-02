@@ -11,7 +11,6 @@ import {
   ChevronLeft, 
   Menu,
   CalendarDays,
-  Cpu,
   Power
 } from 'lucide-react';
 
@@ -46,6 +45,11 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role }) => {
         return [AppTab.DASHBOARD, AppTab.FINANCE].includes(item.id);
       case CareRole.HR_SPECIALIST:
         return [AppTab.DASHBOARD, AppTab.HR_HUB].includes(item.id);
+      case CareRole.CEO:
+      case CareRole.COO:
+      case CareRole.DOC:
+      case CareRole.COORDINATOR:
+        return true;
       default:
         return true;
     }
@@ -77,7 +81,7 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role }) => {
             onClick={() => setActiveTab(item.id)}
             className={`flex items-center gap-4 p-3.5 rounded-xl transition-all group relative ${
               activeTab === item.id 
-                ? 'bg-indigo-600/10 text-indigo-400 border border-indigo-500/20' 
+                ? 'bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 shadow-[inset_0_0_20px_rgba(99,102,241,0.05)]' 
                 : 'text-slate-500 hover:text-slate-200 hover:bg-white/5 border border-transparent'
             }`}
           >
@@ -90,7 +94,7 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role }) => {
               {item.label}
             </span>
             {activeTab === item.id && (
-              <div className="absolute right-2 w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_#6366f1]"></div>
+              <div className="absolute right-2 w-1 h-1 rounded-full bg-indigo-500 shadow-[0_0_8px_#6366f1]"></div>
             )}
           </button>
         ))}

@@ -1,11 +1,11 @@
 
 import React, { useState } from 'react';
-import { CareRole, Client, StaffMember } from '../../types';
+import { Client, StaffMember } from '../../types';
 import Translate from '../../components/Translate';
 import ThroughputPulse from '../coo/ThroughputPulse';
-import StrategicSimulator from '../ceo/StrategicSimulator';
-import ExpansionRoiHUD from '../ceo/ExpansionRoiHUD';
-import { Activity, Globe, Zap, BarChart3 } from 'lucide-react';
+import StabilityGrid from '../coo/StabilityGrid';
+import NeighborhoodBioSentinel from '../coo/NeighborhoodBioSentinel';
+import { Activity, Zap, BarChart3, Globe, ShieldAlert } from 'lucide-react';
 
 interface Props {
   language: string;
@@ -15,17 +15,17 @@ interface Props {
 }
 
 const COOTerminal: React.FC<Props> = ({ language, staffName, clients, staff }) => {
-  const [activeLayer, setActiveLayer] = useState<'PULSE' | 'STRATEGY' | 'MARKET'>('PULSE');
+  const [activeLayer, setActiveLayer] = useState<'VELOCITY' | 'STABILITY' | 'BIO_SENTINEL'>('VELOCITY');
 
   const stats = [
-    { label: 'Fleet Velocity', val: '94.2%', icon: Zap, color: 'text-cyan-400' },
-    { label: 'Global Capacity', val: '1,240h', icon: BarChart3, color: 'text-emerald-400' },
-    { label: 'Sector Density', val: 'Optimal', icon: Globe, color: 'text-sky-400' },
-    { label: 'System Load', val: 'NOMINAL', icon: Activity, color: 'text-white' }
+    { label: 'Agency Velocity', val: '94.2%', icon: Zap, color: 'text-cyan-400' },
+    { label: 'Fleet Latency', val: '115m', icon: Activity, color: 'text-emerald-400' },
+    { label: 'System Density', val: 'Optimal', icon: Globe, color: 'text-sky-400' },
+    { label: 'Node Load', val: 'Nominal', icon: ShieldAlert, color: 'text-white' }
   ];
 
   return (
-    <div className="h-full space-y-10 animate-in fade-in duration-700 pb-24 px-4">
+    <div className="h-full space-y-10 animate-in fade-in duration-700 pb-24 px-4 overflow-y-auto scrollbar-hide">
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
         <div className="space-y-2">
           <div className="flex items-center gap-3">
@@ -40,13 +40,17 @@ const COOTerminal: React.FC<Props> = ({ language, staffName, clients, staff }) =
         </div>
         
         <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl shadow-2xl">
-          {['PULSE', 'STRATEGY', 'MARKET'].map(tab => (
+          {[
+            { id: 'VELOCITY', label: 'Fleet_Throughput' },
+            { id: 'STABILITY', label: 'Roster_Grid' },
+            { id: 'BIO_SENTINEL', label: 'Epidemiology' }
+          ].map(tab => (
             <button 
-              key={tab}
-              onClick={() => setActiveLayer(tab as any)}
-              className={`px-10 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${activeLayer === tab ? 'bg-cyan-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+              key={tab.id}
+              onClick={() => setActiveLayer(tab.id as any)}
+              className={`px-10 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${activeLayer === tab.id ? 'bg-cyan-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
             >
-              <Translate targetLanguage={language}>{tab}</Translate>
+              <Translate targetLanguage={language}>{tab.label}</Translate>
             </button>
           ))}
         </div>
@@ -54,8 +58,8 @@ const COOTerminal: React.FC<Props> = ({ language, staffName, clients, staff }) =
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {stats.map((s, i) => (
-          <div key={i} className="bg-white/5 border border-white/10 p-6 rounded-3xl group hover:border-cyan-500/30 transition-all">
-            <s.icon className={`${s.color} mb-4`} size={20} />
+          <div key={i} className="glass-card p-8 rounded-3xl group hover:border-cyan-500/30 transition-all">
+            <s.icon className={`${s.color} mb-4`} size={22} />
             <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{s.label}</p>
             <p className="text-3xl font-black text-white italic tracking-tighter mt-1">{s.val}</p>
           </div>
@@ -63,9 +67,9 @@ const COOTerminal: React.FC<Props> = ({ language, staffName, clients, staff }) =
       </div>
 
       <div className="min-h-[600px] animate-in slide-in-from-bottom-4 duration-700">
-        {activeLayer === 'PULSE' && <ThroughputPulse language={language} />}
-        {activeLayer === 'STRATEGY' && <StrategicSimulator language={language} />}
-        {activeLayer === 'MARKET' && <ExpansionRoiHUD language={language} />}
+        {activeLayer === 'VELOCITY' && <ThroughputPulse language={language} />}
+        {activeLayer === 'STABILITY' && <StabilityGrid language={language} />}
+        {activeLayer === 'BIO_SENTINEL' && <NeighborhoodBioSentinel language={language} />}
       </div>
     </div>
   );
