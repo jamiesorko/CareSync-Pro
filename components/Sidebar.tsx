@@ -19,9 +19,10 @@ interface Props {
   setActiveTab: (tab: AppTab) => void;
   staffName?: string;
   role: CareRole;
+  language: string;
 }
 
-const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role }) => {
+const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role, language }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const fullMenu = [

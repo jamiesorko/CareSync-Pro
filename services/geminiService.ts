@@ -1,4 +1,5 @@
-import { GoogleGenAI, Modality, GenerateContentResponse, Type } from "@google/genai";
+
+import { GoogleGenAI, Modality, GenerateContentResponse } from "@google/genai";
 
 export class GeminiService {
   private getAI() {
@@ -15,7 +16,6 @@ export class GeminiService {
   async generateText(prompt: string, useSearch: boolean = false): Promise<GenerateContentResponse> {
     const ai = this.getAI();
     const scrubbed = this.scrubIntent(prompt);
-    
     return await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: scrubbed,
@@ -23,14 +23,70 @@ export class GeminiService {
     });
   }
 
+  // Added getMarketIntelligence for services using search grounding
+  async getMarketIntelligence(query: string): Promise<GenerateContentResponse> {
+    const ai = this.getAI();
+    return await ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: query,
+      config: {
+        tools: [{ googleSearch: {} }],
+      },
+    });
+  }
+
+  // Added getFinancialStrategy for CEO financials analysis
+  async getFinancialStrategy(context: any): Promise<string> {
+    const ai = this.getAI();
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-pro-preview',
+      contents: `Analyze these financials and provide a strategy: ${JSON.stringify(context)}`,
+      config: { thinkingConfig: { thinkingBudget: 15000 } }
+    });
+    return response.text || "Analysis failed.";
+  }
+
+  async translate(text: string, targetLanguage: string): Promise<string> {
+    if (!text || targetLanguage.toLowerCase() === 'english') return text;
+    
+    const ai = this.getAI();
+    try {
+      const response = await ai.models.generateContent({
+        model: 'gemini-3-flash-preview',
+        contents: `Translate the following text to ${targetLanguage}: "${text}"`,
+        config: {
+          systemInstruction: "You are a professional medical and enterprise translator. Output ONLY the translated text. Do not include introductory remarks, explanations, or conversational filler. Maintain original formatting and tone.",
+        }
+      });
+      return response.text?.trim() || text;
+    } catch (err) {
+      console.error("[TRANSLATION_CORE_FAILURE]:", err);
+      return text;
+    }
+  }
+
+  async translateToEnglish(text: string): Promise<string> {
+    const ai = this.getAI();
+    try {
+      const response = await ai.models.generateContent({
+        model: 'gemini-3-flash-preview',
+        contents: `Translate this clinical report/concern to professional English for a healthcare supervisor: "${text}"`,
+        config: {
+          systemInstruction: "You are a clinical translation node. Convert the input to clear, professional medical English. Return ONLY the translated text.",
+        }
+      });
+      return response.text?.trim() || text;
+    } catch (err) {
+      return text;
+    }
+  }
+
   async generateAdvancedReasoning(prompt: string): Promise<GenerateContentResponse> {
     const ai = this.getAI();
     return await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
       contents: prompt,
-      config: {
-        thinkingConfig: { thinkingBudget: 15000 }
-      }
+      config: { thinkingConfig: { thinkingBudget: 15000 } }
     });
   }
 
@@ -42,19 +98,22 @@ export class GeminiService {
       config: { imageConfig: { aspectRatio: "1:1" } }
     });
     for (const part of response.candidates?.[0]?.content?.parts || []) {
-      if (part.inlineData) {
-        return `data:image/png;base64,${part.inlineData.data}`;
-      }
+      if (part.inlineData) return `data:image/png;base64,${part.inlineData.data}`;
     }
     return "";
   }
 
+  // Added generateVideo for cinematic synthesis using Veo
   async generateVideo(prompt: string): Promise<string> {
     const ai = this.getAI();
     let operation = await ai.models.generateVideos({
       model: 'veo-3.1-fast-generate-preview',
       prompt: prompt,
-      config: { numberOfVideos: 1, resolution: '720p', aspectRatio: '16:9' }
+      config: {
+        numberOfVideos: 1,
+        resolution: '720p',
+        aspectRatio: '16:9'
+      }
     });
     while (!operation.done) {
       await new Promise(resolve => setTimeout(resolve, 10000));
@@ -64,6 +123,24 @@ export class GeminiService {
     return `${downloadLink}&key=${process.env.API_KEY}`;
   }
 
+  async generateSecureSchedule(anonymizedData: any): Promise<any[]> {
+    const ai = this.getAI();
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-pro-preview',
+      contents: `Generate a valid roster for the following anonymized vector: ${JSON.stringify(anonymizedData)}`,
+      config: {
+        systemInstruction: "You are the Neural Dispatch Engine. SECURITY PROTOCOL: IDs only. Return JSON array of assignments.",
+        responseMimeType: "application/json",
+        thinkingConfig: { thinkingBudget: 15000 }
+      }
+    });
+    try {
+      return JSON.parse(response.text || '[]');
+    } catch {
+      return [];
+    }
+  }
+
   async generateSpeech(text: string, voiceName: string = 'Kore'): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
@@ -71,46 +148,10 @@ export class GeminiService {
       contents: [{ parts: [{ text }] }],
       config: {
         responseModalities: [Modality.AUDIO],
-        speechConfig: {
-          voiceConfig: {
-            prebuiltVoiceConfig: { voiceName },
-          },
-        },
+        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName } } },
       },
     });
     return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || "";
-  }
-
-  async translate(text: string, targetLanguage: string): Promise<string> {
-    const ai = this.getAI();
-    // Enforce strict translation with a powerful system instruction
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: `Translate the following text to ${targetLanguage}: "${text}"`,
-      config: {
-        systemInstruction: "You are a professional medical and enterprise translator. Output ONLY the translated text. Do not include any introductory remarks, explanations, or conversational filler. Maintain the tone and formatting of the original string. If the target language is the same as the source, return the original text.",
-      }
-    });
-    return response.text?.trim() || text;
-  }
-
-  async getFinancialStrategy(context: any): Promise<string> {
-    const ai = this.getAI();
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: `Analyze these financials and provide a strategy: ${JSON.stringify(context)}`,
-      config: { thinkingConfig: { thinkingBudget: 5000 } }
-    });
-    return response.text || "No strategy available.";
-  }
-
-  async getMarketIntelligence(query: string): Promise<GenerateContentResponse> {
-    const ai = this.getAI();
-    return await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: query,
-      config: { tools: [{ googleSearch: {} }] },
-    });
   }
 
   async analyzeHazardImage(base64: string, prompt: string = "Analyze this clinical hazard image."): Promise<string> {
@@ -131,44 +172,10 @@ export class GeminiService {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
-      contents: `Run a self-repair audit on this ledger: ${JSON.stringify(ledger)}. Return JSON: { "remediation": "string" }`,
-      config: {
-        responseMimeType: "application/json",
-        thinkingConfig: { thinkingBudget: 5000 }
-      }
+      contents: `Audit ledger: ${JSON.stringify(ledger)}. Return JSON: { "remediation": "string" }`,
+      config: { responseMimeType: "application/json", thinkingConfig: { thinkingBudget: 5000 } }
     });
-    return response.text || '{"remediation": "No drift detected."}';
-  }
-
-  async generateSecureSchedule(anonymizedData: any): Promise<any[]> {
-    const ai = this.getAI();
-    const systemInstruction = `
-      You are the Neural Dispatch Engine for CareSync Pro.
-      SECURITY PROTOCOL: You only receive IDs and locations. Do not invent names.
-      
-      CONSTRAINTS:
-      1. LOCATION LOCK: Only schedule staff in the sector they work in.
-      2. AVAILABILITY LOCK: Only schedule staff within their window.
-      3. ROLE PARITY: Match required roles based on ID prefixes.
-      
-      OUTPUT: Return a JSON array of assignments.
-    `;
-
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: `Generate a valid roster for the following anonymized vector: ${JSON.stringify(anonymizedData)}`,
-      config: {
-        systemInstruction,
-        responseMimeType: "application/json",
-        thinkingConfig: { thinkingBudget: 15000 }
-      }
-    });
-
-    try {
-      return JSON.parse(response.text || '[]');
-    } catch {
-      return [];
-    }
+    return response.text || '{"remediation": "No drift."}';
   }
 }
 

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { geminiService } from '../services/geminiService';
 
@@ -7,8 +8,7 @@ interface TranslateProps {
   className?: string;
 }
 
-const Translate: React.FC<TranslateProps> = ({ children, targetLanguage, className }) => {
-  // Helper to extract clean text from React children
+const Translate: React.FC<TranslateProps> = ({ children, targetLanguage, className = "" }) => {
   const getTextContent = (node: React.ReactNode): string => {
     if (typeof node === 'string' || typeof node === 'number') return String(node);
     if (Array.isArray(node)) return node.map(getTextContent).join('');
@@ -17,7 +17,6 @@ const Translate: React.FC<TranslateProps> = ({ children, targetLanguage, classNa
   };
 
   const rawText = getTextContent(children);
-  // Replaces underscores with spaces (e.g. Care_Hub -> Care Hub) for the AI
   const normalizedText = rawText.replace(/_/g, ' ').trim();
   
   const [translatedText, setTranslatedText] = useState<string>(rawText);
@@ -27,15 +26,13 @@ const Translate: React.FC<TranslateProps> = ({ children, targetLanguage, classNa
   useEffect(() => {
     isMounted.current = true;
     
-    // Safety check: English to English, empty language, or empty text
-    const isEnglish = !targetLanguage || targetLanguage.toLowerCase() === 'english';
-    if (isEnglish || !normalizedText) {
+    if (!targetLanguage || targetLanguage.toLowerCase() === 'english' || !normalizedText) {
       setTranslatedText(rawText);
       setIsTranslating(false);
       return;
     }
 
-    const cacheKey = `caresync_v4_trans_${targetLanguage.toLowerCase()}:${normalizedText}`;
+    const cacheKey = `trans_v5_${targetLanguage.toLowerCase()}:${normalizedText}`;
     const cached = localStorage.getItem(cacheKey);
     
     if (cached) {
@@ -53,9 +50,7 @@ const Translate: React.FC<TranslateProps> = ({ children, targetLanguage, classNa
           setTranslatedText(result);
         }
       } catch (err) {
-        console.error("[TRANSLATION_ERROR]:", err);
-        // On error, revert to the normalized English text
-        if (isMounted.current) setTranslatedText(normalizedText);
+        if (isMounted.current) setTranslatedText(rawText);
       } finally {
         if (isMounted.current) setIsTranslating(false);
       }
@@ -67,7 +62,7 @@ const Translate: React.FC<TranslateProps> = ({ children, targetLanguage, classNa
   }, [normalizedText, targetLanguage, rawText]);
 
   return (
-    <span className={`${className} transition-all duration-700 ${isTranslating ? 'opacity-30 blur-[2px]' : 'opacity-100 blur-0'}`}>
+    <span className={`${className} transition-all duration-500 ${isTranslating ? 'opacity-30 blur-[2px]' : 'opacity-100 blur-0'}`}>
       {translatedText}
     </span>
   );

@@ -19,16 +19,17 @@ const ConcernsForm: React.FC<Props> = ({ language, onSent }) => {
 
     setIsTransmitting(true);
     try {
-      // Logic: Translate message to English for the Office Program
-      const englishReport = await geminiService.translate(text, "English");
+      // LOGIC: Translate the user's input (any language) to English for the main supervisor
+      const englishReport = await geminiService.translateToEnglish(text);
       
-      console.log("[SYSTEM]: Concern routed to Supervisor in English:", englishReport);
+      // Simulation of transmission to office
+      console.log("[SUPERVISOR_LINK]: Report received in English:", englishReport);
       
-      alert("Transmission_Complete: Your supervisor has been notified in English.");
+      alert("Transmission_Complete: Your report has been translated and sent to the clinical office.");
       setText('');
       onSent();
     } catch (err) {
-      alert("Link_Failure: Could not reach Supervisor.");
+      alert("Link_Failure: Technical drift in neural relay.");
     } finally {
       setIsTransmitting(false);
     }
@@ -44,7 +45,9 @@ const ConcernsForm: React.FC<Props> = ({ language, onSent }) => {
           <h3 className="text-xl font-black text-white italic tracking-tighter uppercase leading-none">
             <Translate targetLanguage={language}>Direct_Supervisor_Link</Translate>
           </h3>
-          <p className="text-[9px] font-bold text-rose-400 uppercase tracking-widest mt-1">Real-time clinical escalation node</p>
+          <p className="text-[9px] font-bold text-rose-400 uppercase tracking-widest mt-1 italic">
+             <Translate targetLanguage={language}>Global_to_English_Relay</Translate>
+          </p>
         </div>
       </div>
 
@@ -52,14 +55,14 @@ const ConcernsForm: React.FC<Props> = ({ language, onSent }) => {
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Speak or type your concern in your own language..."
+          placeholder="Describe your concern in your own language..."
           className="w-full h-40 p-8 bg-black/40 border border-white/10 rounded-[3rem] text-sm text-white focus:outline-none focus:border-rose-500 transition-all italic placeholder:text-slate-800"
         />
         
         <div className="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/5">
           <AlertTriangle size={14} className="text-amber-500" />
           <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">
-            <Translate targetLanguage={language}>This report will be translated for clinical oversight.</Translate>
+            <Translate targetLanguage={language}>Your message will be translated into English for clinical review.</Translate>
           </p>
         </div>
 
@@ -67,7 +70,7 @@ const ConcernsForm: React.FC<Props> = ({ language, onSent }) => {
           disabled={isTransmitting || !text.trim()}
           className="w-full py-6 bg-white text-black rounded-3xl font-black text-xs uppercase tracking-[0.4em] shadow-xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-30 flex items-center justify-center gap-4"
         >
-          {isTransmitting ? 'TRANSMITTING...' : 'SEND_CONCERN'}
+          {isTransmitting ? 'TRANSMITTING...' : 'SEND_REPORT'}
           <Send size={16} />
         </button>
       </form>

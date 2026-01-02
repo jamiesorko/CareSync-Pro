@@ -2,19 +2,25 @@
 import React from 'react';
 import { AppTab } from '../types';
 import { Search, Bell, Settings, Command, UserCircle } from 'lucide-react';
+import LanguageSelector from './LanguageSelector';
+import Translate from './Translate';
 
 interface Props {
   activeTab: AppTab;
+  language: string;
+  onLanguageChange: (lang: string) => void;
   onLogout: () => void;
 }
 
-const Header: React.FC<Props> = ({ activeTab, onLogout }) => {
+const Header: React.FC<Props> = ({ activeTab, language, onLanguageChange, onLogout }) => {
   return (
     <header className="h-20 bg-transparent border-b border-white/5 flex items-center justify-between px-8 shrink-0 z-40">
       <div className="flex items-center gap-8 flex-1">
         <div className="flex flex-col">
           <p className="text-[9px] font-black text-indigo-500 uppercase tracking-[0.4em] mb-0.5">Active_Node</p>
-          <h2 className="text-sm font-black uppercase tracking-widest text-white italic">{activeTab}</h2>
+          <h2 className="text-sm font-black uppercase tracking-widest text-white italic">
+            <Translate targetLanguage={language}>{activeTab}</Translate>
+          </h2>
         </div>
 
         <div className="hidden lg:flex items-center gap-3 bg-white/[0.03] border border-white/10 px-5 py-2.5 rounded-2xl w-[500px] focus-within:border-indigo-500/50 focus-within:bg-white/[0.05] transition-all group">
@@ -32,10 +38,7 @@ const Header: React.FC<Props> = ({ activeTab, onLogout }) => {
       </div>
 
       <div className="flex items-center gap-5">
-        <div className="flex flex-col items-end hidden sm:flex">
-          <p className="text-[10px] font-black text-white uppercase tracking-tighter">Institutional Node_v4.5</p>
-          <p className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest tech-mono">Latency: 14ms</p>
-        </div>
+        <LanguageSelector currentLanguage={language} onLanguageChange={onLanguageChange} />
 
         <div className="h-8 w-px bg-white/5 mx-2"></div>
 

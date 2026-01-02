@@ -9,11 +9,22 @@ interface Props {
   clients: Client[];
   role: CareRole;
   staffName: string;
+  language: string;
 }
 
-const ProfessionalTerminal: React.FC<Props> = ({ clients, role, staffName }) => {
+const ProfessionalTerminal: React.FC<Props> = ({ clients, role, staffName, language }) => {
   const [view, setView] = useState<'ROSTER' | 'VISIT' | 'SELF'>('ROSTER');
   const [activeClient, setActiveClient] = useState<Client | null>(null);
+
+  const handleStartVisit = (client: Client) => {
+    setActiveClient(client);
+    setView('VISIT');
+  };
+
+  const handleEndVisit = () => {
+    setActiveClient(null);
+    setView('ROSTER');
+  };
 
   const getRoleBranding = () => {
     switch (role) {
@@ -61,19 +72,19 @@ const ProfessionalTerminal: React.FC<Props> = ({ clients, role, staffName }) => 
         {view === 'ROSTER' && (
           <PSWRoster 
             clients={clients} 
-            onStartVisit={(client) => { setActiveClient(client); setView('VISIT'); }} 
+            onStartVisit={handleStartVisit} 
           />
         )}
         {view === 'VISIT' && activeClient && (
           <PSWVisitConsole 
             client={activeClient} 
-            language="English"
+            language={language}
             role={role}
-            onClockOut={() => { setActiveClient(null); setView('ROSTER'); }}
+            onClockOut={handleEndVisit}
             onAlert={(type, content) => console.log(`[SIGNAL]: ${type} - ${content}`)}
           />
         )}
-        {view === 'SELF' && <PSWSelfService language="English" />}
+        {view === 'SELF' && <PSWSelfService language={language} />}
       </div>
     </div>
   );

@@ -8,9 +8,10 @@ import NeuralSentinelHub from '../clinical/NeuralSentinelHub';
 interface Props {
   clients: Client[];
   role: CareRole;
+  language: string;
 }
 
-const RNCommand: React.FC<Props> = ({ clients, role }) => {
+const RNCommand: React.FC<Props> = ({ clients, role, language }) => {
   return (
     <div className="space-y-16 animate-in fade-in duration-700">
       <div>
@@ -19,9 +20,9 @@ const RNCommand: React.FC<Props> = ({ clients, role }) => {
       </div>
 
       <div className="grid grid-cols-1 gap-12">
-        <TruthMediationSuite clients={clients} language="English" />
-        <CaseConferenceRoom clients={clients} language="English" userRole={role} />
-        <NeuralSentinelHub clients={clients} language="English" />
+        <TruthMediationSuite clients={clients} language={language} />
+        <CaseConferenceRoom clients={clients} language={language} userRole={role} />
+        <NeuralSentinelHub clients={clients} language={language} />
       </div>
     </div>
   );

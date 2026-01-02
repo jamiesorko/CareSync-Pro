@@ -9,24 +9,28 @@ interface Props {
   setActiveTab: (tab: AppTab) => void;
   user: User;
   onLogout: () => void;
+  language: string;
+  onLanguageChange: (lang: string) => void;
   children: React.ReactNode;
 }
 
-const AppShell: React.FC<Props> = ({ activeTab, setActiveTab, user, onLogout, children }) => {
+const AppShell: React.FC<Props> = ({ activeTab, setActiveTab, user, onLogout, language, onLanguageChange, children }) => {
   return (
     <div className="flex h-screen w-full bg-[#f1f5f9] overflow-hidden text-slate-900">
-      {/* Fix: Pass required staffName and role props to Sidebar based on its component definition */}
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
         staffName={user.name}
         role={user.role} 
+        language={language}
       />
       
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden relative">
         <Header 
           activeTab={activeTab} 
           onLogout={onLogout} 
+          language={language}
+          onLanguageChange={onLanguageChange}
         />
         
         <main className="flex-1 overflow-y-auto app-scroll relative p-6 lg:p-10">
