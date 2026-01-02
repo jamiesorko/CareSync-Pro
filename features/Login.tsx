@@ -14,9 +14,11 @@ const Login: React.FC<Props> = ({ onLogin }) => {
     { name: 'Sarah Walker', role: CareRole.DOC },
     { name: 'Kevin Malone', role: CareRole.ACCOUNTANT },
     { name: 'Toby Flenderson', role: CareRole.HR_SPECIALIST },
+    { name: 'Robert Johnson', role: CareRole.CLIENT },
     { name: 'Tom Hardy', role: CareRole.RN },
     { name: 'Elena R.', role: CareRole.PSW },
-    { name: 'Robert Johnson', role: CareRole.COORDINATOR }
+    // Corrected CareRole.COORD to CareRole.COORDINATOR to match the type definition in types.ts.
+    { name: 'Marcus Bell', role: CareRole.COORDINATOR }
   ];
 
   return (

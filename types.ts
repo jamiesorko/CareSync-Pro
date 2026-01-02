@@ -9,7 +9,8 @@ export enum CareRole {
   HR_SPECIALIST = 'HR Specialist',
   DOC = 'Director of Care',
   COO = 'Chief Operating Officer',
-  HSS = 'Health Support Specialist'
+  HSS = 'Health Support Specialist',
+  CLIENT = 'Client/Family'
 }
 
 export enum AppTab {

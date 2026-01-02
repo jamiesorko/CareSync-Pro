@@ -1,55 +1,57 @@
 
 import React, { useState } from 'react';
-import { Star, ShieldAlert } from 'lucide-react';
+import { Star, ShieldOff, Heart, AlertCircle } from 'lucide-react';
 import Translate from '../../components/Translate';
 
 interface Props {
   pswName: string;
   isNew: boolean;
   language: string;
-  onRate: (score: number) => void;
   onBlacklist: () => void;
+  onRate: (score: number) => void;
 }
 
-const PSWCard: React.FC<Props> = ({ pswName, isNew, language, onRate, onBlacklist }) => {
+const PSWCard: React.FC<Props> = ({ pswName, isNew, language, onBlacklist, onRate }) => {
   const [rating, setRating] = useState(0);
 
   return (
-    <div className="glass-card p-8 rounded-[3rem] border-teal-500/20 bg-teal-500/5 relative overflow-hidden group">
-      <div className="flex justify-between items-start relative z-10">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-            <p className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Active_Assignment</p>
-          </div>
-          <h3 className="text-4xl font-black text-white italic tracking-tighter uppercase leading-none">{pswName}</h3>
+    <div className="glass-card p-10 rounded-[3.5rem] relative overflow-hidden group">
+      <div className="absolute top-0 right-0 p-8 opacity-5">
+        <Heart size={80} />
+      </div>
+
+      <div className="flex justify-between items-start mb-10 relative z-10">
+        <div>
           {isNew && (
-            <span className="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-[8px] font-black uppercase rounded-lg border border-amber-500/30">
-              <Translate targetLanguage={language}>New_To_Home</Translate>
+            <span className="px-3 py-1 bg-amber-500/20 border border-amber-500/30 text-amber-500 text-[8px] font-black rounded-lg uppercase mb-4 inline-block tracking-widest animate-pulse">
+              <Translate targetLanguage={language}>NEW_WORKER_TO_HOME</Translate>
             </span>
           )}
+          <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter leading-none">{pswName}</h3>
+          <p className="text-[10px] font-bold text-slate-500 uppercase mt-1 tracking-widest">Active Care Professional</p>
         </div>
         
         <button 
           onClick={onBlacklist}
-          className="px-4 py-2 bg-rose-600/10 border border-rose-500/30 text-rose-500 rounded-xl text-[8px] font-black uppercase tracking-widest hover:bg-rose-600 hover:text-white transition-all"
+          className="p-4 bg-rose-600/10 border border-rose-500/20 text-rose-500 rounded-2xl hover:bg-rose-600 hover:text-white transition-all shadow-lg group/btn"
         >
-          <Translate targetLanguage={language}>Do_Not_Send_Again</Translate>
+          <ShieldOff size={20} />
+          <div className="absolute top-full right-0 mt-2 hidden group-hover/btn:block bg-black text-white text-[8px] font-black uppercase p-2 rounded whitespace-nowrap z-50">Restrict_Staff</div>
         </button>
       </div>
 
-      <div className="mt-10 pt-10 border-t border-white/5">
-        <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 text-center">
-          <Translate targetLanguage={language}>Rate_Today's_Service</Translate>
+      <div className="bg-white/5 border border-white/5 p-8 rounded-[2.5rem] text-center">
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6 italic">
+          <Translate targetLanguage={language}>Rate_This_Worker's_Performance</Translate>
         </p>
         <div className="flex justify-center gap-4">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
               key={star}
               onClick={() => { setRating(star); onRate(star); }}
-              className={`p-2 transition-all transform hover:scale-125 ${rating >= star ? 'text-amber-400' : 'text-slate-700'}`}
+              className={`p-2 transition-all transform hover:scale-125 ${rating >= star ? 'text-amber-400 drop-shadow-[0_0_10px_#fbbf24]' : 'text-slate-700'}`}
             >
-              <Star size={32} fill={rating >= star ? 'currentColor' : 'none'} />
+              <Star size={32} fill={rating >= star ? 'currentColor' : 'none'} strokeWidth={2} />
             </button>
           ))}
         </div>
