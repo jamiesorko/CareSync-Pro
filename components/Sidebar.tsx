@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { AppTab, CareRole } from '../types';
+import Translate from './Translate';
 import { 
   LayoutDashboard, 
   ShieldAlert, 
@@ -26,13 +27,13 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role, language }) =
   const [isExpanded, setIsExpanded] = useState(false);
 
   const fullMenu = [
-    { id: AppTab.DASHBOARD, icon: LayoutDashboard, label: 'Ops Dashboard' },
-    { id: AppTab.SCHEDULE, icon: CalendarDays, label: 'Roster Deployment' },
-    { id: AppTab.CLINICAL_COMMAND, icon: ShieldAlert, label: 'Clinical Intel' },
-    { id: AppTab.COORDINATION, icon: Users, label: 'Dispatch Grid' },
-    { id: AppTab.HR_HUB, icon: UserRoundSearch, label: 'Resource Core' },
-    { id: AppTab.FINANCE, icon: WalletMinimal, label: 'Fiscal Ledger' },
-    { id: AppTab.ORG_COMMAND, icon: Briefcase, label: 'Node Control' },
+    { id: AppTab.DASHBOARD, icon: LayoutDashboard, label: 'Ops_Dashboard' },
+    { id: AppTab.SCHEDULE, icon: CalendarDays, label: 'Roster_Deployment' },
+    { id: AppTab.CLINICAL_COMMAND, icon: ShieldAlert, label: 'Clinical_Intel' },
+    { id: AppTab.COORDINATION, icon: Users, label: 'Dispatch_Grid' },
+    { id: AppTab.HR_HUB, icon: UserRoundSearch, label: 'Resource_Core' },
+    { id: AppTab.FINANCE, icon: WalletMinimal, label: 'Fiscal_Ledger' },
+    { id: AppTab.ORG_COMMAND, icon: Briefcase, label: 'Node_Control' },
   ];
 
   const filteredMenu = fullMenu.filter(item => {
@@ -92,7 +93,7 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role, language }) =
             <span className={`font-bold text-[11px] uppercase tracking-[0.1em] whitespace-nowrap transition-all duration-300 ${
               isExpanded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 pointer-events-none absolute'
             }`}>
-              {item.label}
+              <Translate targetLanguage={language}>{item.label}</Translate>
             </span>
             {activeTab === item.id && (
               <div className="absolute right-2 w-1 h-1 rounded-full bg-indigo-500 shadow-[0_0_8px_#6366f1]"></div>
@@ -104,11 +105,15 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role, language }) =
       <div className="p-4 border-t border-white/5 space-y-4">
         <div className={`flex items-center gap-3 transition-all ${isExpanded ? 'px-2' : 'justify-center'}`}>
           <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]"></div>
-          <p className={`text-[9px] font-black text-slate-600 uppercase tracking-widest ${isExpanded ? 'block' : 'hidden'}`}>System_Online</p>
+          <p className={`text-[9px] font-black text-slate-600 uppercase tracking-widest ${isExpanded ? 'block' : 'hidden'}`}>
+            <Translate targetLanguage={language}>System_Online</Translate>
+          </p>
         </div>
         <button className="w-full flex items-center gap-4 p-3.5 rounded-xl text-rose-500 hover:bg-rose-500/10 transition-all group">
           <Power size={20} />
-          <span className={`font-bold text-[11px] uppercase tracking-widest ${isExpanded ? 'block' : 'hidden'}`}>Terminate_Session</span>
+          <span className={`font-bold text-[11px] uppercase tracking-widest ${isExpanded ? 'block' : 'hidden'}`}>
+            <Translate targetLanguage={language}>Terminate_Session</Translate>
+          </span>
         </button>
       </div>
     </aside>

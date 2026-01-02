@@ -1,22 +1,31 @@
 
 import React from 'react';
 import { Client } from '../../types';
-// Added Clock to the imports from lucide-react to fix the "Cannot find name 'Clock'" error
+import Translate from '../../components/Translate';
 import { MoreHorizontal, ChevronRight, Binary, MapPin, Activity, Clock } from 'lucide-react';
 
 interface Props {
   clients: Client[];
+  language: string;
 }
 
-const SignalLog: React.FC<Props> = ({ clients }) => (
+const SignalLog: React.FC<Props> = ({ clients, language }) => (
   <div className="overflow-x-auto scrollbar-hide">
     <table className="w-full text-left border-collapse">
       <thead>
         <tr className="border-b border-white/5">
-          <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">Target_Dossier</th>
-          <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">Temporal_Window</th>
-          <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">Acuity_State</th>
-          <th className="px-8 py-4 text-right text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">Action</th>
+          <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">
+            <Translate targetLanguage={language}>Target_Dossier</Translate>
+          </th>
+          <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">
+            <Translate targetLanguage={language}>Temporal_Window</Translate>
+          </th>
+          <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">
+            <Translate targetLanguage={language}>Acuity_State</Translate>
+          </th>
+          <th className="px-8 py-4 text-right text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">
+            <Translate targetLanguage={language}>Action</Translate>
+          </th>
         </tr>
       </thead>
       <tbody className="divide-y divide-white/5">
@@ -32,7 +41,9 @@ const SignalLog: React.FC<Props> = ({ clients }) => (
                   <div className="flex items-center gap-3">
                     <span className="text-[10px] font-black text-slate-600 uppercase tech-mono tracking-widest">{client.anonymizedId}</span>
                     <div className="w-1 h-1 bg-slate-800 rounded-full"></div>
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{client.sector}</span>
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                       <Translate targetLanguage={language}>{client.sector}</Translate>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -44,7 +55,9 @@ const SignalLog: React.FC<Props> = ({ clients }) => (
               </div>
               <div className="flex items-center gap-2 mt-1.5 ml-6">
                 <div className="w-1.5 h-1.5 rounded-sm bg-emerald-500/20 border border-emerald-500/30"></div>
-                <p className="text-[9px] text-slate-600 font-bold uppercase tracking-widest">Verified_Sync</p>
+                <p className="text-[9px] text-slate-600 font-bold uppercase tracking-widest">
+                  <Translate targetLanguage={language}>Verified_Sync</Translate>
+                </p>
               </div>
             </td>
             <td className="px-8 py-5">
@@ -61,7 +74,9 @@ const SignalLog: React.FC<Props> = ({ clients }) => (
                 <span className={`text-[11px] font-black uppercase tracking-[0.2em] ${
                   client.currentVisitStatus === 'IN_PROGRESS' ? 'text-emerald-400 italic' : 'text-slate-600'
                 }`}>
-                  {client.currentVisitStatus?.replace('_', ' ') || 'STANDBY'}
+                  <Translate targetLanguage={language}>
+                    {client.currentVisitStatus?.replace('_', ' ') || 'STANDBY'}
+                  </Translate>
                 </span>
               </div>
             </td>

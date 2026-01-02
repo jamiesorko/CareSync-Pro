@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { CareRole, User } from '../types';
+import Translate from '../components/Translate';
 import { ShieldCheck, Lock, Fingerprint, ChevronRight } from 'lucide-react';
 
 interface Props {
@@ -17,7 +18,6 @@ const Login: React.FC<Props> = ({ onLogin }) => {
     { name: 'Robert Johnson', role: CareRole.CLIENT },
     { name: 'Tom Hardy', role: CareRole.RN },
     { name: 'Elena R.', role: CareRole.PSW },
-    // Corrected CareRole.COORD to CareRole.COORDINATOR to match the type definition in types.ts.
     { name: 'Marcus Bell', role: CareRole.COORDINATOR }
   ];
 
@@ -37,12 +37,16 @@ const Login: React.FC<Props> = ({ onLogin }) => {
           <h1 className="text-4xl font-black tracking-tighter uppercase text-white italic leading-none mb-4 text-glow-indigo">CareSync_Pro</h1>
           <div className="flex items-center justify-center gap-3">
              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-             <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.5em]">Fleet_Deployment_Portal</p>
+             <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.5em]">
+                <Translate targetLanguage="English">Fleet_Deployment_Portal</Translate>
+             </p>
           </div>
         </div>
 
         <div className="space-y-3">
-          <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-4 text-center italic">Authorization Required for Sector Access</p>
+          <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-4 text-center italic">
+            <Translate targetLanguage="English">Authorization_Required_for_Sector_Access</Translate>
+          </p>
           
           <div className="grid grid-cols-1 gap-2 max-h-[380px] overflow-y-auto pr-2 scrollbar-hide">
             {personas.map(p => (
@@ -54,7 +58,7 @@ const Login: React.FC<Props> = ({ onLogin }) => {
                 <div className="relative z-10">
                   <p className="text-sm font-black text-white uppercase italic tracking-tight group-hover/item:text-glow-indigo transition-all">{p.name}</p>
                   <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-1 group-hover/item:text-indigo-400 transition-colors flex items-center gap-2">
-                    <ShieldCheck size={10} /> {p.role}
+                    <ShieldCheck size={10} /> <Translate targetLanguage="English">{p.role}</Translate>
                   </p>
                 </div>
                 <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center opacity-0 group-hover/item:opacity-100 transition-all translate-x-4 group-hover/item:translate-x-0 relative z-10 shadow-lg">

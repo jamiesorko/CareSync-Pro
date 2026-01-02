@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { AppTab, CareRole, Client, StaffMember } from '../types';
+import Translate from '../components/Translate';
 import MetricNode from './dashboard/MetricNode';
 import SignalLog from './dashboard/SignalLog';
 import CommandGrid from './dashboard/CommandGrid';
@@ -24,7 +25,7 @@ interface Props {
   setActiveTab: (tab: AppTab) => void;
 }
 
-const Dashboard: React.FC<Props> = ({ staffName, role, clients, staff, setActiveTab }) => {
+const Dashboard: React.FC<Props> = ({ staffName, role, clients, staff, language, setActiveTab }) => {
   const isExec = [CareRole.CEO, CareRole.COO, CareRole.DOC].includes(role);
 
   return (
@@ -38,25 +39,27 @@ const Dashboard: React.FC<Props> = ({ staffName, role, clients, staff, setActive
           </div>
           <div>
             <h3 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none mb-2">
-              Welcome, <span className="text-glow-indigo">{staffName.split(' ')[0]}</span>
+              <Translate targetLanguage={language}>Welcome</Translate>, <span className="text-glow-indigo">{staffName.split(' ')[0]}</span>
             </h3>
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-2 text-[10px] font-black text-emerald-400 uppercase tracking-widest">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                Roster_Sync: 100%
+                <Translate targetLanguage={language}>Roster_Sync</Translate>: 100%
               </span>
               <span className="text-slate-600">|</span>
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Node Capacity: 92% Utilization</span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">
+                <Translate targetLanguage={language}>Node_Capacity</Translate>: 92% <Translate targetLanguage={language}>Utilization</Translate>
+              </span>
             </div>
           </div>
         </div>
         
         <div className="flex gap-4 relative z-10">
           <button className="btn-tech btn-secondary-tech flex items-center gap-3 py-4 px-8">
-            <Clock size={16} /> Schedule_Vault
+            <Clock size={16} /> <Translate targetLanguage={language}>Schedule_Vault</Translate>
           </button>
           <button className="btn-tech btn-primary-tech flex items-center gap-3 py-4 px-8">
-            <Plus size={16} /> New_Intake_Vector
+            <Plus size={16} /> <Translate targetLanguage={language}>New_Intake_Vector</Translate>
           </button>
         </div>
       </div>
@@ -67,10 +70,10 @@ const Dashboard: React.FC<Props> = ({ staffName, role, clients, staff, setActive
 
       {/* KPI Matrix */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <MetricNode label="Active Census" value={clients.length.toString()} icon={Users} trend="+2 Nodes" trendType="positive" />
-        <MetricNode label="Operational Velocity" value="98.4" suffix="%" icon={Activity} trend="+0.2% Drift" trendType="positive" />
-        <MetricNode label="Critical Gaps" value="04" icon={AlertCircle} trend="Requires Intercept" trendType="negative" />
-        <MetricNode label="Strategic Alpha" value="14.2" suffix="k" icon={Target} trend="Optimized" trendType="positive" />
+        <MetricNode language={language} label="Active_Census" value={clients.length.toString()} icon={Users} trend="+2 Nodes" trendType="positive" />
+        <MetricNode language={language} label="Operational_Velocity" value="98.4" suffix="%" icon={Activity} trend="+0.2% Drift" trendType="positive" />
+        <MetricNode language={language} label="Critical_Gaps" value="04" icon={AlertCircle} trend="Requires Intercept" trendType="negative" />
+        <MetricNode language={language} label="Strategic_Alpha" value="14.2" suffix="k" icon={Target} trend="Optimized" trendType="positive" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -79,12 +82,16 @@ const Dashboard: React.FC<Props> = ({ staffName, role, clients, staff, setActive
               <div className="px-8 py-5 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
                  <div className="flex items-center gap-3">
                    <Zap size={14} className="text-indigo-400" />
-                   <h4 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">Execution_Ledger_Realtime</h4>
+                   <h4 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">
+                     <Translate targetLanguage={language}>Execution_Ledger_Realtime</Translate>
+                   </h4>
                  </div>
-                 <button className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest hover:text-white transition-colors">Interrogate_Full_Logs</button>
+                 <button className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest hover:text-white transition-colors">
+                   <Translate targetLanguage={language}>Interrogate_Full_Logs</Translate>
+                 </button>
               </div>
               <div className="p-2">
-                <SignalLog clients={clients} />
+                <SignalLog clients={clients} language={language} />
               </div>
            </div>
         </div>
@@ -93,20 +100,26 @@ const Dashboard: React.FC<Props> = ({ staffName, role, clients, staff, setActive
           <div className="glass-card p-8 rounded-[3rem] relative overflow-hidden">
              <div className="flex items-center gap-3 mb-8">
                <AlertCircle className="text-rose-500" size={18} />
-               <h4 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">Acuity_Alert_Matrix</h4>
+               <h4 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">
+                 <Translate targetLanguage={language}>Acuity_Alert_Matrix</Translate>
+               </h4>
              </div>
              <div className="space-y-4">
                 {[1, 2].map(i => (
                   <div key={i} className="p-5 bg-rose-600/5 border border-rose-500/10 rounded-2xl flex gap-5 group hover:bg-rose-600/10 transition-all cursor-pointer">
                     <div className="w-1.5 h-auto bg-rose-500 rounded-full shadow-[0_0_8px_#f43f5e]"></div>
                     <div>
-                      <p className="text-xs font-black text-white uppercase tracking-tighter mb-1">Subject_Fall_Intercept</p>
+                      <p className="text-xs font-black text-white uppercase tracking-tighter mb-1">
+                        <Translate targetLanguage={language}>Subject_Fall_Intercept</Translate>
+                      </p>
                       <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest italic">Robert J. • Sector 4 Grid</p>
                     </div>
                   </div>
                 ))}
              </div>
-             <button className="w-full mt-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] hover:text-white hover:bg-white/10 transition-all">Clear_Session_Alarms</button>
+             <button className="w-full mt-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] hover:text-white hover:bg-white/10 transition-all">
+               <Translate targetLanguage={language}>Clear_Session_Alarms</Translate>
+             </button>
           </div>
         </div>
       </div>
