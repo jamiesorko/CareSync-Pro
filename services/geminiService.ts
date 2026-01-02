@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Modality, GenerateContentResponse } from "@google/genai";
 
 export class GeminiService {
@@ -23,7 +22,6 @@ export class GeminiService {
     });
   }
 
-  // Added getMarketIntelligence for services using search grounding
   async getMarketIntelligence(query: string): Promise<GenerateContentResponse> {
     const ai = this.getAI();
     return await ai.models.generateContent({
@@ -35,7 +33,6 @@ export class GeminiService {
     });
   }
 
-  // Added getFinancialStrategy for CEO financials analysis
   async getFinancialStrategy(context: any): Promise<string> {
     const ai = this.getAI();
     const response = await ai.models.generateContent({
@@ -103,7 +100,6 @@ export class GeminiService {
     return "";
   }
 
-  // Added generateVideo for cinematic synthesis using Veo
   async generateVideo(prompt: string): Promise<string> {
     const ai = this.getAI();
     let operation = await ai.models.generateVideos({
