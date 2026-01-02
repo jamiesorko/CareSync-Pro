@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { geminiService } from '../services/geminiService';
 
@@ -9,47 +8,54 @@ interface TranslateProps {
 }
 
 const Translate: React.FC<TranslateProps> = ({ children, targetLanguage, className }) => {
-  // Safe extraction of text from children
+  // Helper to extract clean text from React children
   const getTextContent = (node: React.ReactNode): string => {
     if (typeof node === 'string' || typeof node === 'number') return String(node);
     if (Array.isArray(node)) return node.map(getTextContent).join('');
-    // Fix: cast node.props to any as React.isValidElement only guarantees it's a ReactElement but props may be unknown in some TS configurations.
     if (React.isValidElement(node)) return getTextContent((node.props as any).children);
     return '';
   };
 
-  const initialText = getTextContent(children);
-  const [translatedText, setTranslatedText] = useState<string>(initialText);
+  const rawText = getTextContent(children);
+  // Replaces underscores with spaces (e.g. Care_Hub -> Care Hub) for the AI
+  const normalizedText = rawText.replace(/_/g, ' ').trim();
+  
+  const [translatedText, setTranslatedText] = useState<string>(rawText);
   const [isTranslating, setIsTranslating] = useState(false);
   const isMounted = useRef(true);
 
   useEffect(() => {
     isMounted.current = true;
-    const textToTranslate = getTextContent(children).trim();
-
-    if (!targetLanguage || targetLanguage.toLowerCase() === 'english' || !textToTranslate) {
-      setTranslatedText(textToTranslate || initialText);
+    
+    // Safety check: English to English, empty language, or empty text
+    const isEnglish = !targetLanguage || targetLanguage.toLowerCase() === 'english';
+    if (isEnglish || !normalizedText) {
+      setTranslatedText(rawText);
+      setIsTranslating(false);
       return;
     }
 
-    const cacheKey = `caresync_v4_trans_${targetLanguage.toLowerCase()}:${textToTranslate}`;
+    const cacheKey = `caresync_v4_trans_${targetLanguage.toLowerCase()}:${normalizedText}`;
     const cached = localStorage.getItem(cacheKey);
+    
     if (cached) {
       setTranslatedText(cached);
+      setIsTranslating(false);
       return;
     }
 
-    setIsTranslating(true);
     const performTranslation = async () => {
+      setIsTranslating(true);
       try {
-        const result = await geminiService.translate(textToTranslate, targetLanguage);
-        if (isMounted.current) {
-          const finalResult = result || textToTranslate;
-          localStorage.setItem(cacheKey, finalResult);
-          setTranslatedText(finalResult);
+        const result = await geminiService.translate(normalizedText, targetLanguage);
+        if (isMounted.current && result) {
+          localStorage.setItem(cacheKey, result);
+          setTranslatedText(result);
         }
       } catch (err) {
-        if (isMounted.current) setTranslatedText(textToTranslate);
+        console.error("[TRANSLATION_ERROR]:", err);
+        // On error, revert to the normalized English text
+        if (isMounted.current) setTranslatedText(normalizedText);
       } finally {
         if (isMounted.current) setIsTranslating(false);
       }
@@ -58,10 +64,10 @@ const Translate: React.FC<TranslateProps> = ({ children, targetLanguage, classNa
     performTranslation();
 
     return () => { isMounted.current = false; };
-  }, [children, targetLanguage, initialText]);
+  }, [normalizedText, targetLanguage, rawText]);
 
   return (
-    <span className={`${className} transition-all duration-700 ${isTranslating ? 'opacity-30 blur-[1px]' : 'opacity-100 blur-0'}`}>
+    <span className={`${className} transition-all duration-700 ${isTranslating ? 'opacity-30 blur-[2px]' : 'opacity-100 blur-0'}`}>
       {translatedText}
     </span>
   );

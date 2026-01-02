@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Modality, GenerateContentResponse, Type } from "@google/genai";
 
 export class GeminiService {
@@ -84,11 +83,15 @@ export class GeminiService {
 
   async translate(text: string, targetLanguage: string): Promise<string> {
     const ai = this.getAI();
+    // Enforce strict translation with a powerful system instruction
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: `Translate the following text to ${targetLanguage}: "${text}"`,
+      config: {
+        systemInstruction: "You are a professional medical and enterprise translator. Output ONLY the translated text. Do not include any introductory remarks, explanations, or conversational filler. Maintain the tone and formatting of the original string. If the target language is the same as the source, return the original text.",
+      }
     });
-    return response.text || text;
+    return response.text?.trim() || text;
   }
 
   async getFinancialStrategy(context: any): Promise<string> {
