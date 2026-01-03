@@ -2,13 +2,16 @@
 import React from 'react';
 import { CareRole, User } from '../types';
 import Translate from '../components/Translate';
+import LanguageSelector from '../components/LanguageSelector';
 import { ShieldCheck, Lock, Fingerprint, ChevronRight } from 'lucide-react';
 
 interface Props {
   onLogin: (user: User) => void;
+  language: string;
+  onLanguageChange: (lang: string) => void;
 }
 
-const Login: React.FC<Props> = ({ onLogin }) => {
+const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
   const personas: User[] = [
     { name: 'Jamie Sorko', role: CareRole.CEO },
     { name: 'Michael Scott', role: CareRole.COO },
@@ -22,11 +25,14 @@ const Login: React.FC<Props> = ({ onLogin }) => {
   ];
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center p-6 relative overflow-hidden bg-[#010411]">
+    <div className="h-screen w-screen flex flex-col items-center justify-center p-6 relative overflow-hidden bg-[#010411]">
+      <div className="absolute top-8 right-8 z-50">
+        <LanguageSelector currentLanguage={language} onLanguageChange={onLanguageChange} />
+      </div>
+
       <div className="absolute inset-0 grid-bg opacity-40"></div>
       <div className="fixed -top-40 -left-40 w-[600px] h-[600px] bg-indigo-600/10 blur-[150px] rounded-full pointer-events-none"></div>
-      <div className="fixed -bottom-40 -right-40 w-[600px] h-[600px] bg-emerald-600/5 blur-[150px] rounded-full pointer-events-none"></div>
-
+      
       <div className="glass-card p-12 rounded-[4rem] w-full max-w-lg shadow-[0_0_100px_rgba(0,0,0,0.5)] border-white/5 relative z-10 group overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1 scanner-line"></div>
         
@@ -38,14 +44,14 @@ const Login: React.FC<Props> = ({ onLogin }) => {
           <div className="flex items-center justify-center gap-3">
              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
              <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.5em]">
-                <Translate targetLanguage="English">Fleet_Deployment_Portal</Translate>
+                <Translate targetLanguage={language}>Fleet_Deployment_Portal</Translate>
              </p>
           </div>
         </div>
 
         <div className="space-y-3">
           <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-4 text-center italic">
-            <Translate targetLanguage="English">Authorization_Required_for_Sector_Access</Translate>
+            <Translate targetLanguage={language}>Authorization_Required_for_Sector_Access</Translate>
           </p>
           
           <div className="grid grid-cols-1 gap-2 max-h-[380px] overflow-y-auto pr-2 scrollbar-hide">
@@ -58,13 +64,12 @@ const Login: React.FC<Props> = ({ onLogin }) => {
                 <div className="relative z-10">
                   <p className="text-sm font-black text-white uppercase italic tracking-tight group-hover/item:text-glow-indigo transition-all">{p.name}</p>
                   <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-1 group-hover/item:text-indigo-400 transition-colors flex items-center gap-2">
-                    <ShieldCheck size={10} /> <Translate targetLanguage="English">{p.role}</Translate>
+                    <ShieldCheck size={10} /> <Translate targetLanguage={language}>{p.role}</Translate>
                   </p>
                 </div>
                 <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center opacity-0 group-hover/item:opacity-100 transition-all translate-x-4 group-hover/item:translate-x-0 relative z-10 shadow-lg">
                   <ChevronRight size={16} className="text-white" />
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/0 via-indigo-500/5 to-indigo-500/0 translate-x-[-100%] group-hover/item:translate-x-[100%] transition-transform duration-1000"></div>
               </button>
             ))}
           </div>

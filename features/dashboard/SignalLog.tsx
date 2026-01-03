@@ -2,7 +2,7 @@
 import React from 'react';
 import { Client } from '../../types';
 import Translate from '../../components/Translate';
-import { MoreHorizontal, ChevronRight, Binary, MapPin, Activity, Clock } from 'lucide-react';
+import { MoreHorizontal, ChevronRight, Binary, Activity, Clock } from 'lucide-react';
 
 interface Props {
   clients: Client[];
@@ -63,6 +63,7 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
             <td className="px-8 py-5">
               <div className="flex items-center gap-4">
                 <div className={`w-2.5 h-2.5 rounded-full relative ${
+                  client.currentVisitStatus === 'COMPLETED' ? 'bg-indigo-500' :
                   client.currentVisitStatus === 'IN_PROGRESS' 
                     ? 'bg-emerald-500 shadow-[0_0_12px_#10b981]' 
                     : 'bg-slate-700'

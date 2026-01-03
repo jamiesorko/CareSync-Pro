@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { gemini } from '../services/gemini';
+import { geminiService } from '../services/geminiService';
 
 interface Props {
   children: React.ReactNode;
@@ -32,7 +32,7 @@ const Translate: React.FC<Props> = ({ children, targetLanguage, className = "" }
         return;
       }
 
-      const cacheKey = `csp_trans_${targetLanguage.toLowerCase()}:${normalizedText}`;
+      const cacheKey = `csp_v7_trans_${targetLanguage.toLowerCase()}:${normalizedText}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
@@ -43,7 +43,7 @@ const Translate: React.FC<Props> = ({ children, targetLanguage, className = "" }
 
       setIsTranslating(true);
       try {
-        const result = await gemini.translate(normalizedText, targetLanguage);
+        const result = await geminiService.translate(normalizedText, targetLanguage);
         if (isMounted.current && result) {
           localStorage.setItem(cacheKey, result);
           setTranslatedText(result);

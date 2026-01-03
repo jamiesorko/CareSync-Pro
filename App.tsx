@@ -23,7 +23,7 @@ const App: React.FC = () => {
     else setActiveTab(AppTab.DASHBOARD);
   }, [user]);
 
-  if (!user) return <Login onLogin={setUser} />;
+  if (!user) return <Login onLogin={setUser} language={language} onLanguageChange={setLanguage} />;
 
   const renderContent = () => {
     const isField = [CareRole.PSW, CareRole.RN, CareRole.RPN, CareRole.HSS].includes(user.role as any);

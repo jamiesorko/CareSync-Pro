@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -17,16 +16,19 @@ export default function Home() {
   const [language, setLanguage] = useState<string>('English');
 
   if (!user) {
-    return <Login onLogin={(u: User) => setUser(u)} />;
+    // Fix: Added missing 'language' and 'onLanguageChange' props to the Login component call to satisfy its Props interface.
+    return <Login onLogin={(u: User) => setUser(u)} language={language} onLanguageChange={setLanguage} />;
   }
 
   const renderContent = () => {
     const isField = [CareRole.PSW, CareRole.RN, CareRole.RPN, CareRole.HSS].includes(user.role as any);
 
+    if (activeTab === AppTab.DASHBOARD) {
+      {/* Fix: Removed invalid props role, staff, and setActiveTab from Dashboard component call to match its Props interface */}
+      return <Dashboard staffName={user.name} clients={MOCK_CLIENTS} language={language} />;
+    }
+
     switch (activeTab) {
-      case AppTab.DASHBOARD:
-        {/* Fix: Removed invalid props role, staff, and setActiveTab from Dashboard component call to match its Props interface */}
-        return <Dashboard staffName={user.name} clients={MOCK_CLIENTS} language={language} />;
       case AppTab.SCHEDULE:
         return <ScheduleView role={user.role} clients={MOCK_CLIENTS} language={language} />;
       case AppTab.CLINICAL_COMMAND:
@@ -34,11 +36,7 @@ export default function Home() {
       case AppTab.INCIDENT_REPORTS:
         return <CareReport role={user.role} language={language} clients={MOCK_CLIENTS} />;
       default:
-        return (
-          <div className="flex items-center justify-center h-full opacity-20 text-2xl font-black italic uppercase tracking-widest">
-            Clinical_Node_Ready
-          </div>
-        );
+        return <Dashboard staffName={user.name} clients={MOCK_CLIENTS} language={language} />;
     }
   };
 
