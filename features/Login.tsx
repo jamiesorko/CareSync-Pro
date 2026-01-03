@@ -78,9 +78,13 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
         <div className="mt-10 pt-6 border-t border-white/5 flex justify-between items-center">
           <div className="flex items-center gap-2 opacity-30">
             <Lock size={12} />
-            <span className="text-[8px] font-black uppercase tracking-[0.2em]">AES_256_Encrypted</span>
+            <span className="text-[8px] font-black uppercase tracking-[0.2em]">
+              <Translate targetLanguage={language}>AES_256_Encrypted</Translate>
+            </span>
           </div>
-          <span className="text-[8px] font-black text-slate-700 uppercase tracking-widest">Auth_Node: 12.92.11.X</span>
+          <span className="text-[8px] font-black text-slate-700 uppercase tracking-widest">
+            <Translate targetLanguage={language}>Auth_Node</Translate>: 12.92.11.X
+          </span>
         </div>
       </div>
     </div>

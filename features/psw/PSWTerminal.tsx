@@ -8,9 +8,10 @@ import { MOCK_STAFF } from '../../data/careData';
 
 interface Props {
   clients: Client[];
+  language: string;
 }
 
-const PSWTerminal: React.FC<Props> = ({ clients }) => {
+const PSWTerminal: React.FC<Props> = ({ clients, language }) => {
   const [view, setView] = useState<'ROSTER' | 'VISIT' | 'SELF'>('ROSTER');
   const [activeClient, setActiveClient] = useState<Client | null>(null);
 
@@ -48,17 +49,18 @@ const PSWTerminal: React.FC<Props> = ({ clients }) => {
       </div>
 
       <div className="min-h-[700px]">
-        {view === 'ROSTER' && <PSWRoster clients={clients} onStartVisit={handleStartVisit} />}
+        {/* Pass the required language prop to PSWRoster */}
+        {view === 'ROSTER' && <PSWRoster clients={clients} onStartVisit={handleStartVisit} language={language} />}
         {view === 'VISIT' && activeClient && (
           <PSWVisitConsole 
             client={activeClient} 
-            language="English"
+            language={language}
             role={CareRole.PSW}
             onClockOut={handleEndVisit}
             onAlert={(type, content) => console.log(`Alert: ${type} - ${content}`)}
           />
         )}
-        {view === 'SELF' && <PSWSelfService language="English" />}
+        {view === 'SELF' && <PSWSelfService language={language} />}
       </div>
     </div>
   );

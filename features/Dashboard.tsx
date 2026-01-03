@@ -21,7 +21,7 @@ const Dashboard: React.FC<Props> = ({ staffName, clients, language }) => {
             <Translate targetLanguage={language}>Welcome</Translate>, <span className="text-indigo-400">{staffName.split(' ')[0]}</span>
           </h3>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">
-            <Translate targetLanguage={language}>Node_Status</Translate>: <span className="text-emerald-400 uppercase">Synchronized</span>
+            <Translate targetLanguage={language}>Node_Status</Translate>: <span className="text-emerald-400 uppercase"><Translate targetLanguage={language}>Synchronized</Translate></span>
           </p>
         </div>
       </div>

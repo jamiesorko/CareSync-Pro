@@ -71,9 +71,11 @@ const ProfessionalTerminal: React.FC<Props> = ({ clients, role, staffName, langu
 
       <div className="min-h-[700px]">
         {view === 'ROSTER' && (
+          /* Pass the required language prop to PSWRoster */
           <PSWRoster 
             clients={clients} 
             onStartVisit={handleStartVisit} 
+            language={language}
           />
         )}
         {view === 'VISIT' && activeClient && (
