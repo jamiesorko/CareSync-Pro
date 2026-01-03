@@ -1,5 +1,7 @@
+
 import React, { useState } from 'react';
 import { Client, CareRole } from '../../types';
+import Translate from '../../components/Translate';
 import PSWRoster from '../psw/PSWRoster';
 import PSWVisitConsole from '../psw/PSWVisitConsole';
 import PSWSelfService from '../psw/PSWSelfService';
@@ -43,11 +45,11 @@ const ProfessionalTerminal: React.FC<Props> = ({ clients, role, staffName, langu
           <div className="flex items-center gap-3">
              <div className={`w-2 h-2 rounded-full ${branding.color.replace('text-', 'bg-')} animate-pulse`}></div>
              <h1 className={`text-5xl font-black tracking-tighter uppercase italic leading-none ${branding.color}`}>
-               {branding.title}
+               <Translate targetLanguage={language}>{branding.title}</Translate>
              </h1>
           </div>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em]">
-            {branding.sub} • {staffName}
+            <Translate targetLanguage={language}>{branding.sub}</Translate> • {staffName}
           </p>
         </div>
         
@@ -56,13 +58,13 @@ const ProfessionalTerminal: React.FC<Props> = ({ clients, role, staffName, langu
             onClick={() => setView('ROSTER')}
             className={`px-10 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${view === 'ROSTER' ? `${branding.theme} text-white shadow-xl` : 'text-slate-500 hover:text-white'}`}
           >
-            My_Roster
+            <Translate targetLanguage={language}>My_Roster</Translate>
           </button>
           <button 
             onClick={() => setView('SELF')}
             className={`px-10 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${view === 'SELF' ? `${branding.theme} text-white shadow-xl` : 'text-slate-500 hover:text-white'}`}
           >
-            Self_Service
+            <Translate targetLanguage={language}>Self_Service</Translate>
           </button>
         </div>
       </div>
