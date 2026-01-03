@@ -21,6 +21,7 @@ const Translate: React.FC<Props> = ({ children, targetLanguage, className = "" }
   };
 
   const rawText = getTextContent(children);
+  // Normalize "TECH_SLUGS_LIKE_THIS" to "TECH SLUGS LIKE THIS" for the translator
   const normalizedText = rawText.replace(/_/g, ' ').trim();
 
   useEffect(() => {
@@ -32,7 +33,7 @@ const Translate: React.FC<Props> = ({ children, targetLanguage, className = "" }
         return;
       }
 
-      const cacheKey = `csp_v7_trans_${targetLanguage.toLowerCase()}:${normalizedText}`;
+      const cacheKey = `csp_v8_trans_${targetLanguage.toLowerCase()}:${normalizedText}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {

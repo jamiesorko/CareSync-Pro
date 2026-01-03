@@ -37,7 +37,7 @@ const AccountingTerminal: React.FC<Props> = ({ language, staffName, clients }) =
              </h1>
           </div>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
-            <Translate targetLanguage={language}>Institutional Capital Forensics</Translate> • {staffName}
+            <Translate targetLanguage={language}>Institutional_Capital_Forensics</Translate> • {staffName}
           </p>
         </div>
         

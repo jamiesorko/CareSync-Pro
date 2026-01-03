@@ -2,7 +2,7 @@
 import React from 'react';
 import { Client } from '../../types';
 import Translate from '../../components/Translate';
-import { MoreHorizontal, ChevronRight, Binary, Activity, Clock } from 'lucide-react';
+import { Binary, Activity, Clock, ChevronRight } from 'lucide-react';
 
 interface Props {
   clients: Client[];

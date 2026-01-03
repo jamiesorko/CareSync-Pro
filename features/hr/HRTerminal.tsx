@@ -37,7 +37,7 @@ const HRTerminal: React.FC<Props> = ({ language, staffName }) => {
              </h1>
           </div>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
-            <Translate targetLanguage={language}>Human Capital Stewardship</Translate> • {staffName}
+            <Translate targetLanguage={language}>Human_Capital_Stewardship</Translate> • {staffName}
           </p>
         </div>
         

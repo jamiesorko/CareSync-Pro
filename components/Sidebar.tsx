@@ -22,16 +22,19 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role, language }) =
     { id: AppTab.DASHBOARD, icon: LayoutDashboard, label: 'Ops_Dashboard' },
     { id: AppTab.SCHEDULE, icon: CalendarDays, label: 'Roster_Deployment' },
     { id: AppTab.CLINICAL_COMMAND, icon: ShieldAlert, label: 'Clinical_Intel' },
-    // Fix: Replaced undefined Dispatch_Grid with Users icon
     { id: AppTab.COORDINATION, icon: Users, label: 'Dispatch_Grid' },
     { id: AppTab.HR_HUB, icon: UserRoundSearch, label: 'Resource_Core' },
     { id: AppTab.FINANCE, icon: WalletMinimal, label: 'Fiscal_Ledger' },
   ];
 
   return (
-    <aside className={`bg-black/40 backdrop-blur-xl border-r border-white/5 h-screen transition-all duration-300 ${expanded ? 'w-64' : 'w-20'}`}>
+    <aside className={`bg-black/40 backdrop-blur-xl border-r border-white/5 h-screen transition-all duration-300 relative z-[60] ${expanded ? 'w-64' : 'w-20'}`}>
       <div className="h-20 flex items-center justify-between px-6 border-b border-white/5">
-        {expanded && <span className="font-black text-white italic tracking-tighter">CARESYNC</span>}
+        {expanded && (
+          <span className="font-black text-white italic tracking-tighter">
+            <Translate targetLanguage={language}>CARESYNC</Translate>
+          </span>
+        )}
         <button onClick={() => setExpanded(!expanded)} className="p-2 text-slate-500 hover:text-white">
           {expanded ? <ChevronLeft size={20} /> : <Menu size={20} />}
         </button>
@@ -46,14 +49,22 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role, language }) =
             }`}
           >
             <item.icon size={20} />
-            {expanded && <Translate targetLanguage={language} className="text-[10px] font-black uppercase tracking-widest">{item.label}</Translate>}
+            {expanded && (
+              <Translate targetLanguage={language} className="text-[10px] font-black uppercase tracking-widest">
+                {item.label}
+              </Translate>
+            )}
           </button>
         ))}
       </nav>
       <div className="absolute bottom-4 left-0 w-full px-4">
-        <button className="w-full flex items-center gap-4 p-3 rounded-xl text-rose-500 hover:bg-rose-500/10">
+        <button className="w-full flex items-center gap-4 p-3 rounded-xl text-rose-500 hover:bg-rose-500/10 transition-colors">
           <Power size={20} />
-          {expanded && <Translate targetLanguage={language} className="text-[10px] font-black uppercase">Terminate_Session</Translate>}
+          {expanded && (
+            <Translate targetLanguage={language} className="text-[10px] font-black uppercase">
+              Terminate_Session
+            </Translate>
+          )}
         </button>
       </div>
     </aside>
