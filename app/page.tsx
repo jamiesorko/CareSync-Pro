@@ -21,9 +21,12 @@ export default function Home() {
   }
 
   const renderContent = () => {
+    const isField = [CareRole.PSW, CareRole.RN, CareRole.RPN, CareRole.HSS].includes(user.role as any);
+
     switch (activeTab) {
       case AppTab.DASHBOARD:
-        return <Dashboard staffName={user.name} role={user.role} clients={MOCK_CLIENTS} staff={MOCK_STAFF} language={language} setActiveTab={setActiveTab} />;
+        {/* Fix: Removed invalid props role, staff, and setActiveTab from Dashboard component call to match its Props interface */}
+        return <Dashboard staffName={user.name} clients={MOCK_CLIENTS} language={language} />;
       case AppTab.SCHEDULE:
         return <ScheduleView role={user.role} clients={MOCK_CLIENTS} language={language} />;
       case AppTab.CLINICAL_COMMAND:

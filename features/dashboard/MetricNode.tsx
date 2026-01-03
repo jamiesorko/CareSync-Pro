@@ -14,31 +14,21 @@ interface Props {
 }
 
 const MetricNode: React.FC<Props> = ({ label, value, suffix, icon: Icon, trend, trendType, language }) => (
-  <div className="glass-card p-8 rounded-[2.5rem] flex flex-col justify-between group transition-all hover:bg-white/[0.06] hover:translate-y-[-4px] cursor-default relative overflow-hidden">
-    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-      <Icon size={80} strokeWidth={1} />
-    </div>
-    
-    <div className="flex justify-between items-start relative z-10">
-      <div className="p-3 bg-white/5 border border-white/10 text-indigo-400 rounded-2xl group-hover:bg-indigo-600 group-hover:text-white group-hover:shadow-[0_0_15px_rgba(99,102,241,0.5)] transition-all duration-500">
-        <Icon size={20} strokeWidth={2.5} />
+  <div className="glass-card p-6 rounded-[2rem] hover:bg-white/[0.05] transition-all">
+    <div className="flex justify-between items-start mb-6">
+      <div className="p-2 bg-indigo-500/10 rounded-lg text-indigo-400">
+        <Icon size={18} />
       </div>
-      <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${
-        trendType === 'positive' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
-        trendType === 'negative' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 'bg-slate-500/10 text-slate-500 border-white/5'
-      }`}>
-        {trend}
-      </div>
+      <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded border ${
+        trendType === 'positive' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
+      }`}>{trend}</span>
     </div>
-    
-    <div className="mt-8 relative z-10">
-      <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-2">
-        <Translate targetLanguage={language}>{label}</Translate>
-      </p>
-      <h4 className="text-5xl font-black text-white tracking-tighter italic tabular-nums leading-none flex items-baseline">
-        {value}<span className="text-xl font-bold text-slate-700 ml-1 not-italic">{suffix}</span>
-      </h4>
-    </div>
+    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">
+      <Translate targetLanguage={language}>{label}</Translate>
+    </p>
+    <h4 className="text-3xl font-black text-white italic tracking-tighter">
+      {value}<span className="text-sm opacity-30 not-italic ml-0.5">{suffix}</span>
+    </h4>
   </div>
 );
 

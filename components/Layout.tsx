@@ -27,10 +27,10 @@ const Layout: React.FC<Props> = ({
 }) => {
   return (
     <div className="flex h-screen w-full bg-[#020617] text-slate-200 overflow-hidden select-none">
+      {/* Fix: Removed invalid prop staffName from Sidebar component call as it is not defined in Sidebar's Props interface */}
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
-        staffName={staffName} 
         role={activeRole} 
         language={language}
       />

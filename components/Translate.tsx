@@ -1,14 +1,14 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { geminiService } from '../services/geminiService';
+import { gemini } from '../services/gemini';
 
-interface TranslateProps {
+interface Props {
   children: React.ReactNode;
   targetLanguage: string;
   className?: string;
 }
 
-const Translate: React.FC<TranslateProps> = ({ children, targetLanguage, className = "" }) => {
+const Translate: React.FC<Props> = ({ children, targetLanguage, className = "" }) => {
   const [translatedText, setTranslatedText] = useState<string>('');
   const [isTranslating, setIsTranslating] = useState(false);
   const isMounted = useRef(true);
@@ -21,12 +21,10 @@ const Translate: React.FC<TranslateProps> = ({ children, targetLanguage, classNa
   };
 
   const rawText = getTextContent(children);
-  // Normalize developer keys like "Ops_Dashboard" to "Ops Dashboard" for the AI
   const normalizedText = rawText.replace(/_/g, ' ').trim();
 
   useEffect(() => {
     isMounted.current = true;
-    
     const translateText = async () => {
       if (!targetLanguage || targetLanguage.toLowerCase() === 'english' || !normalizedText) {
         setTranslatedText(rawText);
@@ -34,7 +32,7 @@ const Translate: React.FC<TranslateProps> = ({ children, targetLanguage, classNa
         return;
       }
 
-      const cacheKey = `trans_v6_${targetLanguage.toLowerCase()}:${normalizedText}`;
+      const cacheKey = `csp_trans_${targetLanguage.toLowerCase()}:${normalizedText}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
@@ -45,7 +43,7 @@ const Translate: React.FC<TranslateProps> = ({ children, targetLanguage, classNa
 
       setIsTranslating(true);
       try {
-        const result = await geminiService.translate(normalizedText, targetLanguage);
+        const result = await gemini.translate(normalizedText, targetLanguage);
         if (isMounted.current && result) {
           localStorage.setItem(cacheKey, result);
           setTranslatedText(result);
@@ -58,16 +56,12 @@ const Translate: React.FC<TranslateProps> = ({ children, targetLanguage, classNa
     };
 
     translateText();
-
     return () => { isMounted.current = false; };
   }, [normalizedText, targetLanguage, rawText]);
 
-  // Initial render shows raw text to prevent layout shift
-  const displayContent = translatedText || rawText;
-
   return (
     <span className={`${className} transition-all duration-300 ${isTranslating ? 'opacity-40 blur-[1px]' : 'opacity-100 blur-0'}`}>
-      {displayContent}
+      {translatedText || rawText}
     </span>
   );
 };
