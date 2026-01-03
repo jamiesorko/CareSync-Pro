@@ -17,7 +17,9 @@ const Header: React.FC<Props> = ({ activeTab, language, onLanguageChange, onLogo
     <header className="h-20 bg-transparent border-b border-white/5 flex items-center justify-between px-8 shrink-0 z-40">
       <div className="flex items-center gap-8 flex-1">
         <div className="flex flex-col">
-          <p className="text-[9px] font-black text-indigo-500 uppercase tracking-[0.4em] mb-0.5">Active_Node</p>
+          <p className="text-[9px] font-black text-indigo-500 uppercase tracking-[0.4em] mb-0.5">
+            <Translate targetLanguage={language}>Active_Node</Translate>
+          </p>
           <h2 className="text-sm font-black uppercase tracking-widest text-white italic">
             <Translate targetLanguage={language}>{activeTab}</Translate>
           </h2>
@@ -27,7 +29,7 @@ const Header: React.FC<Props> = ({ activeTab, language, onLanguageChange, onLogo
           <Search size={16} className="text-slate-500 group-focus-within:text-indigo-400" />
           <input 
             type="text" 
-            placeholder="Search Global Roster, Census, or System Directives..." 
+            placeholder="..." 
             className="bg-transparent border-none text-xs text-slate-200 outline-none w-full placeholder:text-slate-600 font-medium"
           />
           <div className="flex items-center gap-1.5 px-2 py-1 bg-white/5 rounded-lg border border-white/5">
@@ -61,7 +63,9 @@ const Header: React.FC<Props> = ({ activeTab, language, onLanguageChange, onLogo
             <UserCircle size={20} />
           </div>
           <div className="text-left">
-            <p className="text-[9px] font-black text-slate-500 uppercase leading-none">Security_ID</p>
+            <p className="text-[9px] font-black text-slate-500 uppercase leading-none">
+              <Translate targetLanguage={language}>Security_ID</Translate>
+            </p>
             <p className="text-[10px] font-black text-white uppercase tracking-tighter">Jamie Sorko</p>
           </div>
         </button>

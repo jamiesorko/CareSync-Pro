@@ -33,11 +33,11 @@ const AccountingTerminal: React.FC<Props> = ({ language, staffName, clients }) =
           <div className="flex items-center gap-3">
              <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
              <h1 className="text-5xl font-black tracking-tighter uppercase italic leading-none text-emerald-500">
-               FISCAL_OMEGA_NODE
+               <Translate targetLanguage={language}>FISCAL_OMEGA_NODE</Translate>
              </h1>
           </div>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
-            Institutional Capital Forensics • {staffName}
+            <Translate targetLanguage={language}>Institutional Capital Forensics</Translate> • {staffName}
           </p>
         </div>
         

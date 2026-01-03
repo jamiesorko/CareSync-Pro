@@ -22,6 +22,7 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role, language }) =
     { id: AppTab.DASHBOARD, icon: LayoutDashboard, label: 'Ops_Dashboard' },
     { id: AppTab.SCHEDULE, icon: CalendarDays, label: 'Roster_Deployment' },
     { id: AppTab.CLINICAL_COMMAND, icon: ShieldAlert, label: 'Clinical_Intel' },
+    // Fix: Replaced undefined Dispatch_Grid with Users icon
     { id: AppTab.COORDINATION, icon: Users, label: 'Dispatch_Grid' },
     { id: AppTab.HR_HUB, icon: UserRoundSearch, label: 'Resource_Core' },
     { id: AppTab.FINANCE, icon: WalletMinimal, label: 'Fiscal_Ledger' },

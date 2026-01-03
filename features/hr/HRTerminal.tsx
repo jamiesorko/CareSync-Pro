@@ -33,11 +33,11 @@ const HRTerminal: React.FC<Props> = ({ language, staffName }) => {
           <div className="flex items-center gap-3">
              <div className="w-3 h-3 rounded-full bg-indigo-500 animate-pulse shadow-[0_0_15px_rgba(99,102,241,0.5)]"></div>
              <h1 className="text-5xl font-black tracking-tighter uppercase italic leading-none text-indigo-400">
-               RESOURCE_SIGMA_NODE
+               <Translate targetLanguage={language}>RESOURCE_SIGMA_NODE</Translate>
              </h1>
           </div>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
-            Human Capital Stewardship • {staffName}
+            <Translate targetLanguage={language}>Human Capital Stewardship</Translate> • {staffName}
           </p>
         </div>
         
