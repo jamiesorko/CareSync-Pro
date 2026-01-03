@@ -1,4 +1,8 @@
+
 import { GoogleGenAI, Modality, GenerateContentResponse } from "@google/genai";
+
+// Private memory cache for instantaneous session translation
+const sessionCache = new Map<string, string>();
 
 export class GeminiService {
   private getAI() {
@@ -44,20 +48,25 @@ export class GeminiService {
   }
 
   async translate(text: string, targetLanguage: string): Promise<string> {
-    if (!text || targetLanguage.toLowerCase() === 'english') return text;
+    if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') return text;
     
+    const cacheKey = `${targetLanguage.toLowerCase()}:${text.toLowerCase().trim()}`;
+    if (sessionCache.has(cacheKey)) return sessionCache.get(cacheKey)!;
+
     const ai = this.getAI();
     try {
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Translate the following text to ${targetLanguage}: "${text}"`,
+        contents: `Translate to ${targetLanguage}: "${text}"`,
         config: {
-          systemInstruction: "You are a professional medical and enterprise translator. Output ONLY the translated text. Do not include introductory remarks, explanations, or conversational filler. Maintain original formatting and tone.",
+          systemInstruction: "You are a specialized medical and healthcare enterprise translator. Translate the input accurately. Output ONLY the translated text without any quotes, preambles, or explanations.",
         }
       });
-      return response.text?.trim() || text;
+      const result = response.text?.trim() || text;
+      sessionCache.set(cacheKey, result);
+      return result;
     } catch (err) {
-      console.error("[TRANSLATION_CORE_FAILURE]:", err);
+      console.error("[TRANSLATION_FAILURE]:", err);
       return text;
     }
   }
@@ -67,9 +76,9 @@ export class GeminiService {
     try {
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Translate this clinical report/concern to professional English for a healthcare supervisor: "${text}"`,
+        contents: `Translate this healthcare note to professional clinical English: "${text}"`,
         config: {
-          systemInstruction: "You are a clinical translation node. Convert the input to clear, professional medical English. Return ONLY the translated text.",
+          systemInstruction: "Translate to professional clinical English. Output ONLY the translated text.",
         }
       });
       return response.text?.trim() || text;

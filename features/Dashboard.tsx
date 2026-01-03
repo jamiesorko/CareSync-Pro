@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { AppTab, CareRole, Client, StaffMember } from '../types';
 import Translate from '../components/Translate';
