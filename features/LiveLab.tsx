@@ -2,11 +2,16 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoogleGenAI, Modality, LiveServerMessage } from '@google/genai';
 import { decode, encode, decodeAudioData } from '../utils/audioHelpers';
+import Translate from '../components/Translate';
 
-const LiveLab: React.FC = () => {
+interface Props {
+  language: string;
+}
+
+const LiveLab: React.FC<Props> = ({ language }) => {
   const [isActive, setIsActive] = useState(false);
   const [transcripts, setTranscripts] = useState<string[]>([]);
-  const [status, setStatus] = useState('Ready to connect');
+  const [status, setStatus] = useState('Ready_to_Connect');
   
   const audioContextRef = useRef<AudioContext | null>(null);
   const outAudioContextRef = useRef<AudioContext | null>(null);
@@ -25,7 +30,7 @@ const LiveLab: React.FC = () => {
 
   const startSession = async () => {
     try {
-      setStatus('Connecting...');
+      setStatus('Connecting');
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const inputCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
@@ -40,7 +45,7 @@ const LiveLab: React.FC = () => {
         callbacks: {
           onopen: () => {
             setIsActive(true);
-            setStatus('Live Listening');
+            setStatus('Live_Listening');
             const source = inputCtx.createMediaStreamSource(stream);
             const scriptProcessor = inputCtx.createScriptProcessor(4096, 1, 1);
             
@@ -93,7 +98,7 @@ const LiveLab: React.FC = () => {
               nextStartTimeRef.current = 0;
             }
           },
-          onerror: (e) => setStatus('Connection Error'),
+          onerror: (e) => setStatus('Connection_Error'),
           onclose: () => setIsActive(false)
         },
         config: {
@@ -107,7 +112,7 @@ const LiveLab: React.FC = () => {
       sessionRef.current = await sessionPromise;
     } catch (err) {
       console.error(err);
-      setStatus('Failed to start session');
+      setStatus('Failed_to_Start');
     }
   };
 
@@ -116,26 +121,50 @@ const LiveLab: React.FC = () => {
   }, []);
 
   return (
-    <div className="h-full flex flex-col space-y-6">
-      <div className="glass-panel rounded-3xl p-8 shadow-sm flex flex-col items-center justify-center text-center space-y-6">
-        <div className={`w-24 h-24 rounded-full flex items-center justify-center transition-all ${isActive ? 'bg-red-100 animate-pulse scale-110' : 'bg-slate-800'}`}>
-          <div className={`w-12 h-12 rounded-full ${isActive ? 'bg-red-500' : 'bg-slate-600'}`}></div>
+    <div className="h-full flex flex-col space-y-10 animate-in fade-in duration-700">
+      <div className="bg-slate-950 border border-white/10 rounded-[4rem] p-12 shadow-2xl flex flex-col items-center justify-center text-center space-y-10 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
+           <span className="text-8xl font-black italic text-white uppercase">Live</span>
         </div>
+        
+        <div className={`w-40 h-40 rounded-full flex items-center justify-center transition-all duration-1000 ${isActive ? 'bg-indigo-600/10 border-4 border-indigo-500 shadow-[0_0_80px_rgba(99,102,241,0.3)] scale-110' : 'bg-white/5 border-2 border-white/10'}`}>
+          <div className={`w-16 h-16 rounded-full transition-all duration-500 ${isActive ? 'bg-indigo-500 animate-pulse' : 'bg-slate-800'}`}></div>
+        </div>
+        
         <div>
-          <h2 className="text-2xl font-bold text-white">Live Multimodal API</h2>
-          <p className={`text-sm font-medium mt-1 ${isActive ? 'text-red-500' : 'text-slate-500'}`}>{status}</p>
+          <h2 className="text-4xl font-black text-white italic uppercase tracking-tighter leading-none">
+            <Translate targetLanguage={language}>Direct_Neural_Link</Translate>
+          </h2>
+          <p className={`text-[10px] font-black uppercase tracking-[0.4em] mt-3 ${isActive ? 'text-indigo-400' : 'text-slate-700'}`}>
+            <Translate targetLanguage={language}>{status}</Translate>
+          </p>
         </div>
-        <button onClick={isActive ? stopSession : startSession} className={`px-8 py-3 rounded-full font-bold transition-all ${isActive ? 'bg-slate-700 text-white' : 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'}`}>
-          {isActive ? 'Stop Conversation' : 'Start Talking'}
+        
+        <button 
+          onClick={isActive ? stopSession : startSession} 
+          className={`px-16 py-6 rounded-[2.5rem] font-black text-xs uppercase tracking-[0.4em] transition-all shadow-3xl ${isActive ? 'bg-rose-600 text-white hover:bg-rose-500' : 'bg-white text-black hover:scale-105 active:scale-95'}`}
+        >
+          {isActive ? <Translate targetLanguage={language}>TERMINATE_SIGNAL</Translate> : <Translate targetLanguage={language}>OPEN_CHANNEL</Translate>}
         </button>
       </div>
-      <div className="flex-1 bg-slate-900/50 rounded-3xl border border-white/5 p-6 overflow-hidden flex flex-col">
-        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Transcription Feed</h3>
-        <div className="flex-1 overflow-y-auto space-y-2 scrollbar-hide">
+
+      <div className="flex-1 bg-black/40 rounded-[3.5rem] border border-white/5 p-10 overflow-hidden flex flex-col shadow-inner backdrop-blur-3xl">
+        <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.5em] mb-8 italic">
+           <Translate targetLanguage={language}>Acoustic_Transcription_Buffer</Translate>
+        </h3>
+        <div className="flex-1 overflow-y-auto space-y-4 scrollbar-hide pr-2">
           {transcripts.map((t, i) => (
-            <div key={i} className={`text-sm p-4 rounded-2xl ${t.startsWith('You:') ? 'bg-blue-600/10 text-blue-100 ml-4' : 'bg-white/5 text-slate-300 mr-4'}`}>{t}</div>
+            <div key={i} className={`text-sm p-6 rounded-[2rem] border transition-all animate-in slide-in-from-bottom-2 ${t.startsWith('You:') ? 'bg-indigo-600/10 border-indigo-500/20 text-indigo-100 ml-12' : 'bg-white/[0.03] border-white/5 text-slate-300 mr-12'}`}>
+               <p className="font-medium italic leading-relaxed">{t}</p>
+            </div>
           ))}
-          {transcripts.length === 0 && <p className="text-slate-600 text-sm italic text-center mt-20">Voice activity will be transcribed here...</p>}
+          {transcripts.length === 0 && (
+            <div className="h-full flex items-center justify-center opacity-20 italic">
+               <p className="text-sm font-black uppercase tracking-widest leading-none">
+                  <Translate targetLanguage={language}>Awaiting_Acoustic_Signals</Translate>
+               </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

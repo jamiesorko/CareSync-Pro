@@ -2,94 +2,82 @@
 import React, { useState } from 'react';
 import Translate from '../components/Translate';
 import { CareRole } from '../types';
+import ScheduleGrid from './client/ScheduleGrid';
+import PSWCard from './client/PSWCard';
+import ConcernsForm from './client/ConcernsForm';
 
 interface Props {
   language: string;
 }
 
 const ClientPortal: React.FC<Props> = ({ language }) => {
+  const [activeTab, setActiveTab] = useState<'HOME' | 'CONCERNS'>('HOME');
   const [schedule] = useState([
-    { id: 'v1', time: '08:00 AM', staffName: 'Elena R.', staffRole: CareRole.PSW, status: 'CONFIRMED' },
-    { id: 'v2', time: '01:30 PM', staffName: 'Mark K.', staffRole: CareRole.RN, status: 'UPCOMING' },
+    { id: 'v1', time: '08:00 AM', pswName: 'Elena R.', status: 'CONFIRMED' as const },
+    { id: 'v2', time: '01:30 PM', pswName: 'Mark K.', status: 'CONFIRMED' as const },
   ]);
-  const [blacklist, setBlacklist] = useState<string[]>([]);
-  const [ratings, setRatings] = useState<Record<string, number>>({});
-
-  const toggleBlacklist = (staffName: string) => {
-    if (blacklist.includes(staffName)) {
-      setBlacklist(prev => prev.filter(n => n !== staffName));
-    } else {
-      if (window.confirm(`Formally restrict ${staffName} from future assignments to your residence?`)) {
-        setBlacklist(prev => [...prev, staffName]);
-        alert("Roster update transmitted to Coordination.");
-      }
-    }
-  };
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-700 pb-24">
-      <div>
-        <h2 className="text-4xl font-black text-white tracking-tighter uppercase leading-none italic">Resident_Command</h2>
-        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">Quality & Logistics Monitor</p>
+    <div className="space-y-12 animate-in fade-in duration-700 pb-24 overflow-y-auto h-full scrollbar-hide">
+      <div className="px-4">
+        <h2 className="text-5xl font-black text-white tracking-tighter uppercase leading-none italic">
+           <Translate targetLanguage={language}>Resident_Command</Translate>
+        </h2>
+        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-3 italic">
+           <Translate targetLanguage={language}>Quality_&_Logistics_Monitor_•_Active_Handshake</Translate>
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        <div className="lg:col-span-8 space-y-6">
-          <div className="bg-white/5 border border-white/10 rounded-[3rem] p-10">
-            <h3 className="text-xl font-black text-white mb-8 tracking-tighter uppercase italic">Current_Service_Log</h3>
-            <div className="space-y-4">
-              {schedule.map(visit => (
-                <div key={visit.id} className="p-8 bg-white/[0.03] border border-white/5 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-6 group">
-                  <div>
-                    <p className="text-lg font-black text-white italic tracking-tighter uppercase">{visit.staffName}</p>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">{visit.staffRole}</p>
-                    
-                    <div className="mt-6 flex items-center space-x-2">
-                      {[1, 2, 3, 4, 5].map(star => (
-                        <button 
-                          key={star}
-                          onClick={() => setRatings(prev => ({ ...prev, [visit.id]: star }))}
-                          className={`text-xl transition-all ${ratings[visit.id] >= star ? 'grayscale-0 scale-110' : 'grayscale opacity-30 hover:opacity-100'}`}
-                        >
-                          ⭐
-                        </button>
-                      ))}
-                      <span className="text-[10px] font-black text-slate-600 ml-3 uppercase">Rate Service</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-4">
-                    <button 
-                      onClick={() => toggleBlacklist(visit.staffName)}
-                      className={`px-8 py-3 rounded-2xl text-[9px] font-black uppercase transition-all ${
-                        blacklist.includes(visit.staffName) 
-                        ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/30' 
-                        : 'bg-white/5 border border-white/10 text-rose-500 hover:bg-rose-500/10'
-                      }`}
-                    >
-                      {blacklist.includes(visit.staffName) ? 'Restricted Personnel' : 'Do Not Send Again'}
-                    </button>
-                    <button className="px-8 py-3 bg-white text-black rounded-2xl text-[9px] font-black uppercase">View Instructions</button>
-                  </div>
-                </div>
-              ))}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 px-4">
+        <div className="lg:col-span-8 space-y-10">
+          <div className="bg-slate-900/50 border border-white/10 rounded-[4rem] p-12 shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
+               <span className="text-8xl font-black italic text-white">LOG</span>
             </div>
+            <h3 className="text-xl font-black text-white mb-10 tracking-tighter uppercase italic">
+               <Translate targetLanguage={language}>Current_Service_Log</Translate>
+            </h3>
+            <ScheduleGrid 
+              visits={schedule} 
+              language={language} 
+              onCancel={(id) => alert(`Signal: Cancellation request for visit ${id} transmitted.`)} 
+            />
           </div>
         </div>
 
-        <div className="lg:col-span-4 bg-teal-600/10 border border-teal-500/20 p-10 rounded-[3rem] h-fit">
-          <h3 className="text-sm font-black text-teal-400 uppercase italic mb-6">Care Directive Mirror</h3>
-          <p className="text-xs text-slate-300 leading-relaxed italic">
-            Instructions from the Clinical DOC and Logistics Coordinator are synced here for your transparency.
-          </p>
-          <div className="mt-8 space-y-4">
-             <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
-                <p className="text-[9px] font-black text-teal-400 uppercase mb-2">Clinical Directive</p>
-                <p className="text-xs text-white italic">"Recovery protocol optimized for post-op mobility."</p>
-             </div>
+        <div className="lg:col-span-4 space-y-8">
+          <PSWCard 
+            pswName="Elena Rodriguez" 
+            isNew={true} 
+            language={language}
+            onRate={(s) => console.log("Rated:", s)}
+            onBlacklist={() => alert("Restricting Professional from future Roster Deployment.")}
+          />
+          
+          <div className="bg-teal-600/10 border border-teal-500/20 p-10 rounded-[3rem] text-center shadow-xl relative overflow-hidden">
+             <div className="absolute top-0 left-0 w-full h-1 bg-teal-500/40"></div>
+             <p className="text-sm font-bold italic text-slate-300 italic mb-4 leading-relaxed">
+               <Translate targetLanguage={language}>The care team is synchronized. All staff are geofence-verified at your address.</Translate>
+             </p>
+             <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse mx-auto"></div>
           </div>
+          
+          <button 
+            onClick={() => setActiveTab(activeTab === 'HOME' ? 'CONCERNS' : 'HOME')}
+            className={`w-full py-6 rounded-3xl font-black text-xs uppercase tracking-[0.4em] transition-all shadow-2xl ${activeTab === 'CONCERNS' ? 'bg-indigo-600 text-white' : 'bg-white text-black hover:scale-[1.02]'}`}
+          >
+            {activeTab === 'HOME' ? <Translate targetLanguage={language}>INITIATE_HELP_SIGNAL</Translate> : <Translate targetLanguage={language}>RETURN_TO_HUB</Translate>}
+          </button>
         </div>
       </div>
+
+      {activeTab === 'CONCERNS' && (
+        <div className="px-4 animate-in slide-in-from-bottom-8 duration-700">
+          <div className="max-w-3xl mx-auto">
+            <ConcernsForm language={language} onSent={() => setActiveTab('HOME')} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

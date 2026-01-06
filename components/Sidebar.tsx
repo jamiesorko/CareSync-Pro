@@ -1,70 +1,64 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import { AppTab, CareRole } from '../types';
-import Translate from './Translate';
 import { 
-  LayoutDashboard, ShieldAlert, Users, Briefcase, 
-  UserRoundSearch, WalletMinimal, ChevronLeft, Menu, 
-  CalendarDays, Power 
+  LayoutDashboard, 
+  ShieldAlert, 
+  Users, 
+  Briefcase, 
+  Wallet, 
+  Database, 
+  Radio,
+  Power
 } from 'lucide-react';
 
 interface Props {
   activeTab: AppTab;
   setActiveTab: (tab: AppTab) => void;
   role: CareRole;
-  language: string;
+  onLogout: () => void;
 }
 
-const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role, language }) => {
-  const [expanded, setExpanded] = useState(false);
-
+const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role, onLogout }) => {
   const menu = [
-    { id: AppTab.DASHBOARD, icon: LayoutDashboard, label: 'Ops_Dashboard' },
-    { id: AppTab.SCHEDULE, icon: CalendarDays, label: 'Roster_Deployment' },
-    { id: AppTab.CLINICAL_COMMAND, icon: ShieldAlert, label: 'Clinical_Intel' },
-    { id: AppTab.COORDINATION, icon: Users, label: 'Dispatch_Grid' },
-    { id: AppTab.HR_HUB, icon: UserRoundSearch, label: 'Resource_Core' },
-    { id: AppTab.FINANCE, icon: WalletMinimal, label: 'Fiscal_Ledger' },
+    { id: AppTab.DASHBOARD, icon: LayoutDashboard, label: 'Ops Dashboard' },
+    { id: AppTab.CLINICAL, icon: ShieldAlert, label: 'Clinical Core' },
+    { id: AppTab.LOGISTICS, icon: Users, label: 'Dispatch Grid' },
+    { id: AppTab.RESOURCE, icon: Briefcase, label: 'Resource Core' },
+    { id: AppTab.FISCAL, icon: Wallet, label: 'Fiscal Ledger' },
+    { id: AppTab.VAULT, icon: Database, label: 'Neural Vault' },
+    { id: AppTab.LIVE, icon: Radio, label: 'Direct Link' },
   ];
 
   return (
-    <aside className={`bg-black/40 backdrop-blur-xl border-r border-white/5 h-screen transition-all duration-300 relative z-[60] ${expanded ? 'w-64' : 'w-20'}`}>
-      <div className="h-20 flex items-center justify-between px-6 border-b border-white/5">
-        {expanded && (
-          <span className="font-black text-white italic tracking-tighter">
-            <Translate targetLanguage={language}>CARESYNC</Translate>
-          </span>
-        )}
-        <button onClick={() => setExpanded(!expanded)} className="p-2 text-slate-500 hover:text-white">
-          {expanded ? <ChevronLeft size={20} /> : <Menu size={20} />}
-        </button>
+    <aside className="w-64 bg-black/40 border-r border-white/5 flex flex-col h-full backdrop-blur-xl">
+      <div className="h-20 flex items-center px-8 border-b border-white/5">
+        <span className="text-xl font-black text-white italic tracking-tighter">CARESYNC<span className="text-indigo-500">PRO</span></span>
       </div>
-      <nav className="p-4 space-y-2">
+      
+      <nav className="flex-1 p-4 space-y-2 overflow-y-auto scrollbar-hide">
         {menu.map(item => (
           <button
             key={item.id}
             onClick={() => setActiveTab(item.id)}
-            className={`w-full flex items-center gap-4 p-3 rounded-xl transition-all ${
-              activeTab === item.id ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/20' : 'text-slate-500 hover:text-white'
+            className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all ${
+              activeTab === item.id 
+                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' 
+                : 'text-slate-500 hover:text-slate-200 hover:bg-white/5'
             }`}
           >
-            <item.icon size={20} />
-            {expanded && (
-              <Translate targetLanguage={language} className="text-[10px] font-black uppercase tracking-widest">
-                {item.label}
-              </Translate>
-            )}
+            <item.icon size={18} />
+            <span className="text-[10px] font-bold uppercase tracking-widest">{item.label}</span>
           </button>
         ))}
       </nav>
-      <div className="absolute bottom-4 left-0 w-full px-4">
-        <button className="w-full flex items-center gap-4 p-3 rounded-xl text-rose-500 hover:bg-rose-500/10 transition-colors">
-          <Power size={20} />
-          {expanded && (
-            <Translate targetLanguage={language} className="text-[10px] font-black uppercase">
-              Terminate_Session
-            </Translate>
-          )}
+
+      <div className="p-4 border-t border-white/5">
+        <button 
+          onClick={onLogout}
+          className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-rose-500 hover:bg-rose-500/10 transition-all"
+        >
+          <Power size={18} />
+          <span className="text-[10px] font-bold uppercase tracking-widest">Terminate Session</span>
         </button>
       </div>
     </aside>

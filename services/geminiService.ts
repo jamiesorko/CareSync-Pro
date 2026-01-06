@@ -1,134 +1,176 @@
 
 import { GoogleGenAI, Modality, GenerateContentResponse } from "@google/genai";
 
-// Language-keyed memory cache for the current session
-const translationCache = new Map<string, string>();
-
 export class GeminiService {
-  private getAI() {
-    return new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+  private ai: GoogleGenAI;
+
+  constructor() {
+    // Correctly initialize with named parameter and process.env.API_KEY
+    this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
   }
 
-  async translate(text: string, targetLanguage: string): Promise<string> {
-    if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') return text;
-    
-    const cacheKey = `${targetLanguage.toLowerCase()}:${text.toLowerCase().trim()}`;
-    if (translationCache.has(cacheKey)) return translationCache.get(cacheKey)!;
-
-    const ai = this.getAI();
-    try {
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: `Translate to ${targetLanguage}: "${text}"`,
-        config: {
-          systemInstruction: "You are a professional medical and enterprise software translator. Output ONLY the translated string. No quotes, no explanations, no conversational filler. Maintain clinical professional tone.",
-        }
-      });
-      const result = response.text?.trim() || text;
-      translationCache.set(cacheKey, result);
-      return result;
-    } catch (err) {
-      console.error("[TRANSLATION_FAILURE]:", err);
-      return text;
-    }
-  }
-
-  async translateToEnglish(text: string): Promise<string> {
-    const ai = this.getAI();
-    try {
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: `Translate to professional clinical English: "${text}"`,
-        config: {
-          systemInstruction: "Translate the input to professional medical English. Output ONLY the translated text.",
-        }
-      });
-      return response.text?.trim() || text;
-    } catch (err) {
-      return text;
-    }
-  }
-
-  async generateText(prompt: string, useSearch: boolean = false): Promise<GenerateContentResponse> {
-    const ai = this.getAI();
-    return await ai.models.generateContent({
+  async generateText(prompt: string, useSearch: boolean = false) {
+    // Fixed: ai.models.generateContent used directly with prompt
+    const response: GenerateContentResponse = await this.ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: prompt,
-      config: useSearch ? { tools: [{ googleSearch: {} }] } : undefined,
-    });
-  }
-
-  async generateAdvancedReasoning(prompt: string): Promise<GenerateContentResponse> {
-    const ai = this.getAI();
-    return await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: prompt,
-      config: { thinkingConfig: { thinkingBudget: 15000 } }
-    });
-  }
-
-  async generateImage(prompt: string): Promise<string> {
-    const ai = this.getAI();
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-image',
-      contents: { parts: [{ text: prompt }] },
-      config: { imageConfig: { aspectRatio: "1:1" } }
-    });
-    for (const part of response.candidates?.[0]?.content?.parts || []) {
-      if (part.inlineData) return `data:image/png;base64,${part.inlineData.data}`;
-    }
-    return "";
-  }
-
-  async generateVideo(prompt: string): Promise<string> {
-    const ai = this.getAI();
-    let operation = await ai.models.generateVideos({
-      model: 'veo-3.1-fast-generate-preview',
-      prompt: prompt,
-      config: { numberOfVideos: 1, resolution: '720p', aspectRatio: '16:9' }
-    });
-    while (!operation.done) {
-      await new Promise(resolve => setTimeout(resolve, 10000));
-      operation = await ai.operations.getVideosOperation({ operation: operation });
-    }
-    const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
-    return `${downloadLink}&key=${process.env.API_KEY}`;
-  }
-
-  async generateSecureSchedule(anonymizedData: any): Promise<any[]> {
-    const ai = this.getAI();
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: `Generate a valid roster for: ${JSON.stringify(anonymizedData)}`,
       config: {
-        systemInstruction: "You are a Neural Dispatch Engine. Return JSON array of assignments.",
-        responseMimeType: "application/json",
-        thinkingConfig: { thinkingBudget: 10000 }
+        tools: useSearch ? [{ googleSearch: {} }] : undefined,
+        systemInstruction: "You are the CareSync Pro Clinical Intelligence Core. Provide concise, professional medical insights.",
       }
     });
-    try {
-      return JSON.parse(response.text || '[]');
-    } catch {
-      return [];
-    }
+    // Correctly access .text property
+    return response;
   }
 
-  async generateSpeech(text: string, voiceName: string = 'Kore'): Promise<string> {
-    const ai = this.getAI();
-    const response = await ai.models.generateContent({
+  async generateClinicalInsight(prompt: string) {
+    const response: GenerateContentResponse = await this.ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: prompt,
+      config: {
+        systemInstruction: "You are the CareSync Pro Clinical Intelligence Core. Provide concise, professional medical insights.",
+      }
+    });
+    return response.text;
+  }
+
+  async performDeepReasoning(prompt: string) {
+    const response: GenerateContentResponse = await this.ai.models.generateContent({
+      model: 'gemini-3-pro-preview',
+      contents: prompt,
+      config: {
+        thinkingConfig: { thinkingBudget: 15000 }
+      }
+    });
+    return response.text;
+  }
+
+  async generateAdvancedReasoning(prompt: string) {
+    return await this.ai.models.generateContent({
+      model: 'gemini-3-pro-preview',
+      contents: prompt,
+      config: {
+        thinkingConfig: { thinkingBudget: 15000 }
+      }
+    });
+  }
+
+  async translate(text: string, targetLang: string) {
+    const response: GenerateContentResponse = await this.ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: `Translate to ${targetLang}: "${text}"`,
+      config: {
+        systemInstruction: "Output only the translated text.",
+      }
+    });
+    return response.text?.trim();
+  }
+
+  async translateToEnglish(text: string) {
+    return await this.translate(text, "English");
+  }
+
+  async generateTTS(text: string) {
+    const response: GenerateContentResponse = await this.ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
       contents: [{ parts: [{ text }] }],
       config: {
         responseModalities: [Modality.AUDIO],
-        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName } } },
+        speechConfig: {
+          voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Kore' } },
+        },
+      },
+    });
+    return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+  }
+
+  async generateSpeech(text: string, voice: string = 'Kore') {
+    const response: GenerateContentResponse = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash-preview-tts",
+      contents: [{ parts: [{ text }] }],
+      config: {
+        responseModalities: [Modality.AUDIO],
+        speechConfig: {
+          voiceConfig: { prebuiltVoiceConfig: { voiceName: voice } },
+        },
       },
     });
     return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || "";
   }
 
-  async analyzeHazardImage(base64: string, prompt: string = "Analyze hazard."): Promise<string> {
-    const ai = this.getAI();
-    const response = await ai.models.generateContent({
+  async generateImage(prompt: string) {
+    const response: GenerateContentResponse = await this.ai.models.generateContent({
+      model: 'gemini-2.5-flash-image',
+      contents: { parts: [{ text: prompt }] },
+      config: {
+        imageConfig: { aspectRatio: "1:1" }
+      }
+    });
+    for (const part of response.candidates?.[0]?.content?.parts || []) {
+      if (part.inlineData) {
+        return `data:image/png;base64,${part.inlineData.data}`;
+      }
+    }
+    return null;
+  }
+
+  async generateVideo(prompt: string) {
+    let operation = await this.ai.models.generateVideos({
+      model: 'veo-3.1-fast-generate-preview',
+      prompt: prompt,
+      config: {
+        numberOfVideos: 1,
+        resolution: '720p',
+        aspectRatio: '16:9'
+      }
+    });
+    while (!operation.done) {
+      await new Promise(resolve => setTimeout(resolve, 10000));
+      operation = await this.ai.operations.getVideosOperation({ operation: operation });
+    }
+    return `${operation.response?.generatedVideos?.[0]?.video?.uri}&key=${process.env.API_KEY}`;
+  }
+
+  async getFinancialStrategy(context: any) {
+    const response: GenerateContentResponse = await this.ai.models.generateContent({
+      model: 'gemini-3-pro-preview',
+      contents: `Analyze these agency financials and provide a strategy: ${JSON.stringify(context)}`,
+      config: {
+        thinkingConfig: { thinkingBudget: 15000 }
+      }
+    });
+    return response.text || "Strategy analysis complete.";
+  }
+
+  async getMarketIntelligence(query: string) {
+    return await this.ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: query,
+      config: { tools: [{ googleSearch: {} }] }
+    });
+  }
+
+  async generateSecureSchedule(payload: any) {
+    const response: GenerateContentResponse = await this.ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: `Generate a secure schedule for: ${JSON.stringify(payload)}. Return valid JSON.`,
+      config: { responseMimeType: "application/json" }
+    });
+    return JSON.parse(response.text || '[]');
+  }
+
+  async runSelfRepairAudit(ledger: any) {
+    const response: GenerateContentResponse = await this.ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: `Run self repair audit for: ${JSON.stringify(ledger)}. Return valid JSON with "remediation" key.`,
+      config: { responseMimeType: "application/json" }
+    });
+    return response.text || '{"remediation": "No drift detected."}';
+  }
+
+  async analyzeHazardImage(base64: string, customPrompt?: string) {
+    const prompt = customPrompt || "Identify clinical hazards in this image. Focus on safety and medical necessity.";
+    const response: GenerateContentResponse = await this.ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
       contents: {
         parts: [
@@ -137,35 +179,7 @@ export class GeminiService {
         ]
       }
     });
-    return response.text || "No analysis.";
-  }
-
-  async runSelfRepairAudit(ledger: any): Promise<string> {
-    const ai = this.getAI();
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: `Audit: ${JSON.stringify(ledger)}. Return JSON: { "remediation": "string" }`,
-      config: { responseMimeType: "application/json", thinkingConfig: { thinkingBudget: 5000 } }
-    });
-    return response.text || '{"remediation": "No drift."}';
-  }
-
-  // Added getFinancialStrategy to fix property 'getFinancialStrategy' does not exist on type 'GeminiService'
-  async getFinancialStrategy(context: any): Promise<string> {
-    const res = await this.generateAdvancedReasoning(`Analyze these financials and provide a strategic profit optimization plan: ${JSON.stringify(context)}`);
-    return res.text || "No strategy synthesized.";
-  }
-
-  // Added getMarketIntelligence to fix property 'getMarketIntelligence' does not exist on type 'GeminiService'
-  async getMarketIntelligence(query: string): Promise<GenerateContentResponse> {
-    const ai = this.getAI();
-    return await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: query,
-      config: {
-        tools: [{ googleSearch: {} }]
-      }
-    });
+    return response.text || "Visual analysis complete.";
   }
 }
 

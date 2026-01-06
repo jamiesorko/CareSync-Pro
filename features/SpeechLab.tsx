@@ -2,8 +2,13 @@
 import React, { useState, useRef } from 'react';
 import { geminiService } from '../services/geminiService';
 import { decode, decodeAudioData } from '../utils/audioHelpers';
+import Translate from '../components/Translate';
 
-const SpeechLab: React.FC = () => {
+interface Props {
+  language: string;
+}
+
+const SpeechLab: React.FC<Props> = ({ language }) => {
   const [text, setText] = useState('Welcome to the future of multimodal intelligence.');
   const [voice, setVoice] = useState('Kore');
   const [loading, setLoading] = useState(false);
@@ -30,59 +35,70 @@ const SpeechLab: React.FC = () => {
       source.connect(ctx.destination);
       source.start();
     } catch (err) {
-      alert("Speech synthesis failed.");
+      alert("Speech synthesis failure.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
-        <h2 className="text-xl font-bold mb-4">Speech Synthesis</h2>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Speaker Voice</label>
-            <div className="flex flex-wrap gap-2">
-              {voices.map(v => (
-                <button
-                  key={v}
-                  onClick={() => setVoice(v)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    voice === v 
-                      ? 'bg-blue-600 text-white' 
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
-                >
-                  {v}
-                </button>
-              ))}
+    <div className="max-w-4xl mx-auto space-y-10 animate-in fade-in duration-700 h-full overflow-y-auto scrollbar-hide pb-20">
+      <div className="bg-slate-900 border border-white/10 rounded-[4rem] p-12 shadow-2xl relative overflow-hidden group">
+        <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
+           <span className="text-9xl font-black italic text-white uppercase">Vocal</span>
+        </div>
+        
+        <div className="relative z-10">
+          <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase mb-12 leading-none">
+            <Translate targetLanguage={language}>Speech_Synthesis_Station</Translate>
+          </h2>
+          
+          <div className="space-y-10">
+            <div>
+              <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mb-6">
+                 <Translate targetLanguage={language}>Active_Speaker_Node</Translate>
+              </label>
+              <div className="flex flex-wrap gap-4">
+                {voices.map(v => (
+                  <button
+                    key={v}
+                    onClick={() => setVoice(v)}
+                    className={`px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border ${
+                      voice === v 
+                        ? 'bg-indigo-600 border-indigo-500 text-white shadow-xl shadow-indigo-600/20' 
+                        : 'bg-white/5 border-white/5 text-slate-500 hover:text-white'
+                    }`}
+                  >
+                    {v}
+                  </button>
+                ))}
+              </div>
             </div>
+
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              className="w-full h-48 p-10 bg-black/40 border border-white/10 rounded-[3.5rem] text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition-all italic font-medium leading-relaxed scrollbar-hide"
+              placeholder="..."
+            />
+
+            <button
+              onClick={handleSynthesize}
+              disabled={loading || !text.trim()}
+              className="w-full bg-white text-black py-8 rounded-[2.5rem] font-black text-xs uppercase tracking-[0.6em] flex items-center justify-center space-x-4 hover:scale-[1.01] active:scale-95 disabled:opacity-30 transition-all shadow-3xl"
+            >
+              {loading ? (
+                <div className="w-5 h-5 border-2 border-indigo-600/30 border-t-indigo-600 rounded-full animate-spin"></div>
+              ) : (
+                <>
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                  </svg>
+                  <Translate targetLanguage={language}>SYNTHESIZE_ACOUSTIC_VECTOR</Translate>
+                </>
+              )}
+            </button>
           </div>
-
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            className="w-full h-40 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-            placeholder="Enter text to speak..."
-          />
-
-          <button
-            onClick={handleSynthesize}
-            disabled={loading || !text.trim()}
-            className="w-full bg-slate-900 text-white py-4 rounded-xl font-bold flex items-center justify-center space-x-2 hover:bg-black disabled:opacity-50 transition-all"
-          >
-            {loading ? (
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-            ) : (
-              <>
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                </svg>
-                <span>Synthesize Audio</span>
-              </>
-            )}
-          </button>
         </div>
       </div>
     </div>

@@ -20,10 +20,10 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
   const isHR = [CareRole.HR_SPECIALIST, CareRole.CEO, CareRole.COO].includes(role);
 
   const tabs = [
-    { id: 'NEXUS', label: 'Workforce Nexus' },
-    { id: 'STAFF', label: 'Staff Mastery' },
-    { id: 'COMPLIANCE', label: 'Compliance' },
-    { id: 'RETENTION', label: 'Retention' },
+    { id: 'NEXUS', label: 'Workforce_Nexus' },
+    { id: 'STAFF', label: 'Staff_Mastery' },
+    { id: 'COMPLIANCE', label: 'Compliance_Sentinel' },
+    { id: 'RETENTION', label: 'Retention_Intel' },
   ];
 
   const adminTabs = [
@@ -32,11 +32,15 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
   ];
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-700 pb-24 h-full">
+    <div className="space-y-12 animate-in fade-in duration-700 pb-24 h-full overflow-y-auto scrollbar-hide">
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 px-4">
         <div>
-          <h2 className="text-4xl font-black text-white tracking-tighter uppercase leading-none italic">Resource_Core</h2>
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-3 italic">Institutional Human Capital & Financial Stewardship</p>
+          <h2 className="text-5xl font-black text-white tracking-tighter uppercase leading-none italic text-indigo-400">
+             <Translate targetLanguage={language}>RESOURCE_CORE</Translate>
+          </h2>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-3 italic">
+             <Translate targetLanguage={language}>Institutional_Human_Capital_&_Financial_Stewardship</Translate>
+          </p>
         </div>
         <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 overflow-x-auto scrollbar-hide shadow-xl">
           {tabs.map(tab => (
