@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -16,15 +17,13 @@ export default function Home() {
   const [language, setLanguage] = useState<string>('English');
 
   if (!user) {
-    // Fix: Added missing 'language' and 'onLanguageChange' props to the Login component call to satisfy its Props interface.
+    // Corrected Login props to match its interface
     return <Login onLogin={(u: User) => setUser(u)} language={language} onLanguageChange={setLanguage} />;
   }
 
   const renderContent = () => {
-    const isField = [CareRole.PSW, CareRole.RN, CareRole.RPN, CareRole.HSS].includes(user.role as any);
-
     if (activeTab === AppTab.DASHBOARD) {
-      {/* Fix: Removed invalid props role, staff, and setActiveTab from Dashboard component call to match its Props interface */}
+      // Corrected Dashboard props to match its interface
       return <Dashboard staffName={user.name} clients={MOCK_CLIENTS} language={language} />;
     }
 

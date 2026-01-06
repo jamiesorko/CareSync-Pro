@@ -15,7 +15,7 @@ class SystemService {
     List exactly 2 clinical risk factors.`;
 
     try {
-      // Fix: generateText now correctly handles 2 arguments
+      // Corrected call signature for generateText
       const response = await geminiService.generateText(prompt, false);
       const text = response.text || "LOW";
       return {
@@ -43,7 +43,8 @@ class SystemService {
   }
 
   getAgencyHealthMetrics(clients: Client[], staff: StaffMember[]) {
-    const activeVisits = clients.filter(c => c.currentVisitStatus === 'IN_PROGRESS').length;
+    // Fixed visit status filtering using currentVisitStatus
+    const activeVisits = clients.filter(c => c.currentVisitStatus === 'IN_PROGRESS' || c.currentVisitStatus === 'ACTIVE').length;
     const completedCount = clients.filter(c => c.currentVisitStatus === 'COMPLETED').length;
     const completionRate = clients.length > 0 ? (completedCount / clients.length) * 100 : 0;
     

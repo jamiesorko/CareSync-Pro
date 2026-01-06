@@ -8,15 +8,23 @@ export class DBService {
       id: 'csp-demo', 
       name: 'CareSync Neural Demo', 
       brandColor: '#6366f1', 
-      activeModules: Object.values(AppTab)
+      activeModules: Object.values(AppTab).map(v => String(v))
     }];
   }
 
-  // Fixed: Implemented getStaff to return mock data
-  async getStaff(): Promise<StaffMember[]> { return MOCK_STAFF; }
+  /**
+   * Retrieves all personnel dossier records.
+   */
+  async getStaff(): Promise<StaffMember[]> { 
+    return MOCK_STAFF; 
+  }
   
-  // Fixed: Implemented getClients to return mock data
-  async getClients(): Promise<Client[]> { return MOCK_CLIENTS; }
+  /**
+   * Retrieves global census matrix.
+   */
+  async getClients(): Promise<Client[]> { 
+    return MOCK_CLIENTS; 
+  }
 
   async updateCompanySettings(id: string, settings: Partial<Company>): Promise<void> {
     console.log(`[DB_SERVICE]: Updating settings for company ${id}`, settings);

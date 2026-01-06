@@ -4,30 +4,41 @@ export enum CareRole {
   COO = 'COO',
   DOC = 'Director of Care',
   RN = 'Registered Nurse',
-  RPN = 'Registered Practical Nurse',
   PSW = 'Personal Support Worker',
-  HSS = 'Health Support Specialist',
   ACCOUNTANT = 'Accountant',
-  HR_SPECIALIST = 'HR Specialist',
   CLIENT = 'Client',
-  COORDINATOR = 'Coordinator'
+  RPN = 'Registered Practical Nurse',
+  HSS = 'Health & Social Specialist',
+  COORDINATOR = 'Coordinator',
+  HR_SPECIALIST = 'HR Specialist',
+  COORD = 'Coordinator'
 }
 
 export enum AppTab {
-  DASHBOARD = 'Dashboard',
-  CLINICAL = 'Clinical Core',
-  LOGISTICS = 'Dispatch Grid',
-  RESOURCE = 'Resource Core',
-  FISCAL = 'Fiscal Ledger',
+  DASHBOARD = 'Ops Dashboard',
+  STRATEGY = 'Strategic Tabletop',
+  CLINICAL = 'Clinical Governance',
+  LOGISTICS = 'Fleet Command',
+  FISCAL = 'Fiscal Forensics',
   VAULT = 'Neural Vault',
-  LIVE = 'Direct Link',
-  ORG_COMMAND = 'Organization Command',
+  WELLNESS = 'Patient Wellness',
   SCHEDULE = 'Schedule',
   CLINICAL_COMMAND = 'Clinical Command',
   INCIDENT_REPORTS = 'Incident Reports',
-  COORDINATION = 'Coordination',
+  RESOURCE = 'Resource Core',
+  LIVE = 'Direct Link',
+  ORG_COMMAND = 'Instance Command',
+  COORDINATION = 'Census Matrix',
   HR_HUB = 'HR Hub',
-  FINANCE = 'Finance'
+  FINANCE = 'Fiscal Ledger',
+  HR_PORTAL = 'HR Portal',
+  FINANCIAL = 'Financial Ledger'
+}
+
+export interface BaseEntity {
+  id: string;
+  companyId: string;
+  createdAt: string;
 }
 
 export interface User {
@@ -42,33 +53,17 @@ export interface UserProfile {
   fullName: string;
 }
 
-export interface Metric {
-  label: string;
-  value: string;
-  trend: string;
-  type: 'positive' | 'negative' | 'neutral';
+export interface Company {
+  id: string;
+  name: string;
+  brandColor?: string;
+  activeModules: string[];
 }
 
 export interface RiskScore {
   level: 'LOW' | 'MED' | 'HIGH' | 'CRITICAL';
   factors: string[];
   lastAssessed: string;
-}
-
-export interface MobilityStatus {
-  isBedridden: boolean;
-  useWheelchair: boolean;
-  useWalker: boolean;
-  dementia: boolean;
-  liftType: string;
-  transferMethod: string;
-}
-
-export interface Medication {
-  id: string;
-  name: string;
-  dosage: string;
-  frequency: string;
 }
 
 export interface Client {
@@ -82,10 +77,17 @@ export interface Client {
   time: string;
   conditions: string[];
   carePlans: Record<string, string[]>;
-  currentVisitStatus: 'IDLE' | 'ACTIVE' | 'IN_PROGRESS' | 'COMPLETED';
-  isInitialVisit: boolean;
+  currentVisitStatus: 'IDLE' | 'IN_PROGRESS' | 'COMPLETED' | 'ACTIVE';
   description: string;
-  mobilityStatus: MobilityStatus;
+  isInitialVisit: boolean;
+  mobilityStatus: {
+    isBedridden: boolean;
+    useWheelchair: boolean;
+    useWalker: boolean;
+    dementia: boolean;
+    liftType: string;
+    transferMethod: string;
+  };
   blacklistStaffIds: string[];
   medications: Medication[];
   risk?: RiskScore;
@@ -95,10 +97,10 @@ export interface Client {
 
 export interface StaffMember {
   id: string;
-  anonymizedId: string;
   name: string;
   role: CareRole;
-  status: 'ONLINE' | 'OFFLINE' | 'IN_FIELD';
+  anonymizedId: string;
+  status: 'ONLINE' | 'IN_FIELD' | 'OFFLINE';
   weeklyHours: number;
   homeSector: string;
   availability: string;
@@ -110,6 +112,22 @@ export interface StaffMember {
   lastSeen?: string;
 }
 
+export interface Staff extends StaffMember {}
+
+export interface Medication {
+  id: string;
+  name: string;
+  dosage: string;
+  frequency: string;
+}
+
+export interface Metric {
+  label: string;
+  value: string;
+  trend: string;
+  type: 'positive' | 'negative' | 'neutral';
+}
+
 export interface Message {
   role: 'user' | 'model';
   text: string;
@@ -117,71 +135,70 @@ export interface Message {
   groundingSources?: { title?: string; uri: string }[];
 }
 
-export type AlertType = 'FALL' | 'CHOKING' | 'MEDICAL' | 'UNSAFE_ENV' | 'CLINICAL' | 'COMPLAINT' | 'NOT_SEEN' | 'INTEGRITY_AUDIT' | 'SWELLING' | 'FISCAL' | 'OPERATIONAL' | 'VACATION' | 'LOA' | 'AVAILABILITY' | 'PAYROLL_DISPUTE' | 'INSURANCE_Q';
-
-export interface AlertSignal {
-  id: string;
-  type: AlertType;
-  content: string;
-  senderName: string;
-  timestamp: string;
-  status: 'PENDING' | 'RESOLVED' | 'DISPATCHED';
-  clientName?: string;
+export interface GeneratedImage {
+  url: string;
+  prompt: string;
 }
 
 export interface BlastStatus {
   id: string;
   clientId: string;
   roleRequired: CareRole;
-  status: 'SENT_TO_CLIENT' | 'ACCEPTED' | 'FAILED';
+  status: string;
   candidates: string[];
 }
 
-export interface FormRequirement {
-  id: string;
-  companyId: string;
+export type AlertType = 'MEDICAL' | 'CLINICAL' | 'UNSAFE_ENV' | 'SWELLING' | 'FALL' | 'COMPLAINT' | 'NOT_SEEN' | 'VACATION' | 'LOA' | 'AVAILABILITY' | 'PAYROLL_DISPUTE' | 'INSURANCE_Q' | 'INTEGRITY_AUDIT' | 'URGENT_BOOK_OFF' | 'BOOK_OFF' | 'SUPPLY_REQ';
+
+export interface ChatMessage extends BaseEntity {
+  senderId: string;
+  senderName: string;
+  text: string;
+  timestamp: string;
+}
+
+export interface ChatThread extends BaseEntity {
+  name: string;
+  type: 'GROUP' | 'PRIVATE';
+  lastMessage: string;
+  unreadCount: number;
+  createdAt: string;
+}
+
+export interface FormRequirement extends BaseEntity {
   name: string;
   submissionTarget: string;
   isMandatory: boolean;
 }
 
-export interface Applicant {
-  id: string;
-  companyId: string;
+export interface Applicant extends BaseEntity {
   name: string;
   role: CareRole;
   credentialsVerified: boolean;
   referencesChecked: boolean;
   cultureFitScore: number;
-  status: 'PENDING' | 'INTERVIEW_SET' | 'HIRED' | 'REJECTED';
+  status: string;
   appliedDate: string;
 }
 
-export interface Certificate {
-  id: string;
-  companyId: string;
+export interface Certificate extends BaseEntity {
   staffId: string;
   staffName: string;
   type: string;
   expiryDate: string;
-  status: 'SUSPENDED' | 'WARNING' | 'VALID';
+  status: 'SUSPENDED' | 'WARNING' | 'VALID' | 'EXPIRED';
 }
 
-export interface TrainingRecord {
-  id: string;
-  companyId: string;
+export interface TrainingRecord extends BaseEntity {
   staffId: string;
   staffName: string;
   moduleName: string;
   isMandatory: boolean;
   isCompleted: boolean;
   dueDate: string;
-  completionDate?: string;
 }
 
-export interface Complaint {
-  id: string;
-  companyId: string;
+export interface Complaint extends BaseEntity {
   clientId: string;
   clientName: string;
   staffId: string;
@@ -193,116 +210,32 @@ export interface Complaint {
   type: 'CLIENT_ISSUE' | 'STAFF_GRIEVANCE';
 }
 
-export interface BaseEntity {
+export interface AlertSignal {
   id: string;
-  companyId: string;
-  createdAt: string;
-}
-
-export interface ChatMessage extends BaseEntity {
-  senderId: string;
+  type: AlertType;
+  content: string;
   senderName: string;
-  text: string;
   timestamp: string;
+  status: 'PENDING' | 'ACKNOWLEDGED' | 'RESOLVED';
+  clientName?: string;
 }
 
-export interface ChatThread extends BaseEntity {
-  name: string;
-  type: 'GROUP' | 'DIRECT';
-  lastMessage: string;
-  unreadCount: number;
-}
-
-export interface Company {
-  id: string;
-  name: string;
-  brandColor?: string;
-  activeModules: string[];
-}
-
-export interface InventoryItem extends BaseEntity {
-  name: string;
-  category: string;
-  stockLevel: number;
-  unit: string;
-  minThreshold: number;
-}
-
-export interface OncallShift extends BaseEntity {
+export interface LeaveRequest extends BaseEntity {
   staffId: string;
-  staffName: string;
-  startTime: string;
-  endTime: string;
-  tier: 'PRIMARY' | 'SECONDARY';
+  startDate: string;
+  endDate: string;
+  reason: string;
+  status: 'PENDING' | 'APPROVED' | 'DENIED';
 }
 
-export interface CommunityResource {
-  name: string;
-  address: string;
-  category: string;
-  uri: string;
-}
-
-export interface ContingencyPlan {
-  impactedClients: string[];
-  suggestedRescuers: string[];
-  etaVariance: number;
-}
-
-export interface RecoveryMilestone {
-  title: string;
-  status: 'ON_TRACK' | 'STAGNANT' | 'DELAYED' | 'ACHIEVED' | 'PENDING' | 'AT_RISK';
-}
-
-export interface ClinicalTruthVector {
-  clientId: string;
-  timestamp: string;
-  acuityScore: number;
-  fusionLevel: string;
-  topDiagnosticSignals: string[];
-}
-
-export interface SecurityProbe extends BaseEntity {
-  actorId: string;
-  action: string;
-  resourcePath: string;
-  anomalyScore: number;
-  threatLevel: 'NONE' | 'ELEVATED' | 'CRITICAL';
-}
-
-export interface RevenueGap {
-  visitId: string;
-  missingProcedure: string;
-  estimatedValue: number;
-  clinicalEvidence: string;
-  billingCodeSuggestion: string;
-}
-
-export interface ClinicalBoardReview extends BaseEntity {
-  clientId: string;
-  timestamp: string;
-  caseSummary: string;
-  perspectives: { entity: string; focus: string; risk: string }[];
-  consensusPlan: string;
-}
-
-export interface AfterActionReview {
-  eventId: string;
-  observedPath: string;
-  optimalPath: string;
-  decisionNodes: { time: string; staffAction: string; isOptimal: boolean }[];
-  trainingForge: string[];
-}
-
-export interface TriageReferral {
-  id: string;
+export interface TriageReferral extends BaseEntity {
   patientName: string;
   source: string;
   gravityScore: number;
   clinicalAcuity: 'LOW' | 'MED' | 'HIGH' | 'CRITICAL';
   logisticalFit: number;
   aiRationale: string;
-  status: 'NEW' | 'TRIAGED' | 'ACCEPTED' | 'REJECTED';
+  status: 'NEW' | 'TRIAGED';
 }
 
 export interface CrisisResource {
@@ -344,7 +277,7 @@ export interface ZenVideoPrompt {
 
 export interface StrategicScenario extends BaseEntity {
   title: string;
-  projection: { month: number; netReserve: number; staffRetention: number }[];
+  projection: any[];
   failurePoint: string;
   mitigationStrategy: string;
   riskIndex: number;
@@ -386,7 +319,7 @@ export interface HuddleSignal extends BaseEntity {
 export interface ForensicDossier {
   eventId: string;
   truthVector: string;
-  multimodalTimeline: { time: string; source: string; evidence: string; hash: string }[];
+  multimodalTimeline: any[];
   legalDefensibilityScore: number;
   exposureAnalysis: string;
 }
@@ -402,7 +335,7 @@ export interface DominanceStrategy {
 
 export interface NexusConsensus extends BaseEntity {
   clientId: string;
-  specialistInputs: { role: string; directive: string; conflict: boolean }[];
+  specialistInputs: any[];
   unifiedCareVector: string;
   criticalSynergyAlert: string | null;
   consensusScore: number;
@@ -419,7 +352,7 @@ export interface ChairmanMandate extends BaseEntity {
 
 export interface IoTAsset extends BaseEntity {
   name: string;
-  type: string;
+  type: 'VEHICLE' | 'HARDWARE';
   status: 'NOMINAL' | 'FAULT' | 'MAINTENANCE';
   telemetry: string;
   repairGroundedInfo: string;
@@ -430,22 +363,38 @@ export interface BioTrajectory {
   recoveryVelocity: number;
   predictedIndependenceDate: string;
   stagnationProbability: number;
-  milestones: RecoveryMilestone[];
+  milestones: any[];
   clinicalRationale: string;
+}
+
+export interface EthicsConsult extends BaseEntity {
+  dilemma: string;
+  moralConflict: string;
+  stakeholderPerspectives: any[];
+  consensusDirective: string;
+  legislativeGuardrail: string;
+}
+
+export interface TrainingModule extends BaseEntity {
+  title: string;
+  targetSkill: string;
+  conceptBrief: string;
+  questions: any[];
+  masteryTarget: number;
 }
 
 export interface ProtocolDraft {
   title: string;
   objective: string;
   regulatoryAlignment: string;
-  workflowSteps: { role: string; task: string; critical: boolean }[];
+  workflowSteps: any[];
   auditChecklist: string[];
 }
 
 export interface RecoveryVector {
   staffId: string;
   staffName: string;
-  failureType: 'MECHANICAL' | 'MEDICAL' | 'COMMS';
+  failureType: string;
   nearestRepairShop: string;
   rescueEtaMinutes: number;
   reassignedStaffId: string;
@@ -462,7 +411,7 @@ export interface PatientTwinSim {
 }
 
 export interface LeakageSignal {
-  type: 'MILEAGE' | 'SUPPLY' | 'HOURS' | 'UPCODING';
+  type: string;
   confidence: number;
   estimatedLoss: number;
   involvedStaff: string;
@@ -471,10 +420,10 @@ export interface LeakageSignal {
 
 export interface TruthMediationCase {
   clientId: string;
-  divergentSignals: { staffName: string; role: string; note: string }[];
+  divergentSignals: any[];
   aiSynthesizedTruth: string;
   discrepancyProbability: number;
-  safetyPriorityLevel: 'STABLE' | 'WATCH' | 'CRITICAL';
+  safetyPriorityLevel: string;
   suggestedDirective: string;
 }
 
@@ -485,7 +434,7 @@ export interface ReclamationCase {
   evidenceHarvested: string[];
   successProbability: number;
   draftedAppeal: string;
-  status: 'PENDING' | 'READY';
+  status: string;
 }
 
 export interface RegionalViralPulse {
@@ -497,11 +446,78 @@ export interface RegionalViralPulse {
   fleetImpactAdvisory: string;
 }
 
-export interface SyntheticInsight {
-  patientId: string;
-  globalPeerComparison: string;
-  predictedLongTermTrajectory: string;
-  scientificCitations: { title: string; uri: string }[];
+export interface InventoryItem extends BaseEntity {
+  name: string;
+  category: string;
+  stockLevel: number;
+  unit: string;
+  minThreshold: number;
+}
+
+export interface ContingencyPlan {
+  impactedClients: string[];
+  suggestedRescuers: string[];
+  etaVariance: number;
+}
+
+export interface RecoveryMilestone {
+  title: string;
+  status: string;
+}
+
+export interface ClinicalTruthVector {
+  clientId: string;
+  timestamp: string;
+  acuityScore: number;
+  fusionLevel: string;
+  topDiagnosticSignals: string[];
+}
+
+export interface SecurityProbe extends BaseEntity {
+  actorId: string;
+  action: string;
+  resourcePath: string;
+  anomalyScore: number;
+  threatLevel: string;
+}
+
+export interface ClinicalBoardReview extends BaseEntity {
+  clientId: string;
+  timestamp: string;
+  caseSummary: string;
+  perspectives: string[];
+  consensusPlan: string;
+}
+
+export interface RevenueGap {
+  visitId: string;
+  missingProcedure: string;
+  estimatedValue: number;
+  clinicalEvidence: string;
+  billingCodeSuggestion: string;
+}
+
+export interface OncallShift extends BaseEntity {
+  staffId: string;
+  staffName: string;
+  startTime: string;
+  endTime: string;
+  tier: string;
+}
+
+export interface CommunityResource {
+  name: string;
+  address: string;
+  category: string;
+  uri: string;
+}
+
+export interface AfterActionReview {
+  eventId: string;
+  observedPath: string;
+  optimalPath: string;
+  decisionNodes: any[];
+  trainingForge: any[];
 }
 
 export interface DeviceReading {
@@ -512,38 +528,16 @@ export interface DeviceReading {
   fhirMappedJson: string;
 }
 
+export interface SyntheticInsight {
+  patientId: string;
+  globalPeerComparison: string;
+  predictedLongTermTrajectory: string;
+  scientificCitations: any[];
+}
+
 export interface RegulatoryPatch extends BaseEntity {
   newLawReference: string;
   affectedSOPs: string[];
   autoDraftedRevision: string;
   complianceDeadline: string;
-}
-
-export interface GeneratedImage {
-  url: string;
-  prompt: string;
-}
-
-export interface EthicsConsult extends BaseEntity {
-  dilemma: string;
-  moralConflict: string;
-  stakeholderPerspectives: { entity: string; focus: string; risk: string }[];
-  consensusDirective: string;
-  legislativeGuardrail: string;
-}
-
-export interface TrainingModule extends BaseEntity {
-  title: string;
-  targetSkill: string;
-  conceptBrief: string;
-  questions: { q: string; a: string[]; correct: number }[];
-  masteryTarget: number;
-}
-
-export interface LeaveRequest {
-  staffId: string;
-  startDate: string;
-  endDate: string;
-  reason: string;
-  status: 'PENDING' | 'APPROVED' | 'DENIED';
 }

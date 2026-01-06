@@ -24,7 +24,7 @@ export class ClinicalInsightService {
     `;
 
     try {
-      // Fix: generateText now correctly handles 2 arguments
+      // Fix: generateText call matches updated service signature
       const response = await geminiService.generateText(prompt, false);
       return response.text || "Clinical trend signal unavailable.";
     } catch (e) {
