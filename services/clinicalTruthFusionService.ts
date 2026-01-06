@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { Client, HuddleSignal } from '../types';
 
@@ -23,6 +24,7 @@ export class ClinicalTruthFusionService {
       return {
         id: Math.random().toString(36).substring(7),
         companyId: 'csp-demo',
+        createdAt: new Date().toISOString(),
         clientId: client.id,
         truthSynthesis: data.truth || "Stable.",
         contradictionDetected: !!data.contradiction,
@@ -34,6 +36,7 @@ export class ClinicalTruthFusionService {
       return {
         id: 'err-fusion',
         companyId: 'csp-demo',
+        createdAt: new Date().toISOString(),
         clientId: client.id,
         truthSynthesis: "Error.",
         contradictionDetected: false,

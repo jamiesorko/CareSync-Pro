@@ -1,3 +1,4 @@
+
 import { geminiService } from './geminiService'
 import { Client, ClinicalBoardReview } from '../types'
 
@@ -16,6 +17,7 @@ export class ClinicalBoardService {
       return {
         id: Math.random().toString(36).substring(7),
         companyId: this.companyId,
+        createdAt: new Date().toISOString(),
         clientId: client.id,
         timestamp: new Date().toISOString(),
         caseSummary: data.summary || "Case initialized.",
@@ -26,6 +28,7 @@ export class ClinicalBoardService {
       return {
         id: Math.random().toString(36).substring(7),
         companyId: this.companyId,
+        createdAt: new Date().toISOString(),
         clientId: client.id,
         timestamp: new Date().toISOString(),
         caseSummary: "Board review failure.",

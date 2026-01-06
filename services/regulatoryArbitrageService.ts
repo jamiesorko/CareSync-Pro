@@ -25,6 +25,7 @@ export class RegulatoryArbitrageService {
       return [{
         id: Math.random().toString(36).substring(7),
         companyId: 'csp-demo',
+        createdAt: new Date().toISOString(),
         newLawReference: data.law || "New Mandate",
         affectedSOPs: data.affected || [],
         autoDraftedRevision: data.draft || "Drafting...",

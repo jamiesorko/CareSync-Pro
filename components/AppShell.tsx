@@ -17,11 +17,12 @@ interface Props {
 const AppShell: React.FC<Props> = ({ activeTab, setActiveTab, user, onLogout, language, onLanguageChange, children }) => {
   return (
     <div className="flex h-screen w-full bg-[#f1f5f9] overflow-hidden text-slate-900">
-      {/* Fix: Removed invalid prop staffName from Sidebar component call as it is not defined in Sidebar's Props interface */}
+      {/* Added missing onLogout prop to Sidebar component call */}
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
         role={user.role} 
+        onLogout={onLogout}
         language={language}
       />
       

@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { Client, EthicsConsult } from '../types';
 
@@ -24,7 +25,8 @@ export class ClinicalEthicsAdvisoryService {
       return {
         id: Math.random().toString(36).substring(7),
         companyId: 'csp-demo',
-        timestamp: new Date().toISOString(),
+        // Changed timestamp to createdAt to comply with BaseEntity interface
+        createdAt: new Date().toISOString(),
         dilemma: scenario,
         moralConflict: data.conflict || "Conflict found.",
         stakeholderPerspectives: data.perspectives || [],
@@ -35,7 +37,8 @@ export class ClinicalEthicsAdvisoryService {
       return {
         id: 'err-ethics',
         companyId: 'csp-demo',
-        timestamp: new Date().toISOString(),
+        // Changed timestamp to createdAt to comply with BaseEntity interface
+        createdAt: new Date().toISOString(),
         dilemma: scenario,
         moralConflict: "Error.",
         stakeholderPerspectives: [],

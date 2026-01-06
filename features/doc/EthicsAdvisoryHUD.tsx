@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Client, EthicsConsult } from '../../types';
 import { clinicalEthicsAdvisoryService } from '../../services/clinicalEthicsAdvisoryService';
@@ -45,7 +46,7 @@ const EthicsAdvisoryHUD: React.FC<Props> = ({ language, clients }) => {
               <button 
                 onClick={runConsult}
                 disabled={loading || !input.trim()}
-                className="w-full py-6 bg-white text-black rounded-3xl font-black text-xs uppercase tracking-[0.4em] shadow-xl hover:scale-105 active:scale-95 transition-all disabled:opacity-30"
+                className="w-full py-6 bg-white text-black rounded-3xl font-black text-xs uppercase tracking-[0.4em] shadow-xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-30"
               >
                 {loading ? 'WEIGHING_ETHICAL_VECTORS...' : 'INITIATE_MORAL_CONSULT'}
               </button>
@@ -58,7 +59,7 @@ const EthicsAdvisoryHUD: React.FC<Props> = ({ language, clients }) => {
                    <p className="text-2xl font-bold text-white leading-relaxed italic uppercase tracking-tighter">"{consult.moralConflict}"</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                   {consult.stakeholderPerspectives.map((p, i) => (
+                   {consult.stakeholderPerspectives.map((p: any, i: number) => (
                      <div key={i} className="p-6 bg-white/[0.03] border border-white/5 rounded-2xl">
                         <p className="text-[8px] font-black text-slate-500 uppercase mb-2">{p.entity}</p>
                         <p className="text-[10px] text-slate-300 italic">"{p.focus}"</p>
@@ -86,7 +87,7 @@ const EthicsAdvisoryHUD: React.FC<Props> = ({ language, clients }) => {
               )}
               <button 
                 onClick={() => alert("SIGNAL_LOCKED: Ethical directive committed to patient record.")}
-                className="w-full py-5 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 transition-all"
+                className="w-full py-5 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all"
               >
                 AUTHORIZE_DIRECTIVE
               </button>

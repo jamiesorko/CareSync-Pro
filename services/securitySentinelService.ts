@@ -1,3 +1,4 @@
+
 import { SecurityProbe } from '../types'
 
 export class SecuritySentinelService {
@@ -10,6 +11,7 @@ export class SecuritySentinelService {
     return {
       id: Math.random().toString(36).substring(7),
       companyId: this.companyId,
+      createdAt: new Date().toISOString(),
       actorId,
       action,
       resourcePath,

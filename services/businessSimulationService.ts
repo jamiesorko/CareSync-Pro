@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { StrategicScenario } from '../types';
 
@@ -26,6 +27,7 @@ export class BusinessSimulationService {
       return {
         id: Math.random().toString(36).substring(7),
         companyId: 'csp-demo',
+        createdAt: new Date().toISOString(),
         title: data.title || "Strategic Forecast",
         projection: data.projection || [],
         failurePoint: data.failurePoint || "N/A",
@@ -36,6 +38,7 @@ export class BusinessSimulationService {
       return {
         id: 'error-sim',
         companyId: 'csp-demo',
+        createdAt: new Date().toISOString(),
         title: "Simulation Failure",
         projection: [],
         failurePoint: "N/A",

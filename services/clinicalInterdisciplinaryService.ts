@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { Client, NexusConsensus } from '../types';
 
@@ -24,6 +25,7 @@ export class ClinicalInterdisciplinaryService {
       return {
         id: Math.random().toString(36).substring(7),
         companyId: 'csp-demo',
+        createdAt: new Date().toISOString(),
         clientId: client.id,
         specialistInputs: data.directives || [],
         unifiedCareVector: data.vector || "Stabilize.",
@@ -34,6 +36,7 @@ export class ClinicalInterdisciplinaryService {
       return {
         id: 'err-nexus',
         companyId: 'csp-demo',
+        createdAt: new Date().toISOString(),
         clientId: client.id,
         specialistInputs: [],
         unifiedCareVector: "Manual review.",

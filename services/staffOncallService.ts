@@ -1,3 +1,4 @@
+
 import { supabase } from '../lib/supabase'
 import { OncallShift } from '../types'
 
@@ -18,6 +19,7 @@ export class StaffOncallService {
     return {
       id: 'oc-1',
       companyId: this.companyId || 'demo',
+      createdAt: new Date().toISOString(),
       staffId: 'rn1',
       staffName: 'Tom Hardy (RN)',
       startTime: new Date().toISOString(),

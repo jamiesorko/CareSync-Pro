@@ -27,11 +27,12 @@ const Layout: React.FC<Props> = ({
 }) => {
   return (
     <div className="flex h-screen w-full bg-[#020617] text-slate-200 overflow-hidden select-none">
-      {/* Fix: Removed invalid prop staffName from Sidebar component call as it is not defined in Sidebar's Props interface */}
+      {/* Added missing onLogout prop to Sidebar component call */}
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
         role={activeRole} 
+        onLogout={onLogout}
         language={language}
       />
       

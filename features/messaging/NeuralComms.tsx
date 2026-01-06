@@ -22,8 +22,15 @@ const NeuralComms: React.FC<Props> = ({ role, language, staffName }) => {
 
   const threads = useMemo(() => {
     const list: ChatThread[] = [];
-    // Fix: Added missing companyId property to ChatThread initialization
-    list.push({ id: 'staff-global', companyId: 'demo-company', name: 'Global Roster Channel', type: 'GROUP', lastMessage: 'Biometric link active.', unreadCount: 0 });
+    list.push({ 
+      id: 'staff-global', 
+      companyId: 'demo-company', 
+      name: 'Global Roster Channel', 
+      type: 'GROUP', 
+      lastMessage: 'Biometric link active.', 
+      unreadCount: 0,
+      createdAt: new Date().toISOString()
+    });
     return list;
   }, []);
 

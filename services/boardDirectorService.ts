@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { ChairmanMandate } from '../types';
 
@@ -35,6 +36,7 @@ export class BoardDirectorService {
       return {
         id: Math.random().toString(36).substring(7),
         companyId: 'csp-demo',
+        createdAt: new Date().toISOString(),
         timestamp: new Date().toISOString(),
         stateOfAgency: data.state || "Stable baseline.",
         institutionalFragilityPoints: data.fragility || [],
@@ -46,6 +48,7 @@ export class BoardDirectorService {
       return {
         id: 'error-mandate',
         companyId: 'csp-demo',
+        createdAt: new Date().toISOString(),
         timestamp: new Date().toISOString(),
         stateOfAgency: "Synthesis failed.",
         institutionalFragilityPoints: [],

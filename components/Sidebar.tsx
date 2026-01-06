@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { AppTab, CareRole } from '../types';
 import { 
@@ -16,9 +17,10 @@ interface Props {
   setActiveTab: (tab: AppTab) => void;
   role: CareRole;
   onLogout: () => void;
+  language?: string;
 }
 
-const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role, onLogout }) => {
+const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role, onLogout, language }) => {
   const menu = [
     { id: AppTab.DASHBOARD, icon: LayoutDashboard, label: 'Ops Dashboard' },
     { id: AppTab.CLINICAL, icon: ShieldAlert, label: 'Clinical Core' },

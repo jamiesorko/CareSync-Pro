@@ -1,19 +1,22 @@
+
 import React, { useState } from 'react';
 import { CareRole, User, AppTab } from './types';
 import Sidebar from './components/Sidebar';
 import Login from './features/Login';
 import Dashboard from './features/Dashboard';
 import { Search, Bell, Settings, UserCircle } from 'lucide-react';
+import { MOCK_CLIENTS } from './data/careData';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState<AppTab>(AppTab.DASHBOARD);
+  const [language, setLanguage] = useState<string>('English');
 
-  if (!user) return <Login onLogin={setUser} />;
+  if (!user) return <Login onLogin={setUser} language={language} onLanguageChange={setLanguage} />;
 
   const renderContent = () => {
     switch (activeTab) {
-      case AppTab.DASHBOARD: return <Dashboard />;
+      case AppTab.DASHBOARD: return <Dashboard staffName={user.name} clients={MOCK_CLIENTS} language={language} />;
       default: return (
         <div className="h-full flex items-center justify-center opacity-30 italic">
           <p className="text-xl uppercase tracking-widest font-black">Vector_{activeTab.replace(' ', '_')}_Locked</p>

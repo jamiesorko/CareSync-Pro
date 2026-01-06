@@ -43,6 +43,7 @@ export class IoTFleetService {
       return {
         id: asset.id || 'iot-000',
         companyId: 'csp-demo',
+        createdAt: new Date().toISOString(),
         name: asset.name || 'Unknown Asset',
         type: asset.type || 'HARDWARE',
         status: data.status || 'FAULT',
@@ -53,6 +54,7 @@ export class IoTFleetService {
       return {
         id: asset.id || 'iot-000',
         companyId: 'csp-demo',
+        createdAt: new Date().toISOString(),
         name: asset.name || 'Unknown Asset',
         type: asset.type || 'HARDWARE',
         status: 'FAULT',

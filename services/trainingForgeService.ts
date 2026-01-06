@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { TrainingModule, StaffMember } from '../types';
 
@@ -21,6 +22,8 @@ export class TrainingForgeService {
       return {
         id: Math.random().toString(36).substring(7),
         companyId: 'csp-demo',
+        // Added missing createdAt property required by BaseEntity interface
+        createdAt: new Date().toISOString(),
         title: data.title || "Remedial Protocol",
         targetSkill: gapDescription,
         conceptBrief: data.brief || "Focus on documentation.",
@@ -31,6 +34,8 @@ export class TrainingForgeService {
       return {
         id: 'err-forge',
         companyId: 'csp-demo',
+        // Added missing createdAt property required by BaseEntity interface
+        createdAt: new Date().toISOString(),
         title: "Standard Training",
         targetSkill: gapDescription,
         conceptBrief: "Manual training required.",

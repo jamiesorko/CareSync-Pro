@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ethicsAdvisoryService } from '../../services/ethicsAdvisoryService';
 import { Client, EthicsConsult } from '../../types';
@@ -82,11 +83,11 @@ const EthicsAdvisoryBoard: React.FC<Props> = ({ language, clients }) => {
                    </div>
 
                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {consult.stakeholderPerspectives.map((p, i) => (
+                      {consult.stakeholderPerspectives.map((p: any, i: number) => (
                         <div key={i} className="p-6 bg-white/[0.02] border border-white/5 rounded-3xl">
                            <p className="text-[8px] font-black text-slate-500 uppercase mb-3">{p.entity}</p>
                            <p className="text-[11px] text-slate-200 font-bold mb-3 italic">"{p.focus}"</p>
-                           <p className="text-[9px] text-rose-500 font-black uppercase">Risk: {p.risk}</p>
+                           <p className="text-[9px] font-black text-rose-500 uppercase">Risk: {p.risk}</p>
                         </div>
                       ))}
                    </div>

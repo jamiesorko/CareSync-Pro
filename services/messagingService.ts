@@ -14,6 +14,7 @@ export class MessagingService {
       return [{ 
         id: 'staff-global', 
         companyId: this.companyId || 'demo', 
+        createdAt: new Date().toISOString(),
         name: 'Global Roster Channel', 
         type: 'GROUP', 
         lastMessage: 'Biometric link active.', 
@@ -24,6 +25,7 @@ export class MessagingService {
     return (data || []).map((t: any) => ({
       id: t.id,
       companyId: t.company_id,
+      createdAt: t.created_at || new Date().toISOString(),
       name: t.name,
       type: t.type,
       unreadCount: 0,
@@ -42,6 +44,7 @@ export class MessagingService {
     return (data || []).map((m: any) => ({
       id: m.id,
       companyId: this.companyId || 'demo',
+      createdAt: m.created_at || new Date().toISOString(),
       senderId: m.sender_id,
       senderName: m.staff?.name || 'System',
       text: m.content,

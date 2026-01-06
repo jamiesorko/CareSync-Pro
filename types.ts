@@ -523,3 +523,27 @@ export interface GeneratedImage {
   url: string;
   prompt: string;
 }
+
+export interface EthicsConsult extends BaseEntity {
+  dilemma: string;
+  moralConflict: string;
+  stakeholderPerspectives: { entity: string; focus: string; risk: string }[];
+  consensusDirective: string;
+  legislativeGuardrail: string;
+}
+
+export interface TrainingModule extends BaseEntity {
+  title: string;
+  targetSkill: string;
+  conceptBrief: string;
+  questions: { q: string; a: string[]; correct: number }[];
+  masteryTarget: number;
+}
+
+export interface LeaveRequest {
+  staffId: string;
+  startDate: string;
+  endDate: string;
+  reason: string;
+  status: 'PENDING' | 'APPROVED' | 'DENIED';
+}
