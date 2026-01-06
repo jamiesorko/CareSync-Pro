@@ -5,7 +5,8 @@ import React, { useState } from 'react';
 import { CareRole, AppTab, User } from '../types';
 import Login from '../features/Login';
 import Layout from '../components/Layout';
-import Dashboard from '../features/Dashboard';
+// Fix: Dashboard is a named export, changing import accordingly.
+import { Dashboard } from '../features/Dashboard';
 import ScheduleView from '../features/ScheduleView';
 import RNCommandCenter from '../features/rn/RNCommandCenter';
 import CareReport from '../features/CareReport';

@@ -15,10 +15,11 @@ const CarePlanEditor: React.FC<Props> = ({ language }) => {
   const [isDictating, setIsDictating] = useState(false);
   
   // Available forms to link
+  // Fix: Added missing createdAt property required by FormRequirement (BaseEntity)
   const availableForms: FormRequirement[] = [
-    { id: 'f1', companyId: 'demo-company', name: 'Wound Assessment v2', submissionTarget: 'RN_SUPERVISOR', isMandatory: true },
-    { id: 'f2', companyId: 'demo-company', name: 'Medication Refusal Form', submissionTarget: 'DOC', isMandatory: true },
-    { id: 'f3', companyId: 'demo-company', name: 'Home Care Incident Log', submissionTarget: 'HOME_CARE_AUTH', isMandatory: false },
+    { id: 'f1', companyId: 'demo-company', createdAt: new Date().toISOString(), name: 'Wound Assessment v2', submissionTarget: 'RN_SUPERVISOR', isMandatory: true },
+    { id: 'f2', companyId: 'demo-company', createdAt: new Date().toISOString(), name: 'Medication Refusal Form', submissionTarget: 'DOC', isMandatory: true },
+    { id: 'f3', companyId: 'demo-company', createdAt: new Date().toISOString(), name: 'Home Care Incident Log', submissionTarget: 'HOME_CARE_AUTH', isMandatory: false },
   ];
 
   const rolesToEdit = [CareRole.RN, CareRole.RPN, CareRole.PSW, CareRole.HSS];

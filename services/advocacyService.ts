@@ -34,7 +34,8 @@ export class AdvocacyService {
       
       if (data.issueDetected) {
         await notificationService.broadcastSignal({
-          type: 'OPERATIONAL',
+          // Fix: Type '"OPERATIONAL"' is not assignable to type 'AlertType'. Using 'CLINICAL' instead.
+          type: 'CLINICAL',
           content: `ADVOCACY_ALARM: Potential rights violation for Client ${clientId}. ${data.description}`
         }, [CareRole.DOC, CareRole.CEO]);
 

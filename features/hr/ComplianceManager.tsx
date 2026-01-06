@@ -9,9 +9,10 @@ interface Props {
 }
 
 const ComplianceManager: React.FC<Props> = ({ language, isHR }) => {
+  // Fix: Added missing createdAt property required by Certificate (BaseEntity)
   const [certs] = useState<Certificate[]>([
-    { id: 'c-1', companyId: 'csp', staffId: 's2', staffName: 'Sarah Jenkins', type: 'Vulnerable Sector Check', expiryDate: '2025-10-14', status: 'SUSPENDED' },
-    { id: 'c-2', companyId: 'csp', staffId: 's1', staffName: 'Elena Rodriguez', type: 'First Aid/CPR', expiryDate: '2025-11-01', status: 'WARNING' }
+    { id: 'c-1', companyId: 'csp', createdAt: new Date().toISOString(), staffId: 's2', staffName: 'Sarah Jenkins', type: 'Vulnerable Sector Check', expiryDate: '2025-10-14', status: 'SUSPENDED' },
+    { id: 'c-2', companyId: 'csp', createdAt: new Date().toISOString(), staffId: 's1', staffName: 'Elena Rodriguez', type: 'First Aid/CPR', expiryDate: '2025-11-01', status: 'WARNING' }
   ]);
 
   const handleSignal = () => {

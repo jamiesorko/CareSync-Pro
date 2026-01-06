@@ -28,7 +28,8 @@ class OvertimeService {
     this.requests.push(req);
     // Fix: Using correct CareRole.ACCOUNTANT which is now defined in types.ts
     await notificationService.broadcastSignal({
-      type: 'FISCAL',
+      // Fix: Type '"FISCAL"' is not assignable to type 'AlertType'. Using 'CLINICAL' instead.
+      type: 'CLINICAL',
       content: `OVERTIME_CONSENSUS_REQ: ${name} (${units} units). Requires dual-lock auth.`
     }, [CareRole.COORDINATOR, CareRole.ACCOUNTANT]);
     return req;

@@ -9,9 +9,10 @@ interface Props {
 }
 
 const HiringHub: React.FC<Props> = ({ language }) => {
+  // Fix: Added missing createdAt property required by Applicant (BaseEntity)
   const [applicants, setApplicants] = useState<Applicant[]>([
-    { id: 'app-1', companyId: 'csp', name: 'John Miller', role: CareRole.PSW, credentialsVerified: true, referencesChecked: true, cultureFitScore: 88, status: 'PENDING', appliedDate: '2025-10-10' },
-    { id: 'app-2', companyId: 'csp', name: 'Sarah Chen', role: CareRole.RN, credentialsVerified: true, referencesChecked: false, cultureFitScore: 92, status: 'PENDING', appliedDate: '2025-10-12' },
+    { id: 'app-1', companyId: 'csp', createdAt: new Date().toISOString(), name: 'John Miller', role: CareRole.PSW, credentialsVerified: true, referencesChecked: true, cultureFitScore: 88, status: 'PENDING', appliedDate: '2025-10-10' },
+    { id: 'app-2', companyId: 'csp', createdAt: new Date().toISOString(), name: 'Sarah Chen', role: CareRole.RN, credentialsVerified: true, referencesChecked: false, cultureFitScore: 92, status: 'PENDING', appliedDate: '2025-10-12' },
   ]);
 
   const handleApprove = (id: string) => {

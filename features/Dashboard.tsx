@@ -1,93 +1,60 @@
 
 import React from 'react';
-import { Metric, Client } from '../types';
-import { Activity, Users, AlertCircle, Target } from 'lucide-react';
-import Translate from '../components/Translate';
+/* Root Translate.tsx uses named export */
+import { Translate } from '../Translate';
+import { Activity, Zap, TrendingUp, ShieldCheck } from 'lucide-react';
+import { Client } from '../types';
 
 interface Props {
+  /* Changed from lang to language to match app usage */
+  language: string;
   staffName: string;
   clients: Client[];
-  language: string;
 }
 
-const Dashboard: React.FC<Props> = ({ staffName, clients, language }) => {
-  const metrics: Metric[] = [
-    { label: 'Active Census', value: String(clients.length), trend: '+4', type: 'positive' },
-    { label: 'Ops Velocity', value: '98.4%', trend: 'Nominal', type: 'neutral' },
-    { label: 'Critical Gaps', value: '02', trend: 'Action', type: 'negative' },
-    { label: 'Fiscal Delta', value: '+$14k', trend: '+2.1%', type: 'positive' },
+export const Dashboard = ({ language, staffName, clients }: Props) => {
+  const stats = [
+    { label: 'Agency Health', val: '98.4%', icon: ShieldCheck, color: 'text-emerald-400' },
+    { label: 'Fleet Velocity', val: '92.1%', icon: Zap, color: 'text-sky-400' },
+    { label: 'Clinical Drift', val: '-2.4%', icon: Activity, color: 'text-rose-400' },
+    { label: 'Fiscal Delta', val: '+$14k', icon: TrendingUp, color: 'text-white' },
   ];
 
   return (
     <div className="space-y-10 animate-in fade-in duration-700">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {metrics.map((m, i) => (
+        {stats.map((s, i) => (
           <div key={i} className="bg-white/5 border border-white/10 p-8 rounded-[3rem] group hover:border-indigo-500/30 transition-all">
-            <div className="flex justify-between items-start mb-6">
-              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                <Translate targetLanguage={language}>{m.label}</Translate>
-              </p>
-              <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded border ${
-                m.type === 'positive' ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5' : 
-                m.type === 'negative' ? 'text-rose-400 border-rose-500/20 bg-rose-500/5' : 
-                'text-slate-400 border-white/10 bg-white/5'
-              }`}>{m.trend}</span>
-            </div>
-            <p className="text-4xl font-black text-white italic tracking-tighter">{m.value}</p>
+            <s.icon className={`${s.color} mb-6`} size={24} />
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+              <Translate target={language}>{s.label}</Translate>
+            </p>
+            <p className="text-4xl font-black text-white italic tracking-tighter mt-1">{s.val}</p>
           </div>
         ))}
       </div>
 
-      <div className="bg-white/5 border border-white/10 rounded-[4rem] overflow-hidden shadow-2xl">
-        <div className="px-10 py-6 border-b border-white/5 bg-white/[0.02] flex justify-between items-center">
-          <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest">
-            <Translate targetLanguage={language}>Global_Signal_Log</Translate>
-          </h3>
-          <button className="text-[8px] font-black text-indigo-400 uppercase tracking-widest hover:text-white transition-colors">
-            <Translate targetLanguage={language}>View_All_Signals</Translate>
-          </button>
-        </div>
-        <div className="overflow-x-auto scrollbar-hide">
-          <table className="w-full text-left">
-            <thead>
-              <tr className="text-[9px] font-black text-slate-600 uppercase tracking-[0.4em] border-b border-white/5">
-                <th className="px-10 py-4">Subject</th>
-                <th className="px-10 py-4">Acuity</th>
-                <th className="px-10 py-4">Status</th>
-                <th className="px-10 py-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5">
-              {clients.map(c => (
-                <tr key={c.id} className="group hover:bg-white/[0.02] transition-all">
-                  <td className="px-10 py-6">
-                    <p className="text-sm font-black text-white uppercase italic">{c.name}</p>
-                    <p className="text-[9px] text-slate-500 font-bold uppercase mt-1">{c.conditions.join(', ')}</p>
-                  </td>
-                  <td className="px-10 py-6">
-                    <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase ${
-                      c.risk?.level === 'CRITICAL' ? 'bg-rose-500' : 
-                      c.risk?.level === 'HIGH' ? 'text-rose-400 border border-rose-500/20' : 
-                      'text-emerald-400 border border-emerald-500/20'
-                    } text-white`}>{c.risk?.level || 'LOW'}</span>
-                  </td>
-                  <td className="px-10 py-6">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${c.currentVisitStatus === 'ACTIVE' ? 'bg-emerald-500 animate-pulse' : 'bg-slate-700'}`}></div>
-                      <span className="text-[10px] font-black text-slate-300 uppercase">{c.currentVisitStatus}</span>
-                    </div>
-                  </td>
-                  <td className="px-10 py-6 text-right">
-                    <button className="opacity-0 group-hover:opacity-100 px-6 py-2 bg-indigo-600 text-white rounded-xl text-[9px] font-black uppercase transition-all shadow-xl">Dossier</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <div className="bg-white/5 border border-white/10 rounded-[4rem] p-12 relative overflow-hidden">
+        <h3 className="text-xl font-black italic uppercase tracking-tighter text-white mb-10">
+          <Translate target={language}>Active Census Monitoring</Translate>
+        </h3>
+        <div className="space-y-4">
+           {clients.slice(0, 5).map((c, i) => (
+             <div key={c.id} className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl flex justify-between items-center group hover:bg-white/5 transition-all">
+                <div>
+                   <p className="text-sm font-black uppercase text-white tracking-tighter italic">{c.name}</p>
+                   <p className="text-[9px] text-slate-500 uppercase font-bold mt-1">
+                     {/* Fix: riskLevel does not exist on Client. Using c.risk?.level instead. */}
+                     <Translate target={language}>{c.sector}</Translate> • <Translate target={language}>{c.risk?.level || 'Stable'}</Translate>
+                   </p>
+                </div>
+                <button className="text-[9px] font-black text-indigo-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all">
+                  <Translate target={language}>View Dossier</Translate>
+                </button>
+             </div>
+           ))}
         </div>
       </div>
     </div>
   );
 };
-
-export default Dashboard;

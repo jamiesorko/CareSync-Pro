@@ -9,10 +9,11 @@ interface Props {
 
 const ComplaintManager: React.FC<Props> = ({ language }) => {
   const [complaints, setComplaints] = useState<Complaint[]>([
-    // Added companyId to satisfy Complaint interface
+    // Fix: Added missing createdAt property required by Complaint (BaseEntity)
     { 
       id: 'cp1', 
       companyId: 'demo-company',
+      createdAt: new Date().toISOString(),
       clientId: '1', 
       clientName: 'Robert Miller', 
       staffId: 's3', 
@@ -26,6 +27,7 @@ const ComplaintManager: React.FC<Props> = ({ language }) => {
     { 
       id: 'cp2', 
       companyId: 'demo-company',
+      createdAt: new Date().toISOString(),
       clientId: '2', 
       clientName: 'Martha Stewart', 
       staffId: 's1', 

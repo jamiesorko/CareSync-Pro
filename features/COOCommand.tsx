@@ -17,9 +17,11 @@ const COOCommand: React.FC<Props> = ({ language }) => {
   const [policyDraft, setPolicyDraft] = useState<string | null>(null);
 
   const staffComplaints: Complaint[] = [
+    // Fix: Added missing createdAt property required by Complaint (BaseEntity)
     { 
       id: 'sc1', 
       companyId: 'demo-company',
+      createdAt: new Date().toISOString(),
       clientId: 'N/A',
       clientName: 'N/A',
       staffId: 's1', 
@@ -38,7 +40,8 @@ const COOCommand: React.FC<Props> = ({ language }) => {
     try {
       // Fix: generateText now correctly handles 2 arguments
       const res = await geminiService.generateText(prompt, false);
-      setPolicyDraft(res.text || "Policy synthesis complete.");
+      const text = res.text || "Policy synthesis complete.";
+      setPolicyDraft(text);
     } catch (e) {
       setPolicyDraft("Neural logic bottleneck.");
     } finally {
