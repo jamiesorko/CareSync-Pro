@@ -19,6 +19,7 @@ export enum AppTab {
   STRATEGY = 'Strategic Tabletop',
   CLINICAL = 'Clinical Governance',
   LOGISTICS = 'Fleet Command',
+  FLEET_COMMAND = 'IoT Command',
   FISCAL = 'Fiscal Forensics',
   VAULT = 'Neural Vault',
   WELLNESS = 'Patient Wellness',
@@ -119,13 +120,6 @@ export interface Medication {
   name: string;
   dosage: string;
   frequency: string;
-}
-
-export interface Metric {
-  label: string;
-  value: string;
-  trend: string;
-  type: 'positive' | 'negative' | 'neutral';
 }
 
 export interface Message {

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { geminiService } from '../services/geminiService';
 
 interface Props {
-  children: React.ReactNode;
+  children: string;
   targetLanguage: string;
   className?: string;
 }
@@ -13,27 +13,22 @@ const Translate: React.FC<Props> = ({ children, targetLanguage, className = "" }
   const [isTranslating, setIsTranslating] = useState(false);
   const isMounted = useRef(true);
 
-  const getTextContent = (node: React.ReactNode): string => {
-    if (typeof node === 'string' || typeof node === 'number') return String(node);
-    if (Array.isArray(node)) return node.map(getTextContent).join('');
-    if (React.isValidElement(node)) return getTextContent((node.props as any).children);
-    return '';
-  };
-
-  const rawText = getTextContent(children);
-  // Normalize "TECH_SLUGS_LIKE_THIS" to "TECH SLUGS LIKE THIS" for the translator
-  const normalizedText = rawText.replace(/_/g, ' ').trim();
+  // Normalize slugs like "DASHBOARD_CORE" or "OPS_DASHBOARD"
+  const normalizedText = children ? children.replace(/_/g, ' ').toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ') : "";
 
   useEffect(() => {
     isMounted.current = true;
     const translateText = async () => {
       if (!targetLanguage || targetLanguage.toLowerCase() === 'english' || !normalizedText) {
-        setTranslatedText(rawText);
+        setTranslatedText(normalizedText || children);
         setIsTranslating(false);
         return;
       }
 
-      const cacheKey = `csp_v8_trans_${targetLanguage.toLowerCase()}:${normalizedText}`;
+      const cacheKey = `csp_trans_${targetLanguage.toLowerCase()}:${normalizedText}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
@@ -50,7 +45,7 @@ const Translate: React.FC<Props> = ({ children, targetLanguage, className = "" }
           setTranslatedText(result);
         }
       } catch (err) {
-        if (isMounted.current) setTranslatedText(rawText);
+        if (isMounted.current) setTranslatedText(normalizedText || children);
       } finally {
         if (isMounted.current) setIsTranslating(false);
       }
@@ -58,11 +53,11 @@ const Translate: React.FC<Props> = ({ children, targetLanguage, className = "" }
 
     translateText();
     return () => { isMounted.current = false; };
-  }, [normalizedText, targetLanguage, rawText]);
+  }, [normalizedText, targetLanguage, children]);
 
   return (
     <span className={`${className} transition-all duration-300 ${isTranslating ? 'opacity-40 blur-[1px]' : 'opacity-100 blur-0'}`}>
-      {translatedText || rawText}
+      {translatedText || normalizedText || children}
     </span>
   );
 };

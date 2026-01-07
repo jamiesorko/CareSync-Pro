@@ -4,7 +4,6 @@ import { CareRole, AppTab, User } from './types';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import { Dashboard } from './features/Dashboard';
-import RNCommand from './features/rn/RNCommand';
 import ProfessionalTerminal from './features/terminal/ProfessionalTerminal';
 import HRPortal from './features/HRPortal';
 import AccountingTerminal from './features/accounting/AccountingTerminal';
@@ -16,7 +15,10 @@ import PatientWellnessHub from './features/client/PatientWellnessHub';
 import MarketDominanceHub from './features/ceo/MarketDominanceHub';
 import ForensicDiscoveryStation from './features/executive/ForensicDiscoveryStation';
 import CEODashboard from './features/ceo/CEODashboard';
-import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
+import StrategicTabletop from './features/ceo/StrategicTabletop';
+import RNCommand from './features/rn/RNCommand';
+import IoTFleetCommand from './features/coordination/IoTFleetCommand';
+import { MOCK_CLIENTS } from './data/careData';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -33,12 +35,19 @@ export default function App() {
         if (user.role === CareRole.CEO) return <CEODashboard />;
         return <Dashboard language={language} staffName={user.name} clients={MOCK_CLIENTS} />;
       
+      case AppTab.STRATEGY:
+        return <StrategicTabletop language={language} />;
+
       case AppTab.CLINICAL:
       case AppTab.CLINICAL_COMMAND:
         return <RNCommand clients={MOCK_CLIENTS} role={user.role} language={language} />;
       
       case AppTab.LOGISTICS:
+      case AppTab.COORDINATION:
         return <CoordinationHub language={language} />;
+
+      case AppTab.FLEET_COMMAND: // Mapped to IoT
+        return <IoTFleetCommand language={language} />;
       
       case AppTab.RESOURCE:
       case AppTab.HR_HUB:

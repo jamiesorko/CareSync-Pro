@@ -5,7 +5,6 @@ export class GeminiService {
   private ai: GoogleGenAI;
 
   constructor() {
-    // Initializing GoogleGenAI with API key from environment variable as per guidelines
     this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
   }
 
@@ -15,7 +14,7 @@ export class GeminiService {
       contents: prompt,
       config: {
         tools: useSearch ? [{ googleSearch: {} }] : undefined,
-        systemInstruction: "You are the CareSync Pro Clinical Intelligence Core. Provide concise, professional medical insights.",
+        systemInstruction: "You are the CareSync Pro Intelligence Core. Provide concise, professional insights.",
       }
     });
     return response;
@@ -35,18 +34,16 @@ export class GeminiService {
   async translate(text: string, targetLang: string) {
     const response: GenerateContentResponse = await this.ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `Translate to ${targetLang}: "${text}"`,
+      contents: `Translate the following text to ${targetLang}: "${text}"`,
       config: {
-        systemInstruction: "Output only the translated text. No conversational filler.",
+        systemInstruction: "You are a professional enterprise translator. Output ONLY the translated text. Do not include quotes, explanations, or conversational filler.",
       }
     });
-    return response.text?.trim();
+    return response.text?.trim() || text;
   }
 
-  // Fix: Added translateToEnglish method for specialized translation needs
   async translateToEnglish(text: string) {
-    const response = await this.translate(text, 'English');
-    return response || text;
+    return await this.translate(text, 'English');
   }
 
   async generateSpeech(text: string, voice: string = 'Kore') {
@@ -81,7 +78,7 @@ export class GeminiService {
   }
 
   async analyzeHazardImage(base64: string, customPrompt?: string) {
-    const prompt = customPrompt || "Identify clinical hazards in this image. Focus on safety and medical necessity.";
+    const prompt = customPrompt || "Identify clinical hazards in this image. Focus on safety.";
     const response: GenerateContentResponse = await this.ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
       contents: {
@@ -91,48 +88,34 @@ export class GeminiService {
         ]
       }
     });
-    return response.text || "Visual analysis complete.";
+    return response.text || "Analysis complete.";
   }
 
-  // Fix: Added generateImage method using gemini-2.5-flash-image as per coding guidelines
   async generateImage(prompt: string) {
     const response = await this.ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
       contents: { parts: [{ text: prompt }] },
     });
-    
-    if (!response.candidates?.[0]?.content?.parts) return null;
-
-    // Finding the image part in the response as per guidelines
-    for (const part of response.candidates[0].content.parts) {
-      if (part.inlineData) {
-        return `data:image/png;base64,${part.inlineData.data}`;
-      }
+    for (const part of response.candidates?.[0]?.content?.parts || []) {
+      if (part.inlineData) return `data:image/png;base64,${part.inlineData.data}`;
     }
     return null;
   }
 
-  // Fix: Added getFinancialStrategy method for executive analysis
   async getFinancialStrategy(context: any) {
     const response = await this.ai.models.generateContent({
       model: 'gemini-3-pro-preview',
       contents: `Analyze these financials and provide a strategy: ${JSON.stringify(context)}`,
-      config: { 
-        thinkingConfig: { thinkingBudget: 10000 } 
-      }
+      config: { thinkingConfig: { thinkingBudget: 10000 } }
     });
-    return response.text || "Strategy unavailable.";
+    return response.text;
   }
 
-  // Fix: Added generateSecureSchedule method for coordination needs
   async generateSecureSchedule(payload: any) {
     const response = await this.ai.models.generateContent({
       model: 'gemini-3-pro-preview',
-      contents: `Generate a secure schedule for: ${JSON.stringify(payload)}. Return JSON array of objects with clientId, staffId, time.`,
-      config: { 
-        responseMimeType: "application/json", 
-        thinkingConfig: { thinkingBudget: 10000 } 
-      }
+      contents: `Generate a secure schedule for: ${JSON.stringify(payload)}. Return JSON array of {clientId, staffId, time}.`,
+      config: { responseMimeType: "application/json", thinkingConfig: { thinkingBudget: 10000 } }
     });
     try {
       return JSON.parse(response.text || '[]');
@@ -141,38 +124,29 @@ export class GeminiService {
     }
   }
 
-  // Fix: Added generateAdvancedReasoning method to support deep-think tasks
-  async generateAdvancedReasoning(prompt: string): Promise<GenerateContentResponse> {
-    return await this.ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: prompt,
-      config: { 
-        thinkingConfig: { thinkingBudget: 15000 } 
-      }
-    });
-  }
-
-  // Fix: Added getMarketIntelligence method with search tools enabled
   async getMarketIntelligence(query: string): Promise<GenerateContentResponse> {
     return await this.ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: query,
-      config: { 
-        tools: [{ googleSearch: {} }] 
-      }
+      config: { tools: [{ googleSearch: {} }] }
     });
   }
 
-  // Fix: Added runSelfRepairAudit method for system integrity checks
   async runSelfRepairAudit(ledger: any) {
     const response = await this.ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `Analyze ledger for inconsistencies and logic drift: ${JSON.stringify(ledger)}. Return JSON: { "remediation": "string" }`,
-      config: { 
-        responseMimeType: "application/json" 
-      }
+      contents: `Analyze ledger for inconsistencies: ${JSON.stringify(ledger)}. Return JSON: { "remediation": "string" }`,
+      config: { responseMimeType: "application/json" }
     });
     return response.text || '{}';
+  }
+
+  async generateAdvancedReasoning(prompt: string): Promise<GenerateContentResponse> {
+    return await this.ai.models.generateContent({
+      model: 'gemini-3-pro-preview',
+      contents: prompt,
+      config: { thinkingConfig: { thinkingBudget: 15000 } }
+    });
   }
 }
 

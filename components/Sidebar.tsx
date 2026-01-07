@@ -4,7 +4,8 @@ import { AppTab, CareRole } from '../types';
 import Translate from './Translate';
 import { 
   LayoutDashboard, ShieldAlert, Users, Briefcase, 
-  Wallet, Database, Radio, Power, Heart, Target, Calendar
+  Wallet, Database, Radio, Power, Heart, Target, Calendar,
+  Cpu, Truck
 } from 'lucide-react';
 
 interface Props {
@@ -18,9 +19,11 @@ interface Props {
 const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role, onLogout, language }) => {
   const menu = [
     { id: AppTab.DASHBOARD, icon: LayoutDashboard, label: 'Ops_Dashboard' },
+    { id: AppTab.STRATEGY, icon: Cpu, label: 'Strategic_Tabletop' },
     { id: AppTab.SCHEDULE, icon: Calendar, label: 'Roster_Grid' },
     { id: AppTab.CLINICAL_COMMAND, icon: ShieldAlert, label: 'Clinical_Core' },
     { id: AppTab.LOGISTICS, icon: Users, label: 'Fleet_Dispatch' },
+    { id: AppTab.FLEET_COMMAND, icon: Truck, label: 'IoT_Command' },
     { id: AppTab.RESOURCE, icon: Briefcase, label: 'Resource_Core' },
     { id: AppTab.FINANCE, icon: Wallet, label: 'Fiscal_Ledger' },
     { id: AppTab.VAULT, icon: Database, label: 'Neural_Vault' },
@@ -28,7 +31,7 @@ const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role, onLogout, lan
     { id: AppTab.LIVE, icon: Radio, label: 'Direct_Link' },
   ];
 
-  // Add Executive Command node for CEO/COO
+  // Add Executive Command node for CEO/COO/DOC
   if ([CareRole.CEO, CareRole.COO, CareRole.DOC].includes(role)) {
     menu.splice(1, 0, { id: AppTab.ORG_COMMAND, icon: Target, label: 'Strategic_Moat' });
   }
