@@ -2,19 +2,20 @@
 {
   "name": "caresync-pro-modular",
   "private": true,
-  "version": "1.2.0",
+  "version": "1.3.0",
   "type": "module",
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "@google/genai": "^0.3.0",
-    "lucide-react": "^0.344.0",
+    "@supabase/supabase-js": "^2.47.10",
+    "lucide-react": "^0.453.0",
     "clsx": "^2.1.0",
     "tailwind-merge": "^2.2.1"
   },
   "devDependencies": {
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.2.1",
     "tailwindcss": "^3.4.1",
     "autoprefixer": "^10.4.17",

@@ -1,16 +1,8 @@
-import { createClient } from '@supabase/supabase-js'
 
-const getEnv = (key: string): string => {
-  try {
-    return process.env[key] || '';
-  } catch {
-    return '';
-  }
-};
+import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = getEnv('SUPABASE_URL');
-const supabaseAnonKey = getEnv('SUPABASE_ANON_KEY');
+// Fallback logic for production builds where keys might be injected later
+const supabaseUrl = process.env.SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || 'placeholder-key';
 
-export const supabase = (supabaseUrl && supabaseAnonKey) 
-  ? createClient(supabaseUrl, supabaseAnonKey) 
-  : null;
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);

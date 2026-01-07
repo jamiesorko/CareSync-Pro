@@ -19,7 +19,7 @@ import ForensicDiscoveryStation from './features/executive/ForensicDiscoveryStat
 import MarketDominanceHub from './features/ceo/MarketDominanceHub';
 import GuardianEscort from './features/psw/GuardianEscort';
 import CognitiveMatrix from './features/clinical/CognitiveMatrix';
-import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
+import { MOCK_CLIENTS } from './data/careData';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -94,7 +94,6 @@ export default function App() {
           </header>
           {renderContent()}
           
-          {/* Global Floating Intercepts */}
           {user.role === CareRole.PSW && activeTab === AppTab.DASHBOARD && (
             <div className="mt-12">
                <GuardianEscort language={lang} clients={MOCK_CLIENTS} />
