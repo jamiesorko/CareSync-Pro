@@ -12,6 +12,7 @@ import LiveLab from './features/LiveLab';
 import CoordinationHub from './features/CoordinationHub';
 import Login from './features/Login';
 import PatientWellnessHub from './features/client/PatientWellnessHub';
+import ClientPortal from './features/client/ClientPortal';
 import MarketDominanceHub from './features/ceo/MarketDominanceHub';
 import ForensicDiscoveryStation from './features/executive/ForensicDiscoveryStation';
 import CEODashboard from './features/ceo/CEODashboard';
@@ -28,6 +29,18 @@ export default function App() {
 
   if (!user) {
     return <Login onLogin={setUser} language={language} onLanguageChange={setLanguage} />;
+  }
+
+  // Redirect Logic for Clients
+  if (user.role === CareRole.CLIENT && activeTab === AppTab.DASHBOARD) {
+    return (
+      <div className="h-screen w-full bg-[#020617] text-slate-100 overflow-hidden select-none">
+        <Header activeTab={AppTab.WELLNESS} language={language} onLanguageChange={setLanguage} onLogout={() => setUser(null)} />
+        <main className="h-[calc(100vh-80px)] overflow-y-auto scrollbar-hide p-8">
+          <ClientPortal user={user} onLogout={() => setUser(null)} />
+        </main>
+      </div>
+    );
   }
 
   const renderContent = () => {
@@ -64,6 +77,7 @@ export default function App() {
         return <DocumentVault role={user.role} language={language} />;
       
       case AppTab.WELLNESS:
+        if (user.role === CareRole.CLIENT) return <ClientPortal user={user} onLogout={() => setUser(null)} />;
         return <PatientWellnessHub language={language} clients={MOCK_CLIENTS} />;
       
       case AppTab.LIVE:

@@ -39,7 +39,7 @@ export class GeminiService {
         model: 'gemini-3-flash-preview',
         contents: `Translate the following text to ${targetLang}: "${text}"`,
         config: {
-          systemInstruction: "You are a professional enterprise translator. Output ONLY the translated text. Do not include quotes, explanations, or conversational filler.",
+          systemInstruction: "You are a professional enterprise translator. Output ONLY the translated text. Do not include quotes, explanations, or conversational filler. Maintain uppercase where provided.",
         }
       });
       return response.text?.trim() || text;
