@@ -14,7 +14,7 @@ export class GeminiService {
       contents: prompt,
       config: {
         tools: useSearch ? [{ googleSearch: {} }] : undefined,
-        systemInstruction: "You are the CareSync Pro Intelligence Core. Provide concise, professional insights.",
+        systemInstruction: "You are the CareSync Pro Clinical Intelligence Core. Provide concise, professional insights.",
       }
     });
     return response;
@@ -32,14 +32,21 @@ export class GeminiService {
   }
 
   async translate(text: string, targetLang: string) {
-    const response: GenerateContentResponse = await this.ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: `Translate the following text to ${targetLang}: "${text}"`,
-      config: {
-        systemInstruction: "You are a professional enterprise translator. Output ONLY the translated text. Do not include quotes, explanations, or conversational filler.",
-      }
-    });
-    return response.text?.trim() || text;
+    if (!text || !targetLang || targetLang.toLowerCase() === 'english') return text;
+    
+    try {
+      const response: GenerateContentResponse = await this.ai.models.generateContent({
+        model: 'gemini-3-flash-preview',
+        contents: `Translate the following text to ${targetLang}: "${text}"`,
+        config: {
+          systemInstruction: "You are a professional enterprise translator. Output ONLY the translated text. Do not include quotes, explanations, or conversational filler.",
+        }
+      });
+      return response.text?.trim() || text;
+    } catch (err) {
+      console.error("Translation signal drift:", err);
+      return text;
+    }
   }
 
   async translateToEnglish(text: string) {

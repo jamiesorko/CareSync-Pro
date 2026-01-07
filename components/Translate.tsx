@@ -28,7 +28,7 @@ const Translate: React.FC<Props> = ({ children, targetLanguage, className = "" }
         return;
       }
 
-      const cacheKey = `csp_trans_${targetLanguage.toLowerCase()}:${normalizedText}`;
+      const cacheKey = `csp_trans_v2_${targetLanguage.toLowerCase()}:${normalizedText}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {

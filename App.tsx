@@ -18,6 +18,7 @@ import CEODashboard from './features/ceo/CEODashboard';
 import StrategicTabletop from './features/ceo/StrategicTabletop';
 import RNCommand from './features/rn/RNCommand';
 import IoTFleetCommand from './features/coordination/IoTFleetCommand';
+import MoatBreakerHUD from './features/executive/MoatBreakerHUD';
 import { MOCK_CLIENTS } from './data/careData';
 
 export default function App() {
@@ -46,7 +47,7 @@ export default function App() {
       case AppTab.COORDINATION:
         return <CoordinationHub language={language} />;
 
-      case AppTab.FLEET_COMMAND: // Mapped to IoT
+      case AppTab.FLEET_COMMAND:
         return <IoTFleetCommand language={language} />;
       
       case AppTab.RESOURCE:
@@ -71,6 +72,7 @@ export default function App() {
       case AppTab.ORG_COMMAND:
         return (
           <div className="space-y-16">
+            <MoatBreakerHUD language={language} clients={MOCK_CLIENTS} />
             <MarketDominanceHub language={language} />
             <ForensicDiscoveryStation language={language} clients={MOCK_CLIENTS} />
           </div>
