@@ -1,13 +1,13 @@
 
 import React from 'react';
-import { AppTab } from './types';
+import { AppTab, CareRole } from './types';
 import { Translate } from './Translate';
 import { 
   LayoutDashboard, Shield, Zap, Wallet, Database, Heart, Cpu, 
-  Radio, Users, Power, Briefcase 
+  Radio, Users, Power, Briefcase, Target 
 } from 'lucide-react';
 
-export const Sidebar = ({ active, setActive, lang, onLogout }: any) => {
+export const Sidebar = ({ active, setActive, role, lang, onLogout }: any) => {
   const items = [
     { id: AppTab.DASHBOARD, icon: LayoutDashboard },
     { id: AppTab.STRATEGY, icon: Cpu },
@@ -19,6 +19,11 @@ export const Sidebar = ({ active, setActive, lang, onLogout }: any) => {
     { id: AppTab.RESOURCE, icon: Briefcase },
     { id: AppTab.LIVE, icon: Radio },
   ];
+
+  // Executive exclusive strategy tab
+  if ([CareRole.CEO, CareRole.COO, CareRole.DOC].includes(role)) {
+    items.splice(1, 0, { id: AppTab.ORG_COMMAND, icon: Target });
+  }
 
   return (
     <aside className="w-64 bg-black/40 border-r border-white/5 flex flex-col backdrop-blur-xl">

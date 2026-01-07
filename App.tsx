@@ -12,7 +12,14 @@ import AccountingTerminal from './features/accounting/AccountingTerminal';
 import DocumentVault from './features/DocumentVault';
 import LiveLab from './features/LiveLab';
 import CoordinationHub from './features/CoordinationHub';
-import { MOCK_CLIENTS } from './data/careData';
+import EthicsAdvisoryBoard from './features/doc/EthicsAdvisoryBoard';
+import NeuralSentinelHub from './features/clinical/NeuralSentinelHub';
+import AfterActionStation from './features/clinical/AfterActionStation';
+import ForensicDiscoveryStation from './features/executive/ForensicDiscoveryStation';
+import MarketDominanceHub from './features/ceo/MarketDominanceHub';
+import GuardianEscort from './features/psw/GuardianEscort';
+import CognitiveMatrix from './features/clinical/CognitiveMatrix';
+import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -24,11 +31,19 @@ export default function App() {
   const renderContent = () => {
     switch (activeTab) {
       case AppTab.DASHBOARD:
-        return <Dashboard lang={lang} staffName={user.name} clients={MOCK_CLIENTS} />;
+        return <Dashboard language={lang} staffName={user.name} clients={MOCK_CLIENTS} />;
       case AppTab.STRATEGY:
         return <StrategyTabletop lang={lang} />;
       case AppTab.CLINICAL:
-        return <ProtocolArchitect lang={lang} />;
+      case AppTab.CLINICAL_COMMAND:
+        return (
+          <div className="space-y-12">
+            <EthicsAdvisoryBoard language={lang} clients={MOCK_CLIENTS} />
+            <NeuralSentinelHub language={lang} clients={MOCK_CLIENTS} />
+            <AfterActionStation language={lang} clients={MOCK_CLIENTS} />
+            <CognitiveMatrix language={lang} clients={MOCK_CLIENTS} />
+          </div>
+        );
       case AppTab.WELLNESS:
         return <ZenStation lang={lang} />;
       case AppTab.HR_HUB:
@@ -44,14 +59,27 @@ export default function App() {
       case AppTab.LOGISTICS:
       case AppTab.COORDINATION:
         return <CoordinationHub language={lang} />;
+      case AppTab.ORG_COMMAND:
+        return (
+          <div className="space-y-12">
+            <MarketDominanceHub language={lang} />
+            <ForensicDiscoveryStation language={lang} clients={MOCK_CLIENTS} />
+          </div>
+        );
       default:
-        return <Dashboard lang={lang} staffName={user.name} clients={MOCK_CLIENTS} />;
+        return <Dashboard language={lang} staffName={user.name} clients={MOCK_CLIENTS} />;
     }
   };
 
   return (
-    <div className="flex h-screen w-full bg-[#020617] text-slate-100 overflow-hidden">
-      <Sidebar active={activeTab} setActive={setActiveTab} role={user.role} lang={lang} onLogout={() => setUser(null)} />
+    <div className="flex h-screen w-full bg-[#020617] text-slate-100 overflow-hidden select-none">
+      <Sidebar 
+        active={activeTab} 
+        setActive={setActiveTab} 
+        role={user.role} 
+        lang={lang} 
+        onLogout={() => setUser(null)} 
+      />
       <main className="flex-1 overflow-y-auto p-10 scrollbar-hide relative">
         <div className="max-w-7xl mx-auto space-y-10">
           <header className="flex justify-between items-center border-b border-white/5 pb-8">
@@ -65,6 +93,13 @@ export default function App() {
             </div>
           </header>
           {renderContent()}
+          
+          {/* Global Floating Intercepts */}
+          {user.role === CareRole.PSW && activeTab === AppTab.DASHBOARD && (
+            <div className="mt-12">
+               <GuardianEscort language={lang} clients={MOCK_CLIENTS} />
+            </div>
+          )}
         </div>
       </main>
     </div>

@@ -8,6 +8,7 @@ import CapacityPlanner from './CapacityPlanner';
 import StaffManager from './StaffManager';
 import WorkforceNexus from './WorkforceNexus';
 import RetentionIntelligence from './RetentionIntelligence';
+import MasteryForge from './MasteryForge';
 import { MOCK_STAFF } from '../../data/careData';
 
 interface Props {
@@ -16,12 +17,13 @@ interface Props {
 }
 
 const HRPortal: React.FC<Props> = ({ role, language }) => {
-  const [activeTab, setActiveTab] = useState<'NEXUS' | 'HIRING' | 'COMPLIANCE' | 'CAPACITY' | 'STAFF' | 'RETENTION'>('NEXUS');
+  const [activeTab, setActiveTab] = useState<'NEXUS' | 'HIRING' | 'COMPLIANCE' | 'CAPACITY' | 'STAFF' | 'RETENTION' | 'FORGE'>('NEXUS');
   const isHR = [CareRole.HR_SPECIALIST, CareRole.CEO, CareRole.COO].includes(role);
 
   const tabs = [
-    { id: 'NEXUS', label: 'Workforce Nexus' },
-    { id: 'STAFF', label: 'Roster Logic' },
+    { id: 'NEXUS', label: 'Workforce_Nexus' },
+    { id: 'STAFF', label: 'Roster_Logic' },
+    { id: 'FORGE', label: 'Mastery_Forge' },
     { id: 'COMPLIANCE', label: 'Verification' },
     { id: 'RETENTION', label: 'Retention' },
   ];
@@ -32,8 +34,8 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
   ];
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-700 h-full overflow-y-auto scrollbar-hide pb-24 px-4">
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
+    <div className="space-y-12 animate-in fade-in duration-700 pb-24 h-full overflow-y-auto scrollbar-hide">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 px-4">
         <div>
           <h2 className="text-5xl font-black text-white tracking-tighter uppercase leading-none italic text-indigo-400">Resource_Core</h2>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-3 italic">Autonomous Human Capital Management Terminal</p>
@@ -67,6 +69,7 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
       <div className="min-h-[600px] animate-in slide-in-from-bottom-4 duration-500">
         {activeTab === 'NEXUS' && <WorkforceNexus staff={MOCK_STAFF} language={language} />}
         {activeTab === 'STAFF' && <StaffManager language={language} />}
+        {activeTab === 'FORGE' && <MasteryForge staffMember={MOCK_STAFF[0]} language={language} />}
         {activeTab === 'COMPLIANCE' && <ComplianceManager language={language} isHR={isHR} />}
         {activeTab === 'HIRING' && isHR && <HiringHub language={language} />}
         {activeTab === 'CAPACITY' && isHR && <CapacityPlanner language={language} />}
