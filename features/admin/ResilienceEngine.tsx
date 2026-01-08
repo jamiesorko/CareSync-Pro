@@ -12,12 +12,12 @@ const ResilienceEngine: React.FC<Props> = ({ language }) => {
 
   return (
     <div className="space-y-12 animate-in fade-in duration-700 pb-24">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 px-4">
         <div>
           <h2 className="text-4xl font-black text-white tracking-tighter uppercase leading-none italic">Neural_Defense_Engine</h2>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">Institutional Integrity & Sovereignty Guard</p>
         </div>
-        <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10 backdrop-blur-xl">
+        <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10 backdrop-blur-xl shadow-sm">
           {['SELF_HEALING', 'PRIVACY', 'LOGIC'].map(tab => (
             <button 
               key={tab}
@@ -54,7 +54,8 @@ const ResilienceEngine: React.FC<Props> = ({ language }) => {
           </div>
         )}
 
-        {activeLayer === 'LOGIC' && (
+        {/* Fix: changed activeLayer to activeSubTab on line 57 to resolve undefined variable error */}
+        {activeSubTab === 'LOGIC' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
              <div className="bg-slate-900 border border-white/10 rounded-[3rem] p-10 flex flex-col justify-between group">
                 <div>

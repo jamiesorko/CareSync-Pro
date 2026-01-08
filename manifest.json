@@ -1,0 +1,22 @@
+
+{
+  "name": "CareSync Pro | Strategic Node",
+  "short_name": "CareSync Pro",
+  "description": "Enterprise-grade clinical fleet management with neural interop",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3063/3063176.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3063/3063176.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

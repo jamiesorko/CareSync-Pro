@@ -1,7 +1,6 @@
-
 /**
  * CareSync Pro Media Lifecycle Service
- * Handles authenticated retrieval of AI-generated assets.
+ * Handles authenticated retrieval and local saving of AI-generated assets.
  */
 export const mediaService = {
   /**
@@ -9,7 +8,9 @@ export const mediaService = {
    */
   async getAuthenticatedUrl(uri: string): Promise<string> {
     const key = process.env.API_KEY;
-    const response = await fetch(`${uri}&key=${key}`);
+    const separator = uri.includes('?') ? '&' : '?';
+    const response = await fetch(`${uri}${separator}key=${key}`);
+    if (!response.ok) throw new Error("Failed to fetch media asset");
     const blob = await response.blob();
     return URL.createObjectURL(blob);
   },
@@ -26,11 +27,14 @@ export const mediaService = {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      URL.revokeObjectURL(authUrl);
+      
+      // Cleanup after download trigger
+      setTimeout(() => URL.revokeObjectURL(authUrl), 200);
     } catch (e) {
       console.error("Asset retrieval failure:", e);
-      // Fallback to direct link if fetch fails
-      window.open(`${uri}&key=${process.env.API_KEY}`, '_blank');
+      const key = process.env.API_KEY;
+      const separator = uri.includes('?') ? '&' : '?';
+      window.open(`${uri}${separator}key=${key}`, '_blank');
     }
   }
 };
