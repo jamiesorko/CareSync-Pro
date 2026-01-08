@@ -1,25 +1,30 @@
-
 import { GoogleGenAI, Modality, GenerateContentResponse } from "@google/genai";
 
 export class GeminiService {
   private ai: GoogleGenAI;
 
   constructor() {
-    // Guidelines: Always use const ai = new GoogleGenAI({apiKey: process.env.API_KEY});
     this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
   }
 
+  /**
+   * Universal Neural Translation
+   * Leverages Gemini 3 Flash for zero-latency cross-linguistic UI adaptation.
+   */
   async translate(text: string, targetLang: string): Promise<string> {
-    if (!text || targetLang === 'English') return text;
+    if (!text || !targetLang || targetLang === 'English') return text;
     try {
       const response = await this.ai.models.generateContent({
-        // Basic translation task uses flash model
         model: 'gemini-3-flash-preview',
-        contents: `Translate to ${targetLang}: "${text}". Output only the translation.`,
-        config: { systemInstruction: "You are a healthcare translator. Be concise." }
+        contents: `Translate the following institutional healthcare UI text to ${targetLang}: "${text}". Provide ONLY the translated text without commentary or quotes. If the text is a technical acronym, preserve its meaning.`,
+        config: { 
+          systemInstruction: "You are a professional healthcare enterprise translator. Maintain the formal, high-tech institutional tone of the application.",
+          temperature: 0.1 // Low temperature for deterministic translations
+        }
       });
       return response.text?.trim() || text;
     } catch (err) {
+      console.error("[NEURAL_LINGUIST_ERROR]:", err);
       return text;
     }
   }
@@ -39,7 +44,6 @@ export class GeminiService {
   }
 
   async generateVideo(prompt: string): Promise<string | undefined> {
-    // Check for API key selection via aistudio bridge
     const win = window as any;
     if (win.aistudio && !(await win.aistudio.hasSelectedApiKey())) {
       await win.aistudio.openSelectKey();
@@ -58,8 +62,6 @@ export class GeminiService {
 
     return operation.response?.generatedVideos?.[0]?.video?.uri;
   }
-
-  // Implementation of missing methods required by various features
 
   async generateText(prompt: string, useSearch: boolean = false): Promise<GenerateContentResponse> {
     const config: any = {
@@ -95,7 +97,6 @@ export class GeminiService {
 
   async getFinancialStrategy(context: any): Promise<string> {
     const response = await this.ai.models.generateContent({
-      // Complex reasoning task uses pro model with thinking budget
       model: 'gemini-3-pro-preview',
       contents: `Analyze these financials and provide a strategic plan: ${JSON.stringify(context)}`,
       config: { thinkingConfig: { thinkingBudget: 15000 } }

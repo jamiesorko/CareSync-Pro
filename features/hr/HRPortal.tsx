@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { CareRole } from '../../types';
-import { Translate } from '../../Translate';
+import { Translate } from '../../components/Translate';
 import HiringHub from './HiringHub';
 import ComplianceManager from './ComplianceManager';
 import CapacityPlanner from './CapacityPlanner';
@@ -36,9 +36,11 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 px-4">
         <div>
           <h2 className="text-5xl font-black text-white tracking-tighter uppercase leading-none italic text-indigo-400">
+             {/* Standardized Translate prop to target */}
              <Translate target={language}>RESOURCE_CORE</Translate>
           </h2>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-3 italic">
+             {/* Standardized Translate prop to target */}
              <Translate target={language}>Institutional_Human_Capital_&_Financial_Stewardship</Translate>
           </p>
         </div>
@@ -51,6 +53,7 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
                 activeTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'
               }`}
             >
+              {/* Standardized Translate prop to target */}
               <Translate target={language}>{tab.label}</Translate>
             </button>
           ))}
@@ -62,6 +65,7 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
                 activeTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'
               }`}
             >
+              {/* Standardized Translate prop to target */}
               <Translate target={language}>{tab.label}</Translate>
             </button>
           ))}

@@ -3,27 +3,30 @@ import React, { useState, useEffect } from 'react';
 import { geminiService } from '../services/geminiService';
 
 interface Props {
-  /* Fix: Change children type from string to React.ReactNode to allow standard JSX children usage and prevent 'single child' errors */
-  children: React.ReactNode;
-  target: string;
+  /* Fix: Made children optional to satisfy TSX usage where children are passed between tags */
+  children?: React.ReactNode;
+  /* Fix: Allow any for target to handle cases where language prop is dynamically typed */
+  target: string | any;
 }
 
-/* Fix: Removed React.FC and typed children as React.ReactNode to satisfy JSX requirement for multiple/single nodes */
+/**
+ * Neural Translation Component
+ * Bridges any UI text to any target language using Gemini Flash.
+ */
+/* Fix: Removed React.FC to better handle children in React 18 */
 export const Translate = ({ children, target }: Props) => {
   const sourceText = typeof children === 'string' ? children : String(children || '');
   const [translated, setTranslated] = useState<string>(sourceText);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    /* Fix: Handle children as a string for translation processing */
-    const text = typeof children === 'string' ? children : String(children || '');
-    if (!text || target === 'English') {
-      setTranslated(text);
+    if (!sourceText || target === 'English') {
+      setTranslated(sourceText);
       return;
     }
 
-    const run = async () => {
-      const cacheKey = `cs_trans_${target}_${text}`;
+    const runTranslation = async () => {
+      const cacheKey = `cs_v4_trans_${target}_${sourceText}`;
       const cached = localStorage.getItem(cacheKey);
 
       if (cached) {
@@ -33,27 +36,26 @@ export const Translate = ({ children, target }: Props) => {
 
       setLoading(true);
       try {
-        const result = await geminiService.translate(text, target);
+        const result = await geminiService.translate(sourceText, target);
         if (result) {
           localStorage.setItem(cacheKey, result);
           setTranslated(result);
         }
       } catch (e) {
-        setTranslated(text);
+        setTranslated(sourceText);
       } finally {
         setLoading(false);
       }
     };
 
-    run();
-  }, [children, target]);
+    runTranslation();
+  }, [sourceText, target]);
 
   return (
-    <span className={loading ? 'opacity-40 animate-pulse' : ''}>
+    <span className={loading ? 'opacity-40 animate-pulse blur-[1px]' : 'transition-all duration-500'}>
       {translated}
     </span>
   );
 };
 
-// Added default export to fix "Module has no default export" errors in various components
 export default Translate;

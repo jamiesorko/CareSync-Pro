@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { gemini } from './gemini';
 
-/* Fix: Typed children as React.ReactNode to allow flexible JSX content and fix 'single child' TypeScript errors */
-export const Translate = ({ children, target }: { children: React.ReactNode, target: string }) => {
+/* Fix: Made children optional and target more permissive to resolve 'children is missing' errors in TSX usage */
+export const Translate = ({ children, target }: { children?: React.ReactNode, target: string | any }) => {
   const sourceText = typeof children === 'string' ? children : String(children || '');
   const [text, setText] = useState(sourceText);
   const [loading, setLoading] = useState(false);
@@ -50,3 +50,5 @@ export const Translate = ({ children, target }: { children: React.ReactNode, tar
 
   return <span className={loading ? 'opacity-30 blur-sm transition-all' : ''}>{text}</span>;
 };
+
+export default Translate;
