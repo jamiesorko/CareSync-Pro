@@ -2,8 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { gemini } from './gemini';
 
-export const Translate = ({ children, target }: { children: string, target: string }) => {
-  const [text, setText] = useState(children);
+/* Fix: Typed children as React.ReactNode to allow flexible JSX content and fix 'single child' TypeScript errors */
+export const Translate = ({ children, target }: { children: React.ReactNode, target: string }) => {
+  const sourceText = typeof children === 'string' ? children : String(children || '');
+  const [text, setText] = useState(sourceText);
   const [loading, setLoading] = useState(false);
 
   // Normalize string for translation (e.g. "DASHBOARD_CORE" -> "Dashboard Core")
@@ -13,14 +15,17 @@ export const Translate = ({ children, target }: { children: string, target: stri
     .join(' ');
 
   useEffect(() => {
-    if (!children) return;
+    /* Fix: Safely convert ReactNode children to string for translation logic */
+    const currentSource = typeof children === 'string' ? children : String(children || '');
+    
+    if (!currentSource) return;
     if (target === 'English') {
-      setText(children);
+      setText(currentSource);
       return;
     }
     const run = async () => {
       setLoading(true);
-      const input = normalize(children);
+      const input = normalize(currentSource);
       const cacheKey = `t_${target}_${input}`;
       const cached = localStorage.getItem(cacheKey);
       

@@ -3,22 +3,27 @@ import React, { useState, useEffect } from 'react';
 import { geminiService } from '../services/geminiService';
 
 interface Props {
-  children: string;
+  /* Fix: Change children type from string to React.ReactNode to allow standard JSX children usage and prevent 'single child' errors */
+  children: React.ReactNode;
   target: string;
 }
 
-export const Translate: React.FC<Props> = ({ children, target }) => {
-  const [translated, setTranslated] = useState(children);
+/* Fix: Removed React.FC and typed children as React.ReactNode to satisfy JSX requirement for multiple/single nodes */
+export const Translate = ({ children, target }: Props) => {
+  const sourceText = typeof children === 'string' ? children : String(children || '');
+  const [translated, setTranslated] = useState<string>(sourceText);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!children || target === 'English') {
-      setTranslated(children);
+    /* Fix: Handle children as a string for translation processing */
+    const text = typeof children === 'string' ? children : String(children || '');
+    if (!text || target === 'English') {
+      setTranslated(text);
       return;
     }
 
     const run = async () => {
-      const cacheKey = `cs_trans_${target}_${children}`;
+      const cacheKey = `cs_trans_${target}_${text}`;
       const cached = localStorage.getItem(cacheKey);
 
       if (cached) {
@@ -28,13 +33,13 @@ export const Translate: React.FC<Props> = ({ children, target }) => {
 
       setLoading(true);
       try {
-        const result = await geminiService.translate(children, target);
+        const result = await geminiService.translate(text, target);
         if (result) {
           localStorage.setItem(cacheKey, result);
           setTranslated(result);
         }
       } catch (e) {
-        setTranslated(children);
+        setTranslated(text);
       } finally {
         setLoading(false);
       }
