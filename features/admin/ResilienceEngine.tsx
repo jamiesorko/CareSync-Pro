@@ -26,7 +26,8 @@ const ResilienceEngine: React.FC<Props> = ({ language }) => {
                 activeSubTab === tab ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'
               }`}
             >
-              <Translate targetLanguage={language}>{tab}</Translate>
+              {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+              <Translate target={language}>{tab}</Translate>
             </button>
           ))}
         </div>
@@ -53,7 +54,7 @@ const ResilienceEngine: React.FC<Props> = ({ language }) => {
           </div>
         )}
 
-        {activeSubTab === 'LOGIC' && (
+        {activeLayer === 'LOGIC' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
              <div className="bg-slate-900 border border-white/10 rounded-[3rem] p-10 flex flex-col justify-between group">
                 <div>

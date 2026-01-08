@@ -52,7 +52,8 @@ const StrategicAuthorityHub: React.FC<Props> = ({ language, clients, staff }) =>
                 activeView === tab.id ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:text-white'
               }`}
             >
-              <Translate targetLanguage={language}>{tab.label}</Translate>
+              {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+              <Translate target={language}>{tab.label}</Translate>
             </button>
           ))}
         </div>
@@ -95,7 +96,7 @@ const StrategicAuthorityHub: React.FC<Props> = ({ language, clients, staff }) =>
                              <p className="text-sm font-bold text-white italic">{s.name} <span className="text-[8px] opacity-40">({s.anonymizedId})</span></p>
                              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-tighter">{s.role} • {s.homeSector}</p>
                           </div>
-                          <button className="text-[9px] font-black text-indigo-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all px-3 py-1 border border-indigo-400/20 rounded-lg">View Dossier</button>
+                          <button className="text-[9px] font-black text-indigo-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all px-3 py-1 border border-indigo-400/20 rounded-lg">View Profile</button>
                        </div>
                      ))}
                   </div>

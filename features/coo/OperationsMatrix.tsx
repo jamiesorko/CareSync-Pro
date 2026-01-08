@@ -26,7 +26,8 @@ const OperationsMatrix: React.FC<Props> = ({ language }) => {
               onClick={() => setActiveLayer(layer as any)}
               className={`px-10 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeLayer === layer ? 'bg-cyan-600 text-white shadow-xl shadow-cyan-600/30' : 'text-slate-500 hover:text-white'}`}
             >
-              <Translate targetLanguage={language}>{layer}</Translate>
+              {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+              <Translate target={language}>{layer}</Translate>
             </button>
           ))}
         </div>

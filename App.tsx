@@ -6,7 +6,7 @@ import Header from './components/Header';
 import Login from './features/Login';
 import CEOPortal from './features/ceo/CEOPortal';
 import COOPortal from './features/coo/COOPortal';
-import DOCPortal from './features/doc/DOCPortal';
+import DOCPortal from './features/clinical/DOCPortal';
 import RNPortal from './features/rn/RNPortal';
 import PSWPortal from './features/psw/PSWPortal';
 import FinancePortal from './features/accounting/FinancePortal';

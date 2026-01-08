@@ -22,7 +22,8 @@ const ScheduleGrid: React.FC<Props> = ({ visits, language, onCancel }) => {
       <div className="flex items-center gap-3 px-4">
         <CalendarDays className="text-teal-400" size={18} />
         <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">
-          <Translate targetLanguage={language}>My_Care_Timeline</Translate>
+          {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+          <Translate target={language}>My_Care_Timeline</Translate>
         </h3>
       </div>
       
@@ -55,7 +56,8 @@ const ScheduleGrid: React.FC<Props> = ({ visits, language, onCancel }) => {
                 onClick={() => onCancel(v.id)}
                 className="px-8 py-4 bg-rose-600/10 border border-rose-500/20 text-rose-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-600 hover:text-white transition-all shadow-lg"
               >
-                <Translate targetLanguage={language}>Cancel_Visit</Translate>
+                {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+                <Translate target={language}>Cancel_Visit</Translate>
               </button>
             )}
           </div>

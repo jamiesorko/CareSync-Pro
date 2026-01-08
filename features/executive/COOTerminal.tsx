@@ -50,7 +50,8 @@ const COOTerminal: React.FC<Props> = ({ language, staffName, clients, staff }) =
               onClick={() => setActiveLayer(tab.id as any)}
               className={`px-10 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${activeLayer === tab.id ? 'bg-cyan-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
             >
-              <Translate targetLanguage={language}>{tab.label}</Translate>
+              {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+              <Translate target={language}>{tab.label}</Translate>
             </button>
           ))}
         </div>

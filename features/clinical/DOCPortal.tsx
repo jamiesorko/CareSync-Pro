@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Client, StaffMember } from '../../types';
+import { Client, StaffMember, User } from '../../types';
 import Translate from '../../components/Translate';
 import TruthMediationSuite from './TruthMediationSuite';
 import ProtocolArchitect from '../doc/ProtocolArchitect';
@@ -9,12 +9,13 @@ import { ShieldCheck, Stethoscope, FileText, Activity } from 'lucide-react';
 
 interface Props {
   language: string;
-  staffName: string;
+  user: User;
   clients: Client[];
 }
 
-const DOCPortal: React.FC<Props> = ({ language, staffName, clients }) => {
+const DOCPortal: React.FC<Props> = ({ language, user, clients }) => {
   const [activeTab, setActiveTab] = useState<'TRUTH' | 'FORGE' | 'CHRONO'>('TRUTH');
+  const staffName = user.name;
 
   const stats = [
     { label: 'Clinical Fidelity', val: '99.8%', icon: ShieldCheck, color: 'text-emerald-400' },
@@ -49,7 +50,7 @@ const DOCPortal: React.FC<Props> = ({ language, staffName, clients }) => {
               onClick={() => setActiveTab(tab.id as any)}
               className={`px-10 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === tab.id ? 'bg-rose-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
             >
-              <Translate targetLanguage={language}>{tab.label}</Translate>
+              <Translate target={language}>{tab.label}</Translate>
             </button>
           ))}
         </div>

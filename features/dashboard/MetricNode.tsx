@@ -22,11 +22,13 @@ const MetricNode: React.FC<Props> = ({ label, value, suffix, icon: Icon, trend, 
       <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded border ${
         trendType === 'positive' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
       }`}>
-        <Translate targetLanguage={language}>{trend}</Translate>
+        {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+        <Translate target={language}>{trend}</Translate>
       </span>
     </div>
     <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">
-      <Translate targetLanguage={language}>{label}</Translate>
+      {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+      <Translate target={language}>{label}</Translate>
     </p>
     <h4 className="text-3xl font-black text-white italic tracking-tighter">
       {value}<span className="text-sm opacity-30 not-italic ml-0.5">{suffix}</span>

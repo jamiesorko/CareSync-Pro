@@ -25,7 +25,8 @@ const CircularGauge: React.FC<GaugeProps> = ({ label, value, color, suffix = "%"
         <span className="text-2xl font-black text-white italic tracking-tighter">{value}{suffix}</span>
       </div>
     </div>
-    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]"><Translate targetLanguage="English">{label}</Translate></p>
+    {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]"><Translate target="English">{label}</Translate></p>
     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
       <span className="text-4xl font-black italic">PULSE</span>
     </div>

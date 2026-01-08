@@ -69,13 +69,15 @@ const ClientApp: React.FC<Props> = ({ user, onLogout }) => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="text-center md:text-left">
               <h2 className="text-5xl font-black text-white tracking-tighter uppercase leading-none italic mb-4">
-                <Translate targetLanguage={language}>Welcome_Back</Translate>,<br/>
+                {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+                <Translate target={language}>Welcome_Back</Translate>,<br/>
                 <span className="text-teal-500">{user.name.split(' ')[0]}</span>
               </h2>
               <div className="flex items-center gap-4 text-slate-500 justify-center md:justify-start">
                 <ShieldCheck size={14} className="text-emerald-500" />
                 <p className="text-[10px] font-black uppercase tracking-widest">
-                  <Translate targetLanguage={language}>Sovereign_Protocol_Active</Translate>
+                  {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+                  <Translate target={language}>Sovereign_Protocol_Active</Translate>
                 </p>
               </div>
             </div>
@@ -85,13 +87,15 @@ const ClientApp: React.FC<Props> = ({ user, onLogout }) => {
                 onClick={() => setActiveTab('HOME')}
                 className={`px-10 py-4 rounded-3xl text-[10px] font-black uppercase transition-all flex items-center gap-3 ${activeTab === 'HOME' ? 'bg-teal-600 text-white' : 'text-slate-500'}`}
               >
-                <Home size={16} /> <Translate targetLanguage={language}>Care_Hub</Translate>
+                {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+                <Home size={16} /> <Translate target={language}>Care_Hub</Translate>
               </button>
               <button 
                 onClick={() => setActiveTab('CONCERNS')}
                 className={`px-10 py-4 rounded-3xl text-[10px] font-black uppercase transition-all flex items-center gap-3 ${activeTab === 'CONCERNS' ? 'bg-rose-600 text-white' : 'text-slate-500'}`}
               >
-                <MessageSquare size={16} /> <Translate targetLanguage={language}>Direct_Help</Translate>
+                {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+                <MessageSquare size={16} /> <Translate target={language}>Direct_Help</Translate>
               </button>
             </div>
           </div>
@@ -116,7 +120,8 @@ const ClientApp: React.FC<Props> = ({ user, onLogout }) => {
                 <div className="glass-card p-8 rounded-[3rem] text-center">
                   <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4 italic">Institutional Integrity Check</p>
                   <p className="text-sm font-medium italic text-slate-300">
-                    <Translate targetLanguage={language}>The team is on-site and verified via GPS geofence.</Translate>
+                    {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+                    <Translate target={language}>The team is on-site and verified via GPS geofence.</Translate>
                   </p>
                 </div>
               </div>

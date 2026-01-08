@@ -33,11 +33,13 @@ const HRTerminal: React.FC<Props> = ({ language, staffName }) => {
           <div className="flex items-center gap-3">
              <div className="w-3 h-3 rounded-full bg-indigo-500 animate-pulse shadow-[0_0_15px_rgba(99,102,241,0.5)]"></div>
              <h1 className="text-5xl font-black tracking-tighter uppercase italic leading-none text-indigo-400">
-               <Translate targetLanguage={language}>RESOURCE_SIGMA_NODE</Translate>
+               {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+               <Translate target={language}>RESOURCE_SIGMA_NODE</Translate>
              </h1>
           </div>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
-            <Translate targetLanguage={language}>Human_Capital_Stewardship</Translate> • {staffName}
+            {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+            <Translate target={language}>Human_Capital_Stewardship</Translate> • {staffName}
           </p>
         </div>
         
@@ -49,7 +51,8 @@ const HRTerminal: React.FC<Props> = ({ language, staffName }) => {
               className={`px-6 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeSubTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
             >
               <tab.icon size={14} />
-              <Translate targetLanguage={language}>{tab.label}</Translate>
+              {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+              <Translate target={language}>{tab.label}</Translate>
             </button>
           ))}
         </div>

@@ -43,10 +43,12 @@ const ConcernsForm: React.FC<Props> = ({ language, onSent }) => {
         </div>
         <div>
           <h3 className="text-xl font-black text-white italic tracking-tighter uppercase leading-none">
-            <Translate targetLanguage={language}>Direct_Supervisor_Link</Translate>
+            {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+            <Translate target={language}>Direct_Supervisor_Link</Translate>
           </h3>
           <p className="text-[9px] font-bold text-rose-400 uppercase tracking-widest mt-1 italic">
-             <Translate targetLanguage={language}>Global_to_English_Relay</Translate>
+             {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+             <Translate target={language}>Global_to_English_Relay</Translate>
           </p>
         </div>
       </div>
@@ -62,7 +64,8 @@ const ConcernsForm: React.FC<Props> = ({ language, onSent }) => {
         <div className="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/5">
           <AlertTriangle size={14} className="text-amber-500" />
           <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">
-            <Translate targetLanguage={language}>Your message will be translated into English for clinical review.</Translate>
+            {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
+            <Translate target={language}>Your message will be translated into English for clinical review.</Translate>
           </p>
         </div>
 
