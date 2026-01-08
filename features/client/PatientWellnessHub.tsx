@@ -1,6 +1,8 @@
+
 import React, { useState } from 'react';
 import { Client } from '../../types';
-import Translate from '../../components/Translate';
+/* Changed default import to named import for Translate */
+import { Translate } from '../../components/Translate';
 import SuccessMirror from './SuccessMirror';
 import TherapeuticZenStation from './TherapeuticZenStation';
 

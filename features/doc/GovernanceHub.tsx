@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { Client } from '../../types';
-import Translate from '../../components/Translate';
+/* Changed default import to named import for Translate */
+import { Translate } from '../../components/Translate';
 import { neuralTruthSynthesizer, SynthesisTruth } from '../../services/neuralTruthSynthesizer';
 
 interface Props {
@@ -35,7 +37,7 @@ const GovernanceHub: React.FC<Props> = ({ language, clients }) => {
 
   return (
     <div className="space-y-12 animate-in fade-in duration-700 pb-24">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 px-4">
         <div>
           <h2 className="text-4xl font-black text-white tracking-tighter uppercase leading-none italic">Governance_Hub</h2>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">Autonomous Truth Mediation & Clinical Integrity</p>
@@ -99,7 +101,7 @@ const GovernanceHub: React.FC<Props> = ({ language, clients }) => {
         </div>
 
         {/* Action Panel */}
-        <div className="lg:col-span-4 space-y-6">
+        <div className="lg:col-span-4 space-y-6 action-panel">
            <div className="bg-indigo-600 p-10 rounded-[3rem] text-white shadow-2xl shadow-indigo-600/30">
               <h3 className="text-xs font-black uppercase tracking-widest mb-10 opacity-60">Governance_Directive</h3>
               <p className="text-sm font-bold italic leading-relaxed mb-10">

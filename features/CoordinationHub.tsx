@@ -46,10 +46,12 @@ const CoordinationHub: React.FC<Props> = ({ language }) => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 px-4">
         <div>
           <h2 className="text-5xl font-black text-white tracking-tighter uppercase italic leading-none text-indigo-400">
-             <Translate targetLanguage={language}>LOGISTICS_COMMAND</Translate>
+             {/* Standardized Translate prop to target */}
+             <Translate target={language}>LOGISTICS_COMMAND</Translate>
           </h2>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-3 italic">
-             <Translate targetLanguage={language}>Autonomous_Deployment_&_Coordinator_Oversight</Translate>
+             {/* Standardized Translate prop to target */}
+             <Translate target={language}>Autonomous_Deployment_&_Coordinator_Oversight</Translate>
           </p>
         </div>
         
@@ -61,7 +63,8 @@ const CoordinationHub: React.FC<Props> = ({ language }) => {
               className={`px-8 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${view === v ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
             >
               {v === 'WAR_ROOM' && <Radio size={12} className={view === 'WAR_ROOM' ? 'animate-pulse' : ''} />}
-              <Translate targetLanguage={language}>{v}</Translate>
+              {/* Standardized Translate prop to target */}
+              <Translate target={language}>{v}</Translate>
             </button>
           ))}
         </div>
@@ -79,7 +82,8 @@ const CoordinationHub: React.FC<Props> = ({ language }) => {
                 <div className="flex items-center gap-3 mb-10">
                   <ShieldAlert className="text-amber-500" size={20} />
                   <h3 className="text-xl font-black text-white italic tracking-tighter uppercase">
-                     <Translate targetLanguage={language}>Cap_Monitor</Translate>
+                     {/* Standardized Translate prop to target */}
+                     <Translate target={language}>Cap_Monitor</Translate>
                   </h3>
                 </div>
                 <div className="space-y-4">
@@ -89,7 +93,8 @@ const CoordinationHub: React.FC<Props> = ({ language }) => {
                         <div>
                           <p className="text-sm font-black text-white uppercase italic">{s.name}</p>
                           <p className="text-[8px] text-slate-500 uppercase font-bold">
-                             <Translate targetLanguage={language}>{s.role}</Translate> • {s.homeSector}
+                             {/* Standardized Translate prop to target */}
+                             <Translate target={language}>{s.role as string}</Translate> • {s.homeSector}
                           </p>
                         </div>
                         <p className={`text-2xl font-black italic tracking-tighter ${s.weeklyHours >= 40 ? 'text-rose-500' : 'text-emerald-400'}`}>{s.weeklyHours}h</p>
@@ -102,7 +107,8 @@ const CoordinationHub: React.FC<Props> = ({ language }) => {
 
             <div className="lg:col-span-8 bg-slate-950 border border-white/10 rounded-[4rem] p-12 shadow-2xl relative overflow-hidden">
                <h3 className="text-2xl font-black text-white italic tracking-tighter uppercase mb-12">
-                  <Translate targetLanguage={language}>Fleet_Roster_Directives</Translate>
+                  {/* Standardized Translate prop to target */}
+                  <Translate target={language}>Fleet_Roster_Directives</Translate>
                </h3>
                <div className="space-y-6">
                   {clients.map(client => (
@@ -111,13 +117,14 @@ const CoordinationHub: React.FC<Props> = ({ language }) => {
                         <div className="flex-1 space-y-6">
                            <div>
                               <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-2 italic">
-                                 <Translate targetLanguage={language}>{client.sector}</Translate>
+                                 {/* Standardized Translate prop to target */}
+                                 <Translate target={language}>{client.sector}</Translate>
                               </p>
                               <h4 className="text-3xl font-black text-white italic tracking-tighter uppercase leading-none">{client.name}</h4>
                            </div>
                            <div className="p-6 bg-black/40 rounded-3xl border border-white/5 relative group/edit">
                               <p className="text-sm text-slate-300 font-medium italic leading-relaxed">
-                                "{client.coordinatorInstructions ? <Translate targetLanguage={language}>{client.coordinatorInstructions}</Translate> : <Translate targetLanguage={language}>No manual instructions issued.</Translate>}"
+                                "{client.coordinatorInstructions ? <Translate target={language}>{client.coordinatorInstructions}</Translate> : <Translate target={language}>No manual instructions issued.</Translate>}"
                               </p>
                               <button 
                                 onClick={() => handleUpdateDirective(client.id)}
@@ -129,7 +136,8 @@ const CoordinationHub: React.FC<Props> = ({ language }) => {
                         </div>
                         <div className="flex flex-col gap-4 shrink-0">
                            <button onClick={() => triggerShiftBlast(client)} className="px-10 py-5 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-indigo-500 transition-all flex items-center gap-4">
-                              <Send size={14} /> <Translate targetLanguage={language}>Trigger_Shift_Blast</Translate>
+                              {/* Standardized Translate prop to target */}
+                              <Send size={14} /> <Translate target={language}>Trigger_Shift_Blast</Translate>
                            </button>
                         </div>
                       </div>
@@ -140,7 +148,8 @@ const CoordinationHub: React.FC<Props> = ({ language }) => {
           </div>
         ) : (
            <div className="bg-slate-900 border border-white/10 rounded-[4rem] p-32 shadow-2xl animate-in zoom-in duration-500 text-center opacity-30 italic">
-              <Translate targetLanguage={language}>No_active_data_in_this_vector.</Translate>
+              {/* Standardized Translate prop to target */}
+              <Translate target={language}>No_active_data_in_this_vector.</Translate>
            </div>
         )}
       </div>

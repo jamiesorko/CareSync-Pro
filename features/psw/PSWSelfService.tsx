@@ -4,8 +4,8 @@ import { Translate } from '../../components/Translate';
 import { hrService } from '../../services/hrService';
 import { financialService } from '../../services/financialService';
 import { coordinationService } from '../../services/coordinationService';
-import { emailService, InternalEmail } from '../../services/emailService';
-import { AlertType } from '../../types';
+import { emailService } from '../../services/emailService';
+import { AlertType, InternalEmail } from '../../types';
 import { Mail, Briefcase, GraduationCap, Vault, Plus, Send, FileText, ShoppingCart, Clock, ShieldAlert, CheckCircle2 } from 'lucide-react';
 
 interface Props {
@@ -60,7 +60,8 @@ const PSWSelfService: React.FC<Props> = ({ language }) => {
             className={`px-10 py-4 rounded-3xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-3 whitespace-nowrap ${activeTab === tab.id ? 'bg-orange-600 text-white shadow-xl' : 'text-slate-500 hover:text-white'}`}
           >
             <tab.icon size={16} />
-            <Translate targetLanguage={language}>{tab.label}</Translate>
+            {/* Standardized Translate prop to target */}
+            <Translate target={language}>{tab.label}</Translate>
           </button>
         ))}
       </div>
@@ -173,7 +174,7 @@ const PSWSelfService: React.FC<Props> = ({ language }) => {
              ].map((doc, i) => (
                <div key={i} className="p-10 bg-white/5 border border-white/10 rounded-[3rem] text-center flex flex-col items-center justify-between group hover:bg-white/10 transition-all h-72 shadow-2xl">
                   <div className="w-16 h-16 rounded-2xl bg-indigo-600/10 border-2 border-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-all"><doc.icon size={24} /></div>
-                  <p className="text-[11px] font-black text-white uppercase italic tracking-tighter">{doc.label}</p>
+                  <p className="text-[11px] font-black text-white italic tracking-tighter">{doc.label}</p>
                   <button onClick={() => alert(`Authorizing secure download for ${doc.label}...`)} className="px-6 py-2 bg-white text-black rounded-xl text-[9px] font-black uppercase tracking-widest shadow-xl">Download</button>
                </div>
              ))}

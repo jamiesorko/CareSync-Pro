@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Client, CareRole } from '../../types';
-import Translate from '../../components/Translate';
+/* Changed default import to named import for Translate */
+import { Translate } from '../../components/Translate';
 import { clinicalContinuityForge, HandoverAsset } from '../../services/clinicalContinuityForge';
 
 interface Props {

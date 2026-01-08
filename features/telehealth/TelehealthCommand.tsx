@@ -3,7 +3,8 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoogleGenAI, Modality, LiveServerMessage } from '@google/genai';
 import { decode, encode, decodeAudioData } from '../../utils/audioHelpers';
 import { Client } from '../../types';
-import Translate from '../../components/Translate';
+/* Changed default import to named import for Translate */
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;
@@ -160,7 +161,8 @@ const TelehealthCommand: React.FC<Props> = ({ language, clients }) => {
               onClick={isActive ? stopSession : startSession}
               className={`w-full py-8 rounded-[2rem] font-black text-xs uppercase tracking-[0.6em] transition-all shadow-2xl ${isActive ? 'bg-rose-600 text-white hover:bg-rose-500' : 'bg-white text-black hover:scale-[1.02] active:scale-95 transition-all'}`}
              >
-               <Translate targetLanguage={language}>{isActive ? 'TERMINATE_INTERCEPT' : 'INITIALIZE_BRIDGE'}</Translate>
+               {/* Standardized Translate prop to target */}
+               <Translate target={language}>{isActive ? 'TERMINATE_INTERCEPT' : 'INITIALIZE_BRIDGE'}</Translate>
              </button>
           </div>
         </div>

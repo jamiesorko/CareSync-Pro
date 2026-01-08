@@ -55,7 +55,8 @@ const CEOConsole: React.FC<Props> = ({ language, clients, staff }) => {
                 activeView === tab.id ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:text-white'
               }`}
             >
-              <Translate targetLanguage={language}>{tab.label}</Translate>
+              {/* Standardized Translate prop to target */}
+              <Translate target={language}>{tab.label}</Translate>
             </button>
           ))}
         </div>

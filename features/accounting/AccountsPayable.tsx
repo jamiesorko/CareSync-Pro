@@ -65,4 +65,25 @@ const AccountsPayable: React.FC<Props> = ({ language }) => {
           {supplyRequests.map(r => (
             <div key={r.id} className="p-6 bg-white/[0.03] border border-white/5 rounded-2xl flex justify-between items-center">
               <div>
-                <p className="text-sm font-black text-white italic">{r.item} (x{
+                <p className="text-sm font-black text-white italic">{r.item} (x{r.quantity})</p>
+                <p className="text-[9px] text-slate-500 font-bold uppercase">Requested by: {r.staffName} • {r.timestamp}</p>
+                <div className="mt-2">
+                   <span className={`text-[8px] font-black px-2 py-0.5 rounded ${
+                     r.status === 'DELIVERED' ? 'bg-emerald-500/20 text-emerald-500' :
+                     r.status === 'ORDERED' ? 'bg-sky-500/20 text-sky-400' : 'bg-amber-500/20 text-amber-500'
+                   }`}>{r.status}</span>
+                </div>
+              </div>
+              {r.status === 'PENDING' && (
+                <button onClick={() => orderSupplies(r.id)} className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-all">Fulfill</button>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+};
+
+/* Added default export */
+export default AccountsPayable;

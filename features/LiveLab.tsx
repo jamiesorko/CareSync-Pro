@@ -133,10 +133,12 @@ const LiveLab: React.FC<Props> = ({ language }) => {
         
         <div>
           <h2 className="text-4xl font-black text-white italic uppercase tracking-tighter leading-none">
-            <Translate targetLanguage={language}>Direct_Neural_Link</Translate>
+            {/* Standardized Translate prop to target */}
+            <Translate target={language}>Direct_Neural_Link</Translate>
           </h2>
           <p className={`text-[10px] font-black uppercase tracking-[0.4em] mt-3 ${isActive ? 'text-indigo-400' : 'text-slate-700'}`}>
-            <Translate targetLanguage={language}>{status}</Translate>
+            {/* Standardized Translate prop to target */}
+            <Translate target={language}>{status}</Translate>
           </p>
         </div>
         
@@ -144,13 +146,15 @@ const LiveLab: React.FC<Props> = ({ language }) => {
           onClick={isActive ? stopSession : startSession} 
           className={`px-16 py-6 rounded-[2.5rem] font-black text-xs uppercase tracking-[0.4em] transition-all shadow-3xl ${isActive ? 'bg-rose-600 text-white hover:bg-rose-500' : 'bg-white text-black hover:scale-105 active:scale-95'}`}
         >
-          {isActive ? <Translate targetLanguage={language}>TERMINATE_SIGNAL</Translate> : <Translate targetLanguage={language}>OPEN_CHANNEL</Translate>}
+          {/* Standardized Translate prop to target */}
+          {isActive ? <Translate target={language}>TERMINATE_SIGNAL</Translate> : <Translate target={language}>OPEN_CHANNEL</Translate>}
         </button>
       </div>
 
       <div className="flex-1 bg-black/40 rounded-[3.5rem] border border-white/5 p-10 overflow-hidden flex flex-col shadow-inner backdrop-blur-3xl">
         <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.5em] mb-8 italic">
-           <Translate targetLanguage={language}>Acoustic_Transcription_Buffer</Translate>
+           {/* Standardized Translate prop to target */}
+           <Translate target={language}>Acoustic_Transcription_Buffer</Translate>
         </h3>
         <div className="flex-1 overflow-y-auto space-y-4 scrollbar-hide pr-2">
           {transcripts.map((t, i) => (
@@ -161,7 +165,8 @@ const LiveLab: React.FC<Props> = ({ language }) => {
           {transcripts.length === 0 && (
             <div className="h-full flex items-center justify-center opacity-20 italic">
                <p className="text-sm font-black uppercase tracking-widest leading-none">
-                  <Translate targetLanguage={language}>Awaiting_Acoustic_Signals</Translate>
+                  {/* Standardized Translate prop to target */}
+                  <Translate target={language}>Awaiting_Acoustic_Signals</Translate>
                </p>
             </div>
           )}

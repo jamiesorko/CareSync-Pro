@@ -1,7 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
 import { shiftStabilityService, StabilityPrediction } from '../../services/shiftStabilityService';
 import { MOCK_STAFF } from '../../data/careData';
-import Translate from '../../components/Translate';
+/* Changed default import to named import for Translate */
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;
@@ -51,7 +53,7 @@ const StabilityGrid: React.FC<Props> = ({ language }) => {
             }`}>
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <h4 className="text-lg font-black text-white italic uppercase tracking-tighter">{staff.name}</h4>
+                  <h4 className="text-lg font-black text-white italic tracking-tighter uppercase leading-none">{staff.name}</h4>
                   <p className="text-[9px] text-slate-500 font-bold uppercase">{staff.role}</p>
                 </div>
                 <div className={`text-xl font-black italic ${p.reliabilityScore < 70 ? 'text-rose-500' : 'text-emerald-400'}`}>
@@ -69,7 +71,8 @@ const StabilityGrid: React.FC<Props> = ({ language }) => {
                 
                 {p.riskReason && (
                   <p className="text-[9px] text-rose-400 italic font-bold uppercase">
-                    Risk: <Translate targetLanguage={language}>{p.riskReason}</Translate>
+                    {/* Standardized Translate prop to target */}
+                    Risk: <Translate target={language}>{p.riskReason}</Translate>
                   </p>
                 )}
 

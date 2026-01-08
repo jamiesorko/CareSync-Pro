@@ -3,7 +3,8 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoogleGenAI, Modality, LiveServerMessage } from '@google/genai';
 import { decode, encode, decodeAudioData } from '../utils/audioHelpers';
 import { CareRole } from '../types';
-import Translate from '../components/Translate';
+/* Changed default import to named import for Translate */
+import { Translate } from '../components/Translate';
 
 interface Props {
   role: CareRole;
@@ -145,7 +146,7 @@ const AIConsult: React.FC<Props> = ({ role, onClose, language }) => {
 
         <div className="p-10 border-t border-white/5">
           <button onClick={isActive ? stopSession : startSession} className={`w-full py-6 rounded-2xl font-black text-xs tracking-[0.3em] transition-all ${isActive ? 'bg-rose-500/20 text-rose-500 animate-pulse' : 'bg-white text-black hover:scale-[1.01] active:scale-95 transition-all'}`}>
-            <Translate targetLanguage={language}>{isActive ? 'TERMINATE_SIGNAL' : 'OPEN_NEURAL_LINK'}</Translate>
+            <Translate target={language}>{isActive ? 'TERMINATE_SIGNAL' : 'OPEN_NEURAL_LINK'}</Translate>
           </button>
         </div>
       </div>

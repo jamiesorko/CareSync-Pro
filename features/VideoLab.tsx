@@ -58,12 +58,15 @@ const VideoLab: React.FC<Props> = ({ language }) => {
 
         <div className="relative z-10 max-w-2xl">
           <h2 className="text-4xl font-black text-white italic tracking-tighter uppercase leading-none mb-6">
-            <Translate targetLanguage={language}>Cinematic_Synthesis</Translate>
+            {/* Standardized Translate prop to target */}
+            <Translate target={language}>Cinematic_Synthesis</Translate>
           </h2>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-relaxed mb-10 italic">
-            <Translate targetLanguage={language}>Generate high-fidelity clinical training videos or therapeutic reminiscence visuals from text descriptions. Requires specialized neural authorization.</Translate>
+            {/* Standardized Translate prop to target */}
+            <Translate target={language}>Generate high-fidelity clinical training videos or therapeutic reminiscence visuals from text descriptions. Requires specialized neural authorization.</Translate>
             <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" className="text-indigo-400 hover:underline ml-2">
-              <Translate targetLanguage={language}>Billiing_Directives</Translate>
+              {/* Standardized Translate prop to target */}
+              <Translate target={language}>Billiing_Directives</Translate>
             </a>
           </p>
 
@@ -82,10 +85,12 @@ const VideoLab: React.FC<Props> = ({ language }) => {
               {loading ? (
                 <>
                   <div className="w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  <Translate targetLanguage={language}>{steps[step]}</Translate>
+                  {/* Standardized Translate prop to target */}
+                  <Translate target={language}>{steps[step]}</Translate>
                 </>
               ) : (
-                <Translate targetLanguage={language}>INITIATE_VEO_FORGE</Translate>
+                /* Standardized Translate prop to target */
+                <Translate target={language}>INITIATE_VEO_FORGE</Translate>
               )}
             </button>
           </div>
@@ -105,7 +110,8 @@ const VideoLab: React.FC<Props> = ({ language }) => {
             <div className="flex items-center gap-3">
                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
                <span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">
-                 <Translate targetLanguage={language}>Neural_Render_Complete</Translate>
+                 {/* Standardized Translate prop to target */}
+                 <Translate target={language}>Neural_Render_Complete</Translate>
                </span>
             </div>
             <a 
@@ -113,7 +119,8 @@ const VideoLab: React.FC<Props> = ({ language }) => {
               target="_blank" 
               className="text-[9px] font-black uppercase tracking-widest bg-white/5 hover:bg-white/10 px-8 py-3 rounded-2xl transition-all border border-white/10 text-white"
             >
-              <Translate targetLanguage={language}>Download_Master_File</Translate>
+              {/* Standardized Translate prop to target */}
+              <Translate target={language}>Download_Master_File</Translate>
             </a>
           </div>
         </div>

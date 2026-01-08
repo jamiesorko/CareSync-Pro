@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Translate } from '../components/Translate';
+import { Translate } from '../Translate';
 import { CareRole } from '../types';
 import ScheduleGrid from './client/ScheduleGrid';
 import PSWCard from './client/PSWCard';

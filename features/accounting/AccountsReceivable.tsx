@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
-import Translate from '../../components/Translate';
+/* Changed default import to named import for Translate */
+import { Translate } from '../../components/Translate';
 import { MOCK_INVOICES, InvoiceRecord } from '../../data/accountingData';
 
 interface Props {
@@ -41,10 +42,10 @@ const AccountsReceivable: React.FC<Props> = ({ language }) => {
                 <p className="text-2xl font-black text-white tracking-tighter">${inv.amount.toLocaleString()}</p>
                 <div className="flex flex-col gap-2">
                   {inv.status === 'SENT' && (
-                    <button onClick={() => markAsPaid(inv.id)} className="px-6 py-2 bg-emerald-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-all">Receive Payment</button>
+                    <button onClick={() => markAsPaid(inv.id)} className="px-6 py-2 bg-emerald-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all">Receive Payment</button>
                   )}
                   {inv.status === 'OVERDUE' && (
-                    <button onClick={() => sendOverdueAlert(inv)} className="px-6 py-2 bg-rose-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-rose-600/20">Escalate to Manager</button>
+                    <button onClick={() => sendOverdueAlert(inv)} className="px-6 py-2 bg-rose-600 text-white rounded-xl text-[9px] font-black uppercase hover:scale-105 transition-all shadow-lg shadow-rose-600/20">Escalate to Manager</button>
                   )}
                   <button className="px-6 py-2 bg-white/5 border border-white/10 text-slate-400 rounded-xl text-[9px] font-black uppercase hover:bg-white/10">Resend Invoice</button>
                 </div>

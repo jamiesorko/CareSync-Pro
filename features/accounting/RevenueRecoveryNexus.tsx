@@ -1,6 +1,8 @@
+
 import React, { useState } from 'react';
 import { revenueRecoveryService, RecoveryCase } from '../../services/revenueRecoveryService';
-import Translate from '../../components/Translate';
+/* Changed default import to named import for Translate */
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;
@@ -71,8 +73,10 @@ const RevenueRecoveryNexus: React.FC<Props> = ({ language }) => {
                       <h4 className="text-lg font-black text-white italic tracking-tighter uppercase leading-none">{c.patientName}</h4>
                     </div>
                     <div className="text-right">
-                       <p className="text-xl font-black text-rose-500 italic">-${(c.billedAmount - c.paidAmount).toLocaleString()}</p>
-                       <p className="text-[7px] font-bold text-slate-600 uppercase">Unpaid Delta</p>
+                       <p className={`text-xl font-black italic ${c.billedAmount - c.paidAmount > 0 ? 'text-rose-500' : 'text-emerald-500'}`}>
+                         -${(c.billedAmount - c.paidAmount).toLocaleString()}
+                       </p>
+                       <p className="text-[7px] font-bold text-slate-600 uppercase mt-1">Unpaid Delta</p>
                     </div>
                   </div>
 
@@ -86,6 +90,7 @@ const RevenueRecoveryNexus: React.FC<Props> = ({ language }) => {
                           onClick={(e) => { e.stopPropagation(); runHarvest(c); }}
                           className="px-6 py-2 bg-white text-black rounded-xl text-[9px] font-black uppercase tracking-widest shadow-xl"
                         >
+                          {/* Standardized Translate usage if needed, though not directly failing here */}
                           Harvest_Evidence
                         </button>
                      ) : (
@@ -109,7 +114,7 @@ const RevenueRecoveryNexus: React.FC<Props> = ({ language }) => {
               <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-10 italic">Forensic_Evidence_Matrix</h3>
               
               {selectedCase ? (
-                <div className="flex-1 flex flex-col space-y-8 animate-in slide-in-from-right-4">
+                <div className="flex-1 flex flex-col space-y-8 animate-in slide-in-from-right-4 duration-500">
                    <div className="space-y-4">
                       <p className="text-[8px] font-black text-emerald-400 uppercase tracking-widest">Neural Proof Points</p>
                       {selectedCase.evidenceFound.length > 0 ? (
@@ -155,17 +160,4 @@ const RevenueRecoveryNexus: React.FC<Props> = ({ language }) => {
               <p className="text-[9px] font-black uppercase tracking-widest mb-4 opacity-60">Recovery_Directive</p>
               <div className="flex items-baseline space-x-2 mb-8">
                  <p className="text-6xl font-black italic tracking-tighter">$14.2k</p>
-                 <span className="text-xs font-black opacity-50 uppercase">Recoverable_Asset_Value</span>
-              </div>
-              <p className="text-sm font-bold italic leading-relaxed">
-                "Neural Core identified 84% of Oct-RA underpayments are due to missing mobility tags. Cross-referencing Scribe logs now..."
-              </p>
-           </div>
-        </div>
-
-      </div>
-    </div>
-  );
-};
-
-export default RevenueRecoveryNexus;
+                 <span className="text-xs font-black opacity-50 uppercase">Recoverable_

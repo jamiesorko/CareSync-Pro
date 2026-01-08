@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
 import { Complaint } from '../../types';
-import Translate from '../../components/Translate';
+/* Changed default import to named import for Translate */
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;

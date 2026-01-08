@@ -37,7 +37,8 @@ const ImageLab: React.FC<Props> = ({ language }) => {
         
         <div className="relative z-10">
           <h2 className="text-3xl font-black text-white uppercase italic tracking-tighter mb-8 leading-none">
-            <Translate targetLanguage={language}>Image_Generation_Core</Translate>
+            {/* Standardized Translate prop to target */}
+            <Translate target={language}>Image_Generation_Core</Translate>
           </h2>
           <div className="flex flex-col space-y-6">
             <textarea
@@ -54,10 +55,12 @@ const ImageLab: React.FC<Props> = ({ language }) => {
               {loading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-indigo-600/30 border-t-indigo-600 rounded-full animate-spin"></div>
-                  <Translate targetLanguage={language}>CREATING_ARTWORK</Translate>
+                  {/* Standardized Translate prop to target */}
+                  <Translate target={language}>CREATING_ARTWORK</Translate>
                 </>
               ) : (
-                <Translate targetLanguage={language}>GENERATE_LENS_VECTOR</Translate>
+                /* Standardized Translate prop to target */
+                <Translate target={language}>GENERATE_LENS_VECTOR</Translate>
               )}
             </button>
           </div>
@@ -83,7 +86,8 @@ const ImageLab: React.FC<Props> = ({ language }) => {
                 }}
                 className="mt-6 text-[9px] font-black text-indigo-400 uppercase tracking-widest hover:text-white transition-colors"
               >
-                <Translate targetLanguage={language}>DOWNLOAD_ASSET</Translate>
+                {/* Standardized Translate prop to target */}
+                <Translate target={language}>DOWNLOAD_ASSET</Translate>
               </button>
             </div>
           </div>
@@ -94,7 +98,8 @@ const ImageLab: React.FC<Props> = ({ language }) => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             <p className="text-xs font-black uppercase tracking-[0.3em] italic">
-               <Translate targetLanguage={language}>Awaiting_Neural_Imaging_Prompt</Translate>
+               {/* Standardized Translate prop to target */}
+               <Translate target={language}>Awaiting_Neural_Imaging_Prompt</Translate>
             </p>
           </div>
         )}

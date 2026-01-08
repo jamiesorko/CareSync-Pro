@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { logisticsThroughputService, ThroughputMetric } from '../../services/logisticsThroughputService';
-import Translate from '../../components/Translate';
+/* Changed default import to named import for Translate */
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;

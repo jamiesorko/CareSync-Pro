@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Translate } from '../components/Translate';
+import { Translate } from '../Translate';
 
 interface Props {
   language: string;

@@ -54,9 +54,11 @@ const COOCommand: React.FC<Props> = ({ language }) => {
         <div>
           <div className="flex items-center space-x-3 mb-2">
             <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)]"></div>
-            <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]"><Translate targetLanguage={language}>Operations Control Center</Translate></span>
+            {/* Standardized Translate prop to target */}
+            <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]"><Translate target={language}>Operations Control Center</Translate></span>
           </div>
-          <h2 className="text-4xl font-black text-white tracking-tighter uppercase leading-none italic"><Translate targetLanguage={language}>COO_OPERATIONAL_MATRIX</Translate></h2>
+          {/* Standardized Translate prop to target */}
+          <h2 className="text-4xl font-black text-white tracking-tighter uppercase leading-none italic"><Translate target={language}>COO_OPERATIONAL_MATRIX</Translate></h2>
         </div>
         
         <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10 backdrop-blur-xl overflow-x-auto scrollbar-hide">
@@ -68,14 +70,15 @@ const COOCommand: React.FC<Props> = ({ language }) => {
                 activeSubTab === tab ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/20' : 'text-slate-500 hover:text-white'
               }`}
             >
-              <Translate targetLanguage={language}>{tab}</Translate>
+              {/* Standardized Translate prop to target */}
+              <Translate target={language}>{tab}</Translate>
             </button>
           ))}
         </div>
       </div>
 
       {activeSubTab === 'STABILITY' && <StabilityGrid language={language} />}
-      {activeSubTab === 'PULSE' && <ThroughputPulse language={language} />}
+      {activeLayer === 'PULSE' && <ThroughputPulse language={language} />}
 
       {activeSubTab === 'OVERVIEW' && (
         <div className="space-y-10">
@@ -87,7 +90,8 @@ const COOCommand: React.FC<Props> = ({ language }) => {
                { label: 'Compliance Index', val: '99.8%', color: 'text-white' }
              ].map((stat, i) => (
                <div key={i} className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] backdrop-blur-3xl">
-                  <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4"><Translate targetLanguage={language}>{stat.label}</Translate></p>
+                  {/* Standardized Translate prop to target */}
+                  <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4"><Translate target={language}>{stat.label}</Translate></p>
                   <p className={`text-4xl font-black tracking-tighter ${stat.color}`}>{stat.val}</p>
                </div>
              ))}

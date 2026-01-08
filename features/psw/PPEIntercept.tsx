@@ -1,6 +1,8 @@
+
 import React, { useState, useRef } from 'react';
 import { bioSurveillanceService } from '../../services/bioSurveillanceService';
-import Translate from '../../components/Translate';
+/* Changed default import to named import for Translate */
+import { Translate } from '../../components/Translate';
 
 interface Props {
   requiredPPE: string[];
@@ -62,7 +64,8 @@ const PPEIntercept: React.FC<Props> = ({ requiredPPE, onVerified, onCancel, lang
 
         <div className="flex-1 p-12 space-y-10">
            <p className="text-sm text-slate-300 font-medium italic leading-relaxed text-center">
-             "You are entering a high-intensity viral zone. Please don your mandatory PPE and verify your equipment to authorize visit clock-in."
+             {/* Standardized Translate prop to target */}
+             "<Translate target={language}>You are entering a high-intensity viral zone. Please don your mandatory PPE and verify your equipment to authorize visit clock-in.</Translate>"
            </p>
 
            <div className="aspect-square bg-black rounded-[3rem] border-4 border-dashed border-white/10 overflow-hidden relative flex items-center justify-center">
@@ -94,14 +97,16 @@ const PPEIntercept: React.FC<Props> = ({ requiredPPE, onVerified, onCancel, lang
                 onClick={onCancel}
                 className="py-5 bg-white/5 border border-white/10 text-slate-500 rounded-3xl font-black text-[10px] uppercase tracking-widest"
               >
-                Abort_Visit
+                {/* Standardized Translate prop to target */}
+                <Translate target={language}>Abort_Visit</Translate>
               </button>
               <button 
                 onClick={captureAndVerify}
                 disabled={isVerifying}
                 className="py-5 bg-white text-black rounded-3xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:scale-[1.02] active:scale-95 transition-all"
               >
-                Perform_Vision_Scan
+                {/* Standardized Translate prop to target */}
+                <Translate target={language}>Perform_Vision_Scan</Translate>
               </button>
            </div>
         </div>

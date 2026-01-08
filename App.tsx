@@ -1,19 +1,19 @@
 
 import React, { useState } from 'react';
 import { CareRole, AppTab, User } from './types';
-import { Sidebar } from './components/Sidebar';
-import { Header } from './components/Header';
-import { Login } from './features/Login';
-import { Dashboard } from './features/Dashboard';
-import { StrategyTabletop } from './features/StrategyTabletop';
-import { ClinicalHub } from './features/ClinicalHub';
-import { FleetCommand } from './features/FleetCommand';
-import { FiscalLedger } from './features/FiscalLedger';
-import { NeuralVault } from './features/NeuralVault';
-import { PatientZen } from './features/PatientZen';
-import { ResourceCore } from './features/ResourceCore';
-import { DirectLink } from './features/DirectLink';
-import { StrategicMoat } from './features/StrategicMoat';
+import { Sidebar } from './Sidebar';
+import Header from './components/Header';
+import { Login } from './Login';
+import { Dashboard } from './Dashboard';
+import { StrategyTabletop } from './StrategyTabletop';
+import DOCSupervision from './features/doc/DOCSupervision';
+import CoordinationHub from './features/CoordinationHub';
+import AccountingHub from './features/accounting/AccountingHub';
+import DocumentVault from './features/DocumentVault';
+import { ZenStation } from './ZenStation';
+import HRPortal from './features/HRPortal';
+import LiveLab from './features/LiveLab';
+import BoardDirectorTerminal from './features/executive/BoardDirectorTerminal';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -28,14 +28,14 @@ export default function App() {
     switch (activeTab) {
       case AppTab.DASHBOARD: return <Dashboard lang={language} />;
       case AppTab.STRATEGY: return <StrategyTabletop lang={language} />;
-      case AppTab.CLINICAL: return <ClinicalHub lang={language} />;
-      case AppTab.LOGISTICS: return <FleetCommand lang={language} />;
-      case AppTab.FISCAL: return <FiscalLedger lang={language} />;
-      case AppTab.VAULT: return <NeuralVault lang={language} />;
-      case AppTab.WELLNESS: return <PatientZen lang={language} />;
-      case AppTab.RESOURCE: return <ResourceCore lang={language} />;
-      case AppTab.LIVE: return <DirectLink lang={language} />;
-      case AppTab.ORG_COMMAND: return <StrategicMoat lang={language} />;
+      case AppTab.CLINICAL: return <DOCSupervision language={language} />;
+      case AppTab.LOGISTICS: return <CoordinationHub language={language} />;
+      case AppTab.FISCAL: return <AccountingHub language={language} />;
+      case AppTab.VAULT: return <DocumentVault role={user.role} language={language} />;
+      case AppTab.WELLNESS: return <ZenStation lang={language} />;
+      case AppTab.RESOURCE: return <HRPortal role={user.role} language={language} />;
+      case AppTab.LIVE: return <LiveLab language={language} />;
+      case AppTab.ORG_COMMAND: return <BoardDirectorTerminal language={language} />;
       default: return <Dashboard lang={language} />;
     }
   };
@@ -50,7 +50,12 @@ export default function App() {
         onLogout={() => setUser(null)}
       />
       <div className="flex-1 flex flex-col min-w-0 h-full">
-        <Header active={activeTab} lang={language} setLang={setLanguage} user={user} />
+        <Header 
+          active={activeTab} 
+          lang={language} 
+          setLang={setLanguage} 
+          user={user} 
+        />
         <main className="flex-1 overflow-y-auto scrollbar-hide p-8">
           <div className="max-w-7xl mx-auto">
             {renderContent()}

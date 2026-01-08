@@ -36,10 +36,12 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 px-4">
         <div>
           <h2 className="text-5xl font-black text-white tracking-tighter uppercase leading-none italic text-indigo-400">
-             <Translate targetLanguage={language}>RESOURCE_CORE</Translate>
+             {/* Standardized Translate prop to target */}
+             <Translate target={language}>RESOURCE_CORE</Translate>
           </h2>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-3 italic">
-             <Translate targetLanguage={language}>Institutional_Human_Capital_&_Financial_Stewardship</Translate>
+             {/* Standardized Translate prop to target */}
+             <Translate target={language}>Institutional_Human_Capital_&_Financial_Stewardship</Translate>
           </p>
         </div>
         <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 overflow-x-auto scrollbar-hide shadow-xl">
@@ -51,7 +53,8 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
                 activeTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'
               }`}
             >
-              <Translate targetLanguage={language}>{tab.label}</Translate>
+              {/* Standardized Translate prop to target */}
+              <Translate target={language}>{tab.label}</Translate>
             </button>
           ))}
           {isHR && adminTabs.map(tab => (
@@ -62,7 +65,8 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
                 activeTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'
               }`}
             >
-              <Translate targetLanguage={language}>{tab.label}</Translate>
+              {/* Standardized Translate prop to target */}
+              <Translate target={language}>{tab.label}</Translate>
             </button>
           ))}
         </div>

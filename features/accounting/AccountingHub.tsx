@@ -33,7 +33,8 @@ const AccountingHub: React.FC<Props> = ({ language }) => {
               className={`px-8 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-3 ${activeTab === tab.id ? 'bg-emerald-600 text-white shadow-xl' : 'text-slate-500 hover:text-white'}`}
             >
               <tab.icon size={14} />
-              <Translate targetLanguage={language}>{tab.label}</Translate>
+              {/* Standardized Translate prop to target */}
+              <Translate target={language}>{tab.label}</Translate>
             </button>
           ))}
         </div>

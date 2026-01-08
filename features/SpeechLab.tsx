@@ -50,13 +50,15 @@ const SpeechLab: React.FC<Props> = ({ language }) => {
         
         <div className="relative z-10">
           <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase mb-12 leading-none">
-            <Translate targetLanguage={language}>Speech_Synthesis_Station</Translate>
+            {/* Standardized Translate prop to target */}
+            <Translate target={language}>Speech_Synthesis_Station</Translate>
           </h2>
           
           <div className="space-y-10">
             <div>
               <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mb-6">
-                 <Translate targetLanguage={language}>Active_Speaker_Node</Translate>
+                 {/* Standardized Translate prop to target */}
+                 <Translate target={language}>Active_Speaker_Node</Translate>
               </label>
               <div className="flex flex-wrap gap-4">
                 {voices.map(v => (
@@ -94,7 +96,8 @@ const SpeechLab: React.FC<Props> = ({ language }) => {
                   <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                   </svg>
-                  <Translate targetLanguage={language}>SYNTHESIZE_ACOUSTIC_VECTOR</Translate>
+                  {/* Standardized Translate prop to target */}
+                  <Translate target={language}>SYNTHESIZE_ACOUSTIC_VECTOR</Translate>
                 </>
               )}
             </button>

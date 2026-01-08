@@ -85,7 +85,8 @@ const CompanySettings: React.FC<Props> = ({ company, setCompany, language }) => 
               return (
                 <label key={modStr} className="flex items-center justify-between p-4 bg-white/[0.03] border border-white/5 rounded-xl cursor-pointer hover:bg-white/10 transition-all group">
                   <span className="text-[10px] font-black text-slate-400 group-hover:text-white uppercase tracking-tighter transition-colors">
-                    <Translate targetLanguage={language}>{modStr}</Translate>
+                    {/* Standardized Translate prop to target */}
+                    <Translate target={language}>{modStr}</Translate>
                   </span>
                   <input 
                     type="checkbox" 

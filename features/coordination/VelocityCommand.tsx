@@ -1,7 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
-    import { Client, StaffMember } from '../../types';
-    import { fleetVelocityService, VelocitySignal, ReallocationProposal } from '../../services/fleetVelocityService';
-    import Translate from '../../components/Translate';
+import { Client, StaffMember } from '../../types';
+import { fleetVelocityService, VelocitySignal, ReallocationProposal } from '../../services/fleetVelocityService';
+/* Changed default import to named import for Translate */
+import { Translate } from '../../components/Translate';
 
 interface Props {
   clients: Client[];

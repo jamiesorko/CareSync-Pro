@@ -2,6 +2,7 @@
 import { supabase } from '../lib/supabase';
 import { BaseEntity, InternalEmail } from '../types';
 
+/* Exported InternalEmail to fix import errors in PSWSelfService.tsx */
 export class EmailService {
   private companyId: string | null = null;
 

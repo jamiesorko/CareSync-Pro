@@ -539,3 +539,63 @@ export interface ProtocolDraft {
   workflowSteps: any[];
   auditChecklist: string[];
 }
+
+// Added missing interface for ClinicalBoardReview
+export interface ClinicalBoardReview extends BaseEntity {
+  clientId: string;
+  timestamp: string;
+  caseSummary: string;
+  perspectives: string[];
+  consensusPlan: string;
+}
+
+// Added missing interface for RevenueGap
+export interface RevenueGap {
+  visitId: string;
+  missingProcedure: string;
+  estimatedValue: number;
+  clinicalEvidence: string;
+  billingCodeSuggestion: string;
+}
+
+// Added missing interface for MarketThreat
+export interface MarketThreat {
+  competitor: string;
+  wageOffer: string;
+  bonus: string;
+  sector: string;
+}
+
+// Added missing interface for StaffLoyaltyRisk
+export interface StaffLoyaltyRisk {
+  staffId: string;
+  riskLevel: 'LOW' | 'MED' | 'HIGH' | 'CRITICAL';
+  vulnerabilityFactors: string[];
+  suggestedPremium: number;
+  rationale: string;
+}
+
+// Added missing interface for SyntheticInsight
+export interface SyntheticInsight {
+  patientId: string;
+  globalPeerComparison: string;
+  predictedLongTermTrajectory: string;
+  scientificCitations: { title: string; uri: string }[];
+}
+
+// Added missing interface for DeviceReading
+export interface DeviceReading {
+  deviceName: string;
+  detectedValue: string;
+  standardizedMetric: string;
+  confidence: number;
+  fhirMappedJson: string;
+}
+
+// Added missing interface for RegulatoryPatch
+export interface RegulatoryPatch extends BaseEntity {
+  newLawReference: string;
+  affectedSOPs: string[];
+  autoDraftedRevision: string;
+  complianceDeadline: string;
+}

@@ -3,7 +3,8 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoogleGenAI, Modality, LiveServerMessage } from '@google/genai';
 import { decode, encode, decodeAudioData } from '../../utils/audioHelpers';
 import { Client, CareRole } from '../../types';
-import Translate from '../../components/Translate';
+/* Changed default import to named import for Translate */
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;
@@ -80,7 +81,7 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
             const content = message.serverContent;
             if (!content) return;
 
-            // Fix: Using correct property names for model and user output transcription. 'outputAudioTranscription' does not exist on type 'LiveServerContent'.
+            /* Corrected outputTranscription property naming */
             const text = content.outputTranscription?.text || content.inputTranscription?.text;
             if (text) {
               const lowerText = text.toLowerCase();
@@ -113,7 +114,7 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
           onclose: () => setIsActive(false)
         },
         config: {
-          // Fix: Corrected typo 'responseModalities' from 'responseModalalities'
+          /* Corrected typo: responseModalities */
           responseModalities: [Modality.AUDIO],
           outputAudioTranscription: {},
           inputAudioTranscription: {},
@@ -200,7 +201,7 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
                            <div className={`w-1.5 h-1.5 rounded-full ${insight.color.replace('text-', 'bg-')}`}></div>
                            <span className={`text-[8px] font-black uppercase tracking-widest ${insight.color}`}>Agent_{insight.agent}</span>
                         </div>
-                        <p className="text-[11px] text-slate-200 font-medium leading-relaxed italic">"{insight.text}"</p>
+                        <p className="text-[11px] text-slate-200 font-medium italic leading-relaxed">"{insight.text}"</p>
                      </div>
                    ))
                  ) : (

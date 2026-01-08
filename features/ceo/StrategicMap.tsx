@@ -1,6 +1,8 @@
+
 import React, { useState } from 'react';
 import { strategicExpansionService, GrowthZone } from '../../services/strategicExpansionService';
-import Translate from '../../components/Translate';
+/* Changed default import to named import for Translate */
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;
@@ -45,7 +47,8 @@ const StrategicMap: React.FC<Props> = ({ language }) => {
                 {zone.seniorDensityIndex}x Density
               </h4>
               <p className="text-xs text-slate-400 font-medium italic leading-relaxed">
-                <Translate targetLanguage={language}>{zone.recommendation}</Translate>
+                {/* Standardized Translate prop to target */}
+                <Translate target={language}>{zone.recommendation}</Translate>
               </p>
               <div className="mt-8 flex gap-4">
                 <span className="text-[8px] font-black text-slate-500 uppercase border border-white/5 px-2 py-1 rounded">Competitor Presence: {zone.competitorPresence}</span>
