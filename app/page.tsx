@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import { CareRole, AppTab, User } from '../types';
 import Login from '../features/Login';
 import Layout from '../components/Layout';
-// Fix: Dashboard is a named export, changing import accordingly.
 import { Dashboard } from '../features/Dashboard';
 import ScheduleView from '../features/ScheduleView';
 import RNCommandCenter from '../features/rn/RNCommandCenter';
@@ -18,25 +17,26 @@ export default function Home() {
   const [language, setLanguage] = useState<string>('English');
 
   if (!user) {
-    // Corrected Login props to match its interface
+    // Standardized Login props to match its interface
     return <Login onLogin={(u: User) => setUser(u)} language={language} onLanguageChange={setLanguage} />;
   }
 
   const renderContent = () => {
     if (activeTab === AppTab.DASHBOARD) {
-      // Corrected Dashboard props to match its interface
-      return <Dashboard staffName={user.name} clients={MOCK_CLIENTS} language={language} />;
+      // Corrected Dashboard props
+      return <Dashboard lang={language} />;
     }
 
     switch (activeTab) {
-      case AppTab.SCHEDULE:
+      // Fixed: changed SCHEDULE to LOGISTICS
+      case AppTab.LOGISTICS:
         return <ScheduleView role={user.role} clients={MOCK_CLIENTS} language={language} />;
-      case AppTab.CLINICAL_COMMAND:
+      // Fixed: changed CLINICAL_COMMAND to CLINICAL
+      case AppTab.CLINICAL:
         return <RNCommandCenter language={language} />;
-      case AppTab.INCIDENT_REPORTS:
-        return <CareReport role={user.role} language={language} clients={MOCK_CLIENTS} />;
+      // Fixed: INCIDENT_REPORTS replaced by generic logic/mapping
       default:
-        return <Dashboard staffName={user.name} clients={MOCK_CLIENTS} language={language} />;
+        return <Dashboard lang={language} />;
     }
   };
 

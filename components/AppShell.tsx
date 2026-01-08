@@ -17,21 +17,22 @@ interface Props {
 const AppShell: React.FC<Props> = ({ activeTab, setActiveTab, user, onLogout, language, onLanguageChange, children }) => {
   return (
     <div className="flex h-screen w-full bg-[#f1f5f9] overflow-hidden text-slate-900">
-      {/* Added missing onLogout prop to Sidebar component call */}
+      {/* Fixed: Synced Sidebar props: changed activeTab to active and language to lang */}
       <Sidebar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
+        active={activeTab} 
+        setActive={setActiveTab} 
         role={user.role} 
         onLogout={onLogout}
-        language={language}
+        lang={language}
       />
       
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden relative">
+        {/* Fixed: Synced Header props: changed language to lang and user pass-through */}
         <Header 
-          activeTab={activeTab} 
-          onLogout={onLogout} 
-          language={language}
-          onLanguageChange={onLanguageChange}
+          active={activeTab} 
+          lang={language} 
+          setLang={onLanguageChange} 
+          user={user} 
         />
         
         <main className="flex-1 overflow-y-auto app-scroll relative p-6 lg:p-10">

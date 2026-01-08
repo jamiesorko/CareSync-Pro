@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { regulatoryRadarService, LawChange } from '../../services/regulatoryRadarService';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;

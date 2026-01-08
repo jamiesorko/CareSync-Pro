@@ -1,7 +1,8 @@
+
 import React, { useState } from 'react';
 import { healthBridgeService } from '../../services/healthBridgeService';
 import { Client } from '../../types';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;

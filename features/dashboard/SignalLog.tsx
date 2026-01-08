@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Client } from '../../types';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 import { Binary, Activity, Clock, ChevronRight } from 'lucide-react';
 
 interface Props {
@@ -15,16 +15,16 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
       <thead>
         <tr className="border-b border-white/5">
           <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">
-            <Translate targetLanguage={language}>Target_Dossier</Translate>
+            <Translate target={language}>Target_Dossier</Translate>
           </th>
           <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">
-            <Translate targetLanguage={language}>Temporal_Window</Translate>
+            <Translate target={language}>Temporal_Window</Translate>
           </th>
           <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">
-            <Translate targetLanguage={language}>Acuity_State</Translate>
+            <Translate target={language}>Acuity_State</Translate>
           </th>
           <th className="px-8 py-4 text-right text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">
-            <Translate targetLanguage={language}>Action</Translate>
+            <Translate target={language}>Action</Translate>
           </th>
         </tr>
       </thead>
@@ -42,7 +42,7 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
                     <span className="text-[10px] font-black text-slate-600 uppercase tech-mono tracking-widest">{client.anonymizedId}</span>
                     <div className="w-1 h-1 bg-slate-800 rounded-full"></div>
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                       <Translate targetLanguage={language}>{client.sector}</Translate>
+                       <Translate target={language}>{client.sector}</Translate>
                     </span>
                   </div>
                 </div>
@@ -56,7 +56,7 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
               <div className="flex items-center gap-2 mt-1.5 ml-6">
                 <div className="w-1.5 h-1.5 rounded-sm bg-emerald-500/20 border border-emerald-500/30"></div>
                 <p className="text-[9px] text-slate-600 font-bold uppercase tracking-widest">
-                  <Translate targetLanguage={language}>Verified_Sync</Translate>
+                  <Translate target={language}>Verified_Sync</Translate>
                 </p>
               </div>
             </td>
@@ -75,7 +75,7 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
                 <span className={`text-[11px] font-black uppercase tracking-[0.2em] ${
                   client.currentVisitStatus === 'IN_PROGRESS' ? 'text-emerald-400 italic' : 'text-slate-600'
                 }`}>
-                  <Translate targetLanguage={language}>
+                  <Translate target={language}>
                     {client.currentVisitStatus?.replace('_', ' ') || 'STANDBY'}
                   </Translate>
                 </span>

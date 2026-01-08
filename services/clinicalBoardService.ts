@@ -12,6 +12,7 @@ export class ClinicalBoardService {
     `;
 
     try {
+      // Corrected: accepted two arguments
       const res = await geminiService.generateText(prompt, false);
       const data = JSON.parse(res.text || '{}');
       return {

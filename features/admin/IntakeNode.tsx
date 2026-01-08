@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import { intakeParsingService } from '../../services/intakeParsingService';
 import { predictiveTriageService, TriageScore } from '../../services/predictiveTriageService';
 import { Client } from '../../types';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;

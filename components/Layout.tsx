@@ -27,21 +27,22 @@ const Layout: React.FC<Props> = ({
 }) => {
   return (
     <div className="flex h-screen w-full bg-[#020617] text-slate-200 overflow-hidden select-none">
-      {/* Added missing onLogout prop to Sidebar component call */}
+      {/* Fixed: Synced Sidebar props: changed activeTab to active and language to lang */}
       <Sidebar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
+        active={activeTab} 
+        setActive={setActiveTab} 
         role={activeRole} 
         onLogout={onLogout}
-        language={language}
+        lang={language}
       />
       
       <div className="flex-1 flex flex-col h-full min-w-0">
+        {/* Fixed: Synced Header props: changed onLanguageChange to setLang and user structure */}
         <Header 
-          activeTab={activeTab} 
-          language={language} 
-          onLanguageChange={onLanguageChange} 
-          onLogout={onLogout} 
+          active={activeTab} 
+          lang={language} 
+          setLang={onLanguageChange} 
+          user={{ name: staffName, role: activeRole }} 
         />
         
         <main className="flex-1 overflow-y-auto scrollbar-hide">

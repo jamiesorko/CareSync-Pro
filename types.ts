@@ -4,13 +4,14 @@ export enum CareRole {
   COO = 'COO',
   DOC = 'Director of Care',
   RN = 'Registered Nurse',
+  RPN = 'Registered Practical Nurse',
   PSW = 'Personal Support Worker',
   ACCOUNTANT = 'Accountant',
   CLIENT = 'Client',
-  RPN = 'Registered Practical Nurse',
   HSS = 'Health & Social Specialist',
   COORDINATOR = 'Coordinator',
-  HR_SPECIALIST = 'HR Specialist'
+  HR_SPECIALIST = 'HR Specialist',
+  COORD = 'Coordinator'
 }
 
 export enum AppTab {
@@ -24,12 +25,18 @@ export enum AppTab {
   RESOURCE = 'Resource_Core',
   LIVE = 'Direct_Link',
   ORG_COMMAND = 'Strategic_Moat',
-  SCHEDULE = 'Schedule',
-  CLINICAL_COMMAND = 'Clinical_Command',
+  SCHEDULE = 'Roster_Deployment',
+  CLINICAL_COMMAND = 'Clinical_Intel',
   INCIDENT_REPORTS = 'Incident_Reports',
-  COORDINATION = 'Coordination',
+  COORDINATION = 'Coordination_Hub',
   HR_HUB = 'HR_Hub',
-  FINANCE = 'Finance'
+  FINANCE = 'Fiscal_Ledger'
+}
+
+export interface BaseEntity {
+  id: string;
+  companyId: string;
+  createdAt: string;
 }
 
 export interface User {
@@ -37,7 +44,13 @@ export interface User {
   role: CareRole;
 }
 
-// Added missing interface for TextChat
+export interface UserProfile {
+  id: string;
+  companyId: string;
+  role: CareRole;
+  fullName: string;
+}
+
 export interface Message {
   role: 'user' | 'model';
   text: string;
@@ -45,29 +58,20 @@ export interface Message {
   groundingSources?: { title?: string; uri: string }[];
 }
 
-// Added missing interface for ImageLab
-export interface GeneratedImage {
-  url: string;
-  prompt: string;
+export interface ChatMessage extends BaseEntity {
+  senderId: string;
+  senderName: string;
+  text: string;
+  timestamp: string;
 }
 
-// Added missing interface for Patient Wellness
-export interface PatientDailySynthesis {
-  headline: string;
-  accomplishments: string[];
-  visitorToday: string;
-  tomorrowPreview: string;
-  soothingNote: string;
+export interface ChatThread extends BaseEntity {
+  name: string;
+  type: 'PRIVATE' | 'GROUP';
+  lastMessage: string;
+  unreadCount: number;
 }
 
-// Added missing interface for ZenStation
-export interface ZenVideoPrompt {
-  prompt: string;
-  mood: string;
-  estimatedDuration: number;
-}
-
-// Added missing interface for Client
 export interface Client {
   id: string;
   companyId: string;
@@ -97,7 +101,6 @@ export interface Client {
   docInstructions?: string;
 }
 
-// Added missing interface for Medication
 export interface Medication {
   id: string;
   name: string;
@@ -105,23 +108,15 @@ export interface Medication {
   frequency: string;
 }
 
-// Added missing interface for RiskScore
 export interface RiskScore {
   level: 'LOW' | 'MED' | 'HIGH' | 'CRITICAL';
   factors: string[];
   lastAssessed: string;
 }
 
-// Added missing interface for BaseEntity
-export interface BaseEntity {
-  id: string;
-  companyId: string;
-  createdAt: string;
-}
-
-// Added missing interface for StaffMember
 export interface StaffMember {
   id: string;
+  companyId: string;
   anonymizedId: string;
   name: string;
   role: CareRole | string;
@@ -137,62 +132,73 @@ export interface StaffMember {
   lastSeen?: string;
 }
 
-// Added missing interface for BlastStatus
+export interface AlertSignal {
+  id: string;
+  type: AlertType;
+  content: string;
+  senderName: string;
+  timestamp: string;
+  status: 'PENDING' | 'ACKNOWLEDGED' | 'RESOLVED';
+  clientName?: string;
+}
+
+export type AlertType = 'MEDICAL' | 'CLINICAL' | 'UNSAFE_ENV' | 'FALL' | 'COMPLAINT' | 'NOT_SEEN' | 'INTEGRITY_AUDIT' | 'VACATION' | 'LOA' | 'AVAILABILITY' | 'PAYROLL_DISPUTE' | 'INSURANCE_Q' | 'SWELLING';
+
+export interface ChairmanMandate extends BaseEntity {
+  timestamp: string;
+  stateOfAgency: string;
+  institutionalFragilityPoints: string[];
+  nonNegotiableDirectives: string[];
+  strategicRiskIndex: number;
+  marketSentimentGrounded: string;
+}
+
+export interface HuddleSignal extends BaseEntity {
+  clientId: string;
+  truthSynthesis: string;
+  contradictionDetected: boolean;
+  biometricDrift: string;
+  remediationDirective: string;
+  confidence: number;
+}
+
+export interface GeneratedImage {
+  url: string;
+  prompt: string;
+}
+
 export interface BlastStatus {
   id: string;
   clientId: string;
   roleRequired: CareRole;
-  status: 'SENT_TO_CLIENT' | 'PENDING';
+  status: 'SENT_TO_CLIENT' | 'ACCEPTED' | 'REJECTED';
   candidates: string[];
 }
 
-// Added missing type for AlertType
-export type AlertType = 'MEDICAL' | 'CLINICAL' | 'UNSAFE_ENV' | 'SWELLING' | 'FALL' | 'COMPLAINT' | 'NOT_SEEN' | 'INTEGRITY_AUDIT' | 'VACATION' | 'LOA' | 'AVAILABILITY' | 'PAYROLL_DISPUTE' | 'INSURANCE_Q';
-
-// Added missing interface for ChatMessage
-export interface ChatMessage extends BaseEntity {
-  senderId: string;
-  senderName: string;
-  text: string;
-  timestamp: string;
-}
-
-// Added missing interface for ChatThread
-export interface ChatThread extends BaseEntity {
-  name: string;
-  type: 'GROUP' | 'DIRECT';
-  lastMessage: string;
-  unreadCount: number;
-}
-
-// Added missing interface for FormRequirement
 export interface FormRequirement extends BaseEntity {
   name: string;
   submissionTarget: string;
   isMandatory: boolean;
 }
 
-// Added missing interface for Applicant
 export interface Applicant extends BaseEntity {
   name: string;
   role: CareRole;
   credentialsVerified: boolean;
   referencesChecked: boolean;
   cultureFitScore: number;
-  status: string;
+  status: 'PENDING' | 'INTERVIEW_SET' | 'HIRED' | 'REJECTED';
   appliedDate: string;
 }
 
-// Added missing interface for Certificate
 export interface Certificate extends BaseEntity {
   staffId: string;
   staffName: string;
   type: string;
   expiryDate: string;
-  status: 'SUSPENDED' | 'WARNING' | 'VALID';
+  status: 'ACTIVE' | 'WARNING' | 'SUSPENDED';
 }
 
-// Added missing interface for TrainingRecord
 export interface TrainingRecord extends BaseEntity {
   staffId: string;
   staffName: string;
@@ -200,9 +206,18 @@ export interface TrainingRecord extends BaseEntity {
   isMandatory: boolean;
   isCompleted: boolean;
   dueDate: string;
+  completionDate?: string;
 }
 
-// Added missing interface for Complaint
+// Added TrainingModule to support HR and Training features across the application
+export interface TrainingModule extends BaseEntity {
+  title: string;
+  targetSkill: string;
+  conceptBrief: string;
+  questions: { q: string; a: string[]; correct: number }[];
+  masteryTarget: number;
+}
+
 export interface Complaint extends BaseEntity {
   clientId: string;
   clientName: string;
@@ -215,7 +230,6 @@ export interface Complaint extends BaseEntity {
   type: 'CLIENT_ISSUE' | 'STAFF_GRIEVANCE';
 }
 
-// Added missing interface for Company
 export interface Company {
   id: string;
   name: string;
@@ -223,26 +237,25 @@ export interface Company {
   activeModules?: string[];
 }
 
-// Added missing interface for UserProfile
-export interface UserProfile {
+export interface LeaveRequest {
   id: string;
-  companyId: string;
-  role: CareRole;
-  fullName: string;
+  staffId: string;
+  startDate: string;
+  endDate: string;
+  type: 'VACATION' | 'LOA';
+  status: 'PENDING' | 'APPROVED' | 'DENIED';
 }
 
-// Added missing interface for AlertSignal
-export interface AlertSignal {
-  id: string;
-  type: AlertType;
-  content: string;
+export interface InternalEmail extends BaseEntity {
+  senderId: string;
   senderName: string;
-  timestamp: string;
-  status: 'PENDING' | 'ACKNOWLEDGED' | 'RESOLVED';
-  clientName?: string;
+  recipientRole: string;
+  subject: string;
+  body: string;
+  isRead: boolean;
+  priority: 'NORMAL' | 'HIGH';
 }
 
-// Added missing interface for InventoryItem
 export interface InventoryItem extends BaseEntity {
   name: string;
   category: string;
@@ -251,28 +264,90 @@ export interface InventoryItem extends BaseEntity {
   minThreshold: number;
 }
 
-// Added missing interface for LeaveRequest
-export interface LeaveRequest {
-  id: string;
+export interface OncallShift extends BaseEntity {
   staffId: string;
-  type: 'VACATION' | 'SICK';
-  startDate: string;
-  endDate: string;
+  staffName: string;
+  startTime: string;
+  endTime: string;
+  tier: 'PRIMARY' | 'SECONDARY';
 }
 
-// Added missing interface for TriageReferral
+export interface CommunityResource {
+  name: string;
+  address: string;
+  category: string;
+  uri: string;
+}
+
+export interface ContingencyPlan {
+  impactedClients: string[];
+  suggestedRescuers: string[];
+  etaVariance: number;
+}
+
+export interface RecoveryMilestone {
+  title: string;
+  status: 'ON_TRACK' | 'STAGNANT' | 'DELAYED';
+}
+
+export interface ClinicalTruthVector {
+  clientId: string;
+  timestamp: string;
+  acuityScore: number;
+  fusionLevel: 'TOTAL_SYNTHESIS' | 'SENSORY_ONLY';
+  topDiagnosticSignals: string[];
+}
+
+export interface SecurityProbe extends BaseEntity {
+  actorId: string;
+  action: string;
+  resourcePath: string;
+  anomalyScore: number;
+  threatLevel: 'NONE' | 'ELEVATED' | 'CRITICAL';
+}
+
+export interface ClinicalBoardReview extends BaseEntity {
+  clientId: string;
+  timestamp: string;
+  caseSummary: string;
+  perspectives: string[];
+  consensusPlan: string;
+}
+
+export interface RevenueGap {
+  visitId: string;
+  missingProcedure: string;
+  estimatedValue: number;
+  clinicalEvidence: string;
+  billingCodeSuggestion: string;
+}
+
+export interface AfterActionReview {
+  eventId: string;
+  observedPath: string;
+  optimalPath: string;
+  decisionNodes: any[];
+  trainingForge: any[];
+}
+
 export interface TriageReferral {
   id: string;
   patientName: string;
   source: string;
   gravityScore: number;
-  clinicalAcuity: string;
+  clinicalAcuity: 'LOW' | 'MED' | 'HIGH' | 'CRITICAL';
   logisticalFit: number;
   aiRationale: string;
   status: string;
 }
 
-// Added missing interface for BioSocialSignal
+export interface CrisisResource {
+  name: string;
+  type: string;
+  distance: string;
+  uri: string;
+}
+
 export interface BioSocialSignal {
   clientId: string;
   isolationScore: number;
@@ -282,7 +357,6 @@ export interface BioSocialSignal {
   recommendedSocialIntercept: string;
 }
 
-// Added missing interface for NeighborhoodImmunity
 export interface NeighborhoodImmunity {
   postalCode: string;
   threatType: string;
@@ -290,7 +364,20 @@ export interface NeighborhoodImmunity {
   mandateUpdate: string;
 }
 
-// Added missing interface for StrategicScenario
+export interface PatientDailySynthesis {
+  headline: string;
+  accomplishments: string[];
+  visitorToday: string;
+  tomorrowPreview: string;
+  soothingNote: string;
+}
+
+export interface ZenVideoPrompt {
+  prompt: string;
+  mood: string;
+  estimatedDuration: number;
+}
+
 export interface StrategicScenario extends BaseEntity {
   title: string;
   projection: any[];
@@ -299,27 +386,30 @@ export interface StrategicScenario extends BaseEntity {
   riskIndex: number;
 }
 
-// Added missing interface for OutbreakZone
 export interface OutbreakZone {
   postalCode: string;
   threatType: string;
-  severity: string;
+  severity: 'SAFE' | 'WARNING' | 'CRITICAL';
   intensity: number;
   mandatoryPPE: string[];
   advisory: string;
 }
 
-// Added missing interface for HuddleSignal
-export interface HuddleSignal extends BaseEntity {
-  clientId: string;
-  truthSynthesis: string;
-  contradictionDetected: boolean;
-  biometricDrift: string;
-  remediationDirective: string;
-  confidence: number;
+export interface MarketThreat {
+  competitor: string;
+  wageOffer: string;
+  bonus: string;
+  sector: string;
 }
 
-// Added missing interface for ForensicDossier
+export interface StaffLoyaltyRisk {
+  staffId: string;
+  riskLevel: 'LOW' | 'MED' | 'HIGH' | 'CRITICAL';
+  vulnerabilityFactors: string[];
+  suggestedPremium: number;
+  rationale: string;
+}
+
 export interface ForensicDossier {
   eventId: string;
   truthVector: string;
@@ -328,7 +418,6 @@ export interface ForensicDossier {
   exposureAnalysis: string;
 }
 
-// Added missing interface for DominanceStrategy
 export interface DominanceStrategy {
   region: string;
   targetServiceLine: string;
@@ -338,7 +427,6 @@ export interface DominanceStrategy {
   draftedValueProposition: string;
 }
 
-// Added missing interface for NexusConsensus
 export interface NexusConsensus extends BaseEntity {
   clientId: string;
   specialistInputs: any[];
@@ -347,17 +435,6 @@ export interface NexusConsensus extends BaseEntity {
   consensusScore: number;
 }
 
-// Added missing interface for ChairmanMandate
-export interface ChairmanMandate extends BaseEntity {
-  timestamp: string;
-  stateOfAgency: string;
-  institutionalFragilityPoints: string[];
-  nonNegotiableDirectives: string[];
-  strategicRiskIndex: number;
-  marketSentimentGrounded: string;
-}
-
-// Added missing interface for IoTAsset
 export interface IoTAsset extends BaseEntity {
   name: string;
   type: string;
@@ -366,7 +443,6 @@ export interface IoTAsset extends BaseEntity {
   repairGroundedInfo: string;
 }
 
-// Added missing interface for BioTrajectory
 export interface BioTrajectory {
   clientId: string;
   recoveryVelocity: number;
@@ -376,7 +452,22 @@ export interface BioTrajectory {
   clinicalRationale: string;
 }
 
-// Added missing interface for RecoveryVector
+export interface EthicsConsult extends BaseEntity {
+  dilemma: string;
+  moralConflict: string;
+  stakeholderPerspectives: any[];
+  consensusDirective: string;
+  legislativeGuardrail: string;
+}
+
+export interface ProtocolDraft {
+  title: string;
+  objective: string;
+  regulatoryAlignment: string;
+  workflowSteps: any[];
+  auditChecklist: string[];
+}
+
 export interface RecoveryVector {
   staffId: string;
   staffName: string;
@@ -387,7 +478,6 @@ export interface RecoveryVector {
   reassignedStaffName: string;
 }
 
-// Added missing interface for PatientTwinSim
 export interface PatientTwinSim {
   clientId: string;
   changeDescription: string;
@@ -397,7 +487,6 @@ export interface PatientTwinSim {
   clinicalAdvisory: string;
 }
 
-// Added missing interface for LeakageSignal
 export interface LeakageSignal {
   type: string;
   confidence: number;
@@ -406,7 +495,6 @@ export interface LeakageSignal {
   rationale: string;
 }
 
-// Added missing interface for TruthMediationCase
 export interface TruthMediationCase {
   clientId: string;
   divergentSignals: any[];
@@ -416,7 +504,6 @@ export interface TruthMediationCase {
   suggestedDirective: string;
 }
 
-// Added missing interface for RegionalViralPulse
 export interface RegionalViralPulse {
   region: string;
   threatType: string;
@@ -426,81 +513,6 @@ export interface RegionalViralPulse {
   fleetImpactAdvisory: string;
 }
 
-// Added missing interface for CrisisResource
-export interface CrisisResource {
-  name: string;
-  type: string;
-  distance: string;
-  uri: string;
-}
-
-// Added missing interface for ClinicalTruthVector
-export interface ClinicalTruthVector {
-  clientId: string;
-  timestamp: string;
-  acuityScore: number;
-  fusionLevel: string;
-  topDiagnosticSignals: string[];
-}
-
-// Added missing interface for SecurityProbe
-export interface SecurityProbe extends BaseEntity {
-  actorId: string;
-  action: string;
-  resourcePath: string;
-  anomalyScore: number;
-  threatLevel: 'NONE' | 'ELEVATED' | 'CRITICAL';
-}
-
-// Added missing interface for RecoveryMilestone
-export interface RecoveryMilestone {
-  title: string;
-  status: 'ON_TRACK' | 'STAGNANT' | 'DELAYED';
-}
-
-// Added missing interface for OncallShift
-export interface OncallShift extends BaseEntity {
-  staffId: string;
-  staffName: string;
-  startTime: string;
-  endTime: string;
-  tier: 'PRIMARY' | 'SECONDARY';
-}
-
-// Added missing interface for CommunityResource
-export interface CommunityResource {
-  name: string;
-  address: string;
-  category: string;
-  uri: string;
-}
-
-// Added missing interface for ContingencyPlan
-export interface ContingencyPlan {
-  impactedClients: string[];
-  suggestedRescuers: string[];
-  etaVariance: number;
-}
-
-// Added missing interface for TrainingModule
-export interface TrainingModule extends BaseEntity {
-  title: string;
-  targetSkill: string;
-  conceptBrief: string;
-  questions: any[];
-  masteryTarget: number;
-}
-
-// Added missing interface for EthicsConsult
-export interface EthicsConsult extends BaseEntity {
-  dilemma: string;
-  moralConflict: string;
-  stakeholderPerspectives: any[];
-  consensusDirective: string;
-  legislativeGuardrail: string;
-}
-
-// Added missing interface for ReclamationCase
 export interface ReclamationCase {
   id: string;
   denialCode: string;
@@ -508,82 +520,16 @@ export interface ReclamationCase {
   evidenceHarvested: string[];
   successProbability: number;
   draftedAppeal: string;
-  status: 'READY' | 'PENDING';
+  status: string;
 }
 
-// Added missing interface for InternalEmail
-export interface InternalEmail extends BaseEntity {
-  senderId: string;
-  senderName: string;
-  recipientRole: string;
-  subject: string;
-  body: string;
-  isRead: boolean;
-  priority: 'NORMAL' | 'URGENT';
-}
-
-// Added missing interface for AfterActionReview
-export interface AfterActionReview {
-  eventId: string;
-  observedPath: string;
-  optimalPath: string;
-  decisionNodes: any[];
-  trainingForge: any[];
-}
-
-// Added missing interface for ProtocolDraft
-export interface ProtocolDraft {
-  title: string;
-  objective: string;
-  regulatoryAlignment: string;
-  workflowSteps: any[];
-  auditChecklist: string[];
-}
-
-// Added missing interface for ClinicalBoardReview
-export interface ClinicalBoardReview extends BaseEntity {
-  clientId: string;
-  timestamp: string;
-  caseSummary: string;
-  perspectives: string[];
-  consensusPlan: string;
-}
-
-// Added missing interface for RevenueGap
-export interface RevenueGap {
-  visitId: string;
-  missingProcedure: string;
-  estimatedValue: number;
-  clinicalEvidence: string;
-  billingCodeSuggestion: string;
-}
-
-// Added missing interface for MarketThreat
-export interface MarketThreat {
-  competitor: string;
-  wageOffer: string;
-  bonus: string;
-  sector: string;
-}
-
-// Added missing interface for StaffLoyaltyRisk
-export interface StaffLoyaltyRisk {
-  staffId: string;
-  riskLevel: 'LOW' | 'MED' | 'HIGH' | 'CRITICAL';
-  vulnerabilityFactors: string[];
-  suggestedPremium: number;
-  rationale: string;
-}
-
-// Added missing interface for SyntheticInsight
 export interface SyntheticInsight {
   patientId: string;
   globalPeerComparison: string;
   predictedLongTermTrajectory: string;
-  scientificCitations: { title: string; uri: string }[];
+  scientificCitations: any[];
 }
 
-// Added missing interface for DeviceReading
 export interface DeviceReading {
   deviceName: string;
   detectedValue: string;
@@ -592,7 +538,6 @@ export interface DeviceReading {
   fhirMappedJson: string;
 }
 
-// Added missing interface for RegulatoryPatch
 export interface RegulatoryPatch extends BaseEntity {
   newLawReference: string;
   affectedSOPs: string[];

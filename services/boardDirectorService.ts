@@ -3,21 +3,12 @@ import { GoogleGenAI } from "@google/genai";
 import { ChairmanMandate } from '../types';
 
 export class BoardDirectorService {
-  private getApiKey(): string {
-    return process.env.API_KEY || '';
-  }
-
-  async synthesizeMandate(agencyMetrics: any, region: string): Promise<ChairmanMandate> {
-    const ai = new GoogleGenAI({ apiKey: this.getApiKey() });
-    const query = `Healthcare labor market trends in ${region}, Ontario October 2025.`;
+  async synthesizeMandate(metrics: any, region: string): Promise<ChairmanMandate> {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
     
     const prompt = `
-      Act as Board Chairman. Agency Stats: ${JSON.stringify(agencyMetrics)}. Region: ${region}.
-      Task: Institutional Audit.
-      1. State of Agency.
-      2. 3 Fragility Points.
-      3. 3 Directives.
-      4. Risk Index (0-100).
+      Act as Board Chairman. Agency Stats: ${JSON.stringify(metrics)}. Region: ${region}.
+      Task: Institutional Audit. Identify state of agency, 3 fragility points, and non-negotiable directives.
       Return JSON: { "state": "", "fragility": [], "directives": [], "risk": number, "sentiment": "" }
     `;
 
@@ -38,24 +29,14 @@ export class BoardDirectorService {
         companyId: 'csp-demo',
         createdAt: new Date().toISOString(),
         timestamp: new Date().toISOString(),
-        stateOfAgency: data.state || "Stable baseline.",
+        stateOfAgency: data.state || "Stable.",
         institutionalFragilityPoints: data.fragility || [],
         nonNegotiableDirectives: data.directives || [],
         strategicRiskIndex: data.risk || 0,
-        marketSentimentGrounded: data.sentiment || "Stable outlook."
+        marketSentimentGrounded: data.sentiment || "Nominal."
       };
     } catch (e) {
-      return {
-        id: 'error-mandate',
-        companyId: 'csp-demo',
-        createdAt: new Date().toISOString(),
-        timestamp: new Date().toISOString(),
-        stateOfAgency: "Synthesis failed.",
-        institutionalFragilityPoints: [],
-        nonNegotiableDirectives: [],
-        strategicRiskIndex: 0,
-        marketSentimentGrounded: "Signal lost."
-      };
+      throw e;
     }
   }
 }

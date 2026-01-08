@@ -2,11 +2,12 @@
 import { Client, CareRole, StaffMember } from '../types';
 
 export const MOCK_STAFF: StaffMember[] = [
-  { id: 'P1', anonymizedId: 'W101', name: 'Elena Rodriguez', role: CareRole.PSW, status: 'ONLINE', weeklyHours: 38, homeSector: 'Mississauga', availability: '08:00-20:00', disciplinaryStrikes: 0, hourlyRate: 25, specialties: ['Dementia'], lat: 43.5890, lng: -79.6441 },
-  { id: 'P2', anonymizedId: 'W102', name: 'Sarah Jenkins', role: CareRole.PSW, status: 'IN_FIELD', weeklyHours: 42, homeSector: 'Scarborough', availability: '08:00-20:00', disciplinaryStrikes: 1, hourlyRate: 24, specialties: [], lat: 43.7764, lng: -79.2317 },
-  { id: 'RN1', anonymizedId: 'R201', name: 'Tom Hardy', role: CareRole.RN, status: 'ONLINE', weeklyHours: 35, homeSector: 'Toronto', availability: '09:00-17:00', disciplinaryStrikes: 0, hourlyRate: 55, specialties: ['Surgical Wound Care'], lat: 43.6532, lng: -79.3832 },
-  { id: 'RPN1', anonymizedId: 'R202', name: 'Jared Leto', role: CareRole.RPN, status: 'ONLINE', weeklyHours: 40, homeSector: 'Vaughan', availability: '09:00-17:00', disciplinaryStrikes: 2, hourlyRate: 40, specialties: [], lat: 43.8563, lng: -79.5085 },
-  { id: 'H1', anonymizedId: 'H301', name: 'Marcus Bell', role: CareRole.HSS, status: 'ONLINE', weeklyHours: 30, homeSector: 'Mississauga', availability: 'Flexible', disciplinaryStrikes: 0, hourlyRate: 28, specialties: [], lat: 43.5890, lng: -79.6441 }
+  // Added missing companyId: 'csp-demo' to satisfy StaffMember requirements
+  { id: 'P1', companyId: 'csp-demo', anonymizedId: 'W101', name: 'Elena Rodriguez', role: CareRole.PSW, status: 'ONLINE', weeklyHours: 38, homeSector: 'Mississauga', availability: '08:00-20:00', disciplinaryStrikes: 0, hourlyRate: 25, specialties: ['Dementia'], lat: 43.5890, lng: -79.6441 },
+  { id: 'P2', companyId: 'csp-demo', anonymizedId: 'W102', name: 'Sarah Jenkins', role: CareRole.PSW, status: 'IN_FIELD', weeklyHours: 42, homeSector: 'Scarborough', availability: '08:00-20:00', disciplinaryStrikes: 1, hourlyRate: 24, specialties: [] as string[], lat: 43.7764, lng: -79.2317 },
+  { id: 'RN1', companyId: 'csp-demo', anonymizedId: 'R201', name: 'Tom Hardy', role: CareRole.RN, status: 'ONLINE', weeklyHours: 35, homeSector: 'Toronto', availability: '09:00-17:00', disciplinaryStrikes: 0, hourlyRate: 55, specialties: ['Surgical Wound Care'], lat: 43.6532, lng: -79.3832 },
+  { id: 'RPN1', companyId: 'csp-demo', anonymizedId: 'R202', name: 'Jared Leto', role: CareRole.RPN, status: 'ONLINE', weeklyHours: 40, homeSector: 'Vaughan', availability: '09:00-17:00', disciplinaryStrikes: 2, hourlyRate: 40, specialties: [] as string[], lat: 43.8563, lng: -79.5085 },
+  { id: 'H1', companyId: 'csp-demo', anonymizedId: 'H301', name: 'Marcus Bell', role: CareRole.HSS, status: 'ONLINE', weeklyHours: 30, homeSector: 'Mississauga', availability: 'Flexible', disciplinaryStrikes: 0, hourlyRate: 28, specialties: [] as string[], lat: 43.5890, lng: -79.6441 }
 ];
 
 export const MOCK_CLIENTS: Client[] = [

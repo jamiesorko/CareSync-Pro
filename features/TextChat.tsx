@@ -2,7 +2,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { geminiService } from '../services/geminiService';
 import { Message } from '../types';
-import { Translate } from '../components/Translate';
+// Corrected to default import for Translate
+import Translate from '../components/Translate';
 
 interface Props {
   language: string;
@@ -31,6 +32,7 @@ const TextChat: React.FC<Props> = ({ language }) => {
     setLoading(true);
 
     try {
+      // Corrected call to accept prompt and search flag
       const response = await geminiService.generateText(input, useSearch);
       const text = response.text || "No response received.";
       

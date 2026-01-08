@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { revenueRecoveryService, RecoveryCase } from '../../services/revenueRecoveryService';
-/* Changed default import to named import for Translate */
 import { Translate } from '../../components/Translate';
 
 interface Props {
@@ -90,7 +89,6 @@ const RevenueRecoveryNexus: React.FC<Props> = ({ language }) => {
                           onClick={(e) => { e.stopPropagation(); runHarvest(c); }}
                           className="px-6 py-2 bg-white text-black rounded-xl text-[9px] font-black uppercase tracking-widest shadow-xl"
                         >
-                          {/* Standardized Translate usage if needed, though not directly failing here */}
                           Harvest_Evidence
                         </button>
                      ) : (
@@ -160,4 +158,13 @@ const RevenueRecoveryNexus: React.FC<Props> = ({ language }) => {
               <p className="text-[9px] font-black uppercase tracking-widest mb-4 opacity-60">Recovery_Directive</p>
               <div className="flex items-baseline space-x-2 mb-8">
                  <p className="text-6xl font-black italic tracking-tighter">$14.2k</p>
-                 <span className="text-xs font-black opacity-50 uppercase">Recoverable_
+                 <span className="text-xs font-black opacity-50 uppercase">Recoverable_Liquid</span>
+              </div>
+           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default RevenueRecoveryNexus;

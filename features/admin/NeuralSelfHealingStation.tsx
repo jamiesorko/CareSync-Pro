@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { geminiService } from '../../services/geminiService';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;
@@ -26,7 +27,8 @@ const NeuralSelfHealingStation: React.FC<Props> = ({ language }) => {
     setIsHealing(true);
     const mockLedger = { vCount: 142, cTotal: 142, siteGpsMatch: 0.99 };
     try {
-      const result = await geminiService.runSelfRepairAudit(mockLedger);
+      // Corrected: changed runSelfRepairAudit to runSelfRepairAuditStation
+      const result = await geminiService.runSelfRepairAuditStation(mockLedger);
       const data = JSON.parse(result);
       setRepairLog(prev => [...prev, `NEURAL_AUDIT: ${data.remediation || 'No drift detected.'}`]);
       setRepairLog(prev => [...prev, "INTEGRITY_SHIELD: Roster logic re-aligned."]);

@@ -1,19 +1,20 @@
 
 import React, { useState } from 'react';
 import { CareRole, AppTab, User } from './types';
-import { Sidebar } from './Sidebar';
+import Sidebar from './components/Sidebar';
 import Header from './components/Header';
-import { Login } from './Login';
-import { Dashboard } from './Dashboard';
-import { StrategyTabletop } from './StrategyTabletop';
-import DOCSupervision from './features/doc/DOCSupervision';
-import CoordinationHub from './features/CoordinationHub';
-import AccountingHub from './features/accounting/AccountingHub';
-import DocumentVault from './features/DocumentVault';
-import { ZenStation } from './ZenStation';
-import HRPortal from './features/HRPortal';
+import Login from './features/Login';
+import CEOPortal from './features/ceo/CEOPortal';
+import COOPortal from './features/coo/COOPortal';
+import DOCPortal from './features/doc/DOCPortal';
+import RNPortal from './features/rn/RNPortal';
+import PSWPortal from './features/psw/PSWPortal';
+import FinancePortal from './features/accounting/FinancePortal';
+import ClientPortal from './features/client/ClientPortal';
+import HSSPortal from './features/hss/HSSPortal';
+import VideoLab from './features/VideoLab';
 import LiveLab from './features/LiveLab';
-import BoardDirectorTerminal from './features/executive/BoardDirectorTerminal';
+import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -21,22 +22,27 @@ export default function App() {
   const [language, setLanguage] = useState('English');
 
   if (!user) {
-    return <Login onLogin={setUser} lang={language} setLang={setLanguage} />;
+    return <Login onLogin={setUser} language={language} onLanguageChange={setLanguage} />;
   }
 
   const renderContent = () => {
-    switch (activeTab) {
-      case AppTab.DASHBOARD: return <Dashboard lang={language} />;
-      case AppTab.STRATEGY: return <StrategyTabletop lang={language} />;
-      case AppTab.CLINICAL: return <DOCSupervision language={language} />;
-      case AppTab.LOGISTICS: return <CoordinationHub language={language} />;
-      case AppTab.FISCAL: return <AccountingHub language={language} />;
-      case AppTab.VAULT: return <DocumentVault role={user.role} language={language} />;
-      case AppTab.WELLNESS: return <ZenStation lang={language} />;
-      case AppTab.RESOURCE: return <HRPortal role={user.role} language={language} />;
-      case AppTab.LIVE: return <LiveLab language={language} />;
-      case AppTab.ORG_COMMAND: return <BoardDirectorTerminal language={language} />;
-      default: return <Dashboard lang={language} />;
+    const props = { language, clients: MOCK_CLIENTS, staff: MOCK_STAFF, user };
+    
+    // Global features override the role-based portals
+    if (activeTab === AppTab.LIVE) return <LiveLab language={language} />;
+    if (activeTab === AppTab.WELLNESS) return <VideoLab language={language} />;
+
+    switch (user.role) {
+      case CareRole.CEO: return <CEOPortal {...props} />;
+      case CareRole.COO: return <COOPortal {...props} />;
+      case CareRole.DOC: return <DOCPortal {...props} />;
+      case CareRole.RN: 
+      case CareRole.RPN: return <RNPortal {...props} />;
+      case CareRole.PSW: return <PSWPortal {...props} />;
+      case CareRole.ACCOUNTANT: return <FinancePortal {...props} />;
+      case CareRole.CLIENT: return <ClientPortal {...props} />;
+      case CareRole.HSS: return <HSSPortal {...props} />;
+      default: return <PSWPortal {...props} />;
     }
   };
 
@@ -49,15 +55,15 @@ export default function App() {
         lang={language}
         onLogout={() => setUser(null)}
       />
-      <div className="flex-1 flex flex-col min-w-0 h-full">
+      <div className="flex-1 flex flex-col min-w-0 h-full relative">
         <Header 
           active={activeTab} 
           lang={language} 
           setLang={setLanguage} 
           user={user} 
         />
-        <main className="flex-1 overflow-y-auto scrollbar-hide p-8">
-          <div className="max-w-7xl mx-auto">
+        <main className="flex-1 overflow-y-auto scrollbar-hide p-4 lg:p-8 relative">
+          <div className="max-w-7xl mx-auto h-full animate-fade-up">
             {renderContent()}
           </div>
         </main>

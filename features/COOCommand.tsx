@@ -78,7 +78,8 @@ const COOCommand: React.FC<Props> = ({ language }) => {
       </div>
 
       {activeSubTab === 'STABILITY' && <StabilityGrid language={language} />}
-      {activeLayer === 'PULSE' && <ThroughputPulse language={language} />}
+      {/* Fixed: changed activeLayer to activeSubTab */}
+      {activeSubTab === 'PULSE' && <ThroughputPulse language={language} />}
 
       {activeSubTab === 'OVERVIEW' && (
         <div className="space-y-10">

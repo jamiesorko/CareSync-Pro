@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { StaffMember } from '../../types';
-/* Changed default import to named import for Translate */
 import { Translate } from '../../components/Translate';
 import { workforceResilienceService, MentorshipPairing } from '../../services/workforceResilienceService';
 

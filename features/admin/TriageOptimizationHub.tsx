@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { Client, StaffMember, TriageReferral } from '../../types';
 import { triageOptimizationService } from '../../services/triageOptimizationService';
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;

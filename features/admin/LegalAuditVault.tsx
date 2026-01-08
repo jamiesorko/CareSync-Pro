@@ -1,7 +1,8 @@
+
 import React, { useState } from 'react';
 import { evidenceHarvesterService, DefensibilityBundle } from '../../services/evidenceHarvesterService';
 import { Client } from '../../types';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;
@@ -56,7 +57,7 @@ const LegalAuditVault: React.FC<Props> = ({ language, clients }) => {
                 <p className="text-[10px] font-black text-rose-500 uppercase tracking-widest animate-pulse">Aggregating_Immutable_Signals</p>
              </div>
            ) : bundle && (
-             <div className="space-y-12 relative z-10 animate-in slide-in-from-bottom-8">
+             <div className="space-y-12 relative z-10 animate-in slide-in-from-bottom-8 duration-700">
                 <div className="flex justify-between items-start">
                    <div>
                       <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter leading-none">{bundle.id}</h3>
