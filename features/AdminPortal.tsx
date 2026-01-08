@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import Translate from '../components/Translate';
+import { Translate } from '../components/Translate';
 import { CareRole, Client } from '../types';
 
 interface Props {

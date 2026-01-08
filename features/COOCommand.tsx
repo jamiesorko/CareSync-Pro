@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import Translate from '../components/Translate';
+import { Translate } from '../components/Translate';
 import { CareRole, Complaint } from '../types';
 import { MOCK_STAFF } from '../data/careData';
 import { geminiService } from '../services/geminiService';
@@ -17,7 +17,6 @@ const COOCommand: React.FC<Props> = ({ language }) => {
   const [policyDraft, setPolicyDraft] = useState<string | null>(null);
 
   const staffComplaints: Complaint[] = [
-    // Fix: Added missing createdAt property required by Complaint (BaseEntity)
     { 
       id: 'sc1', 
       companyId: 'demo-company',
@@ -38,7 +37,7 @@ const COOCommand: React.FC<Props> = ({ language }) => {
     setLoading(true);
     const prompt = `Context: COO Healthcare Policy. Action: Draft Staff Wellness policy based on high field density. Concise bullets.`;
     try {
-      // Fix: generateText now correctly handles 2 arguments
+      // Corrected call to accept two arguments
       const res = await geminiService.generateText(prompt, false);
       const text = res.text || "Policy synthesis complete.";
       setPolicyDraft(text);

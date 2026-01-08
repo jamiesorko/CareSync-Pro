@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { CareRole, Client, FormRequirement } from '../../types';
 import { MOCK_CLIENTS } from '../../data/careData';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;
@@ -15,7 +15,6 @@ const CarePlanEditor: React.FC<Props> = ({ language }) => {
   const [isDictating, setIsDictating] = useState(false);
   
   // Available forms to link
-  // Fix: Added missing createdAt property required by FormRequirement (BaseEntity)
   const availableForms: FormRequirement[] = [
     { id: 'f1', companyId: 'demo-company', createdAt: new Date().toISOString(), name: 'Wound Assessment v2', submissionTarget: 'RN_SUPERVISOR', isMandatory: true },
     { id: 'f2', companyId: 'demo-company', createdAt: new Date().toISOString(), name: 'Medication Refusal Form', submissionTarget: 'DOC', isMandatory: true },
@@ -44,7 +43,7 @@ const CarePlanEditor: React.FC<Props> = ({ language }) => {
         <div>
           <div className="flex items-center space-x-3 mb-2">
             <div className="w-2 h-2 rounded-full bg-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.5)]"></div>
-            <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]"><Translate targetLanguage={language}>Clinical Protocol Architect</Translate></span>
+            <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]"><Translate target={language}>Clinical Protocol Architect</Translate></span>
           </div>
           <h2 className="text-4xl font-black text-white tracking-tighter uppercase leading-none italic">Care_Protocol_Matrix</h2>
         </div>

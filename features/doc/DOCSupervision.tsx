@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 import { MOCK_CLIENTS } from '../../data/careData';
 import AIScheduler from './AIScheduler';
 

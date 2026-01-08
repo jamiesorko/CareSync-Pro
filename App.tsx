@@ -1,26 +1,19 @@
 
 import React, { useState } from 'react';
 import { CareRole, AppTab, User } from './types';
-import Sidebar from './components/Sidebar';
-import Header from './components/Header';
+import { Sidebar } from './components/Sidebar';
+import { Header } from './components/Header';
+import { Login } from './features/Login';
 import { Dashboard } from './features/Dashboard';
-import ProfessionalTerminal from './features/terminal/ProfessionalTerminal';
-import HRPortal from './features/HRPortal';
-import AccountingTerminal from './features/accounting/AccountingTerminal';
-import DocumentVault from './features/DocumentVault';
-import LiveLab from './features/LiveLab';
-import CoordinationHub from './features/CoordinationHub';
-import Login from './features/Login';
-import PatientWellnessHub from './features/client/PatientWellnessHub';
-import ClientPortal from './features/client/ClientPortal';
-import MarketDominanceHub from './features/ceo/MarketDominanceHub';
-import ForensicDiscoveryStation from './features/executive/ForensicDiscoveryStation';
-import CEODashboard from './features/ceo/CEODashboard';
-import StrategicTabletop from './features/ceo/StrategicTabletop';
-import RNCommand from './features/rn/RNCommand';
-import IoTFleetCommand from './features/coordination/IoTFleetCommand';
-import MoatBreakerHUD from './features/executive/MoatBreakerHUD';
-import { MOCK_CLIENTS } from './data/careData';
+import { StrategyTabletop } from './features/StrategyTabletop';
+import { ClinicalHub } from './features/ClinicalHub';
+import { FleetCommand } from './features/FleetCommand';
+import { FiscalLedger } from './features/FiscalLedger';
+import { NeuralVault } from './features/NeuralVault';
+import { PatientZen } from './features/PatientZen';
+import { ResourceCore } from './features/ResourceCore';
+import { DirectLink } from './features/DirectLink';
+import { StrategicMoat } from './features/StrategicMoat';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -28,96 +21,38 @@ export default function App() {
   const [language, setLanguage] = useState('English');
 
   if (!user) {
-    return <Login onLogin={setUser} language={language} onLanguageChange={setLanguage} />;
-  }
-
-  // Redirect Logic for Clients
-  if (user.role === CareRole.CLIENT && activeTab === AppTab.DASHBOARD) {
-    return (
-      <div className="h-screen w-full bg-[#020617] text-slate-100 overflow-hidden select-none">
-        <Header activeTab={AppTab.WELLNESS} language={language} onLanguageChange={setLanguage} onLogout={() => setUser(null)} />
-        <main className="h-[calc(100vh-80px)] overflow-y-auto scrollbar-hide p-8">
-          <ClientPortal user={user} onLogout={() => setUser(null)} />
-        </main>
-      </div>
-    );
+    return <Login onLogin={setUser} lang={language} setLang={setLanguage} />;
   }
 
   const renderContent = () => {
     switch (activeTab) {
-      case AppTab.DASHBOARD:
-        if (user.role === CareRole.CEO) return <CEODashboard />;
-        return <Dashboard language={language} staffName={user.name} clients={MOCK_CLIENTS} />;
-      
-      case AppTab.STRATEGY:
-        return <StrategicTabletop language={language} />;
-
-      case AppTab.CLINICAL:
-      case AppTab.CLINICAL_COMMAND:
-        return <RNCommand clients={MOCK_CLIENTS} role={user.role} language={language} />;
-      
-      case AppTab.LOGISTICS:
-      case AppTab.COORDINATION:
-        return <CoordinationHub language={language} />;
-
-      case AppTab.FLEET_COMMAND:
-        return <IoTFleetCommand language={language} />;
-      
-      case AppTab.RESOURCE:
-      case AppTab.HR_HUB:
-      case AppTab.HR_PORTAL:
-        return <HRPortal role={user.role} language={language} />;
-      
-      case AppTab.FISCAL:
-      case AppTab.FINANCE:
-      case AppTab.FINANCIAL:
-        return <AccountingTerminal language={language} staffName={user.name} clients={MOCK_CLIENTS} />;
-      
-      case AppTab.VAULT:
-        return <DocumentVault role={user.role} language={language} />;
-      
-      case AppTab.WELLNESS:
-        if (user.role === CareRole.CLIENT) return <ClientPortal user={user} onLogout={() => setUser(null)} />;
-        return <PatientWellnessHub language={language} clients={MOCK_CLIENTS} />;
-      
-      case AppTab.LIVE:
-        return <LiveLab language={language} />;
-      
-      case AppTab.ORG_COMMAND:
-        return (
-          <div className="space-y-16">
-            <MoatBreakerHUD language={language} clients={MOCK_CLIENTS} />
-            <MarketDominanceHub language={language} />
-            <ForensicDiscoveryStation language={language} clients={MOCK_CLIENTS} />
-          </div>
-        );
-
-      case AppTab.SCHEDULE:
-        return <ProfessionalTerminal clients={MOCK_CLIENTS} role={user.role} staffName={user.name} language={language} />;
-
-      default:
-        return <Dashboard language={language} staffName={user.name} clients={MOCK_CLIENTS} />;
+      case AppTab.DASHBOARD: return <Dashboard lang={language} />;
+      case AppTab.STRATEGY: return <StrategyTabletop lang={language} />;
+      case AppTab.CLINICAL: return <ClinicalHub lang={language} />;
+      case AppTab.LOGISTICS: return <FleetCommand lang={language} />;
+      case AppTab.FISCAL: return <FiscalLedger lang={language} />;
+      case AppTab.VAULT: return <NeuralVault lang={language} />;
+      case AppTab.WELLNESS: return <PatientZen lang={language} />;
+      case AppTab.RESOURCE: return <ResourceCore lang={language} />;
+      case AppTab.LIVE: return <DirectLink lang={language} />;
+      case AppTab.ORG_COMMAND: return <StrategicMoat lang={language} />;
+      default: return <Dashboard lang={language} />;
     }
   };
 
   return (
     <div className="flex h-screen w-full bg-[#020617] text-slate-100 overflow-hidden select-none">
       <Sidebar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
+        active={activeTab} 
+        setActive={setActiveTab} 
         role={user.role} 
-        onLogout={() => setUser(null)} 
-        language={language}
+        lang={language}
+        onLogout={() => setUser(null)}
       />
       <div className="flex-1 flex flex-col min-w-0 h-full">
-        <Header 
-          activeTab={activeTab} 
-          language={language} 
-          onLanguageChange={setLanguage} 
-          onLogout={() => setUser(null)} 
-        />
-        <main className="flex-1 overflow-y-auto scrollbar-hide p-8 relative">
-          <div className="max-w-7xl mx-auto pb-24">
+        <Header active={activeTab} lang={language} setLang={setLanguage} user={user} />
+        <main className="flex-1 overflow-y-auto scrollbar-hide p-8">
+          <div className="max-w-7xl mx-auto">
             {renderContent()}
           </div>
         </main>

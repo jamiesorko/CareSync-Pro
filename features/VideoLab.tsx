@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { geminiService } from '../services/geminiService';
-import Translate from '../components/Translate';
+import { Translate } from '../components/Translate';
 
 interface Props {
   language: string;

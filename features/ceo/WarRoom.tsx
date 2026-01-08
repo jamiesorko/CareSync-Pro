@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { MOCK_STAFF } from '../../data/careData';
 import { telemetryService } from '../../services/telemetryService';
 import { Scan, ShieldAlert, Radio, Search, AlertCircle } from 'lucide-react';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;

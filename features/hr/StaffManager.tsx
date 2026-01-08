@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { MOCK_STAFF } from '../../data/careData';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 import { ShieldCheck, AlertTriangle, Search } from 'lucide-react';
 
 interface Props {
@@ -41,26 +41,26 @@ const StaffManager: React.FC<Props> = ({ language }) => {
             
             <h4 className="text-2xl font-black text-white italic uppercase tracking-tighter mb-1">{s.name}</h4>
             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-6">
-              <Translate targetLanguage={language}>{s.role}</Translate>
+              <Translate target={language}>{s.role}</Translate>
             </p>
 
             <div className="space-y-3 pt-6 border-t border-white/5">
                <div className="flex justify-between items-center">
                   <span className="text-[9px] font-black text-slate-600 uppercase">
-                    <Translate targetLanguage={language}>Sector Lock</Translate>
+                    <Translate target={language}>Sector Lock</Translate>
                   </span>
                   <span className="text-[10px] font-black text-emerald-400 uppercase">{s.homeSector}</span>
                </div>
                <div className="flex justify-between items-center">
                   <span className="text-[9px] font-black text-slate-600 uppercase">
-                    <Translate targetLanguage={language}>Hours / Week</Translate>
+                    <Translate target={language}>Hours / Week</Translate>
                   </span>
                   <span className="text-[10px] font-black text-white">{s.weeklyHours}h</span>
                </div>
             </div>
 
             <button className="w-full mt-10 py-4 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black uppercase text-slate-400 hover:text-white hover:bg-white/10 transition-all">
-               <Translate targetLanguage={language}>View_Full_Mastery_Dossier</Translate>
+               <Translate target={language}>View_Full_Mastery_Dossier</Translate>
             </button>
           </div>
         ))}

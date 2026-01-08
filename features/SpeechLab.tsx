@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { geminiService } from '../services/geminiService';
 import { decode, decodeAudioData } from '../utils/audioHelpers';
-import Translate from '../components/Translate';
+import { Translate } from '../components/Translate';
 
 interface Props {
   language: string;

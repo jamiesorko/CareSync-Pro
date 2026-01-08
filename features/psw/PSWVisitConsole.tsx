@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Client, CareRole, AlertType } from '../../types';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 import NeuralScribe from '../rn/NeuralScribe';
 import { ShieldAlert, Clock, MapPin, CheckCircle2, Stethoscope, Activity, HeartPulse, UserCheck, Edit3 } from 'lucide-react';
 

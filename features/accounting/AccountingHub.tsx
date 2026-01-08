@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 import PayrollSystem from './PayrollSystem';
 import AccountsReceivable from './AccountsReceivable';
 import AccountsPayable from './AccountsPayable';

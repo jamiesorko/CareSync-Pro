@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 import { PayrollRecord } from '../../data/accountingData';
 
 interface Props {

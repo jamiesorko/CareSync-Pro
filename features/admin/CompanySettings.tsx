@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { Company, AppTab } from '../../types';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 import { dbService } from '../../services/dbService';
 
 interface Props {

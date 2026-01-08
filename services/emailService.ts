@@ -1,16 +1,6 @@
 
 import { supabase } from '../lib/supabase';
-import { BaseEntity } from '../types';
-
-export interface InternalEmail extends BaseEntity {
-  senderId: string;
-  senderName: string;
-  recipientRole: string;
-  subject: string;
-  body: string;
-  isRead: boolean;
-  priority: 'NORMAL' | 'URGENT';
-}
+import { BaseEntity, InternalEmail } from '../types';
 
 export class EmailService {
   private companyId: string | null = null;

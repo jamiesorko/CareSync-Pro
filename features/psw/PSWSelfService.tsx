@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 import { hrService } from '../../services/hrService';
 import { financialService } from '../../services/financialService';
 import { coordinationService } from '../../services/coordinationService';

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { CareRole } from '../types';
-import Translate from '../components/Translate';
+import { Translate } from '../components/Translate';
 import HiringHub from './hr/HiringHub';
 import ComplianceManager from './hr/ComplianceManager';
 import CapacityPlanner from './hr/CapacityPlanner';

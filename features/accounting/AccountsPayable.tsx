@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 import { MOCK_PAYABLES, MOCK_SUPPLY_REQUESTS, PayableRecord, SupplyRequest } from '../../data/accountingData';
 
 interface Props {
@@ -65,30 +65,4 @@ const AccountsPayable: React.FC<Props> = ({ language }) => {
           {supplyRequests.map(r => (
             <div key={r.id} className="p-6 bg-white/[0.03] border border-white/5 rounded-2xl flex justify-between items-center">
               <div>
-                <p className="text-sm font-black text-white italic">{r.item} (x{r.quantity})</p>
-                <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Requested by: {r.staffName} • {r.timestamp}</p>
-                <span className={`text-[8px] font-black px-2 py-0.5 rounded mt-2 inline-block ${
-                  r.urgency === 'HIGH' ? 'bg-rose-500/20 text-rose-500' : 'bg-amber-500/20 text-amber-500'
-                }`}>
-                  {r.urgency}_URGENCY
-                </span>
-              </div>
-              <div className="flex items-center space-x-4">
-                <span className={`text-[9px] font-black uppercase ${r.status === 'ORDERED' ? 'text-emerald-400' : 'text-amber-500 animate-pulse'}`}>
-                  {r.status}
-                </span>
-                {r.status === 'PENDING' && (
-                  <button onClick={() => orderSupplies(r.id)} className="px-6 py-2.5 bg-emerald-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-emerald-500/20">
-                    Place Order
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-    </div>
-  );
-};
-
-export default AccountsPayable;
+                <p className="text-sm font-black text-white italic">{r.item} (x{

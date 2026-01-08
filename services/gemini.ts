@@ -1,65 +1,47 @@
 
-import { GoogleGenAI, Modality, GenerateContentResponse } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 
-export class GeminiService {
-  private getAI() {
-    return new GoogleGenAI({ apiKey: process.env.API_KEY as string });
-  }
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-  async translate(text: string, targetLanguage: string): Promise<string> {
-    if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') return text;
-    
-    const ai = this.getAI();
+export const gemini = {
+  // Ultra-fast translation using Flash
+  async translate(text: string, target: string) {
+    if (target === 'English') return text;
     try {
-      const response = await ai.models.generateContent({
+      const res = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Translate to ${targetLanguage}: "${text}"`,
-        config: {
-          systemInstruction: "You are a professional medical and enterprise software translator. Output ONLY the translated string. No quotes, no explanations, no conversational filler. Maintain clinical professional tone.",
-        }
+        contents: `Translate to ${target}: "${text}". Output ONLY the translation. No quotes.`,
       });
-      return response.text?.trim() || text;
-    } catch (err) {
-      console.error("[TRANSLATION_FAILURE]:", err);
+      return res.text?.trim();
+    } catch (e) {
+      console.error("Neural translation drift:", e);
       return text;
     }
-  }
+  },
 
-  async analyzeVision(base64: string, prompt: string): Promise<string> {
-    const ai = this.getAI();
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-image',
-      contents: {
-        parts: [
-          { inlineData: { data: base64, mimeType: 'image/jpeg' } },
-          { text: prompt }
-        ]
-      }
-    });
-    return response.text || "Analysis failed.";
-  }
-
-  async generateSpeech(text: string, voiceName: string = 'Kore'): Promise<string> {
-    const ai = this.getAI();
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-preview-tts",
-      contents: [{ parts: [{ text }] }],
-      config: {
-        responseModalities: [Modality.AUDIO],
-        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName } } },
-      },
-    });
-    return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || "";
-  }
-
-  async generateAdvancedReasoning(prompt: string): Promise<GenerateContentResponse> {
-    const ai = this.getAI();
-    return await ai.models.generateContent({
+  // Deep reasoning for strategy and board mandates
+  async think(prompt: string) {
+    const res = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
       contents: prompt,
-      config: { thinkingConfig: { thinkingBudget: 15000 } }
+      config: { 
+        thinkingConfig: { thinkingBudget: 15000 } 
+      }
     });
-  }
-}
+    return res.text;
+  },
 
-export const gemini = new GeminiService();
+  // High-fidelity video for Patient Zen
+  async generateZenVideo(prompt: string) {
+    let op = await ai.models.generateVideos({
+      model: 'veo-3.1-fast-generate-preview',
+      prompt: `Cinematic therapeutic visual: ${prompt}`,
+      config: { numberOfVideos: 1, resolution: '720p', aspectRatio: '16:9' }
+    });
+    while (!op.done) {
+      await new Promise(r => setTimeout(r, 10000));
+      op = await ai.operations.getVideosOperation({ operation: op });
+    }
+    return `${op.response?.generatedVideos?.[0]?.video?.uri}&key=${process.env.API_KEY}`;
+  }
+};

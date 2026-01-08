@@ -1,74 +1,57 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { geminiService } from '../services/geminiService';
+import React, { useState, useEffect } from 'react';
+import { gemini } from '../services/gemini';
 
 interface Props {
   children: string;
-  targetLanguage: string;
-  className?: string;
+  target: string;
 }
 
-const Translate: React.FC<Props> = ({ children, targetLanguage, className = "" }) => {
-  const [translatedText, setTranslatedText] = useState<string>('');
-  const [isTranslating, setIsTranslating] = useState(false);
-  const isMounted = useRef(true);
-
-  // Normalize slugs like "DASHBOARD_CORE" or "OPS_DASHBOARD"
-  // but keep normal sentences intact.
-  const normalize = (val: string) => {
-    if (!val) return "";
-    if (val.includes('_')) {
-      return val.replace(/_/g, ' ').toLowerCase()
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-    }
-    return val;
-  };
-
-  const textToTranslate = normalize(children);
+export const Translate: React.FC<Props> = ({ children, target }) => {
+  const [translated, setTranslated] = useState(children);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    isMounted.current = true;
-    const translateText = async () => {
-      if (!targetLanguage || targetLanguage.toLowerCase() === 'english' || !textToTranslate) {
-        setTranslatedText(textToTranslate || children);
-        setIsTranslating(false);
-        return;
-      }
+    if (!children || target === 'English') {
+      setTranslated(children);
+      return;
+    }
 
-      const cacheKey = `csp_neural_v3_${targetLanguage.toLowerCase()}:${textToTranslate}`;
+    const run = async () => {
+      // Normalize slugs like "OPS_DASHBOARD" -> "Ops Dashboard"
+      const normalized = children.replace(/_/g, ' ').toLowerCase()
+        .split(' ')
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' ');
+
+      const cacheKey = `csp_v4_${target}_${normalized}`;
       const cached = localStorage.getItem(cacheKey);
-      
+
       if (cached) {
-        setTranslatedText(cached);
-        setIsTranslating(false);
+        setTranslated(cached);
         return;
       }
 
-      setIsTranslating(true);
+      setLoading(true);
       try {
-        const result = await geminiService.translate(textToTranslate, targetLanguage);
-        if (isMounted.current && result) {
+        const result = await gemini.translate(normalized, target);
+        if (result) {
           localStorage.setItem(cacheKey, result);
-          setTranslatedText(result);
+          setTranslated(result);
         }
-      } catch (err) {
-        if (isMounted.current) setTranslatedText(textToTranslate || children);
+      } catch (e) {
+        setTranslated(normalized);
       } finally {
-        if (isMounted.current) setIsTranslating(false);
+        setLoading(false);
       }
     };
 
-    translateText();
-    return () => { isMounted.current = false; };
-  }, [textToTranslate, targetLanguage, children]);
+    run();
+  }, [children, target]);
 
   return (
-    <span className={`${className} transition-all duration-300 ${isTranslating ? 'opacity-30 blur-[2px]' : 'opacity-100 blur-0'}`}>
-      {translatedText || textToTranslate || children}
+    <span className={`${loading ? 'opacity-40 blur-[1px]' : 'opacity-100'} transition-all duration-300`}>
+      {translated}
     </span>
   );
 };
-
-export default Translate;

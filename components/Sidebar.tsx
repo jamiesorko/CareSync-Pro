@@ -1,91 +1,55 @@
 
 import React from 'react';
 import { AppTab, CareRole } from '../types';
-import Translate from './Translate';
+import { Translate } from './Translate';
 import { 
-  LayoutDashboard, ShieldAlert, Users, Briefcase, 
-  Wallet, Database, Radio, Power, Heart, Target, Calendar,
-  Cpu, Truck
+  LayoutDashboard, Cpu, Shield, Zap, Wallet, 
+  Database, Heart, Briefcase, Radio, Target, Power 
 } from 'lucide-react';
 
-interface Props {
-  activeTab: AppTab;
-  setActiveTab: (tab: AppTab) => void;
-  role: CareRole;
-  onLogout: () => void;
-  language: string;
-}
-
-const Sidebar: React.FC<Props> = ({ activeTab, setActiveTab, role, onLogout, language }) => {
-  const isProfessional = [CareRole.RN, CareRole.RPN, CareRole.PSW, CareRole.HSS].includes(role);
-  
+// Changed to default export to match Layout.tsx expectation
+const Sidebar = ({ active, setActive, role, lang, onLogout }: any) => {
   const menu = [
-    { id: AppTab.DASHBOARD, icon: LayoutDashboard, label: 'Ops_Dashboard' },
-    { id: AppTab.STRATEGY, icon: Cpu, label: 'Strategic_Tabletop' },
-    { 
-      id: AppTab.SCHEDULE, 
-      icon: Calendar, 
-      label: role === CareRole.RPN ? 'Clinical_Roster' : 
-             role === CareRole.HSS ? 'Social_Dispatch' : 'Roster_Grid' 
-    },
-    { id: AppTab.CLINICAL_COMMAND, icon: ShieldAlert, label: 'Clinical_Core' },
-    { id: AppTab.COORDINATION, icon: Users, label: 'Census_Matrix' },
-    { id: AppTab.FLEET_COMMAND, icon: Truck, label: 'IoT_Command' },
-    { id: AppTab.RESOURCE, icon: Briefcase, label: 'Resource_Core' },
-    { id: AppTab.FINANCE, icon: Wallet, label: 'Fiscal_Ledger' },
-    { id: AppTab.VAULT, icon: Database, label: 'Neural_Vault' },
-    { id: AppTab.WELLNESS, icon: Heart, label: 'Patient_Zen' },
-    { id: AppTab.LIVE, icon: Radio, label: 'Direct_Link' },
+    { id: AppTab.DASHBOARD, icon: LayoutDashboard },
+    { id: AppTab.STRATEGY, icon: Cpu },
+    { id: AppTab.CLINICAL, icon: Shield },
+    { id: AppTab.LOGISTICS, icon: Zap },
+    { id: AppTab.FISCAL, icon: Wallet },
+    { id: AppTab.VAULT, icon: Database },
+    { id: AppTab.WELLNESS, icon: Heart },
+    { id: AppTab.RESOURCE, icon: Briefcase },
+    { id: AppTab.LIVE, icon: Radio },
   ];
 
-  // Restrict tabs based on professional vs executive context if needed
-  // For now, keeping them all visible for the "easy to repair" enterprise feel, but restricted ORG_COMMAND.
-  if (![CareRole.CEO, CareRole.COO, CareRole.DOC].includes(role)) {
-    // Keep only essentials for PSW/HSS/RPN if preferred, but user said portals were "gone", 
-    // implying they want them accessible or visible.
-  }
-
-  // Add Executive Command node for CEO/COO/DOC
   if ([CareRole.CEO, CareRole.COO, CareRole.DOC].includes(role)) {
-    menu.splice(1, 0, { id: AppTab.ORG_COMMAND, icon: Target, label: 'Strategic_Moat' });
+    menu.push({ id: AppTab.ORG_COMMAND, icon: Target });
   }
 
   return (
-    <aside className="w-64 bg-black/40 border-r border-white/5 flex flex-col h-full backdrop-blur-xl shrink-0">
-      <div className="h-24 flex items-center px-10 border-b border-white/5">
-        <span className="text-xl font-black text-white italic tracking-tighter uppercase">
-          CareSync<span className="text-indigo-500">Pro</span>
-        </span>
+    <aside className="w-64 bg-black/40 border-r border-white/5 flex flex-col backdrop-blur-xl">
+      <div className="h-20 flex items-center px-8 border-b border-white/5">
+        <h1 className="text-xl font-black italic">CARESYNC<span className="text-indigo-500">PRO</span></h1>
       </div>
-      
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto scrollbar-hide">
+      <nav className="flex-1 p-4 space-y-1">
         {menu.map(item => (
           <button
             key={item.id}
-            onClick={() => setActiveTab(item.id)}
+            onClick={() => setActive(item.id)}
             className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all ${
-              activeTab === item.id 
-                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' 
-                : 'text-slate-500 hover:text-slate-200 hover:bg-white/5'
+              active === item.id ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'text-slate-500 hover:text-white hover:bg-white/5'
             }`}
           >
-            <item.icon size={18} strokeWidth={activeTab === item.id ? 2.5 : 2} />
-            <span className="text-[10px] font-black uppercase tracking-widest text-left leading-none">
-              <Translate targetLanguage={language}>{item.label}</Translate>
+            <item.icon size={18} />
+            <span className="text-[10px] font-black uppercase tracking-widest">
+              <Translate target={lang}>{item.id}</Translate>
             </span>
           </button>
         ))}
       </nav>
-
       <div className="p-4 border-t border-white/5">
-        <button 
-          onClick={onLogout}
-          className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-rose-500 hover:bg-rose-500/10 transition-all"
-        >
+        <button onClick={onLogout} className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-rose-500 hover:bg-rose-500/10">
           <Power size={18} />
-          <span className="text-[10px] font-black uppercase tracking-widest">
-            <Translate targetLanguage={language}>Terminate_Session</Translate>
-          </span>
+          <span className="text-[10px] font-black uppercase tracking-widest"><Translate target={lang}>Logout</Translate></span>
         </button>
       </div>
     </aside>

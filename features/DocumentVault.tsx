@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { CareRole } from '../types';
-import Translate from '../components/Translate';
+import { Translate } from '../components/Translate';
 import VaultChat from './vault/VaultChat';
 import VaultTransferTerminal from './vault/VaultTransferTerminal';
 

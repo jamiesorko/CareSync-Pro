@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { CareRole, Client, StaffMember } from '../types';
-import Translate from '../components/Translate';
+import { Translate } from '../components/Translate';
 import RiskMatrix from './predictive/RiskMatrix';
 import WarRoom from './ceo/WarRoom';
 import StrategicMap from './ceo/StrategicMap';

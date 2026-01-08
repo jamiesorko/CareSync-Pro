@@ -1,7 +1,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { CareRole, ChatMessage, ChatThread } from '../../types';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 import { MOCK_STAFF } from '../../data/careData';
 
 interface Props {
@@ -25,11 +25,11 @@ const NeuralComms: React.FC<Props> = ({ role, language, staffName }) => {
     list.push({ 
       id: 'staff-global', 
       companyId: 'demo-company', 
+      createdAt: new Date().toISOString(),
       name: 'Global Roster Channel', 
       type: 'GROUP', 
       lastMessage: 'Biometric link active.', 
-      unreadCount: 0,
-      createdAt: new Date().toISOString()
+      unreadCount: 0 
     });
     return list;
   }, []);

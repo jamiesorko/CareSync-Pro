@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { geminiService } from '../services/geminiService';
 import { Message } from '../types';
-import Translate from '../components/Translate';
+import { Translate } from '../components/Translate';
 
 interface Props {
   language: string;
@@ -63,7 +63,7 @@ const TextChat: React.FC<Props> = ({ language }) => {
     <div className="flex flex-col h-full bg-slate-900/50 rounded-2xl shadow-xl border border-white/10 overflow-hidden backdrop-blur-xl">
       <div className="p-5 border-b border-white/5 flex justify-between items-center bg-black/20">
         <h2 className="font-black text-white uppercase tracking-widest text-xs italic">
-          <Translate targetLanguage={language}>Knowledge_Hub</Translate>
+          <Translate target={language}>Knowledge_Hub</Translate>
         </h2>
         <label className="flex items-center space-x-2 cursor-pointer group">
           <input 
@@ -73,7 +73,7 @@ const TextChat: React.FC<Props> = ({ language }) => {
             className="w-4 h-4 rounded border-white/20 bg-black text-indigo-500 focus:ring-0"
           />
           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter group-hover:text-slate-300">
-            <Translate targetLanguage={language}>Google_Search_Grounding</Translate>
+            <Translate target={language}>Google_Search_Grounding</Translate>
           </span>
         </label>
       </div>
@@ -85,7 +85,7 @@ const TextChat: React.FC<Props> = ({ language }) => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
             </svg>
             <p className="text-[10px] font-black uppercase tracking-widest italic">
-              <Translate targetLanguage={language}>Start_a_conversation_with_Gemini_Flash</Translate>
+              <Translate target={language}>Start_a_conversation_with_Gemini_Flash</Translate>
             </p>
           </div>
         )}
@@ -104,7 +104,7 @@ const TextChat: React.FC<Props> = ({ language }) => {
               {m.groundingSources && m.groundingSources.length > 0 && (
                 <div className="mt-6 pt-4 border-t border-white/10">
                   <p className="text-[8px] uppercase font-black text-slate-500 mb-3 tracking-widest">
-                    <Translate targetLanguage={language}>SOURCES</Translate>
+                    <Translate target={language}>SOURCES</Translate>
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {m.groundingSources.map((s, idx) => (
@@ -152,7 +152,7 @@ const TextChat: React.FC<Props> = ({ language }) => {
             disabled={loading || !input.trim()}
             className="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-500 disabled:opacity-30 transition-all shadow-xl shadow-indigo-600/20"
           >
-            <Translate targetLanguage={language}>SEND</Translate>
+            <Translate target={language}>SEND</Translate>
           </button>
         </div>
       </form>

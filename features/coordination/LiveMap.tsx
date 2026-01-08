@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 import { CareRole } from '../../types';
 import { Wifi, Radio, ShieldCheck, Zap } from 'lucide-react';
 

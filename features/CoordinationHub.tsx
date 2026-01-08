@@ -4,7 +4,7 @@ import { MOCK_STAFF, MOCK_CLIENTS } from '../data/careData';
 import { CareRole, StaffMember, Client, BlastStatus, AlertType } from '../types';
 import { aiSchedulerService } from '../services/aiSchedulerService';
 import { ShieldAlert, Send, Radio, Edit3, AlertCircle } from 'lucide-react';
-import Translate from '../components/Translate';
+import { Translate } from '../components/Translate';
 import WarRoom from './ceo/WarRoom';
 
 interface Props {

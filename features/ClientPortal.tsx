@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import Translate from '../components/Translate';
+import { Translate } from '../components/Translate';
 import { CareRole } from '../types';
 import ScheduleGrid from './client/ScheduleGrid';
 import PSWCard from './client/PSWCard';
@@ -21,10 +21,10 @@ const ClientPortal: React.FC<Props> = ({ language }) => {
     <div className="space-y-12 animate-in fade-in duration-700 pb-24 overflow-y-auto h-full scrollbar-hide">
       <div className="px-4">
         <h2 className="text-5xl font-black text-white tracking-tighter uppercase leading-none italic">
-           <Translate targetLanguage={language}>Resident_Command</Translate>
+           <Translate target={language}>Resident_Command</Translate>
         </h2>
         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-3 italic">
-           <Translate targetLanguage={language}>Quality_&_Logistics_Monitor_•_Active_Handshake</Translate>
+           <Translate target={language}>Quality_&_Logistics_Monitor_•_Active_Handshake</Translate>
         </p>
       </div>
 
@@ -35,7 +35,7 @@ const ClientPortal: React.FC<Props> = ({ language }) => {
                <span className="text-8xl font-black italic text-white">LOG</span>
             </div>
             <h3 className="text-xl font-black text-white mb-10 tracking-tighter uppercase italic">
-               <Translate targetLanguage={language}>Current_Service_Log</Translate>
+               <Translate target={language}>Current_Service_Log</Translate>
             </h3>
             <ScheduleGrid 
               visits={schedule} 
@@ -57,7 +57,7 @@ const ClientPortal: React.FC<Props> = ({ language }) => {
           <div className="bg-teal-600/10 border border-teal-500/20 p-10 rounded-[3rem] text-center shadow-xl relative overflow-hidden">
              <div className="absolute top-0 left-0 w-full h-1 bg-teal-500/40"></div>
              <p className="text-sm font-bold italic text-slate-300 italic mb-4 leading-relaxed">
-               <Translate targetLanguage={language}>The care team is synchronized. All staff are geofence-verified at your address.</Translate>
+               <Translate target={language}>The care team is synchronized. All staff are geofence-verified at your address.</Translate>
              </p>
              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse mx-auto"></div>
           </div>
@@ -66,7 +66,7 @@ const ClientPortal: React.FC<Props> = ({ language }) => {
             onClick={() => setActiveTab(activeTab === 'HOME' ? 'CONCERNS' : 'HOME')}
             className={`w-full py-6 rounded-3xl font-black text-xs uppercase tracking-[0.4em] transition-all shadow-2xl ${activeTab === 'CONCERNS' ? 'bg-indigo-600 text-white' : 'bg-white text-black hover:scale-[1.02]'}`}
           >
-            {activeTab === 'HOME' ? <Translate targetLanguage={language}>INITIATE_HELP_SIGNAL</Translate> : <Translate targetLanguage={language}>RETURN_TO_HUB</Translate>}
+            {activeTab === 'HOME' ? <Translate target={language}>INITIATE_HELP_SIGNAL</Translate> : <Translate target={language}>RETURN_TO_HUB</Translate>}
           </button>
         </div>
       </div>

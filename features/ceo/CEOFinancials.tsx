@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 import { MOCK_HISTORICAL_PL } from '../../data/accountingData';
 import { geminiService } from '../../services/geminiService';
 
