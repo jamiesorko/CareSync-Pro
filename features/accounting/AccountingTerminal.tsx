@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Client } from '../../types';
 import { Translate } from '../../components/Translate';
@@ -43,7 +44,7 @@ const AccountingTerminal: React.FC<Props> = ({ language, staffName, clients }) =
              </h1>
           </div>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
-            <Translate target={language}>Institutional_Capital_Forensics</Translate> • {staffName}
+            <Translate target={language}>Institutional_Capital_Forensics</Translate> • <Translate target={language}>{staffName}</Translate>
           </p>
         </div>
         

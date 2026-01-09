@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 
 class TranslationService {
@@ -22,10 +23,10 @@ class TranslationService {
         
         Mandatory Rules:
         - Output ONLY the translated string.
-        - Handle TECHNICAL TERMS: (e.g., Geofence, Biometric, Ledger, Solvency, Acuity, Wound Care).
-        - Localize NUMBERS & CURRENCY: If the text contains currency symbols ($), percentages (%), or large magnitudes (e.g., 1.42M, 14.2k, LOW/HIGH), translate the numeric suffixes (M/k) and position the currency symbol according to the standards of "${targetLanguage}".
-        - Maintain the formal, high-tech, professional tone of a global healthcare ERP.
-        - If the source is a code-like string (e.g., OPS_DASHBOARD), translate it as a user-friendly label.`,
+        - TECHNICAL LOCALIZATION: If the text is a measurement (e.g., "40h", "80 Units") or a financial magnitude (e.g., "$14.2k", "$1.42M"), translate the units and suffixes to the standard form used in "${targetLanguage}".
+        - FORMATTING: Ensure decimal separators (commas vs dots) and currency symbol placement follow the conventions of "${targetLanguage}".
+        - TECHNICAL TERMS: (e.g., Geofence, Biometric, Ledger, Solvency, Acuity, Wound Care) must use professional equivalents.
+        - If the source is snake_case (e.g., OVERTIME_REQUIRED), translate it as a user-friendly label.`,
         config: { 
           temperature: 0.0,
           systemInstruction: "You are the CareSync Universal Translation Node. Accuracy, regional number localization, and healthcare terminology are your primary objectives."

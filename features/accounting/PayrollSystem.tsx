@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { MOCK_STAFF } from '../../data/careData';
 import { hrService } from '../../services/hrService';
@@ -27,9 +28,11 @@ const PayrollSystem: React.FC<Props> = ({ language }) => {
               <div key={s.id} className="p-10 bg-white/[0.03] border border-white/5 rounded-[3rem] group hover:bg-white/5 transition-all">
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
                   <div className="space-y-2">
-                    <h4 className="text-2xl font-black text-white italic uppercase tracking-tighter">{s.name}</h4>
+                    <h4 className="text-2xl font-black text-white italic uppercase tracking-tighter">
+                       <Translate target={language}>{s.name}</Translate>
+                    </h4>
                     <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                      <Translate target={language}>{s.role as string}</Translate> • 80.00 <Translate target={language}>Units</Translate>
+                      <Translate target={language}>{s.role as string}</Translate> • <Translate target={language}>80.00 Units</Translate>
                     </p>
                   </div>
 

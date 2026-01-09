@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Translate } from '../../components/Translate';
 import { MOCK_INVOICES, InvoiceRecord } from '../../data/accountingData';
@@ -27,13 +28,15 @@ const AccountsReceivable: React.FC<Props> = ({ language }) => {
           {invoices.map(inv => (
             <div key={inv.id} className="p-8 bg-white/[0.03] border border-white/5 rounded-3xl flex justify-between items-center group hover:bg-white/5 transition-all">
               <div>
-                <p className="text-lg font-black text-white italic tracking-tighter uppercase">{inv.clientName}</p>
+                <p className="text-lg font-black text-white italic tracking-tighter uppercase">
+                   <Translate target={language}>{inv.clientName}</Translate>
+                </p>
                 <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">
-                  Ref: {inv.id} • <Translate target={language}>Sent</Translate>: {inv.date} • <Translate target={language}>Due</Translate>: {inv.dueDate}
+                  Ref: {inv.id} • <Translate target={language}>Sent</Translate>: <Translate target={language}>{inv.date}</Translate> • <Translate target={language}>Due</Translate>: <Translate target={language}>{inv.dueDate}</Translate>
                 </p>
                 <div className="mt-4 flex items-center space-x-3">
                   <span className={`text-[9px] font-black px-3 py-1 rounded-full uppercase ${
-                    inv.status === 'PAID' ? 'bg-emerald-500/10 text-emerald-400' : 
+                    inv.status === 'PAID' ? 'bg-emerald-500/10 text-emerald-500' : 
                     inv.status === 'OVERDUE' ? 'bg-rose-500/20 text-rose-500 animate-pulse' : 'bg-sky-500/10 text-sky-400'
                   }`}>
                     <Translate target={language}>{inv.status}</Translate>
