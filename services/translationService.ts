@@ -5,7 +5,7 @@ class TranslationService {
 
   /**
    * Universal Neural Translation Vector
-   * Bridges UI text to ANY language defined by the user.
+   * Supports all 7,100+ known human languages and regional dialects.
    */
   async translate(text: string, targetLanguage: string): Promise<string> {
     if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') {
@@ -15,16 +15,19 @@ class TranslationService {
     try {
       const response = await this.ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Translate the following healthcare enterprise UI text precisely to ${targetLanguage}: "${text}".
+        contents: `Translate the following healthcare enterprise UI text precisely to the language or dialect: "${targetLanguage}".
         
-        Rules:
+        Text to translate: "${text}"
+        
+        Mandatory Rules:
         - Output ONLY the translated text.
-        - No quotes, no conversational filler, no explanations.
-        - Maintain a professional, high-fidelity clinical tone.
-        - If the target is an obscure regional dialect, use the most common local phonetic equivalent.`,
+        - No quotes, no explanations, no conversational filler.
+        - Maintain a professional, high-fidelity clinical and institutional tone.
+        - If the target is an obscure regional dialect, use the most common local phonetic or script equivalent.
+        - Preserve technical accuracy for medical terms.`,
         config: { 
           temperature: 0.1,
-          systemInstruction: "You are a world-class professional translator for a global healthcare enterprise. You support all 7,100+ known human languages and dialects."
+          systemInstruction: "You are a world-class professional clinical translator. You support all known human communication vectors."
         }
       });
 

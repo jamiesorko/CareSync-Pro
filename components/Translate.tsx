@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+
+import React, { useState, useEffect, useMemo, createContext, useContext } from 'react';
 import { translationService } from '../services/translationService';
 
 interface Props {
@@ -7,11 +8,62 @@ interface Props {
 }
 
 /**
- * Universal Neural Intercept Component
- * Wraps any UI text to bridge it to any language vector defined in the selector.
+ * Normalizes technical keys (DASHBOARD_CORE -> Dashboard Core)
+ */
+const normalizeText = (text: string): string => {
+  if (!text) return '';
+  if (!text.includes('_')) return text;
+  return text
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+};
+
+/**
+ * Hook for translating raw strings (placeholders, alerts, etc.)
+ */
+export const useTranslate = (text: string, target: string) => {
+  const normalized = useMemo(() => normalizeText(text), [text]);
+  const [translated, setTranslated] = useState(normalized);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!normalized || !target || target.toLowerCase() === 'english') {
+      setTranslated(normalized);
+      return;
+    }
+
+    const run = async () => {
+      const cacheKey = `cs_v9_trans_${target.toLowerCase()}_${normalized.toLowerCase()}`;
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        setTranslated(cached);
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const result = await translationService.translate(normalized, target);
+        if (result) {
+          localStorage.setItem(cacheKey, result);
+          setTranslated(result);
+        }
+      } catch (e) {
+        setTranslated(normalized);
+      } finally {
+        setLoading(false);
+      }
+    };
+    run();
+  }, [normalized, target]);
+
+  return { translated, loading };
+};
+
+/**
+ * Component for translating React sub-trees
  */
 export const Translate: React.FC<Props> = ({ children, target }) => {
-  // 1. Recursively extract text from any React structure (arrays, nested spans, etc)
   const extractText = (node: React.ReactNode): string => {
     if (typeof node === 'string' || typeof node === 'number') return String(node);
     if (Array.isArray(node)) return node.map(extractText).join(' ');
@@ -20,57 +72,11 @@ export const Translate: React.FC<Props> = ({ children, target }) => {
   };
 
   const sourceText = useMemo(() => extractText(children).trim(), [children]);
-
-  // 2. Normalize technical keys (e.g., "OPS_DASHBOARD" -> "Ops Dashboard")
-  const normalizedText = useMemo(() => {
-    if (!sourceText || !sourceText.includes('_')) return sourceText;
-    return sourceText
-      .split('_')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
-  }, [sourceText]);
-
-  const [displayText, setDisplayText] = useState(normalizedText || sourceText);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!normalizedText || !target || target === 'English') {
-      setDisplayText(normalizedText || sourceText);
-      return;
-    }
-
-    const performTranslation = async () => {
-      const cacheKey = `caresync_v7_trans_${target.toLowerCase()}_${normalizedText}`;
-      const cached = localStorage.getItem(cacheKey);
-
-      if (cached) {
-        setDisplayText(cached);
-        return;
-      }
-
-      setLoading(true);
-      try {
-        const result = await translationService.translate(normalizedText, target);
-        if (result) {
-          localStorage.setItem(cacheKey, result);
-          setDisplayText(result);
-        }
-      } catch (e) {
-        setDisplayText(normalizedText);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    performTranslation();
-  }, [normalizedText, target]);
+  const { translated, loading } = useTranslate(sourceText, target);
 
   return (
-    <span 
-      className={`transition-all duration-300 ${loading ? 'opacity-40 blur-[2px] animate-pulse' : 'opacity-100'}`}
-      title={normalizedText !== displayText ? normalizedText : undefined}
-    >
-      {displayText}
+    <span className={`transition-opacity duration-300 ${loading ? 'opacity-40 animate-pulse' : 'opacity-100'}`}>
+      {translated}
     </span>
   );
 };

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { CareRole, User } from '../types';
 import { Fingerprint, ShieldCheck } from 'lucide-react';

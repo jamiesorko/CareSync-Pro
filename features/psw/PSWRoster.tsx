@@ -10,7 +10,7 @@ interface Props {
   language: string;
 }
 
-const PSWRoster: React.FC<Props & { language: string }> = ({ clients, onStartVisit, language }) => {
+const PSWRoster: React.FC<Props> = ({ clients, onStartVisit, language }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-in slide-in-from-bottom-4 duration-500 pb-20">
       {clients.map((client) => (
@@ -19,7 +19,9 @@ const PSWRoster: React.FC<Props & { language: string }> = ({ clients, onStartVis
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <span className="px-3 py-1 bg-orange-600/20 text-orange-400 text-[10px] font-black uppercase rounded-lg tracking-widest">{client.time}</span>
-                <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{client.sector}</span>
+                <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
+                  <Translate target={language}>{client.sector}</Translate>
+                </span>
               </div>
               <h3 className="text-3xl font-black text-white italic tracking-tighter uppercase leading-none">{client.name}</h3>
               <div className="flex flex-col gap-2 text-slate-400">
@@ -37,14 +39,12 @@ const PSWRoster: React.FC<Props & { language: string }> = ({ clients, onStartVis
               onClick={() => onStartVisit(client)}
               className="px-10 py-5 bg-white text-black rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl hover:scale-105 active:scale-95 transition-all"
             >
-              {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
               <Translate target={language}>INITIALIZE_VISIT</Translate>
             </button>
           </div>
 
           <div className="p-8 bg-white/[0.03] border border-white/5 rounded-[2.5rem] mb-8 flex-1">
              <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-4">
-               {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
                <Translate target={language}>Patient_Mobility_Vector</Translate>
              </p>
              
@@ -52,29 +52,25 @@ const PSWRoster: React.FC<Props & { language: string }> = ({ clients, onStartVis
                 <div className={`p-4 rounded-2xl border flex items-center gap-4 ${client.mobilityStatus.dementia ? 'bg-amber-500/10 border-amber-500/30 text-amber-500' : 'bg-white/5 border-white/5 text-slate-500'}`}>
                    <Brain size={18} />
                    <span className="text-[10px] font-black uppercase tracking-tighter">
-                     {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
                      <Translate target={language}>Dementia</Translate>: {client.mobilityStatus.dementia ? <Translate target={language}>YES</Translate> : <Translate target={language}>NO</Translate>}
                    </span>
                 </div>
                 <div className={`p-4 rounded-2xl border flex items-center gap-4 ${client.mobilityStatus.isBedridden ? 'bg-rose-500/10 border-rose-500/30 text-rose-500' : 'bg-white/5 border-white/5 text-slate-500'}`}>
                    <Accessibility size={18} />
                    <span className="text-[10px] font-black uppercase tracking-tighter">
-                     {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
                      <Translate target={language}>Bedridden</Translate>: {client.mobilityStatus.isBedridden ? <Translate target={language}>YES</Translate> : <Translate target={language}>NO</Translate>}
                    </span>
                 </div>
                 <div className="p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center gap-4 text-slate-300">
                    <Wind size={18} className="text-sky-400" />
                    <span className="text-[10px] font-black uppercase tracking-tighter">
-                     {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
-                     <Translate target={language}>Lift</Translate>: <Translate target={language}>{client.mobilityStatus.liftType}</Translate>
+                     <Translate target={language}>Lift</Translate>: <Translate target={language}>{client.mobilityStatus.liftType || 'None'}</Translate>
                    </span>
                 </div>
                 <div className="p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center gap-4 text-slate-300">
                    <UserCheck size={18} className="text-emerald-400" />
                    <span className="text-[10px] font-black uppercase tracking-tighter">
-                     {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
-                     <Translate target={language}>Method</Translate>: <Translate target={language}>{client.mobilityStatus.transferMethod}</Translate>
+                     <Translate target={language}>Method</Translate>: <Translate target={language}>{client.mobilityStatus.transferMethod || 'STD'}</Translate>
                    </span>
                 </div>
              </div>
@@ -82,13 +78,11 @@ const PSWRoster: React.FC<Props & { language: string }> = ({ clients, onStartVis
              <div className="mt-6 flex flex-wrap gap-2">
                 {client.mobilityStatus.useWheelchair && (
                   <span className="px-3 py-1 bg-indigo-600/20 text-indigo-400 border border-indigo-500/20 rounded text-[8px] font-black uppercase">
-                    {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
                     <Translate target={language}>Wheelchair</Translate>
                   </span>
                 )}
                 {client.mobilityStatus.useWalker && (
                   <span className="px-3 py-1 bg-indigo-600/20 text-indigo-400 border border-indigo-500/20 rounded text-[8px] font-black uppercase">
-                    {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
                     <Translate target={language}>Walker</Translate>
                   </span>
                 )}
@@ -99,7 +93,6 @@ const PSWRoster: React.FC<Props & { language: string }> = ({ clients, onStartVis
              <div className="flex gap-2">
                 {client.conditions.slice(0, 3).map(c => (
                   <span key={c} className="text-[8px] font-black text-slate-500 uppercase tracking-widest">
-                    {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
                     <Translate target={language}>{c}</Translate>
                   </span>
                 ))}
