@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { StaffMember } from '../../types';
 import Translate from '../../components/Translate';
@@ -9,9 +8,10 @@ import { UserRoundSearch, ShieldCheck, GraduationCap, UsersRound, BrainCircuit }
 interface Props {
   language: string;
   staffName: string;
+  staff: StaffMember[];
 }
 
-const HRTerminal: React.FC<Props> = ({ language, staffName }) => {
+const HRTerminal: React.FC<Props> = ({ language, staffName, staff }) => {
   const [selectedStaff, setSelectedStaff] = useState<StaffMember | null>(null);
   const [activeSubTab, setActiveSubTab] = useState<'SEARCH' | 'ANALYSIS'>('SEARCH');
 
@@ -22,7 +22,7 @@ const HRTerminal: React.FC<Props> = ({ language, staffName }) => {
           <div className="flex items-center gap-3">
              <div className="w-3 h-3 rounded-full bg-indigo-500 animate-pulse shadow-[0_0_15px_rgba(99,102,241,0.5)]"></div>
              <h1 className="text-5xl font-black tracking-tighter uppercase italic leading-none text-indigo-400">
-               <Translate target={language}>RESOURCE_CORE</Translate>
+               <Translate target={language}>RESOURCE_SIGMA_NODE</Translate>
              </h1>
           </div>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
@@ -50,14 +50,20 @@ const HRTerminal: React.FC<Props> = ({ language, staffName }) => {
         {activeSubTab === 'SEARCH' ? (
           selectedStaff ? (
              <div className="bg-slate-900 border border-white/10 p-12 rounded-[4rem] animate-in zoom-in duration-500">
-                <button onClick={() => setSelectedStaff(null)} className="text-[9px] font-black uppercase text-indigo-400 mb-8 tracking-widest">← Return to Search</button>
+                <button onClick={() => setSelectedStaff(null)} className="text-[9px] font-black uppercase text-indigo-400 mb-8 tracking-widest">
+                   ← <Translate target={language}>Return_to_Search</Translate>
+                </button>
                 <div className="flex justify-between items-start">
                    <div>
                       <h2 className="text-5xl font-black text-white italic tracking-tighter uppercase leading-none">{selectedStaff.name}</h2>
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-4">Authorized operative dossier accessible.</p>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-4">
+                         <Translate target={language}>Authorized_operative_dossier_accessible</Translate>.
+                      </p>
                    </div>
-                   <div className="bg-emerald-500/10 border border-emerald-500/30 px-6 py-2 rounded-xl">
-                      <p className="text-[8px] font-black text-emerald-500 uppercase">Weekly Hours</p>
+                   <div className="bg-emerald-500/10 border border-emerald-500/30 px-6 py-2 rounded-xl text-center">
+                      <p className="text-[8px] font-black text-emerald-500 uppercase">
+                         <Translate target={language}>Weekly_Hours</Translate>
+                      </p>
                       <p className="text-2xl font-black text-white italic">{selectedStaff.weeklyHours}h</p>
                    </div>
                 </div>
@@ -70,7 +76,7 @@ const HRTerminal: React.FC<Props> = ({ language, staffName }) => {
             />
           )
         ) : (
-          <WorkforceNexus staff={[]} language={language} />
+          <WorkforceNexus staff={staff} language={language} />
         )}
       </div>
     </div>

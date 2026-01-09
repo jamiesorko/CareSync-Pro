@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Translate } from '../components/Translate';
 import { Activity, Zap, TrendingUp, ShieldCheck } from 'lucide-react';
@@ -12,18 +11,22 @@ interface Props {
 
 export const Dashboard: React.FC<Props> = ({ lang, staffName, clients }) => {
   const stats = [
-    { label: 'Agency Health', val: '98.4%', icon: ShieldCheck, color: 'text-emerald-400' },
-    { label: 'Fleet Velocity', val: '92.1%', icon: Zap, color: 'text-sky-400' },
-    { label: 'Clinical Drift', val: '-2.4%', icon: Activity, color: 'text-rose-400' },
-    { label: 'Fiscal Delta', val: '+$14k', icon: TrendingUp, color: 'text-white' },
+    { label: 'Agency_Health', val: '98.4%', icon: ShieldCheck, color: 'text-emerald-400' },
+    { label: 'Fleet_Velocity', val: '92.1%', icon: Zap, color: 'text-sky-400' },
+    { label: 'Clinical_Drift', val: '-2.4%', icon: Activity, color: 'text-rose-400' },
+    { label: 'Fiscal_Delta', val: '+$14k', icon: TrendingUp, color: 'text-white' },
   ];
 
   return (
     <div className="space-y-10 animate-in fade-in duration-700">
       {staffName && (
         <div className="px-4">
-          <p className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.4em] mb-2">Authenticated_Node</p>
-          <h2 className="text-4xl font-black text-white uppercase italic tracking-tighter leading-none">Welcome, {staffName}</h2>
+          <p className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.4em] mb-2">
+            <Translate target={lang}>Authenticated_Node</Translate>
+          </p>
+          <h2 className="text-4xl font-black text-white uppercase italic tracking-tighter leading-none">
+             <Translate target={lang}>Welcome</Translate>, {staffName}
+          </h2>
         </div>
       )}
 
@@ -40,15 +43,21 @@ export const Dashboard: React.FC<Props> = ({ lang, staffName, clients }) => {
       </div>
 
       <div className="bg-white/5 border border-white/10 rounded-[4rem] p-12 relative overflow-hidden">
-        <h3 className="text-xl font-black italic uppercase tracking-tighter text-white mb-10">Global_Signal_Log</h3>
+        <h3 className="text-xl font-black italic uppercase tracking-tighter text-white mb-10">
+          <Translate target={lang}>Global_Signal_Log</Translate>
+        </h3>
         <div className="space-y-4">
            {(clients || [...Array(3)]).slice(0, 3).map((c: any, i: number) => (
              <div key={i} className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl flex justify-between items-center group hover:bg-white/5 transition-all">
                 <div>
                    <p className="text-sm font-black uppercase text-white tracking-tighter italic">{c?.name || `Signal_Vector_0${i+1}`}</p>
-                   <p className="text-[9px] text-slate-500 uppercase font-bold mt-1">{c?.sector || 'Sector 4'} • Geofence Verified</p>
+                   <p className="text-[9px] text-slate-500 uppercase font-bold mt-1">
+                      <Translate target={lang}>{c?.sector || 'Sector_4'}</Translate> • <Translate target={lang}>Geofence_Verified</Translate>
+                   </p>
                 </div>
-                <button className="text-[9px] font-black text-indigo-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all">Dossier</button>
+                <button className="text-[9px] font-black text-indigo-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all">
+                  <Translate target={lang}>Dossier</Translate>
+                </button>
              </div>
            ))}
         </div>
