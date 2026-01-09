@@ -24,15 +24,21 @@ const CEOPortal: React.FC<Props> = ({ language, clients, staff }) => {
     { id: 'DOMINANCE', label: 'Market_Expansion', icon: Globe }
   ];
 
+  const macroStats = [
+    { label: 'Net_Solvency', val: '$1.42M', theme: 'bg-emerald-600/10 border-emerald-500/20 text-emerald-400' },
+    { label: 'Agency_Health', val: '98.4%', theme: 'bg-indigo-600/10 border-indigo-500/20 text-indigo-400' },
+    { label: 'Market_Exposure', val: 'LOW', theme: 'bg-rose-600/10 border-rose-500/20 text-rose-400' }
+  ];
+
   return (
     <div className="space-y-12 pb-20 px-4 h-full overflow-y-auto scrollbar-hide">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div>
           <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none">
-            CEO_COMMAND
+            <Translate target={language}>CEO_COMMAND</Translate>
           </h1>
           <p className="text-[10px] font-bold text-sky-500 uppercase tracking-[0.4em] mt-3 italic">
-            Institutional Sovereignty Matrix • v6.4
+            <Translate target={language}>Institutional_Sovereignty_Matrix_v6.4</Translate>
           </p>
         </div>
         
@@ -54,18 +60,16 @@ const CEOPortal: React.FC<Props> = ({ language, clients, staff }) => {
         {activeView === 'MACRO' && (
           <div className="space-y-12">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-               <div className="bg-emerald-600/10 border border-emerald-500/20 p-10 rounded-[3rem] text-center shadow-xl">
-                  <p className="text-[9px] font-black text-emerald-400 uppercase tracking-widest mb-2">Net Solvency</p>
-                  <p className="text-5xl font-black text-white italic tracking-tighter">$1.42M</p>
-               </div>
-               <div className="bg-indigo-600/10 border border-indigo-500/20 p-10 rounded-[3rem] text-center shadow-xl">
-                  <p className="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-2">Agency Health</p>
-                  <p className="text-5xl font-black text-white italic tracking-tighter">98.4%</p>
-               </div>
-               <div className="bg-rose-600/10 border border-rose-500/20 p-10 rounded-[3rem] text-center shadow-xl">
-                  <p className="text-[9px] font-black text-rose-400 uppercase tracking-widest mb-2">Market Exposure</p>
-                  <p className="text-5xl font-black text-white italic tracking-tighter">LOW</p>
-               </div>
+               {macroStats.map((stat, i) => (
+                 <div key={i} className={`${stat.theme} border p-10 rounded-[3rem] text-center shadow-xl`}>
+                    <p className={`text-[9px] font-black uppercase tracking-widest mb-2 opacity-80`}>
+                      <Translate target={language}>{stat.label}</Translate>
+                    </p>
+                    <p className="text-5xl font-black text-white italic tracking-tighter">
+                      <Translate target={language}>{stat.val}</Translate>
+                    </p>
+                 </div>
+               ))}
             </div>
             <ChairmanCommand language={language} />
           </div>
@@ -74,8 +78,12 @@ const CEOPortal: React.FC<Props> = ({ language, clients, staff }) => {
         {activeView === 'SEARCH' && (
           <div className="max-w-4xl mx-auto space-y-12">
              <div className="bg-white/5 border border-white/10 p-12 rounded-[4rem] text-center space-y-6">
-                <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter">Tactical_Intelligence_Core</h3>
-                <p className="text-sm text-slate-500 font-medium italic max-w-md mx-auto">Interrogate the Global Census Matrix or Personnel Dossiers to visualize operational rosters.</p>
+                <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter">
+                  <Translate target={language}>Tactical_Intelligence_Core</Translate>
+                </h3>
+                <p className="text-sm text-slate-500 font-medium italic max-w-md mx-auto">
+                  <Translate target={language}>Interrogate_the_Global_Census_Matrix_or_Personnel_Dossiers_to_visualize_operational_rosters</Translate>
+                </p>
              </div>
              <SearchCommand 
                language={language}

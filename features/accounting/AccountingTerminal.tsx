@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Client } from '../../types';
 import Translate from '../../components/Translate';
@@ -23,6 +24,13 @@ const AccountingTerminal: React.FC<Props> = ({ language, staffName, clients }) =
     { id: 'RECOVERY', label: 'Revenue_Recovery', icon: HeartPulse },
     { id: 'RECEIVABLE', label: 'Receivables', icon: ReceiptText },
     { id: 'PAYABLE', label: 'Payables', icon: Truck }
+  ];
+
+  const fiscalStats = [
+    { label: 'Unpaid_Invoices', val: '$14.2k', color: 'text-rose-400' },
+    { label: 'Current_Payroll', val: '$42,901', color: 'text-white' },
+    { label: 'Tax_Reserves', val: '$8.4k', color: 'text-sky-400' },
+    { label: 'Vacation_Liability', val: '$12,204', color: 'text-emerald-400' }
   ];
 
   return (
@@ -55,17 +63,14 @@ const AccountingTerminal: React.FC<Props> = ({ language, staffName, clients }) =
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-4 mb-10">
-        {[
-          { label: 'Unpaid_Invoices', val: '$14.2k', color: 'text-rose-400' },
-          { label: 'Current_Payroll', val: '$42,901', color: 'text-white' },
-          { label: 'Tax_Reserves', val: '$8.4k', color: 'text-sky-400' },
-          { label: 'Vacation_Liability', val: '$12,204', color: 'text-emerald-400' }
-        ].map((stat, i) => (
+        {fiscalStats.map((stat, i) => (
           <div key={i} className="bg-white/5 border border-white/10 p-8 rounded-[2rem] backdrop-blur-3xl">
              <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4">
                 <Translate target={language}>{stat.label}</Translate>
              </p>
-             <p className={`text-4xl font-black ${stat.color} tracking-tighter`}>{stat.val}</p>
+             <p className={`text-4xl font-black ${stat.color} tracking-tighter`}>
+               <Translate target={language}>{stat.val}</Translate>
+             </p>
           </div>
         ))}
       </div>

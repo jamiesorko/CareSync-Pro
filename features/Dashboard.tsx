@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Translate } from '../components/Translate';
 import { Activity, Zap, TrendingUp, ShieldCheck, MapPin } from 'lucide-react';
@@ -44,7 +45,9 @@ export const Dashboard: React.FC<Props> = ({ lang, staffName, clients }) => {
             <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
               <Translate target={lang}>{s.label}</Translate>
             </p>
-            <p className="text-4xl font-black text-white italic tracking-tighter mt-1">{s.val}</p>
+            <p className="text-4xl font-black text-white italic tracking-tighter mt-1">
+              <Translate target={lang}>{s.val}</Translate>
+            </p>
           </div>
         ))}
       </div>

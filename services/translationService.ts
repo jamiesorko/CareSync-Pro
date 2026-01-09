@@ -5,8 +5,8 @@ class TranslationService {
   private ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
 
   /**
-   * Translates any UI string or data attribute into any human language or dialect.
-   * Optimized for high-velocity institutional terminology.
+   * Translates any UI string, data attribute, or numeric value into any human language.
+   * Optimized for high-velocity institutional terminology and regional number formats.
    */
   async translate(text: string, targetLanguage: string): Promise<string> {
     if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') {
@@ -16,19 +16,20 @@ class TranslationService {
     try {
       const response = await this.ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Act as a master institutional healthcare linguist. Translate the following text into exactly the language/dialect: "${targetLanguage}".
+        contents: `Act as a master institutional healthcare linguist and localization expert. 
+        Translate the following text into exactly the language/dialect: "${targetLanguage}".
         
         Source Text: "${text}"
         
-        Specific Rules:
+        Localization Rules:
         - Output ONLY the translated string.
-        - No meta-talk, quotes, or explanations.
-        - Support technical healthcare terms (e.g. Geofence, Biometric, Ledger).
-        - Use the formal, professional institutional variant of the target language.
-        - Handle scripts like Arabic, Kanji, Cyrillic, and Devanagari natively.`,
+        - Handle TECHNICAL TERMS: (e.g., Geofence, Biometric, Ledger, Solvency, Acuity).
+        - Localize NUMBERS & CURRENCY: If the text contains currency ($) or percentages (%), use the regional symbols and numeral systems (e.g., Arabic numerals vs. Western numerals) appropriate for "${targetLanguage}".
+        - Maintain the formal, high-tech, professional tone of a healthcare ERP.
+        - If the source is a code-like string (e.g., OPS_DASHBOARD), translate it as a user-friendly label.`,
         config: { 
           temperature: 0.0,
-          systemInstruction: "You are the CareSync Universal Translator Node. Accuracy and formal tone are your primary objectives."
+          systemInstruction: "You are the CareSync Universal Translation Node. Accuracy and regional number localization are your primary objectives."
         }
       });
 
