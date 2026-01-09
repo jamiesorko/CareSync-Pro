@@ -4,7 +4,7 @@ import { AppTab, CareRole } from '../types';
 import Translate from './Translate';
 import { 
   LayoutDashboard, Shield, Zap, Wallet, Database, 
-  Heart, Cpu, Radio, Users, Power, Briefcase, Target 
+  Heart, Cpu, Radio, Power, Briefcase, Target 
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -17,23 +17,22 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, lang, onLogout }) => {
   const menuItems = [
-    { id: AppTab.DASHBOARD, icon: LayoutDashboard },
-    { id: AppTab.STRATEGY, icon: Cpu },
-    { id: AppTab.CLINICAL, icon: Shield },
-    { id: AppTab.LOGISTICS, icon: Zap },
-    { id: AppTab.FISCAL, icon: Wallet },
-    { id: AppTab.VAULT, icon: Database },
-    { id: AppTab.WELLNESS, icon: Heart },
-    { id: AppTab.RESOURCE, icon: Briefcase },
-    { id: AppTab.LIVE, icon: Radio },
+    { id: AppTab.DASHBOARD, label: 'Ops_Dashboard', icon: LayoutDashboard },
+    { id: AppTab.STRATEGY, label: 'Strategic_Tabletop', icon: Cpu },
+    { id: AppTab.CLINICAL, label: 'Clinical_Governance', icon: Shield },
+    { id: AppTab.LOGISTICS, label: 'Fleet_Command', icon: Zap },
+    { id: AppTab.FISCAL, label: 'Fiscal_Ledger', icon: Wallet },
+    { id: AppTab.VAULT, label: 'Neural_Vault', icon: Database },
+    { id: AppTab.WELLNESS, label: 'Patient_Wellness', icon: Heart },
+    { id: AppTab.RESOURCE, label: 'Resource_Core', icon: Briefcase },
+    { id: AppTab.LIVE, label: 'Direct_Link', icon: Radio },
   ].filter(item => {
-    // Explicitly remove Fiscal Ledger (Accounting) access for the Director of Care role
     if (item.id === AppTab.FISCAL && role === CareRole.DOC) return false;
     return true;
   });
 
   if ([CareRole.CEO, CareRole.COO, CareRole.DOC].includes(role)) {
-    menuItems.push({ id: AppTab.ORG_COMMAND, icon: Target });
+    menuItems.splice(1, 0, { id: AppTab.ORG_COMMAND, label: 'Strategic_Moat', icon: Target });
   }
 
   return (
@@ -57,7 +56,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, lang, onLogo
           >
             <item.icon size={18} />
             <span className="text-[10px] font-black uppercase tracking-widest">
-              <Translate target={lang}>{item.id}</Translate>
+              <Translate target={lang}>{item.label}</Translate>
             </span>
           </button>
         ))}
@@ -69,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, lang, onLogo
           className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-rose-500 hover:bg-rose-500/10 transition-all font-black text-[10px] uppercase tracking-widest"
         >
           <Power size={18} />
-          <Translate target={lang}>Sign_Out</Translate>
+          <Translate target={lang}>SIGN_OUT</Translate>
         </button>
       </div>
     </aside>
