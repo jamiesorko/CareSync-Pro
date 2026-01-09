@@ -1,4 +1,3 @@
-
 import { GoogleGenAI } from "@google/genai";
 
 class TranslationService {
@@ -24,7 +23,7 @@ class TranslationService {
         Localization Rules:
         - Output ONLY the translated string.
         - Handle TECHNICAL TERMS: (e.g., Geofence, Biometric, Ledger, Solvency, Acuity).
-        - Localize NUMBERS & CURRENCY: If the text contains currency ($) or percentages (%), use the regional symbols and numeral systems (e.g., Arabic numerals vs. Western numerals) appropriate for "${targetLanguage}".
+        - Localize NUMBERS & CURRENCY: If the text contains currency symbols ($), percentages (%), or large magnitudes (1.42M, 14k), use the regional symbols and numeral systems (e.g., Arabic numerals vs. Western numerals) appropriate for "${targetLanguage}".
         - Maintain the formal, high-tech, professional tone of a healthcare ERP.
         - If the source is a code-like string (e.g., OPS_DASHBOARD), translate it as a user-friendly label.`,
         config: { 

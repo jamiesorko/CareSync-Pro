@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { shiftStabilityService, StabilityPrediction } from '../../services/shiftStabilityService';
 import { MOCK_STAFF } from '../../data/careData';
@@ -27,17 +26,25 @@ const StabilityGrid: React.FC<Props> = ({ language }) => {
     <div className="bg-white/5 border border-white/10 rounded-[3rem] p-10 backdrop-blur-3xl animate-in slide-in-from-bottom-4 duration-500">
       <div className="flex justify-between items-end mb-12">
         <div>
-          <h3 className="text-2xl font-black text-white italic tracking-tighter uppercase leading-none">Shift_Reliability_Grid</h3>
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">Predictive Burnout & Availability Simulation</p>
+          <h3 className="text-2xl font-black text-white italic tracking-tighter uppercase leading-none">
+            <Translate target={language}>Shift_Reliability_Grid</Translate>
+          </h3>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">
+             <Translate target={language}>Predictive Burnout & Availability Simulation</Translate>
+          </p>
         </div>
         <div className="flex items-center space-x-6">
            <div className="flex items-center space-x-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-              <span className="text-[9px] font-black text-emerald-500 uppercase">Secure</span>
+              <span className="text-[9px] font-black text-emerald-500 uppercase">
+                 <Translate target={language}>Secure</Translate>
+              </span>
            </div>
            <div className="flex items-center space-x-2">
               <div className="w-2 h-2 rounded-full bg-rose-500"></div>
-              <span className="text-[9px] font-black text-rose-500 uppercase">Critical</span>
+              <span className="text-[9px] font-black text-rose-500 uppercase">
+                 <Translate target={language}>Critical</Translate>
+              </span>
            </div>
         </div>
       </div>
@@ -57,7 +64,7 @@ const StabilityGrid: React.FC<Props> = ({ language }) => {
                   <p className="text-[9px] text-slate-500 font-bold uppercase">{staff.role}</p>
                 </div>
                 <div className={`text-xl font-black italic ${p.reliabilityScore < 70 ? 'text-rose-500' : 'text-emerald-400'}`}>
-                  {p.reliabilityScore}%
+                  <Translate target={language}>{`${p.reliabilityScore}%`}</Translate>
                 </div>
               </div>
               
@@ -71,14 +78,13 @@ const StabilityGrid: React.FC<Props> = ({ language }) => {
                 
                 {p.riskReason && (
                   <p className="text-[9px] text-rose-400 italic font-bold uppercase">
-                    {/* Standardized Translate prop to target */}
-                    Risk: <Translate target={language}>{p.riskReason}</Translate>
+                    <Translate target={language}>Risk</Translate>: <Translate target={language}>{p.riskReason}</Translate>
                   </p>
                 )}
 
                 {p.shouldShadowBook && (
                   <button className="w-full mt-4 py-3 bg-rose-600 text-white rounded-xl text-[8px] font-black uppercase tracking-widest shadow-lg animate-pulse">
-                    Initiate Shadow Booking
+                    <Translate target={language}>Initiate Shadow Booking</Translate>
                   </button>
                 )}
               </div>
