@@ -3,19 +3,21 @@ import React, { useState, useEffect } from 'react';
 import { geminiService } from '../services/geminiService';
 
 interface Props {
-  /* Fix: Made children optional to satisfy TSX usage where children are passed between tags */
   children?: React.ReactNode;
-  /* Fix: Allow any for target to handle cases where language prop is dynamically typed */
-  target: string | any;
+  target: string;
 }
 
 /**
  * Neural Translation Component
  * Bridges any UI text to any target language using Gemini Flash.
  */
-/* Fix: Removed React.FC to better handle children in React 18 */
-export const Translate = ({ children, target }: Props) => {
-  const sourceText = typeof children === 'string' ? children : String(children || '');
+export const Translate: React.FC<Props> = ({ children, target }) => {
+  // Convert children to a string for translation processing
+  const sourceText = React.Children.toArray(children).map(child => {
+    if (typeof child === 'string' || typeof child === 'number') return String(child);
+    return '';
+  }).join(' ');
+
   const [translated, setTranslated] = useState<string>(sourceText);
   const [loading, setLoading] = useState(false);
 

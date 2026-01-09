@@ -14,9 +14,12 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
   const personas: User[] = [
     { name: 'Jamie Sorko', role: CareRole.CEO },
     { name: 'Sarah Walker', role: CareRole.DOC },
-    { name: 'Elena R.', role: CareRole.PSW },
+    { name: 'Nyota Uhura', role: CareRole.COORDINATOR },
+    { name: 'Toby Flenderson', role: CareRole.HR_SPECIALIST },
     { name: 'Tom Hardy', role: CareRole.RN },
+    { name: 'Elena R.', role: CareRole.PSW },
     { name: 'Kevin Malone', role: CareRole.ACCOUNTANT },
+    { name: 'Robert Johnson', role: CareRole.CLIENT },
   ];
 
   return (
@@ -32,14 +35,14 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
           <div className="w-20 h-20 bg-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-indigo-600/40">
             <Fingerprint size={40} className="text-white" />
           </div>
-          <h1 className="text-3xl font-black text-white tracking-tighter uppercase italic">CareSync_Pro</h1>
-          <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em] mt-2">Authorization Required</p>
+          <h1 className="text-3xl font-black text-white tracking-tighter uppercase italic leading-none">CareSync_Pro</h1>
+          <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em] mt-3">Authorization Required</p>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 max-h-[400px] overflow-y-auto scrollbar-hide pr-2">
           {personas.map(p => (
             <button
-              key={p.name}
+              key={p.role + p.name}
               onClick={() => onLogin(p)}
               className="w-full p-5 bg-white/[0.02] border border-white/5 rounded-2xl flex justify-between items-center hover:bg-white/[0.08] hover:border-indigo-500/30 transition-all group"
             >
@@ -54,6 +57,7 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
           ))}
         </div>
       </div>
+      <p className="mt-8 text-[10px] font-bold text-slate-600 uppercase tracking-widest italic opacity-50">Precision Enterprise Healthcare Node v4.5</p>
     </div>
   );
 };

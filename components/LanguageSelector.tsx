@@ -1,5 +1,6 @@
+
 import React, { useState, useMemo } from 'react';
-import { Search, Globe, Zap } from 'lucide-react';
+import { Search, Globe, Zap, X } from 'lucide-react';
 
 interface LanguageSelectorProps {
   currentLanguage: string;
@@ -10,27 +11,19 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLanguage, on
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
 
-  // Comprehensive ISO language list (expanded for global support)
   const allLanguages = [
     "English", "Spanish", "French", "Chinese (Mandarin)", "Chinese (Cantonese)", "Hindi", "Arabic", 
-    "Portuguese", "Bengali", "Russian", "Japanese", "Punjabi", "German", "Javanese", "Wu Chinese", 
-    "Malay", "Telugu", "Vietnamese", "Korean", "Marathi", "Tamil", "Urdu", "Turkish", "Italian", 
-    "Thai", "Gujarati", "Jin Chinese", "Southern Min", "Persian", "Polish", "Pashto", "Kannada", 
-    "Xiang Chinese", "Malayalam", "Sundanese", "Hausa", "Odia", "Burmese", "Hakka Chinese", 
-    "Ukrainian", "Bhojpuri", "Tagalog", "Yoruba", "Maithili", "Uzbek", "Sindhi", "Amharic", 
-    "Fula", "Romanian", "Oromo", "Igbo", "Azerbaijani", "Awadhi", "Gan Chinese", "Cebuano", 
-    "Dutch", "Kurdish", "Serbo-Croatian", "Malagasy", "Saraiki", "Nepali", "Sinhalese", 
-    "Chittagonian", "Zhuang", "Khmer", "Turkmen", "Assamese", "Madurese", "Somali", "Marwari", 
-    "Magahi", "Haryanvi", "Hungarian", "Chhattisgarhi", "Greek", "Chewa", "Deccan", "Akan", 
-    "Kazakh", "Min Dong Chinese", "Sylheti", "Zulu", "Czech", "Kinyarwanda", "Dhundhari", 
-    "Haitian Creole", "Eastern Min", "Ilocano", "Quechua", "Kirundi", "Swedish", "Hmong", 
-    "Shona", "Uyghur", "Hiligaynon", "Mossi", "Xhosa", "Belarusian", "Balochi", "Konkani", 
-    "Hebrew", "Greek", "Finnish", "Danish", "Norwegian", "Slovak", "Bulgarian", "Lithuanian", 
-    "Latvian", "Estonian", "Icelandic", "Welsh", "Irish", "Basque", "Catalan", "Galician"
+    "Portuguese", "Bengali", "Russian", "Japanese", "Punjabi", "German", "Javanese", "Malay", 
+    "Telugu", "Vietnamese", "Korean", "Marathi", "Tamil", "Urdu", "Turkish", "Italian", 
+    "Thai", "Gujarati", "Persian", "Polish", "Pashto", "Kannada", "Malayalam", "Sundanese", 
+    "Hausa", "Odia", "Burmese", "Ukrainian", "Bhojpuri", "Tagalog", "Yoruba", "Maithili", 
+    "Uzbek", "Sindhi", "Amharic", "Fula", "Romanian", "Oromo", "Igbo", "Azerbaijani", 
+    "Dutch", "Kurdish", "Saraiki", "Nepali", "Sinhalese", "Khmer", "Turkmen", "Somali", 
+    "Greek", "Czech", "Zulu", "Swedish", "Hebrew", "Finnish", "Danish", "Norwegian"
   ];
 
   const filtered = useMemo(() => {
-    if (!query) return allLanguages.slice(0, 20);
+    if (!query) return allLanguages.slice(0, 15);
     return allLanguages.filter(l => l.toLowerCase().includes(query.toLowerCase()));
   }, [query]);
 
@@ -48,16 +41,18 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLanguage, on
       >
         <Globe size={18} className="text-indigo-400 group-hover:rotate-12 transition-transform" />
         <div className="text-left">
-          <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Global_Relay</p>
+          <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Global_Relay</p>
           <p className="text-[11px] font-black uppercase text-white tracking-tighter">{currentLanguage}</p>
         </div>
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-4 w-80 bg-[#020617] border border-white/10 rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.9)] z-[100] p-6 animate-in fade-in zoom-in-95 duration-200">
+        <div className="absolute top-full right-0 mt-4 w-80 bg-slate-950 border border-white/10 rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.9)] z-[200] p-6 animate-in fade-in zoom-in-95 duration-200">
           <div className="flex items-center justify-between mb-6">
             <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Neural_Linguist_Core</p>
-            <button onClick={() => setIsOpen(false)} className="text-slate-600 hover:text-white transition-colors">✕</button>
+            <button onClick={() => setIsOpen(false)} className="text-slate-600 hover:text-white transition-colors">
+              <X size={14} />
+            </button>
           </div>
           
           <div className="relative mb-6">
@@ -65,7 +60,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLanguage, on
             <input 
               autoFocus
               type="text"
-              placeholder="Search or type ANY dialect..."
+              placeholder="Search ANY language..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-xs text-white outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-700 italic"
@@ -100,16 +95,6 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLanguage, on
                 {lang}
               </button>
             ))}
-            
-            {filtered.length === 0 && !query && (
-              <p className="text-[10px] text-slate-700 text-center py-10 italic">Awaiting dialect signal...</p>
-            )}
-          </div>
-          
-          <div className="mt-6 pt-6 border-t border-white/5 text-center">
-            <p className="text-[8px] text-slate-600 font-bold uppercase tracking-widest leading-relaxed">
-              Supporting 7,168+ languages via real-time<br/>Multimodal Neural Interception
-            </p>
           </div>
         </div>
       )}

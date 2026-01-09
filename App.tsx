@@ -4,6 +4,8 @@ import { CareRole, AppTab, User } from './types';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Login from './features/Login';
+
+// Portals
 import CEOPortal from './features/ceo/CEOPortal';
 import COOPortal from './features/coo/COOPortal';
 import DOCPortal from './features/clinical/DOCPortal';
@@ -12,8 +14,17 @@ import PSWPortal from './features/psw/PSWPortal';
 import FinancePortal from './features/accounting/FinancePortal';
 import ClientPortal from './features/client/ClientPortal';
 import HSSPortal from './features/hss/HSSPortal';
+import HRPortal from './features/hr/HRPortal';
+import CoordinationHub from './features/CoordinationHub';
+
+// Features
 import VideoLab from './features/VideoLab';
 import LiveLab from './features/LiveLab';
+import DocumentVault from './features/DocumentVault';
+import StrategicSimulator from './features/ceo/StrategicSimulator';
+import ImageLab from './features/ImageLab';
+import SpeechLab from './features/SpeechLab';
+
 import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
 
 export default function App() {
@@ -26,23 +37,35 @@ export default function App() {
   }
 
   const renderContent = () => {
-    const props = { language, clients: MOCK_CLIENTS, staff: MOCK_STAFF, user };
+    const props = { language, clients: MOCK_CLIENTS, staff: MOCK_STAFF, user, role: user.role };
     
-    // Global features override the role-based portals
-    if (activeTab === AppTab.LIVE) return <LiveLab language={language} />;
-    if (activeTab === AppTab.WELLNESS) return <VideoLab language={language} />;
-
-    switch (user.role) {
-      case CareRole.CEO: return <CEOPortal {...props} />;
-      case CareRole.COO: return <COOPortal {...props} />;
-      case CareRole.DOC: return <DOCPortal {...props} />;
-      case CareRole.RN: 
-      case CareRole.RPN: return <RNPortal {...props} />;
-      case CareRole.PSW: return <PSWPortal {...props} />;
-      case CareRole.ACCOUNTANT: return <FinancePortal {...props} />;
-      case CareRole.CLIENT: return <ClientPortal {...props} />;
-      case CareRole.HSS: return <HSSPortal {...props} />;
-      default: return <PSWPortal {...props} />;
+    // Global features based on Active Tab
+    switch (activeTab) {
+      case AppTab.LIVE: return <LiveLab language={language} />;
+      case AppTab.WELLNESS: return <VideoLab language={language} />;
+      case AppTab.VAULT: return <DocumentVault {...props} />;
+      case AppTab.STRATEGY: return <StrategicSimulator language={language} />;
+      case AppTab.RESOURCE: return <HRPortal {...props} />;
+      case AppTab.LOGISTICS: return <CoordinationHub language={language} />;
+      case AppTab.FISCAL: return <FinancePortal language={language} />;
+      // Default to Dashboard (Role-specific Portal)
+      case AppTab.DASHBOARD:
+        switch (user.role) {
+          case CareRole.CEO: return <CEOPortal {...props} />;
+          case CareRole.COO: return <COOPortal {...props} />;
+          case CareRole.DOC: return <DOCPortal {...props} />;
+          case CareRole.RN: 
+          case CareRole.RPN: return <RNPortal {...props} />;
+          case CareRole.PSW: return <PSWPortal {...props} />;
+          case CareRole.ACCOUNTANT: return <FinancePortal {...props} />;
+          case CareRole.CLIENT: return <ClientPortal {...props} />;
+          case CareRole.HSS: return <HSSPortal {...props} />;
+          case CareRole.HR_SPECIALIST: return <HRPortal {...props} />;
+          case CareRole.COORD:
+          case CareRole.COORDINATOR: return <CoordinationHub language={language} />;
+          default: return <PSWPortal {...props} />;
+        }
+      default: return <div className="p-20 text-center opacity-20 italic">Node Access Pending...</div>;
     }
   };
 
@@ -53,7 +76,10 @@ export default function App() {
         setActive={setActiveTab} 
         role={user.role} 
         lang={language}
-        onLogout={() => setUser(null)}
+        onLogout={() => {
+          setUser(null);
+          setActiveTab(AppTab.DASHBOARD);
+        }}
       />
       <div className="flex-1 flex flex-col min-w-0 h-full relative">
         <Header 
