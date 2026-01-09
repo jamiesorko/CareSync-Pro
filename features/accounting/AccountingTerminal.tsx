@@ -45,7 +45,7 @@ const AccountingTerminal: React.FC<Props> = ({ language, staffName, clients }) =
             <button 
               key={tab.id}
               onClick={() => setActiveSubTab(tab.id as any)}
-              className={`px-6 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeSubTab === tab.id ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+              className={`px-8 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeSubTab === tab.id ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
             >
               <tab.icon size={14} />
               <Translate target={language}>{tab.label}</Translate>

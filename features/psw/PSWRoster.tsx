@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Client } from '../../types';
 import Translate from '../../components/Translate';
@@ -73,19 +72,6 @@ const PSWRoster: React.FC<Props> = ({ clients, onStartVisit, language }) => {
                      <Translate target={language}>Method</Translate>: <Translate target={language}>{client.mobilityStatus.transferMethod || 'STD'}</Translate>
                    </span>
                 </div>
-             </div>
-
-             <div className="mt-6 flex flex-wrap gap-2">
-                {client.mobilityStatus.useWheelchair && (
-                  <span className="px-3 py-1 bg-indigo-600/20 text-indigo-400 border border-indigo-500/20 rounded text-[8px] font-black uppercase">
-                    <Translate target={language}>Wheelchair</Translate>
-                  </span>
-                )}
-                {client.mobilityStatus.useWalker && (
-                  <span className="px-3 py-1 bg-indigo-600/20 text-indigo-400 border border-indigo-500/20 rounded text-[8px] font-black uppercase">
-                    <Translate target={language}>Walker</Translate>
-                  </span>
-                )}
              </div>
           </div>
 

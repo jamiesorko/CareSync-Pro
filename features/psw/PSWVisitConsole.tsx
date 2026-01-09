@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Client, CareRole, AlertType } from '../../types';
 import { Translate } from '../../components/Translate';
@@ -55,7 +54,6 @@ const PSWVisitConsole: React.FC<Props> = ({ client, onClockOut, onAlert, languag
                  <div className="flex items-center gap-2">
                    {isNurse ? <Stethoscope className="text-sky-400" size={14} /> : isSocial ? <HeartPulse className="text-purple-400" size={14} /> : <UserCheck className="text-orange-500" size={14} />}
                    <span className={`text-[8px] font-black uppercase tracking-widest ${isNurse ? 'text-sky-400' : isSocial ? 'text-purple-400' : 'text-orange-500'}`}>
-                     {/* Standardized Translate prop to target */}
                      <Translate target={language}>{role}</Translate>_ENCOUNTER
                    </span>
                  </div>
@@ -68,7 +66,6 @@ const PSWVisitConsole: React.FC<Props> = ({ client, onClockOut, onAlert, languag
            </div>
            <button onClick={handleFinalize} className={`px-10 py-5 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl transition-all ${isNurse ? 'bg-sky-600' : isSocial ? 'bg-purple-600' : 'bg-rose-600'}`}>
              <CheckCircle2 size={14} className="inline mr-2" /> 
-             {/* Standardized Translate prop to target */}
              <Translate target={language}>{isNurse ? 'CLOSE_ENCOUNTER' : 'CLOCK_OUT'}</Translate>
            </button>
         </div>
@@ -79,12 +76,10 @@ const PSWVisitConsole: React.FC<Props> = ({ client, onClockOut, onAlert, languag
                 <div className="flex items-center gap-3 mb-4">
                    <Edit3 size={16} className="text-indigo-400" />
                    <h4 className="text-xs font-black text-indigo-400 uppercase tracking-widest italic">
-                     {/* Standardized Translate prop to target */}
                      <Translate target={language}>Coordinator_Directive</Translate>
                    </h4>
                 </div>
                 <p className="text-sm text-white font-bold italic leading-relaxed">
-                  {/* Standardized Translate prop to target */}
                   "<Translate target={language}>{client.coordinatorInstructions}</Translate>"
                 </p>
              </div>
@@ -92,7 +87,6 @@ const PSWVisitConsole: React.FC<Props> = ({ client, onClockOut, onAlert, languag
 
            <h3 className="text-xl font-black text-white italic tracking-tighter uppercase flex items-center gap-4 mb-12">
               <ShieldAlert size={20} className={isNurse ? 'text-sky-400' : isSocial ? 'text-purple-400' : 'text-orange-400'} />
-              {/* Standardized Translate prop to target */}
               <Translate target={language}>
                 {isNurse ? 'Clinical_Practice_Directives' : isSocial ? 'Social_Intercept_Tasks' : 'Personal_Support_Routine'}
               </Translate>
@@ -108,7 +102,6 @@ const PSWVisitConsole: React.FC<Props> = ({ client, onClockOut, onAlert, languag
                     className="w-8 h-8 rounded-xl bg-black border-white/10 text-emerald-500 focus:ring-0"
                    />
                    <p className={`text-lg font-bold italic tracking-tight ${checkedTasks[i] ? 'text-emerald-400 line-through opacity-40' : 'text-slate-200'}`}>
-                     {/* Standardized Translate prop to target */}
                      <Translate target={language}>{task}</Translate>
                    </p>
                 </label>
@@ -122,40 +115,33 @@ const PSWVisitConsole: React.FC<Props> = ({ client, onClockOut, onAlert, languag
       <div className="lg:col-span-4 space-y-6">
         <div className="bg-rose-600/10 border border-rose-500/30 rounded-[3.5rem] p-10 shadow-2xl flex flex-col gap-4">
            <h3 className="text-xs font-black uppercase tracking-widest text-rose-500 mb-6 italic">
-             {/* Standardized Translate prop to target */}
              <Translate target={language}>Tactical_Alerts</Translate>
            </h3>
            
            {isNurse ? (
              <>
                <button onClick={() => triggerSignal('MEDICAL', "Medication Error Details:")} className="p-6 bg-rose-600 text-white rounded-3xl font-black text-[10px] uppercase text-left shadow-xl hover:scale-105 transition-all">
-                  {/* Standardized Translate prop to target */}
                   <Translate target={language}>Medication Error / Refusal</Translate>
                </button>
                <button onClick={() => triggerSignal('CLINICAL', "Deterioration Markers:")} className="p-6 bg-slate-900 border border-white/10 text-rose-400 rounded-3xl font-black text-[10px] uppercase text-left hover:bg-rose-600 hover:text-white transition-all">
-                  {/* Standardized Translate prop to target */}
                   <Translate target={language}>Acute Clinical Change</Translate>
                </button>
              </>
            ) : isSocial ? (
              <>
                <button onClick={() => triggerSignal('UNSAFE_ENV', "Dwelling Hazards:")} className="p-6 bg-rose-600 text-white rounded-3xl font-black text-[10px] uppercase text-left shadow-xl hover:scale-105 transition-all">
-                  {/* Standardized Translate prop to target */}
                   <Translate target={language}>Dwelling Hazard Detected</Translate>
                </button>
                <button onClick={() => triggerSignal('SWELLING', "Social Drift:")} className="p-6 bg-slate-900 border border-white/10 text-rose-400 rounded-3xl font-black text-[10px] uppercase text-left hover:bg-rose-600 hover:text-white transition-all">
-                  {/* Standardized Translate prop to target */}
                   <Translate target={language}>Bio-Social Instability</Translate>
                </button>
              </>
            ) : (
              <>
                <button onClick={() => triggerSignal('FALL', "Fall Details:")} className="p-6 bg-rose-600 text-white rounded-3xl font-black text-[10px] uppercase text-left shadow-xl hover:scale-105 transition-all">
-                  {/* Standardized Translate prop to target */}
                   <Translate target={language}>Patient Fall / Impact</Translate>
                </button>
                <button onClick={() => triggerSignal('COMPLAINT', "Complaint Details:")} className="p-6 bg-slate-900 border border-white/10 text-rose-400 rounded-3xl font-black text-[10px] uppercase text-left hover:bg-rose-600 hover:text-white transition-all">
-                  {/* Standardized Translate prop to target */}
                   <Translate target={language}>Subject Complaint</Translate>
                </button>
              </>
@@ -164,11 +150,9 @@ const PSWVisitConsole: React.FC<Props> = ({ client, onClockOut, onAlert, languag
 
         <div className="bg-amber-600/10 border border-amber-500/30 rounded-[3.5rem] p-10 flex flex-col gap-4">
            <h3 className="text-xs font-black uppercase tracking-widest text-amber-500 mb-6 italic">
-             {/* Standardized Translate prop to target */}
              <Translate target={language}>Logistics</Translate>
            </h3>
            <button onClick={() => triggerSignal('NOT_SEEN', "Confirm Not Seen")} className="p-6 bg-amber-600 text-white rounded-3xl font-black text-[10px] uppercase shadow-xl animate-pulse">
-              {/* Standardized Translate prop to target */}
               <Translate target={language}>Subject_Not_Found</Translate>
            </button>
         </div>

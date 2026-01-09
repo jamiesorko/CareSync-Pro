@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Translate } from '../components/Translate';
 import { Activity, Zap, TrendingUp, ShieldCheck, MapPin } from 'lucide-react';
@@ -77,9 +76,14 @@ export const Dashboard: React.FC<Props> = ({ lang, staffName, clients }) => {
                       </div>
                    </div>
                 </div>
-                <button className="px-6 py-2 bg-white/5 border border-white/10 rounded-xl text-[9px] font-black text-indigo-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all">
-                  <Translate target={lang}>DOSSIER</Translate>
-                </button>
+                <div className="flex items-center gap-6">
+                   <span className="text-[10px] font-black text-slate-500 uppercase italic">
+                      <Translate target={lang}>{c.currentVisitStatus}</Translate>
+                   </span>
+                   <button className="px-6 py-2 bg-white/5 border border-white/10 rounded-xl text-[9px] font-black text-indigo-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all">
+                     <Translate target={lang}>DOSSIER</Translate>
+                   </button>
+                </div>
              </div>
            ))}
         </div>
