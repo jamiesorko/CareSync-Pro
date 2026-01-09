@@ -24,7 +24,7 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
 
   return (
     <div className="h-full space-y-12 animate-in fade-in duration-1000 pb-24">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 px-4">
         <div>
           <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none text-amber-500">
              <Translate target={language}>Market_Dominance_Hub</Translate>
@@ -44,7 +44,7 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 px-4">
         <div className="lg:col-span-4 space-y-6 flex flex-col">
            <div className="bg-slate-900 border border-white/10 p-10 rounded-[3rem] shadow-2xl flex flex-col">
               <h3 className="text-xs font-black uppercase tracking-widest text-slate-500 mb-10 italic">
@@ -70,6 +70,9 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
                       onChange={(e) => setService(e.target.value)}
                       className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-sm text-white focus:outline-none"
                     />
+                    <p className="mt-2 text-[8px] font-black text-slate-600 uppercase">
+                      <Translate target={language}>Current_Filter</Translate>: <Translate target={language}>{service}</Translate>
+                    </p>
                  </div>
               </div>
            </div>

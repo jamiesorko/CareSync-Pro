@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { revenueRecoveryService, RecoveryCase } from '../../services/revenueRecoveryService';
 import { Translate } from '../../components/Translate';
@@ -32,31 +31,38 @@ const RevenueRecoveryNexus: React.FC<Props> = ({ language }) => {
 
   return (
     <div className="space-y-12 animate-in fade-in duration-700 pb-24 h-full">
-      <div className="flex justify-between items-end">
+      <div className="flex justify-between items-end px-4">
         <div>
-          <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none">Fiscal_Recovery_Nexus</h2>
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">Autonomous Evidence Harvesting & Multi-Payer Reconciliation</p>
+          <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none">
+            <Translate target={language}>Fiscal_Recovery_Nexus</Translate>
+          </h2>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">
+            <Translate target={language}>Autonomous_Evidence_Harvesting_&_Multi-Payer_Reconciliation</Translate>
+          </p>
         </div>
         <button 
           onClick={simulateIngestion}
           disabled={isProcessing}
           className="px-8 py-4 bg-emerald-600 text-white rounded-2xl text-[10px] font-black uppercase shadow-xl hover:scale-105 active:scale-95 transition-all"
         >
-          {isProcessing ? 'SCANNING_LEDGERS...' : 'INGEST_REMITTANCE_SIGNAL'}
+          {isProcessing ? <Translate target={language}>SCANNING_LEDGERS</Translate> : <Translate target={language}>INGEST_REMITTANCE_SIGNAL</Translate>}
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* Case List */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 px-4">
         <div className="lg:col-span-7 bg-slate-950 border border-white/10 rounded-[3rem] p-10 shadow-2xl relative overflow-hidden flex flex-col min-h-[600px]">
            <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat"></div>
-           <h3 className="text-xl font-black text-white italic tracking-tighter uppercase mb-10">Reclamation_Queue</h3>
+           <h3 className="text-xl font-black text-white italic tracking-tighter uppercase mb-10">
+              <Translate target={language}>Reclamation_Queue</Translate>
+           </h3>
            
            <div className="flex-1 space-y-4 overflow-y-auto scrollbar-hide pr-2">
               {cases.length === 0 && !isProcessing && (
                 <div className="h-full flex flex-col items-center justify-center opacity-30 italic text-center px-20">
                    <span className="text-5xl mb-6">💰</span>
-                   <p className="text-sm font-bold text-white uppercase tracking-widest leading-relaxed">No active leakage signals. Ingest a government remittance advice to initialize harvesting.</p>
+                   <p className="text-sm font-bold text-white uppercase tracking-widest leading-relaxed">
+                     <Translate target={language}>No active leakage signals. Ingest a government remittance advice to initialize harvesting.</Translate>
+                   </p>
                 </div>
               )}
               
@@ -64,36 +70,42 @@ const RevenueRecoveryNexus: React.FC<Props> = ({ language }) => {
                 <div 
                   key={i} 
                   onClick={() => setSelectedCase(c)}
-                  className={`p-8 rounded-3xl border transition-all cursor-pointer group ${selectedCase?.claimId === c.claimId ? 'bg-emerald-600/10 border-emerald-500/50' : 'bg-white/[0.03] border-white/5 hover:bg-white/5'}`}
+                  className={`p-8 rounded-3xl border transition-all cursor-pointer group ${selectedCase?.claimId === c.claimId ? 'bg-emerald-600/10 border-emerald-500/50 shadow-xl' : 'bg-white/[0.03] border-white/5 hover:bg-white/5'}`}
                 >
                   <div className="flex justify-between items-start mb-6">
                     <div>
                       <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-1">{c.claimId}</p>
-                      <h4 className="text-lg font-black text-white italic tracking-tighter uppercase leading-none">{c.patientName}</h4>
+                      <h4 className="text-lg font-black text-white italic tracking-tighter uppercase leading-none">
+                        <Translate target={language}>{c.patientName}</Translate>
+                      </h4>
                     </div>
                     <div className="text-right">
                        <p className={`text-xl font-black italic ${c.billedAmount - c.paidAmount > 0 ? 'text-rose-500' : 'text-emerald-500'}`}>
-                         -${(c.billedAmount - c.paidAmount).toLocaleString()}
+                         <Translate target={language}>{`-$${(c.billedAmount - c.paidAmount).toLocaleString()}`}</Translate>
                        </p>
-                       <p className="text-[7px] font-bold text-slate-600 uppercase mt-1">Unpaid Delta</p>
+                       <p className="text-[7px] font-bold text-slate-600 uppercase mt-1">
+                         <Translate target={language}>Unpaid Delta</Translate>
+                       </p>
                     </div>
                   </div>
 
                   <div className="flex justify-between items-end">
                      <div>
                         <span className="px-2 py-0.5 bg-rose-600/20 text-rose-500 text-[8px] font-black rounded uppercase mr-2">{c.denialCode}</span>
-                        <span className="text-[10px] text-slate-500 font-medium italic">"{c.denialReason}"</span>
+                        <span className="text-[10px] text-slate-500 font-medium italic">"<Translate target={language}>{c.denialReason}</Translate>"</span>
                      </div>
                      {c.status === 'PENDING_HARVEST' ? (
                         <button 
                           onClick={(e) => { e.stopPropagation(); runHarvest(c); }}
                           className="px-6 py-2 bg-white text-black rounded-xl text-[9px] font-black uppercase tracking-widest shadow-xl"
                         >
-                          Harvest_Evidence
+                          <Translate target={language}>Harvest_Evidence</Translate>
                         </button>
                      ) : (
                         <div className="flex items-center space-x-2">
-                           <p className="text-[10px] font-black text-emerald-400 uppercase italic">{c.recoveryProbability}% Probability</p>
+                           <p className="text-[10px] font-black text-emerald-400 uppercase italic">
+                             <Translate target={language}>{`${c.recoveryProbability}% Probability`}</Translate>
+                           </p>
                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
                         </div>
                      )}
@@ -103,62 +115,76 @@ const RevenueRecoveryNexus: React.FC<Props> = ({ language }) => {
            </div>
         </div>
 
-        {/* Evidence & Appeal Panel */}
         <div className="lg:col-span-5 flex flex-col space-y-6">
            <div className="bg-white/5 border border-white/10 rounded-[3rem] p-10 flex-1 backdrop-blur-3xl overflow-hidden flex flex-col relative shadow-3xl">
-              <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-                <span className="text-6xl font-black italic">APPEAL</span>
-              </div>
-              <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-10 italic">Forensic_Evidence_Matrix</h3>
+              <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-10 italic">
+                <Translate target={language}>Forensic_Evidence_Matrix</Translate>
+              </h3>
               
               {selectedCase ? (
                 <div className="flex-1 flex flex-col space-y-8 animate-in slide-in-from-right-4 duration-500">
                    <div className="space-y-4">
-                      <p className="text-[8px] font-black text-emerald-400 uppercase tracking-widest">Neural Proof Points</p>
+                      <p className="text-[8px] font-black text-emerald-400 uppercase tracking-widest">
+                        <Translate target={language}>Neural Proof Points</Translate>
+                      </p>
                       {selectedCase.evidenceFound.length > 0 ? (
                         selectedCase.evidenceFound.map((e, i) => (
                           <div key={i} className="flex items-start gap-3 p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-2xl">
                              <div className="w-1 h-1 rounded-full bg-emerald-500 mt-1.5"></div>
-                             <p className="text-[11px] text-slate-200 font-medium leading-relaxed italic">"{e}"</p>
+                             <p className="text-[11px] text-slate-200 font-medium leading-relaxed italic">"<Translate target={language}>{e}</Translate>"</p>
                           </div>
                         ))
                       ) : (
-                        <p className="text-[10px] text-slate-600 italic">Click "Harvest Evidence" to interrogate the Neural Vault for this case.</p>
+                        <p className="text-[10px] text-slate-600 italic">
+                          <Translate target={language}>Interrogate the Neural Vault for this case by harvesting evidence.</Translate>
+                        </p>
                       )}
                    </div>
 
                    {selectedCase.draftedAppeal && (
                      <div className="flex-1 flex flex-col min-h-0">
-                        <p className="text-[8px] font-black text-sky-400 uppercase tracking-widest mb-4">Strategic Appeal Draft</p>
+                        <p className="text-[8px] font-black text-sky-400 uppercase tracking-widest mb-4">
+                          <Translate target={language}>Strategic Appeal Draft</Translate>
+                        </p>
                         <div className="flex-1 bg-white/[0.02] border border-white/10 p-6 rounded-2xl overflow-y-auto scrollbar-hide text-[10px] font-mono text-slate-400 leading-relaxed">
-                           {selectedCase.draftedAppeal}
+                           <Translate target={language}>{selectedCase.draftedAppeal}</Translate>
                         </div>
                      </div>
                    )}
 
                    <div className="pt-6 border-t border-white/5 grid grid-cols-2 gap-4">
-                      <button className="py-4 bg-white/5 border border-white/10 text-slate-500 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10">Modify_Draft</button>
+                      <button className="py-4 bg-white/5 border border-white/10 text-slate-500 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10">
+                        <Translate target={language}>Modify_Draft</Translate>
+                      </button>
                       <button 
                         disabled={!selectedCase.draftedAppeal}
                         onClick={() => alert("SIGNAL_LOCKED: Appeal transmitted to Payer Gateway via EDI 275.")}
                         className="py-4 bg-emerald-600 text-white rounded-2xl text-[9px] font-black uppercase tracking-widest shadow-xl shadow-emerald-500/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-30"
                       >
-                        Authorize_Recovery
+                        <Translate target={language}>Authorize_Recovery</Translate>
                       </button>
                    </div>
                 </div>
               ) : (
                 <div className="flex-1 flex flex-col items-center justify-center opacity-20 italic px-10 text-center">
-                  <p className="text-sm">Select a discrepancy from the queue to initialize forensic harvesting.</p>
+                  <p className="text-sm">
+                    <Translate target={language}>Select a discrepancy from the queue to initialize forensic harvesting.</Translate>
+                  </p>
                 </div>
               )}
            </div>
 
            <div className="bg-emerald-600 p-10 rounded-[3rem] text-white shadow-2xl shadow-emerald-600/30">
-              <p className="text-[9px] font-black uppercase tracking-widest mb-4 opacity-60">Recovery_Directive</p>
+              <p className="text-[9px] font-black uppercase tracking-widest mb-4 opacity-60">
+                 <Translate target={language}>Recovery_Directive</Translate>
+              </p>
               <div className="flex items-baseline space-x-2 mb-8">
-                 <p className="text-6xl font-black italic tracking-tighter">$14.2k</p>
-                 <span className="text-xs font-black opacity-50 uppercase">Recoverable_Liquid</span>
+                 <p className="text-6xl font-black italic tracking-tighter">
+                   <Translate target={language}>$14.2k</Translate>
+                 </p>
+                 <span className="text-xs font-black opacity-50 uppercase tracking-widest">
+                   <Translate target={language}>Recoverable_Liquid</Translate>
+                 </span>
               </div>
            </div>
         </div>

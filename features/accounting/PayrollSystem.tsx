@@ -38,7 +38,9 @@ const PayrollSystem: React.FC<Props> = ({ language }) => {
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                     <div className="text-center md:text-left">
                        <p className="text-[8px] font-black text-slate-600 uppercase mb-1"><Translate target={language}>Gross_Liquid</Translate></p>
-                       <p className="text-xl font-black text-white"><Translate target={language}>{formatCAD(payroll.gross)}</Translate></p>
+                       <p className="text-xl font-black text-white">
+                         <Translate target={language}>{formatCAD(payroll.gross)}</Translate>
+                       </p>
                     </div>
                     <div className="text-center md:text-left">
                        <p className="text-[8px] font-black text-rose-500 uppercase mb-1"><Translate target={language}>Stat_Deductions</Translate></p>
