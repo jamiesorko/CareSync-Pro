@@ -102,7 +102,7 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
                       <h3 className="text-4xl font-black text-white italic tracking-tighter uppercase leading-none">
                          <Translate target={language}>Attack_Surface</Translate>: <Translate target={language}>{strategy.region}</Translate>
                       </h3>
-                      <p className="mt-4">
+                      <p className="mt-4 text-xs font-bold uppercase text-slate-500">
                         <Translate target={language}>Service_Line</Translate>: <Translate target={language}>{strategy.targetServiceLine}</Translate>
                       </p>
                    </div>

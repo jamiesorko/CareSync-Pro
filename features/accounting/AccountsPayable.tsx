@@ -35,7 +35,7 @@ const AccountsPayable: React.FC<Props> = ({ language }) => {
               <div>
                 <p className="text-sm font-black text-white uppercase italic">{p.vendor}</p>
                 <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">
-                  <Translate target={language}>{p.category}</Translate> • <Translate target={language}>Due</Translate>: {p.date}
+                  <Translate target={language}>{p.category}</Translate> • <Translate target={language}>Due</Translate>: <Translate target={language}>{p.date}</Translate>
                 </p>
                 <div className="mt-2 flex items-center space-x-2">
                   <span className={`text-[8px] font-black px-2 py-0.5 rounded ${
@@ -80,7 +80,7 @@ const AccountsPayable: React.FC<Props> = ({ language }) => {
                   <Translate target={language}>{r.item}</Translate> (x{r.quantity})
                 </p>
                 <p className="text-[9px] text-slate-500 font-bold uppercase">
-                   <Translate target={language}>Requested_by</Translate>: {r.staffName} • {r.timestamp}
+                   <Translate target={language}>Requested_by</Translate>: <Translate target={language}>{r.staffName}</Translate> • <Translate target={language}>{r.timestamp}</Translate>
                 </p>
                 <div className="mt-2">
                    <span className={`text-[8px] font-black px-2 py-0.5 rounded ${

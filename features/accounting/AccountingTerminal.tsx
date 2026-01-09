@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Client } from '../../types';
 import { Translate } from '../../components/Translate';
@@ -64,7 +63,7 @@ const AccountingTerminal: React.FC<Props> = ({ language, staffName, clients }) =
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-4 mb-10">
         {fiscalStats.map((stat, i) => (
-          <div key={i} className="bg-white/5 border border-white/10 p-8 rounded-[2rem] backdrop-blur-3xl">
+          <div key={i} className="bg-white/5 border border-white/10 p-8 rounded-[2rem] backdrop-blur-3xl text-center">
              <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4">
                 <Translate target={language}>{stat.label}</Translate>
              </p>
