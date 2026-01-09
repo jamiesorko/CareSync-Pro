@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { marketDominanceService } from '../../services/marketDominanceService';
 import { DominanceStrategy } from '../../types';
@@ -103,6 +102,9 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
                       <h3 className="text-4xl font-black text-white italic tracking-tighter uppercase leading-none">
                          <Translate target={language}>Attack_Surface</Translate>: <Translate target={language}>{strategy.region}</Translate>
                       </h3>
+                      <p className="mt-4">
+                        <Translate target={language}>Service_Line</Translate>: <Translate target={language}>{strategy.targetServiceLine}</Translate>
+                      </p>
                    </div>
                    <div className="bg-white/5 border border-white/10 px-6 py-2 rounded-xl text-center">
                       <p className="text-[8px] font-black text-slate-500 uppercase">

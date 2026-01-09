@@ -1,4 +1,3 @@
-
 import { GoogleGenAI } from "@google/genai";
 
 class TranslationService {
@@ -24,7 +23,7 @@ class TranslationService {
         Mandatory Rules:
         - Output ONLY the translated string.
         - TECHNICAL TERMS: (Geofence, Biometric, Ledger, Solvency, Acuity) must use professional equivalents.
-        - LOCALIZATION: If the text contains currency ($), percentages (%), or large numbers (1.42M, 14k), format them exactly as expected in "${targetLanguage}" (e.g., decimal marks, currency symbol placement).
+        - LOCALIZATION: If the text contains currency ($), percentages (%), or large numbers (1.42M, 14k, LOW/HIGH), format them exactly as expected in "${targetLanguage}" (e.g., decimal marks, currency symbol placement, translated magnitude suffixes).
         - Maintain the high-tech, urgent, professional tone of a CEO/COO terminal.
         - Translate snake_case (OPS_DASHBOARD) as clean user labels.`,
         config: { 

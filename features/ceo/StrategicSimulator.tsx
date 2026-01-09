@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { StrategicScenario } from '../../types';
 import { businessSimulationService } from '../../services/businessSimulationService';

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { MOCK_STAFF } from '../../data/careData';
 import { telemetryService } from '../../services/telemetryService';
@@ -69,7 +68,9 @@ const WarRoom: React.FC<Props> = ({ language }) => {
                 <div className="relative">
                    <div className="w-4 h-4 bg-rose-500 rounded-full shadow-[0_0_20px_#f43f5e] border-2 border-white"></div>
                    <div className="absolute top-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black/80 border border-white/10 px-3 py-1 rounded-lg">
-                      <p className="text-[8px] font-black text-white uppercase tracking-widest">{s.name}</p>
+                      <p className="text-[8px] font-black text-white uppercase tracking-widest">
+                        <Translate target={language}>{s.name}</Translate>
+                      </p>
                    </div>
                 </div>
              </div>
@@ -97,7 +98,9 @@ const WarRoom: React.FC<Props> = ({ language }) => {
                 <div key={s.id} className="p-6 bg-white/[0.03] border border-white/5 rounded-2xl group hover:bg-white/10 transition-all">
                    <div className="flex justify-between items-start mb-4">
                       <div>
-                         <p className="text-xs font-black text-white uppercase italic">{s.name}</p>
+                         <p className="text-xs font-black text-white uppercase italic">
+                           <Translate target={language}>{s.name}</Translate>
+                         </p>
                          <p className="text-[8px] text-slate-600 font-bold uppercase">
                             <Translate target={language}>{String(s.role)}</Translate> • <Translate target={language}>{s.homeSector}</Translate>
                          </p>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Client } from '../../types';
 import { Translate } from '../../components/Translate';
