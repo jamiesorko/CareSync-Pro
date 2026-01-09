@@ -5,7 +5,8 @@ import Translate from '../../components/Translate';
 import TruthMediationSuite from './TruthMediationSuite';
 import ProtocolArchitect from '../doc/ProtocolArchitect';
 import BioTrajectoryHub from './BioTrajectoryHub';
-import { ShieldCheck, Stethoscope, FileText, Activity } from 'lucide-react';
+import SearchCommand from '../SearchCommand';
+import { ShieldCheck, Stethoscope, FileText, Activity, Search } from 'lucide-react';
 
 interface Props {
   language: string;
@@ -14,8 +15,8 @@ interface Props {
 }
 
 const DOCPortal: React.FC<Props> = ({ language, user, clients }) => {
-  const [activeTab, setActiveTab] = useState<'TRUTH' | 'FORGE' | 'CHRONO'>('TRUTH');
-  const staffName = user.name;
+  const [activeTab, setActiveTab] = useState<'SEARCH' | 'TRUTH' | 'FORGE' | 'CHRONO'>('SEARCH');
+  const [focusTarget, setFocusTarget] = useState<Client | StaffMember | null>(null);
 
   const stats = [
     { label: 'Clinical Fidelity', val: '99.8%', icon: ShieldCheck, color: 'text-emerald-400' },
@@ -31,24 +32,25 @@ const DOCPortal: React.FC<Props> = ({ language, user, clients }) => {
           <div className="flex items-center gap-3">
              <div className="w-3 h-3 rounded-full bg-rose-500 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.5)]"></div>
              <h1 className="text-5xl font-black tracking-tighter uppercase italic leading-none text-rose-500">
-               DOC_CLINICAL_COMMAND
+               DOC_COMMAND
              </h1>
           </div>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
-            Clinical Governance & Truth Synthesis • {staffName}
+            Governance & Interrogative Search • {user.name}
           </p>
         </div>
         
         <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl shadow-2xl">
           {[
-            { id: 'TRUTH', label: 'Truth_Mediation' },
-            { id: 'FORGE', label: 'Protocol_Architect' },
-            { id: 'CHRONO', label: 'Bio_Trajectory' }
+            { id: 'SEARCH', label: 'Census_Search', icon: Search },
+            { id: 'TRUTH', label: 'Truth_Mediation', icon: Activity },
+            { id: 'FORGE', label: 'Protocol_Architect', icon: FileText },
+            { id: 'CHRONO', label: 'Bio_Trajectory', icon: Activity }
           ].map(tab => (
             <button 
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-10 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === tab.id ? 'bg-rose-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+              className={`px-8 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeTab === tab.id ? 'bg-rose-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
             >
               <Translate target={language}>{tab.label}</Translate>
             </button>
@@ -67,6 +69,18 @@ const DOCPortal: React.FC<Props> = ({ language, user, clients }) => {
       </div>
 
       <div className="min-h-[600px] animate-in slide-in-from-bottom-4 duration-700">
+        {activeTab === 'SEARCH' && (
+          <div className="max-w-4xl mx-auto space-y-12">
+             <div className="text-center py-10 opacity-50 italic">
+               <p className="text-sm font-medium">Interrogate specific personnel or patient signals to view rosters.</p>
+             </div>
+             <SearchCommand 
+               language={language}
+               onSelectClient={(c) => { setFocusTarget(c); setActiveTab('CHRONO'); }}
+               onSelectStaff={(s) => { alert(`Signal Intercept: Opening schedule for ${s.name}`); }}
+             />
+          </div>
+        )}
         {activeTab === 'TRUTH' && <TruthMediationSuite language={language} clients={clients} />}
         {activeTab === 'FORGE' && <ProtocolArchitect language={language} />}
         {activeTab === 'CHRONO' && <BioTrajectoryHub language={language} clients={clients} />}

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { CareRole, AppTab, User } from './types';
 import Sidebar from './components/Sidebar';
@@ -44,7 +45,9 @@ export default function App() {
       case AppTab.STRATEGY: return <StrategicSimulator language={language} />;
       case AppTab.RESOURCE: return <HRTerminal {...props} />;
       case AppTab.LOGISTICS: return <CoordinationHub language={language} />;
-      case AppTab.FISCAL: return <AccountingTerminal {...props} />;
+      case AppTab.FISCAL: 
+        if (user.role === CareRole.DOC) break; // Security Guard: DOC cannot see Accounting
+        return <AccountingTerminal {...props} />;
     }
 
     // Role-Based Landing Logic

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { AppTab, CareRole } from '../types';
-import { Translate } from './Translate';
+import Translate from './Translate';
 import { 
   LayoutDashboard, Shield, Zap, Wallet, Database, 
   Heart, Cpu, Radio, Users, Power, Briefcase, Target 
@@ -26,7 +26,11 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, lang, onLogo
     { id: AppTab.WELLNESS, icon: Heart },
     { id: AppTab.RESOURCE, icon: Briefcase },
     { id: AppTab.LIVE, icon: Radio },
-  ];
+  ].filter(item => {
+    // Explicitly remove Fiscal Ledger (Accounting) access for the Director of Care role
+    if (item.id === AppTab.FISCAL && role === CareRole.DOC) return false;
+    return true;
+  });
 
   if ([CareRole.CEO, CareRole.COO, CareRole.DOC].includes(role)) {
     menuItems.push({ id: AppTab.ORG_COMMAND, icon: Target });
