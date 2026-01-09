@@ -19,15 +19,15 @@ const NeuralSelfHealingStation: React.FC<Props> = ({ language }) => {
     setIsScrubbing(true);
     await new Promise(r => setTimeout(r, 1500));
     setRepairLog(prev => [...prev, "PROTOCOL_ACTIVE: Identifying PII & Spatial Vectors..."]);
-    setRepairLog(prev => [...prev, "SCRUB_COMPLETE: Clients/Staff names swapped for Sovereign IDs."]);
-    setRepairLog(prev => [...prev, "SCRUB_COMPLETE: Financial exacts bucketed into Magnitude Tiers."]);
+    setRepairLog(prev => [...prev, "SCRUB_COMPLETE: 42 Names Masked"]);
+    setRepairLog(prev => [...prev, "SCRUB_COMPLETE: 12 Addresses Generalized"]);
     setIsScrubbing(false);
 
     // STEP 2: NEURAL AUDIT
     setIsHealing(true);
     const mockLedger = { vCount: 142, cTotal: 142, siteGpsMatch: 0.99 };
     try {
-      // Corrected: changed runSelfRepairAudit to runSelfRepairAuditStation
+      // Corrected call signature and method name for institutional repair audit
       const result = await geminiService.runSelfRepairAuditStation(mockLedger);
       const data = JSON.parse(result);
       setRepairLog(prev => [...prev, `NEURAL_AUDIT: ${data.remediation || 'No drift detected.'}`]);

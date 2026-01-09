@@ -5,7 +5,7 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Login from './features/Login';
 
-// Portals
+// Import Modular Portal Programs
 import CEOPortal from './features/ceo/CEOPortal';
 import COOPortal from './features/coo/COOPortal';
 import DOCPortal from './features/clinical/DOCPortal';
@@ -17,13 +17,11 @@ import HSSPortal from './features/hss/HSSPortal';
 import HRPortal from './features/hr/HRPortal';
 import CoordinationHub from './features/CoordinationHub';
 
-// Features
+// Global Feature Modules
 import VideoLab from './features/VideoLab';
 import LiveLab from './features/LiveLab';
 import DocumentVault from './features/DocumentVault';
 import StrategicSimulator from './features/ceo/StrategicSimulator';
-import ImageLab from './features/ImageLab';
-import SpeechLab from './features/SpeechLab';
 
 import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
 
@@ -36,10 +34,11 @@ export default function App() {
     return <Login onLogin={setUser} language={language} onLanguageChange={setLanguage} />;
   }
 
-  const renderContent = () => {
+  // MODULAR ROUTING ENGINE
+  const renderProgram = () => {
     const props = { language, clients: MOCK_CLIENTS, staff: MOCK_STAFF, user, role: user.role };
     
-    // Global features based on Active Tab
+    // 1. Check for Global Overrides (Tabs that aren't the Dashboard)
     switch (activeTab) {
       case AppTab.LIVE: return <LiveLab language={language} />;
       case AppTab.WELLNESS: return <VideoLab language={language} />;
@@ -48,24 +47,23 @@ export default function App() {
       case AppTab.RESOURCE: return <HRPortal {...props} />;
       case AppTab.LOGISTICS: return <CoordinationHub language={language} />;
       case AppTab.FISCAL: return <FinancePortal language={language} />;
-      // Default to Dashboard (Role-specific Portal)
-      case AppTab.DASHBOARD:
-        switch (user.role) {
-          case CareRole.CEO: return <CEOPortal {...props} />;
-          case CareRole.COO: return <COOPortal {...props} />;
-          case CareRole.DOC: return <DOCPortal {...props} />;
-          case CareRole.RN: 
-          case CareRole.RPN: return <RNPortal {...props} />;
-          case CareRole.PSW: return <PSWPortal {...props} />;
-          case CareRole.ACCOUNTANT: return <FinancePortal {...props} />;
-          case CareRole.CLIENT: return <ClientPortal {...props} />;
-          case CareRole.HSS: return <HSSPortal {...props} />;
-          case CareRole.HR_SPECIALIST: return <HRPortal {...props} />;
-          case CareRole.COORD:
-          case CareRole.COORDINATOR: return <CoordinationHub language={language} />;
-          default: return <PSWPortal {...props} />;
-        }
-      default: return <div className="p-20 text-center opacity-20 italic">Node Access Pending...</div>;
+      case AppTab.ORG_COMMAND: return <CEOPortal {...props} />;
+    }
+
+    // 2. Default to Role-Based Dashboards
+    switch (user.role) {
+      case CareRole.CEO: return <CEOPortal {...props} />;
+      case CareRole.COO: return <COOPortal {...props} />;
+      case CareRole.DOC: return <DOCPortal {...props} />;
+      case CareRole.RN: 
+      case CareRole.RPN: return <RNPortal {...props} />;
+      case CareRole.PSW: return <PSWPortal {...props} />;
+      case CareRole.ACCOUNTANT: return <FinancePortal language={language} />;
+      case CareRole.CLIENT: return <ClientPortal language={language} clients={MOCK_CLIENTS} user={user} />;
+      case CareRole.HSS: return <HSSPortal language={language} clients={MOCK_CLIENTS} />;
+      case CareRole.COORDINATOR: return <CoordinationHub language={language} />;
+      case CareRole.HR_SPECIALIST: return <HRPortal {...props} />;
+      default: return <PSWPortal {...props} />;
     }
   };
 
@@ -90,7 +88,7 @@ export default function App() {
         />
         <main className="flex-1 overflow-y-auto scrollbar-hide p-4 lg:p-8 relative">
           <div className="max-w-7xl mx-auto h-full animate-fade-up">
-            {renderContent()}
+            {renderProgram()}
           </div>
         </main>
       </div>

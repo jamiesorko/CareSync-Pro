@@ -26,6 +26,7 @@ const ResilienceEngine: React.FC<Props> = ({ language }) => {
                 activeSubTab === tab ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'
               }`}
             >
+              {/* Standardized Translate prop to target */}
               <Translate target={language}>{tab}</Translate>
             </button>
           ))}

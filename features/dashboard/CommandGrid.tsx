@@ -18,6 +18,7 @@ interface Props {
 const CommandGrid: React.FC<Props> = ({ setActiveTab }) => {
   const nodes = [
     { id: AppTab.DASHBOARD, label: 'Ops Dashboard', sub: 'Global Telemetry', icon: LayoutDashboard, color: 'text-sky-400', bg: 'bg-sky-400/10' },
+    // Corrected enum property names to match updated AppTab in types.ts
     { id: AppTab.SCHEDULE, label: 'Roster Deployment', sub: 'Fleet Logistics', icon: CalendarDays, color: 'text-orange-400', bg: 'bg-orange-400/10' },
     { id: AppTab.CLINICAL_COMMAND, label: 'Clinical Intel', sub: 'Director Oversight', icon: ShieldAlert, color: 'text-rose-400', bg: 'bg-rose-400/10' },
     { id: AppTab.COORDINATION, label: 'Census Matrix', sub: 'Dispatcher Grid', icon: Users, color: 'text-indigo-400', bg: 'bg-indigo-400/10' },

@@ -8,15 +8,15 @@ interface Props {
 }
 
 /**
- * Neural Translation Component
+ * Modular Translation Component
  * Bridges any UI text to any target language using Gemini Flash.
  */
 export const Translate: React.FC<Props> = ({ children, target }) => {
-  // Convert children to a string for translation processing
+  // Extract text from ReactNode safely
   const sourceText = React.Children.toArray(children).map(child => {
     if (typeof child === 'string' || typeof child === 'number') return String(child);
     return '';
-  }).join(' ');
+  }).join(' ').trim();
 
   const [translated, setTranslated] = useState<string>(sourceText);
   const [loading, setLoading] = useState(false);
@@ -28,7 +28,7 @@ export const Translate: React.FC<Props> = ({ children, target }) => {
     }
 
     const runTranslation = async () => {
-      const cacheKey = `cs_v4_trans_${target}_${sourceText}`;
+      const cacheKey = `cs_v5_trans_${target}_${sourceText}`;
       const cached = localStorage.getItem(cacheKey);
 
       if (cached) {

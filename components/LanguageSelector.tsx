@@ -11,20 +11,25 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLanguage, on
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
 
-  const allLanguages = [
-    "English", "Spanish", "French", "Chinese (Mandarin)", "Chinese (Cantonese)", "Hindi", "Arabic", 
-    "Portuguese", "Bengali", "Russian", "Japanese", "Punjabi", "German", "Javanese", "Malay", 
-    "Telugu", "Vietnamese", "Korean", "Marathi", "Tamil", "Urdu", "Turkish", "Italian", 
-    "Thai", "Gujarati", "Persian", "Polish", "Pashto", "Kannada", "Malayalam", "Sundanese", 
-    "Hausa", "Odia", "Burmese", "Ukrainian", "Bhojpuri", "Tagalog", "Yoruba", "Maithili", 
-    "Uzbek", "Sindhi", "Amharic", "Fula", "Romanian", "Oromo", "Igbo", "Azerbaijani", 
-    "Dutch", "Kurdish", "Saraiki", "Nepali", "Sinhalese", "Khmer", "Turkmen", "Somali", 
-    "Greek", "Czech", "Zulu", "Swedish", "Hebrew", "Finnish", "Danish", "Norwegian"
+  // Extended common list + neural search for "all others"
+  const languages = [
+    "English", "Spanish", "French", "Chinese (Mandarin)", "Hindi", "Arabic", 
+    "Portuguese", "Bengali", "Russian", "Japanese", "Punjabi", "German", 
+    "Javanese", "Malay", "Telugu", "Vietnamese", "Korean", "Marathi", 
+    "Tamil", "Urdu", "Turkish", "Italian", "Thai", "Gujarati", "Persian", 
+    "Polish", "Pashto", "Kannada", "Malayalam", "Sundanese", "Hausa", 
+    "Burmese", "Odia", "Ukrainian", "Yoruba", "Maithili", "Uzbek", "Sindhi", 
+    "Amharic", "Fula", "Romanian", "Oromo", "Igbo", "Azerbaijani", "Dutch", 
+    "Kurdish", "Serbo-Croatian", "Malagasy", "Saraiki", "Nepali", "Sinhalese", 
+    "Chittagonian", "Zhuang", "Khmer", "Turkmen", "Assamese", "Madurese", 
+    "Somali", "Marwari", "Magahi", "Haryanvi", "Hungarian", "Greek", "Czech", 
+    "Zulu", "Quechua", "Kirundi", "Swedish", "Hmong", "Shona", "Uyghur", 
+    "Hiligaynon", "Mossi", "Xhosa", "Belarusian", "Balochi", "Konkani"
   ];
 
   const filtered = useMemo(() => {
-    if (!query) return allLanguages.slice(0, 15);
-    return allLanguages.filter(l => l.toLowerCase().includes(query.toLowerCase()));
+    if (!query) return languages.slice(0, 15);
+    return languages.filter(l => l.toLowerCase().includes(query.toLowerCase()));
   }, [query]);
 
   const handleSelect = (lang: string) => {
@@ -60,7 +65,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLanguage, on
             <input 
               autoFocus
               type="text"
-              placeholder="Search ANY language..."
+              placeholder="Search or type ANY language..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-xs text-white outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-700 italic"
@@ -71,7 +76,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLanguage, on
           </div>
           
           <div className="max-h-72 overflow-y-auto space-y-1 pr-2 scrollbar-hide">
-            {query && !allLanguages.some(l => l.toLowerCase() === query.toLowerCase()) && (
+            {query && !languages.some(l => l.toLowerCase() === query.toLowerCase()) && (
                <button 
                 onClick={() => handleSelect(query)}
                 className="w-full text-left p-4 rounded-2xl bg-indigo-600/10 border border-indigo-500/20 group hover:bg-indigo-600/20 transition-all mb-4"
