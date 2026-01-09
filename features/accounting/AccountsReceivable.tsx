@@ -33,7 +33,7 @@ const AccountsReceivable: React.FC<Props> = ({ language }) => {
                 </p>
                 <div className="mt-4 flex items-center space-x-3">
                   <span className={`text-[9px] font-black px-3 py-1 rounded-full uppercase ${
-                    inv.status === 'PAID' ? 'bg-emerald-500/10 text-emerald-500' : 
+                    inv.status === 'PAID' ? 'bg-emerald-500/10 text-emerald-400' : 
                     inv.status === 'OVERDUE' ? 'bg-rose-500/20 text-rose-500 animate-pulse' : 'bg-sky-500/10 text-sky-400'
                   }`}>
                     <Translate target={language}>{inv.status}</Translate>

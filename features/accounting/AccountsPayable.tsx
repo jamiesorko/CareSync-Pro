@@ -35,19 +35,21 @@ const AccountsPayable: React.FC<Props> = ({ language }) => {
               <div>
                 <p className="text-sm font-black text-white uppercase italic">{p.vendor}</p>
                 <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">
-                  <Translate target={language}>{p.category}</Translate> • <Translate target={language}>Due</Translate>: {p.dueDate}
+                  <Translate target={language}>{p.category}</Translate> • <Translate target={language}>Due</Translate>: {p.date}
                 </p>
                 <div className="mt-2 flex items-center space-x-2">
                   <span className={`text-[8px] font-black px-2 py-0.5 rounded ${
                     p.status === 'PAID' ? 'bg-emerald-500/20 text-emerald-500' : 
                     p.status === 'VERIFIED' ? 'bg-sky-500/20 text-sky-400' : 'bg-rose-500/20 text-rose-500'
                   }`}>
-                    {p.status}
+                    <Translate target={language}>{p.status}</Translate>
                   </span>
                 </div>
               </div>
               <div className="text-right flex items-center space-x-4">
-                <p className="text-lg font-black text-white tracking-tighter">-${p.amount.toLocaleString()}</p>
+                <p className="text-lg font-black text-white tracking-tighter">
+                  <Translate target={language}>{`-$${p.amount.toLocaleString()}`}</Translate>
+                </p>
                 <div className="flex space-x-2">
                   {p.status === 'UNVERIFIED' && (
                     <button onClick={() => verifyPayable(p.id)} className="px-4 py-2 bg-sky-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-all">
@@ -74,7 +76,9 @@ const AccountsPayable: React.FC<Props> = ({ language }) => {
           {supplyRequests.map(r => (
             <div key={r.id} className="p-6 bg-white/[0.03] border border-white/5 rounded-2xl flex justify-between items-center">
               <div>
-                <p className="text-sm font-black text-white italic">{r.item} (x{r.quantity})</p>
+                <p className="text-sm font-black text-white italic">
+                  <Translate target={language}>{r.item}</Translate> (x{r.quantity})
+                </p>
                 <p className="text-[9px] text-slate-500 font-bold uppercase">
                    <Translate target={language}>Requested_by</Translate>: {r.staffName} • {r.timestamp}
                 </p>
@@ -82,7 +86,9 @@ const AccountsPayable: React.FC<Props> = ({ language }) => {
                    <span className={`text-[8px] font-black px-2 py-0.5 rounded ${
                      r.status === 'DELIVERED' ? 'bg-emerald-500/20 text-emerald-500' :
                      r.status === 'ORDERED' ? 'bg-sky-500/20 text-sky-400' : 'bg-amber-500/20 text-amber-500'
-                   }`}>{r.status}</span>
+                   }`}>
+                     <Translate target={language}>{r.status}</Translate>
+                   </span>
                 </div>
               </div>
               {r.status === 'PENDING' && (

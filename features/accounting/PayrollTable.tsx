@@ -9,8 +9,6 @@ interface Props {
 }
 
 const PayrollTable: React.FC<Props> = ({ records, language }) => {
-  const [editingId, setEditingId] = useState<string | null>(null);
-
   const formatCurrency = (num: number) => new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(num);
 
   const StatusBadge = ({ status }: { status: string }) => {
