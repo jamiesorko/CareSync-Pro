@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { Client } from '../../types';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 import PayrollSystem from './PayrollSystem';
 import FiscalHealthCockpit from './FiscalHealthCockpit';
 import RevenueRecoveryNexus from './RevenueRecoveryNexus';
@@ -47,12 +48,12 @@ const AccountingTerminal: React.FC<Props> = ({ language, staffName, clients }) =
           </p>
         </div>
         
-        <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl shadow-2xl">
+        <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl shadow-2xl overflow-x-auto scrollbar-hide">
           {tabs.map(tab => (
             <button 
               key={tab.id}
               onClick={() => setActiveSubTab(tab.id as any)}
-              className={`px-8 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeSubTab === tab.id ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+              className={`px-8 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 whitespace-nowrap ${activeSubTab === tab.id ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
             >
               <tab.icon size={14} />
               <Translate target={language}>{tab.label}</Translate>

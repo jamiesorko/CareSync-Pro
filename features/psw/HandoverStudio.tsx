@@ -39,7 +39,7 @@ const HandoverStudio: React.FC<Props> = ({ client, lastNote, language, onFinaliz
              </p>
            </div>
            <div className={`px-4 py-1.5 rounded-full border ${asset?.urgency === 'HIGH' ? 'bg-rose-500/10 border-rose-500/20 text-rose-500' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500'} text-[8px] font-black uppercase tracking-widest animate-pulse`}>
-             {isForging ? <Translate target={language}>Processing_Vectors</Translate> : <Translate target={language}>{`${asset?.urgency}_RISK_VECTOR`}</Translate>}
+             {isForging ? <Translate target={language}>Processing</Translate> : <Translate target={language}>{`${asset?.urgency}_RISK`}</Translate>}
            </div>
         </div>
 
@@ -72,7 +72,7 @@ const HandoverStudio: React.FC<Props> = ({ client, lastNote, language, onFinaliz
                   </h4>
                   <div className="bg-white/[0.03] border border-white/5 p-8 rounded-3xl min-h-[140px]">
                     <p className="text-sm text-slate-200 italic leading-relaxed">
-                       <Translate target={language}>{asset?.criticalAlertText || ""}</Translate>
+                       "<Translate target={language}>{asset?.criticalAlertText || ""}</Translate>"
                     </p>
                   </div>
                 </div>
@@ -81,25 +81,11 @@ const HandoverStudio: React.FC<Props> = ({ client, lastNote, language, onFinaliz
                      <Translate target={language}>Biometric_Drift</Translate>
                   </h4>
                   <div className="bg-white/[0.03] border border-white/5 p-8 rounded-3xl min-h-[140px]">
-                    <p className="text-sm text-sky-400 font-mono uppercase">
-                       <Translate target={language}>SIGNAL_ANALYSIS</Translate>: <Translate target={language}>{asset?.biometricDeltaWarning || ""}</Translate>
+                    <p className="text-sm text-sky-400 font-mono uppercase tracking-tighter">
+                       <Translate target={language}>SIGNAL</Translate>: <Translate target={language}>{asset?.biometricDeltaWarning || ""}</Translate>
                     </p>
                   </div>
                 </div>
-              </div>
-
-              <div className="bg-indigo-600/5 border border-indigo-500/20 p-8 rounded-3xl">
-                 <h4 className="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-4 italic">
-                    <Translate target={language}>Parity_Guard_Check</Translate>
-                 </h4>
-                 <div className="space-y-3">
-                    <div className="flex items-center space-x-3">
-                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-                       <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">
-                          <Translate target={language}>Documentation_matches_clinical_vitals</Translate>
-                       </p>
-                    </div>
-                 </div>
               </div>
             </>
           )}
@@ -107,14 +93,14 @@ const HandoverStudio: React.FC<Props> = ({ client, lastNote, language, onFinaliz
 
         <div className="p-12 border-t border-white/5 bg-white/[0.02] flex gap-6">
            <button onClick={onCancel} className="flex-1 py-6 rounded-2xl bg-white/5 border border-white/10 text-slate-500 font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all">
-             <Translate target={language}>Return_to_Logs</Translate>
+             <Translate target={language}>Abort</Translate>
            </button>
            <button 
              disabled={isForging}
              onClick={onFinalize}
              className="flex-[2] py-6 rounded-2xl bg-white text-black font-black text-[10px] uppercase tracking-[0.4em] shadow-2xl shadow-sky-500/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-30"
            >
-             <Translate target={language}>AUTHORIZE_HANDOVER_CLOCK_OUT</Translate>
+             <Translate target={language}>AUTHORIZE_HANDOVER</Translate>
            </button>
         </div>
       </div>
