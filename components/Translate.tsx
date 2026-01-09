@@ -9,16 +9,18 @@ interface Props {
 
 /**
  * Universal Neural Intercept Component
- * Wraps any UI text to bridge it to any of the 7,000+ world languages.
+ * Bridges any UI text to any language vector defined in the selector.
  */
 export const Translate: React.FC<Props> = ({ children, target }) => {
-  // 1. Safely extract text from any React structure
-  const sourceText = useMemo(() => {
-    return React.Children.toArray(children)
-      .map(child => (typeof child === 'string' || typeof child === 'number' ? String(child) : ''))
-      .join(' ')
-      .trim();
-  }, [children]);
+  // 1. Recursively extract text from any React structure
+  const extractText = (node: React.ReactNode): string => {
+    if (typeof node === 'string' || typeof node === 'number') return String(node);
+    if (Array.isArray(node)) return node.map(extractText).join('');
+    if (React.isValidElement(node)) return extractText(node.props.children);
+    return '';
+  };
+
+  const sourceText = useMemo(() => extractText(children).trim(), [children]);
 
   // 2. Normalize technical keys (e.g., "OPS_DASHBOARD" -> "Ops Dashboard")
   const normalizedText = useMemo(() => {
@@ -39,7 +41,7 @@ export const Translate: React.FC<Props> = ({ children, target }) => {
     }
 
     const performTranslation = async () => {
-      const cacheKey = `csp_v6_cache_${target.toLowerCase()}_${normalizedText}`;
+      const cacheKey = `trans_v2_${target.toLowerCase()}_${normalizedText}`;
       const cached = localStorage.getItem(cacheKey);
 
       if (cached) {
@@ -62,7 +64,7 @@ export const Translate: React.FC<Props> = ({ children, target }) => {
     };
 
     performTranslation();
-  }, [normalizedText, target, sourceText]);
+  }, [normalizedText, target]);
 
   return (
     <span 

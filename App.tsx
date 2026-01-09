@@ -11,10 +11,10 @@ import COOPortal from './features/coo/COOPortal';
 import DOCPortal from './features/clinical/DOCPortal';
 import RNPortal from './features/rn/RNPortal';
 import PSWPortal from './features/psw/PSWPortal';
-import FinancePortal from './features/accounting/FinancePortal';
+import AccountingTerminal from './features/accounting/AccountingTerminal';
 import ClientPortal from './features/client/ClientPortal';
 import HSSPortal from './features/hss/HSSPortal';
-import HRPortal from './features/hr/HRPortal';
+import HRTerminal from './features/hr/HRTerminal';
 import CoordinationHub from './features/CoordinationHub';
 
 // Shared Features
@@ -35,7 +35,7 @@ export default function App() {
   }
 
   const renderActiveProgram = () => {
-    const props = { language, clients: MOCK_CLIENTS, staff: MOCK_STAFF, user, role: user.role };
+    const props = { language, clients: MOCK_CLIENTS, staff: MOCK_STAFF, user, role: user.role, staffName: user.name };
     
     // Feature-specific routing
     switch (activeTab) {
@@ -43,9 +43,9 @@ export default function App() {
       case AppTab.WELLNESS: return <VideoLab language={language} />;
       case AppTab.VAULT: return <DocumentVault {...props} />;
       case AppTab.STRATEGY: return <StrategicSimulator language={language} />;
-      case AppTab.RESOURCE: return <HRPortal {...props} />;
+      case AppTab.RESOURCE: return <HRTerminal {...props} />;
       case AppTab.LOGISTICS: return <CoordinationHub language={language} />;
-      case AppTab.FISCAL: return <FinancePortal language={language} />;
+      case AppTab.FISCAL: return <AccountingTerminal {...props} />;
     }
 
     // Role-specific dashboard routing
@@ -56,11 +56,11 @@ export default function App() {
       case CareRole.RN: 
       case CareRole.RPN: return <RNPortal {...props} />;
       case CareRole.PSW: return <PSWPortal {...props} />;
-      case CareRole.ACCOUNTANT: return <FinancePortal language={language} />;
-      case CareRole.CLIENT: return <ClientPortal language={language} clients={MOCK_CLIENTS} user={user} />;
-      case CareRole.HSS: return <HSSPortal language={language} clients={MOCK_CLIENTS} />;
+      case CareRole.ACCOUNTANT: return <AccountingTerminal {...props} />;
+      case CareRole.CLIENT: return <ClientPortal {...props} />;
+      case CareRole.HSS: return <HSSPortal {...props} />;
       case CareRole.COORDINATOR: return <CoordinationHub language={language} />;
-      case CareRole.HR_SPECIALIST: return <HRPortal {...props} />;
+      case CareRole.HR_SPECIALIST: return <HRTerminal {...props} />;
       default: return <PSWPortal {...props} />;
     }
   };

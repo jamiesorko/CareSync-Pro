@@ -4,6 +4,10 @@ import { GoogleGenAI } from "@google/genai";
 class TranslationService {
   private ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
 
+  /**
+   * Universal Neural Translation
+   * Bridges UI text to ANY language defined by the user.
+   */
   async translate(text: string, targetLanguage: string): Promise<string> {
     if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') {
       return text;
@@ -12,22 +16,22 @@ class TranslationService {
     try {
       const response = await this.ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Translate the following healthcare enterprise UI text precisely to ${targetLanguage}: "${text}".
+        contents: `Translate the following healthcare enterprise text to ${targetLanguage}: "${text}".
         
         Rules:
         - Output ONLY the translated text.
-        - No quotes, no explanations.
-        - Maintain the professional, high-tech tone of a medical ERP.
-        - If the target is a specific regional dialect, prioritize local terminology.`,
+        - No quotes or conversational filler.
+        - Maintain a professional, high-tech clinical tone.
+        - If the target is a regional dialect, use local idioms.`,
         config: { 
           temperature: 0.1,
-          systemInstruction: "You are a world-class professional translator for a global healthcare enterprise."
+          systemInstruction: "You are a world-class professional translator for a global healthcare enterprise. You support all 7,000+ world languages and dialects."
         }
       });
 
       return response.text?.trim() || text;
     } catch (error) {
-      console.error("[NEURAL_LINGUIST_ERROR]:", error);
+      console.error("[TRANSLATION_SIGNAL_LOST]:", error);
       return text; // Fallback to original text on failure
     }
   }
