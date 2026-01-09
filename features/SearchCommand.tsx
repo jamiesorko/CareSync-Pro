@@ -13,7 +13,9 @@ interface Props {
 
 const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClient }) => {
   const [query, setQuery] = useState('');
-  const { translated: placeholder } = useTranslate("Search_Field_Staff_or_Patient_by_name", language);
+  const { translated: placeholder } = useTranslate("Search by Personnel Name or Patient ID", language);
+  const { translated: resultsHeaderStaff } = useTranslate("Personnel Records Found", language);
+  const { translated: resultsHeaderClients } = useTranslate("Census Matrix Found", language);
 
   const results = useMemo(() => {
     if (query.length < 2) return { staff: [], clients: [] };
@@ -25,10 +27,10 @@ const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClien
   }, [query]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-4xl mx-auto">
       <div className="relative group">
-        <div className="absolute inset-0 bg-indigo-500/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity rounded-[3rem]"></div>
-        <div className="relative bg-slate-900 border border-white/10 rounded-[2.5rem] p-3 flex items-center shadow-2xl backdrop-blur-2xl">
+        <div className="absolute inset-0 bg-indigo-500/10 blur-3xl rounded-[3rem]"></div>
+        <div className="relative bg-slate-900 border border-white/10 rounded-[2.5rem] p-3 flex items-center shadow-2xl backdrop-blur-xl">
           <div className="w-16 h-16 flex items-center justify-center text-indigo-500">
             <Search size={24} />
           </div>
@@ -37,26 +39,15 @@ const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClien
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={placeholder}
-            className="flex-1 bg-transparent border-none text-2xl font-black text-white outline-none placeholder:text-slate-700 italic px-4 tracking-tighter"
+            className="flex-1 bg-transparent border-none text-xl font-black text-white outline-none placeholder:text-slate-700 italic px-4"
           />
-          <div className="hidden md:flex flex-col items-end px-8 border-l border-white/5">
-            <p className="text-[8px] font-black text-indigo-500 uppercase tracking-[0.4em] leading-none mb-1">
-              <Translate target={language}>INTERCEPT_STATUS</Translate>
-            </p>
-            <p className="text-[10px] font-black text-white uppercase tracking-widest">
-              <Translate target={language}>ACTIVE_HANDSHAKE</Translate>
-            </p>
-          </div>
         </div>
       </div>
 
       {(results.staff.length > 0 || results.clients.length > 0) ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-top-6 duration-700">
-          {/* Staff Results */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-top-4 duration-500">
           <div className="space-y-4">
-            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] ml-6 flex items-center gap-3">
-              <Users size={14} className="text-indigo-400" /> <Translate target={language}>PERSONNEL_RECORDS</Translate>
-            </h4>
+            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-6">{resultsHeaderStaff}</h4>
             {results.staff.map(s => (
               <button 
                 key={s.id}
@@ -64,26 +55,18 @@ const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClien
                 className="w-full p-8 bg-white/[0.02] border border-white/5 rounded-[2.5rem] hover:bg-white/5 hover:border-indigo-500/30 transition-all flex justify-between items-center group text-left"
               >
                 <div>
-                  <p className="text-lg font-black text-white uppercase italic tracking-tighter leading-none mb-2">{s.name}</p>
-                  <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">
+                  <p className="text-lg font-black text-white uppercase italic tracking-tighter">{s.name}</p>
+                  <p className="text-[9px] font-bold text-slate-500 uppercase mt-1">
                     <Translate target={language}>{s.role}</Translate> • <Translate target={language}>{s.homeSector}</Translate>
                   </p>
                 </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-[8px] font-black text-indigo-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all">
-                    <Translate target={language}>Interrogate_Schedule</Translate>
-                  </span>
-                  <ArrowRight size={18} className="text-slate-700 group-hover:text-indigo-400 transition-colors" />
-                </div>
+                <ArrowRight size={18} className="text-slate-700 group-hover:text-indigo-400 transition-colors" />
               </button>
             ))}
           </div>
 
-          {/* Client Results */}
           <div className="space-y-4">
-            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] ml-6 flex items-center gap-3">
-              <User size={14} className="text-emerald-400" /> <Translate target={language}>CENSUS_MATRIX</Translate>
-            </h4>
+            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-6">{resultsHeaderClients}</h4>
             {results.clients.map(c => (
               <button 
                 key={c.id}
@@ -91,32 +74,25 @@ const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClien
                 className="w-full p-8 bg-white/[0.02] border border-white/5 rounded-[2.5rem] hover:bg-white/5 hover:border-emerald-500/30 transition-all flex justify-between items-center group text-left"
               >
                 <div>
-                  <p className="text-lg font-black text-white uppercase italic tracking-tighter leading-none mb-2">{c.name}</p>
-                  <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">
-                    <Translate target={language}>{c.sector}</Translate> • <Translate target={language}>Risk</Translate>: <Translate target={language}>{c.risk?.level || 'STD'}</Translate>
+                  <p className="text-lg font-black text-white uppercase italic tracking-tighter">{c.name}</p>
+                  <p className="text-[9px] font-bold text-slate-500 uppercase mt-1">
+                    <Translate target={language}>{c.sector}</Translate>
                   </p>
                 </div>
-                <div className="flex items-center gap-4">
-                   <span className="text-[8px] font-black text-emerald-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all">
-                     <Translate target={language}>Open_Dossier</Translate>
-                   </span>
-                   <ArrowRight size={18} className="text-slate-700 group-hover:text-emerald-400 transition-colors" />
-                </div>
+                <ArrowRight size={18} className="text-slate-700 group-hover:text-emerald-400 transition-colors" />
               </button>
             ))}
           </div>
         </div>
       ) : query.length >= 2 ? (
-        <div className="p-24 text-center bg-white/[0.02] border border-dashed border-white/5 rounded-[4rem] opacity-30 italic">
-          <p className="text-base font-medium">
-            <Translate target={language}>NO_SIGNALS_DETECTED_FOR</Translate> "{query}"
-          </p>
+        <div className="p-24 text-center opacity-30 italic">
+          <Translate target={language}>No signals found in the registry.</Translate>
         </div>
       ) : (
         <div className="p-32 text-center opacity-10 flex flex-col items-center">
           <Shield size={64} strokeWidth={1} className="mb-6" />
-          <p className="text-sm font-black uppercase tracking-[0.3em] italic">
-            <Translate target={language}>AWAITING_AUTHORIZATION_QUERY</Translate>
+          <p className="text-sm font-black uppercase tracking-widest italic">
+            <Translate target={language}>Enter credentials to interrogate registry</Translate>
           </p>
         </div>
       )}

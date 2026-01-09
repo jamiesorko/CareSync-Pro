@@ -1,12 +1,9 @@
+
 import React, { useState } from 'react';
-import { CareRole } from '../../types';
+import { StaffMember } from '../../types';
 import Translate from '../../components/Translate';
+import SearchCommand from '../SearchCommand';
 import WorkforceNexus from './WorkforceNexus';
-import StaffManager from './StaffManager';
-import ComplianceManager from './ComplianceManager';
-import HiringHub from './HiringHub';
-import RetentionIntelligence from './RetentionIntelligence';
-import { MOCK_STAFF } from '../../data/careData';
 import { UserRoundSearch, ShieldCheck, GraduationCap, UsersRound, BrainCircuit } from 'lucide-react';
 
 interface Props {
@@ -15,15 +12,8 @@ interface Props {
 }
 
 const HRTerminal: React.FC<Props> = ({ language, staffName }) => {
-  const [activeSubTab, setActiveSubTab] = useState<'NEXUS' | 'STAFF' | 'COMPLIANCE' | 'RECRUITMENT' | 'RETENTION'>('NEXUS');
-
-  const tabs = [
-    { id: 'NEXUS', label: 'Workforce_Nexus', icon: UserRoundSearch },
-    { id: 'STAFF', label: 'Roster_Logic', icon: UsersRound },
-    { id: 'COMPLIANCE', label: 'Verification', icon: ShieldCheck },
-    { id: 'RECRUITMENT', label: 'Recruitment', icon: GraduationCap },
-    { id: 'RETENTION', label: 'Retention', icon: BrainCircuit }
-  ];
+  const [selectedStaff, setSelectedStaff] = useState<StaffMember | null>(null);
+  const [activeSubTab, setActiveSubTab] = useState<'SEARCH' | 'ANALYSIS'>('SEARCH');
 
   return (
     <div className="space-y-10 animate-in fade-in duration-700 h-full overflow-y-auto scrollbar-hide">
@@ -32,34 +22,56 @@ const HRTerminal: React.FC<Props> = ({ language, staffName }) => {
           <div className="flex items-center gap-3">
              <div className="w-3 h-3 rounded-full bg-indigo-500 animate-pulse shadow-[0_0_15px_rgba(99,102,241,0.5)]"></div>
              <h1 className="text-5xl font-black tracking-tighter uppercase italic leading-none text-indigo-400">
-               <Translate target={language}>RESOURCE_SIGMA_NODE</Translate>
+               <Translate target={language}>RESOURCE_CORE</Translate>
              </h1>
           </div>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
-            <Translate target={language}>Human_Capital_Stewardship</Translate> • {staffName}
+            <Translate target={language}>Human_Capital_Sovereignty</Translate> • {staffName}
           </p>
         </div>
         
-        <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl shadow-2xl">
-          {tabs.map(tab => (
+        <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl">
             <button 
-              key={tab.id}
-              onClick={() => setActiveSubTab(tab.id as any)}
-              className={`px-6 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeSubTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+              onClick={() => setActiveSubTab('SEARCH')}
+              className={`px-8 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${activeSubTab === 'SEARCH' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:text-white'}`}
             >
-              <tab.icon size={14} />
-              <Translate target={language}>{tab.label}</Translate>
+              <Translate target={language}>Personnel_Search</Translate>
             </button>
-          ))}
+            <button 
+              onClick={() => setActiveSubTab('ANALYSIS')}
+              className={`px-8 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${activeSubTab === 'ANALYSIS' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:text-white'}`}
+            >
+              <Translate target={language}>Regional_Intelligence</Translate>
+            </button>
         </div>
       </div>
 
       <div className="min-h-[600px] px-4 pb-24">
-        {activeSubTab === 'NEXUS' && <WorkforceNexus staff={MOCK_STAFF} language={language} />}
-        {activeSubTab === 'STAFF' && <StaffManager language={language} />}
-        {activeSubTab === 'COMPLIANCE' && <ComplianceManager language={language} isHR={true} />}
-        {activeSubTab === 'RECRUITMENT' && <HiringHub language={language} />}
-        {activeSubTab === 'RETENTION' && <RetentionIntelligence staff={MOCK_STAFF} language={language} />}
+        {activeSubTab === 'SEARCH' ? (
+          selectedStaff ? (
+             <div className="bg-slate-900 border border-white/10 p-12 rounded-[4rem] animate-in zoom-in duration-500">
+                <button onClick={() => setSelectedStaff(null)} className="text-[9px] font-black uppercase text-indigo-400 mb-8 tracking-widest">← Return to Search</button>
+                <div className="flex justify-between items-start">
+                   <div>
+                      <h2 className="text-5xl font-black text-white italic tracking-tighter uppercase leading-none">{selectedStaff.name}</h2>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-4">Authorized operative dossier accessible.</p>
+                   </div>
+                   <div className="bg-emerald-500/10 border border-emerald-500/30 px-6 py-2 rounded-xl">
+                      <p className="text-[8px] font-black text-emerald-500 uppercase">Weekly Hours</p>
+                      <p className="text-2xl font-black text-white italic">{selectedStaff.weeklyHours}h</p>
+                   </div>
+                </div>
+             </div>
+          ) : (
+            <SearchCommand 
+              language={language} 
+              onSelectStaff={setSelectedStaff} 
+              onSelectClient={() => {}} 
+            />
+          )
+        ) : (
+          <WorkforceNexus staff={[]} language={language} />
+        )}
       </div>
     </div>
   );
