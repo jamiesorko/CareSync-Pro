@@ -16,18 +16,19 @@ class TranslationService {
     try {
       const response = await this.ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Translate the following healthcare institutional UI text into the language/dialect: "${targetLanguage}".
+        contents: `Act as a master institutional healthcare linguist. Translate the following text into exactly the language/dialect: "${targetLanguage}".
         
-        Text: "${text}"
+        Source Text: "${text}"
         
-        Rules:
+        Specific Rules:
         - Output ONLY the translated string.
-        - No conversational filler.
-        - Support all regional dialects and scripts (Cyrillic, Kanji, Arabic, etc).
-        - Maintain a formal, high-tech clinical tone.`,
+        - No meta-talk, quotes, or explanations.
+        - Support technical healthcare terms (e.g. Geofence, Biometric, Ledger).
+        - Use the formal, professional institutional variant of the target language.
+        - Handle scripts like Arabic, Kanji, Cyrillic, and Devanagari natively.`,
         config: { 
-          temperature: 0.1,
-          systemInstruction: "You are the CareSync Universal Translator. You bridge all human communication vectors."
+          temperature: 0.0,
+          systemInstruction: "You are the CareSync Universal Translator Node. Accuracy and formal tone are your primary objectives."
         }
       });
 

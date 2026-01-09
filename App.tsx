@@ -7,7 +7,7 @@ import Login from './features/Login';
 
 // Modular Feature Portals
 import CEOPortal from './features/ceo/CEOPortal';
-import COOPortal from './features/coo/COOPortal';
+import COOPortal from './features/executive/COOTerminal';
 import DOCPortal from './features/clinical/DOCPortal';
 import RNPortal from './features/rn/RNPortal';
 import PSWPortal from './features/psw/PSWPortal';
@@ -46,7 +46,7 @@ export default function App() {
       case AppTab.RESOURCE: return <HRTerminal {...props} />;
       case AppTab.LOGISTICS: return <CoordinationHub language={language} />;
       case AppTab.FISCAL: 
-        if (user.role === CareRole.DOC) break; // Security Guard: DOC cannot see Accounting
+        if (user.role === CareRole.DOC) break; 
         return <AccountingTerminal {...props} />;
     }
 

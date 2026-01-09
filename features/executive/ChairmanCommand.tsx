@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { boardGovernanceService } from '../../services/boardGovernanceService';
 import { ChairmanMandate } from '../../types';

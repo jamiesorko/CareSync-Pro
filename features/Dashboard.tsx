@@ -55,10 +55,10 @@ export const Dashboard: React.FC<Props> = ({ lang, staffName, clients }) => {
           <Translate target={lang}>GLOBAL_SIGNAL_LOG</Translate>
         </h3>
         <div className="space-y-4">
-           {(clients || []).slice(0, 5).map((c, i) => (
+           {(clients || []).slice(0, 5).map((c) => (
              <div key={c.id} className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl flex justify-between items-center group hover:bg-white/5 transition-all">
                 <div className="flex items-center gap-6">
-                   <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-500">
+                   <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-500 text-[8px] font-black uppercase">
                       <Translate target={lang}>SIGNAL</Translate>
                    </div>
                    <div>
