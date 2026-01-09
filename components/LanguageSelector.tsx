@@ -1,6 +1,5 @@
-
 import React, { useState, useMemo } from 'react';
-import { Search, Globe, Plus, X } from 'lucide-react';
+import { Search, Globe, Plus, X, Zap } from 'lucide-react';
 
 interface Props {
   currentLanguage: string;
@@ -12,12 +11,15 @@ const LanguageSelector: React.FC<Props> = ({ currentLanguage, onLanguageChange }
   const [query, setQuery] = useState('');
 
   const common = [
-    "English", "Spanish", "French", "Chinese", "Hindi", "Arabic", 
-    "Portuguese", "Bengali", "Russian", "Japanese", "Punjabi", "German"
+    "English", "Spanish", "French", "Chinese (Mandarin)", "Chinese (Cantonese)", "Hindi", "Arabic", 
+    "Portuguese", "Bengali", "Russian", "Japanese", "Punjabi", "German", "Javanese", "Malay", 
+    "Telugu", "Vietnamese", "Korean", "Marathi", "Tamil", "Urdu", "Turkish", "Italian", 
+    "Thai", "Gujarati", "Persian", "Polish", "Pashto", "Kannada", "Malayalam", "Sundanese", 
+    "Hausa", "Burmese", "Odia", "Ukrainian", "Tagalog", "Yoruba", "Maithili", "Uzbek"
   ];
 
   const filtered = useMemo(() => {
-    if (!query) return common.slice(0, 10);
+    if (!query) return common.slice(0, 12);
     return common.filter(l => l.toLowerCase().includes(query.toLowerCase()));
   }, [query]);
 
@@ -27,7 +29,7 @@ const LanguageSelector: React.FC<Props> = ({ currentLanguage, onLanguageChange }
     setQuery('');
   };
 
-  const isNew = query && !common.some(l => l.toLowerCase() === query.toLowerCase());
+  const isNewVector = query && !common.some(l => l.toLowerCase() === query.toLowerCase());
 
   return (
     <div className="relative">
@@ -37,7 +39,7 @@ const LanguageSelector: React.FC<Props> = ({ currentLanguage, onLanguageChange }
       >
         <Globe size={18} className="text-indigo-400 group-hover:rotate-12 transition-transform" />
         <div className="text-left">
-          <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Global_Registry</p>
+          <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Global_Intercept</p>
           <p className="text-[11px] font-black uppercase text-white tracking-tighter">{currentLanguage}</p>
         </div>
       </button>
@@ -45,7 +47,7 @@ const LanguageSelector: React.FC<Props> = ({ currentLanguage, onLanguageChange }
       {isOpen && (
         <div className="absolute top-full right-0 mt-4 w-80 bg-slate-950 border border-white/10 rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.9)] z-[1000] p-6 animate-in fade-in zoom-in-95 duration-200">
           <div className="flex items-center justify-between mb-6">
-            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Neural_Linguist</p>
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Language_Registry</p>
             <button onClick={() => setIsOpen(false)} className="text-slate-600 hover:text-white">
               <X size={14} />
             </button>
@@ -56,18 +58,18 @@ const LanguageSelector: React.FC<Props> = ({ currentLanguage, onLanguageChange }
             <input 
               autoFocus
               type="text"
-              placeholder="Type ANY language..."
+              placeholder="Search or type ANY language..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-xs text-white outline-none focus:border-indigo-500 italic"
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-xs text-white outline-none focus:border-indigo-500 transition-colors italic"
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && query) handleSelect(query);
               }}
             />
           </div>
           
-          <div className="max-h-60 overflow-y-auto space-y-1 pr-2 scrollbar-hide">
-            {isNew && (
+          <div className="max-h-72 overflow-y-auto space-y-1 pr-2 scrollbar-hide">
+            {isNewVector && (
                <button 
                 onClick={() => handleSelect(query)}
                 className="w-full text-left p-4 rounded-2xl bg-indigo-600/10 border border-indigo-500/20 group hover:bg-indigo-600/20 transition-all mb-4"
@@ -76,7 +78,7 @@ const LanguageSelector: React.FC<Props> = ({ currentLanguage, onLanguageChange }
                   <span className="text-xs font-black text-white uppercase tracking-widest italic">Forge: "{query}"</span>
                   <Plus size={12} className="text-indigo-400 animate-pulse" />
                 </div>
-                <p className="text-[8px] text-slate-500 mt-1 uppercase font-bold">Initiate neural intercept</p>
+                <p className="text-[8px] text-slate-500 mt-1 uppercase font-bold">Initiate neural translation vector</p>
               </button>
             )}
 
@@ -85,12 +87,17 @@ const LanguageSelector: React.FC<Props> = ({ currentLanguage, onLanguageChange }
                 key={lang}
                 onClick={() => handleSelect(lang)}
                 className={`w-full text-left px-5 py-3 rounded-xl text-[10px] transition-all uppercase font-black tracking-widest ${
-                  currentLanguage === lang ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:bg-white/5'
+                  currentLanguage === lang ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:bg-white/5 hover:text-slate-200'
                 }`}
               >
                 {lang}
               </button>
             ))}
+          </div>
+          
+          <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-center gap-2">
+             <Zap size={10} className="text-indigo-400" />
+             <p className="text-[8px] text-slate-600 font-bold uppercase tracking-widest">Supporting 7,100+ Global Dialects</p>
           </div>
         </div>
       )}

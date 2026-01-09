@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { CareRole, AppTab, User } from './types';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Login from './features/Login';
 
-// Import Modular Portals
+// Modular Feature Portals
 import CEOPortal from './features/ceo/CEOPortal';
 import COOPortal from './features/coo/COOPortal';
 import DOCPortal from './features/clinical/DOCPortal';
@@ -17,7 +16,7 @@ import HSSPortal from './features/hss/HSSPortal';
 import HRTerminal from './features/hr/HRTerminal';
 import CoordinationHub from './features/CoordinationHub';
 
-// Shared Features
+// Shared Utilities
 import VideoLab from './features/VideoLab';
 import LiveLab from './features/LiveLab';
 import DocumentVault from './features/DocumentVault';
@@ -37,7 +36,7 @@ export default function App() {
   const renderActiveProgram = () => {
     const props = { language, clients: MOCK_CLIENTS, staff: MOCK_STAFF, user, role: user.role, staffName: user.name };
     
-    // Feature-specific routing
+    // Core Navigation Override
     switch (activeTab) {
       case AppTab.LIVE: return <LiveLab language={language} />;
       case AppTab.WELLNESS: return <VideoLab language={language} />;
@@ -48,7 +47,7 @@ export default function App() {
       case AppTab.FISCAL: return <AccountingTerminal {...props} />;
     }
 
-    // Role-specific dashboard routing
+    // Role-Based Landing Logic
     switch (user.role) {
       case CareRole.CEO: return <CEOPortal {...props} />;
       case CareRole.COO: return <COOPortal {...props} />;
