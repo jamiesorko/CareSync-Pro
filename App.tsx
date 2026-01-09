@@ -5,7 +5,7 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Login from './features/Login';
 
-// Import Modular Portal Programs
+// Import Modular Portals
 import CEOPortal from './features/ceo/CEOPortal';
 import COOPortal from './features/coo/COOPortal';
 import DOCPortal from './features/clinical/DOCPortal';
@@ -17,7 +17,7 @@ import HSSPortal from './features/hss/HSSPortal';
 import HRPortal from './features/hr/HRPortal';
 import CoordinationHub from './features/CoordinationHub';
 
-// Global Feature Modules
+// Shared Features
 import VideoLab from './features/VideoLab';
 import LiveLab from './features/LiveLab';
 import DocumentVault from './features/DocumentVault';
@@ -34,11 +34,10 @@ export default function App() {
     return <Login onLogin={setUser} language={language} onLanguageChange={setLanguage} />;
   }
 
-  // MODULAR ROUTING ENGINE
-  const renderProgram = () => {
+  const renderActiveProgram = () => {
     const props = { language, clients: MOCK_CLIENTS, staff: MOCK_STAFF, user, role: user.role };
     
-    // 1. Check for Global Overrides (Tabs that aren't the Dashboard)
+    // Feature-specific routing
     switch (activeTab) {
       case AppTab.LIVE: return <LiveLab language={language} />;
       case AppTab.WELLNESS: return <VideoLab language={language} />;
@@ -47,10 +46,9 @@ export default function App() {
       case AppTab.RESOURCE: return <HRPortal {...props} />;
       case AppTab.LOGISTICS: return <CoordinationHub language={language} />;
       case AppTab.FISCAL: return <FinancePortal language={language} />;
-      case AppTab.ORG_COMMAND: return <CEOPortal {...props} />;
     }
 
-    // 2. Default to Role-Based Dashboards
+    // Role-specific dashboard routing
     switch (user.role) {
       case CareRole.CEO: return <CEOPortal {...props} />;
       case CareRole.COO: return <COOPortal {...props} />;
@@ -68,7 +66,7 @@ export default function App() {
   };
 
   return (
-    <div className="flex h-screen w-full bg-[#020617] text-slate-100 overflow-hidden select-none">
+    <div className="flex h-screen w-full bg-[#020617] text-slate-100 overflow-hidden select-none font-sans">
       <Sidebar 
         active={activeTab} 
         setActive={setActiveTab} 
@@ -88,7 +86,7 @@ export default function App() {
         />
         <main className="flex-1 overflow-y-auto scrollbar-hide p-4 lg:p-8 relative">
           <div className="max-w-7xl mx-auto h-full animate-fade-up">
-            {renderProgram()}
+            {renderActiveProgram()}
           </div>
         </main>
       </div>

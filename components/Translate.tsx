@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
-import { geminiService } from '../services/geminiService';
+import { translationService } from '../services/translationService';
 
 interface Props {
   children?: React.ReactNode;
@@ -7,24 +8,20 @@ interface Props {
 }
 
 /**
- * Neural Intercept Translation Component
- * Bridges UI text to ANY global language using Gemini 3 Flash.
+ * Universal Neural Intercept Component
+ * Wraps any UI text to bridge it to any of the 7,000+ world languages.
  */
 export const Translate: React.FC<Props> = ({ children, target }) => {
-  // Extract text content from React children efficiently
+  // 1. Safely extract text from any React structure
   const sourceText = useMemo(() => {
     return React.Children.toArray(children)
-      .map(child => {
-        if (typeof child === 'string' || typeof child === 'number') return String(child);
-        return '';
-      })
+      .map(child => (typeof child === 'string' || typeof child === 'number' ? String(child) : ''))
       .join(' ')
       .trim();
   }, [children]);
 
-  // Clean up technical keys (e.g., "RESOURCE_CORE" -> "Resource Core")
-  const humanReadableSource = useMemo(() => {
-    if (!sourceText) return "";
+  // 2. Normalize technical keys (e.g., "OPS_DASHBOARD" -> "Ops Dashboard")
+  const normalizedText = useMemo(() => {
     if (!sourceText.includes('_')) return sourceText;
     return sourceText
       .split('_')
@@ -32,50 +29,47 @@ export const Translate: React.FC<Props> = ({ children, target }) => {
       .join(' ');
   }, [sourceText]);
 
-  const [translated, setTranslated] = useState<string>(humanReadableSource || sourceText);
+  const [displayText, setDisplayText] = useState(normalizedText || sourceText);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!humanReadableSource || !target || target === 'English') {
-      setTranslated(humanReadableSource || sourceText);
+    if (!normalizedText || target === 'English') {
+      setDisplayText(normalizedText || sourceText);
       return;
     }
 
-    const runTranslation = async () => {
-      const cacheKey = `csp_v5_trans_${target.toLowerCase()}_${humanReadableSource}`;
+    const performTranslation = async () => {
+      const cacheKey = `csp_v6_cache_${target.toLowerCase()}_${normalizedText}`;
       const cached = localStorage.getItem(cacheKey);
 
       if (cached) {
-        setTranslated(cached);
+        setDisplayText(cached);
         return;
       }
 
       setLoading(true);
       try {
-        const result = await geminiService.translate(humanReadableSource, target);
+        const result = await translationService.translate(normalizedText, target);
         if (result) {
           localStorage.setItem(cacheKey, result);
-          setTranslated(result);
-        } else {
-          setTranslated(humanReadableSource);
+          setDisplayText(result);
         }
       } catch (e) {
-        console.error("[TRANSLATION_FAILOVER]:", e);
-        setTranslated(humanReadableSource);
+        setDisplayText(normalizedText);
       } finally {
         setLoading(false);
       }
     };
 
-    runTranslation();
-  }, [humanReadableSource, target, sourceText]);
+    performTranslation();
+  }, [normalizedText, target, sourceText]);
 
   return (
     <span 
-      className={`transition-all duration-500 ${loading ? 'opacity-40 blur-[1px] animate-pulse' : 'opacity-100 blur-0'}`}
-      title={humanReadableSource !== translated ? humanReadableSource : undefined}
+      className={`transition-all duration-300 ${loading ? 'opacity-40 blur-[1px] animate-pulse' : 'opacity-100'}`}
+      title={normalizedText !== displayText ? normalizedText : undefined}
     >
-      {translated}
+      {displayText}
     </span>
   );
 };
