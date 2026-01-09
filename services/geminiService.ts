@@ -8,23 +8,30 @@ export class GeminiService {
   }
 
   /**
-   * Universal Neural Translation
-   * Leverages Gemini 3 Flash for zero-latency cross-linguistic UI adaptation.
+   * Universal Neural Translation Vector
+   * Optimized for high-fidelity healthcare institutional terminology.
    */
   async translate(text: string, targetLang: string): Promise<string> {
-    if (!text || !targetLang || targetLang === 'English') return text;
+    if (!text || !targetLang || targetLang.toLowerCase() === 'english') return text;
     try {
       const response = await this.ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Translate the following institutional healthcare UI text to ${targetLang}: "${text}". Provide ONLY the translated text without commentary or quotes. If the text is a technical acronym, preserve its meaning.`,
+        contents: `Translate the following healthcare enterprise UI text exactly to ${targetLang}: "${text}".
+        
+        Guidelines:
+        - Output ONLY the translated text.
+        - No quotes, explanations, or meta-talk.
+        - Maintain formal, institutional, high-tech tone.
+        - If technical terms like "Geofence" or "Neural" are used, find the closest professional equivalent.
+        - If the target language is a specific dialect or obscure language, ensure semantic accuracy.`,
         config: { 
-          systemInstruction: "You are a professional healthcare enterprise translator. Maintain the formal, high-tech institutional tone of the application.",
-          temperature: 0.1 // Low temperature for deterministic translations
+          systemInstruction: "You are a professional multi-dialect healthcare enterprise translator.",
+          temperature: 0.1 
         }
       });
       return response.text?.trim() || text;
     } catch (err) {
-      console.error("[NEURAL_LINGUIST_ERROR]:", err);
+      console.error("[NEURAL_LINGUIST_SIGNAL_LOST]:", err);
       return text;
     }
   }

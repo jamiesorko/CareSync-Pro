@@ -43,9 +43,11 @@ const IntakeNode: React.FC<Props> = ({ language, onClientAdded }) => {
   const handleConfirm = () => {
     if (!parsedClient) return;
     // Client ID prefixed with C
+    // Add missing createdAt property required by BaseEntity interface
     const client: Client = {
       id: "C" + Math.floor(Math.random() * 10000),
       companyId: 'csp-demo',
+      createdAt: new Date().toISOString(),
       anonymizedId: `C${Math.floor(100 + Math.random() * 900)}`,
       name: parsedClient.name || 'Unknown Patient',
       address: parsedClient.address || 'TBD',

@@ -20,9 +20,11 @@ const AdminPortal: React.FC<Props> = ({ language, role, clients, setClients }) =
     // Prefix client ID with C
     const id = "C" + (clients.length + 1);
     
+    // Add missing createdAt property required by BaseEntity interface
     const client: Client = {
       id,
       companyId: 'demo-company',
+      createdAt: new Date().toISOString(),
       anonymizedId: `C${100 + clients.length + 1}`,
       name: newClient.name,
       address: newClient.address,
