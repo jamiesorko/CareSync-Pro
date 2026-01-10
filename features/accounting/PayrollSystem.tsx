@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MOCK_STAFF } from '../../data/careData';
 import { hrService } from '../../services/hrService';
@@ -32,7 +31,7 @@ const PayrollSystem: React.FC<Props> = ({ language }) => {
                        <Translate target={language}>{s.name}</Translate>
                     </h4>
                     <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                      <Translate target={language}>{s.role as string}</Translate> • <Translate target={language}>80.00 Units</Translate>
+                      <Translate target={language}>{String(s.role)}</Translate> • <Translate target={language}>80.00 Units</Translate>
                     </p>
                   </div>
 

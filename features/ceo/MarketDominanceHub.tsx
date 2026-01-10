@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { marketDominanceService } from '../../services/marketDominanceService';
 import { DominanceStrategy } from '../../types';
