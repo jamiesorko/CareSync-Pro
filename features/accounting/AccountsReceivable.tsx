@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Translate } from '../../components/Translate';
 import { MOCK_INVOICES, InvoiceRecord } from '../../data/accountingData';
@@ -9,10 +8,6 @@ interface Props {
 
 const AccountsReceivable: React.FC<Props> = ({ language }) => {
   const [invoices, setInvoices] = useState<InvoiceRecord[]>(MOCK_INVOICES);
-
-  const sendOverdueAlert = (inv: InvoiceRecord) => {
-    alert(`Alert Triggered: Notifying Human AR Manager regarding past-due invoice ${inv.id} for ${inv.clientName}.`);
-  };
 
   const markAsPaid = (id: string) => {
     setInvoices(prev => prev.map(i => i.id === id ? { ...i, status: 'PAID' } : i));
@@ -26,41 +21,25 @@ const AccountsReceivable: React.FC<Props> = ({ language }) => {
         </h3>
         <div className="space-y-4">
           {invoices.map(inv => (
-            <div key={inv.id} className="p-8 bg-white/[0.03] border border-white/5 rounded-3xl flex justify-between items-center group hover:bg-white/5 transition-all">
+            <div key={inv.id} className="p-8 bg-white/[0.03] border border-white/5 rounded-3xl flex justify-between items-center group">
               <div>
-                <p className="text-lg font-black text-white italic tracking-tighter uppercase">
+                <p className="text-lg font-black text-white uppercase italic tracking-tighter">
                    <Translate target={language}>{inv.clientName}</Translate>
                 </p>
                 <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">
                   Ref: {inv.id} • <Translate target={language}>Sent</Translate>: <Translate target={language}>{inv.date}</Translate> • <Translate target={language}>Due</Translate>: <Translate target={language}>{inv.dueDate}</Translate>
                 </p>
-                <div className="mt-4 flex items-center space-x-3">
-                  <span className={`text-[9px] font-black px-3 py-1 rounded-full uppercase ${
-                    inv.status === 'PAID' ? 'bg-emerald-500/10 text-emerald-500' : 
-                    inv.status === 'OVERDUE' ? 'bg-rose-500/20 text-rose-500 animate-pulse' : 'bg-sky-500/10 text-sky-400'
-                  }`}>
+                <div className="mt-4">
+                  <span className={`text-[9px] font-black px-3 py-1 rounded-full uppercase ${inv.status === 'PAID' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/20 text-rose-400 animate-pulse'}`}>
                     <Translate target={language}>{inv.status}</Translate>
                   </span>
                 </div>
               </div>
               <div className="text-right flex items-center space-x-6">
-                <p className="text-2xl font-black text-white tracking-tighter">
-                  <Translate target={language}>{`$${inv.amount.toLocaleString()}`}</Translate>
-                </p>
+                <p className="text-2xl font-black text-white italic tracking-tighter">${inv.amount}</p>
                 <div className="flex flex-col gap-2">
-                  {inv.status === 'SENT' && (
-                    <button onClick={() => markAsPaid(inv.id)} className="px-6 py-2 bg-emerald-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all">
-                      <Translate target={language}>Receive_Payment</Translate>
-                    </button>
-                  )}
-                  {inv.status === 'OVERDUE' && (
-                    <button onClick={() => sendOverdueAlert(inv)} className="px-6 py-2 bg-rose-600 text-white rounded-xl text-[9px] font-black uppercase hover:scale-105 transition-all shadow-lg shadow-rose-600/20">
-                      <Translate target={language}>Escalate_to_Manager</Translate>
-                    </button>
-                  )}
-                  <button className="px-6 py-2 bg-white/5 border border-white/10 text-slate-400 rounded-xl text-[9px] font-black uppercase hover:bg-white/10">
-                    <Translate target={language}>Resend_Invoice</Translate>
-                  </button>
+                  {inv.status === 'SENT' && <button onClick={() => markAsPaid(inv.id)} className="px-6 py-2 bg-emerald-600 text-white rounded-xl text-[9px] font-black uppercase"><Translate target={language}>Receive_Payment</Translate></button>}
+                  <button className="px-6 py-2 bg-white/5 border border-white/10 text-slate-400 rounded-xl text-[9px] font-black uppercase"><Translate target={language}>Resend_Invoice</Translate></button>
                 </div>
               </div>
             </div>

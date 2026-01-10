@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { Translate } from '../../components/Translate';
 import { hrService } from '../../services/hrService';
 import { financialService } from '../../services/financialService';
 import { coordinationService } from '../../services/coordinationService';
-import { AlertType, InternalEmail } from '../../types';
-import { Mail, Briefcase, GraduationCap, Vault, Plus, Send, FileText, ShoppingCart, Clock, ShieldAlert, CheckCircle2 } from 'lucide-react';
+import { AlertType } from '../../types';
+import { Mail, Briefcase, GraduationCap, Vault, ShoppingCart, Clock, ShieldAlert, CheckCircle2 } from 'lucide-react';
 
 interface Props {
   language: string;
@@ -15,32 +14,24 @@ const PSWSelfService: React.FC<Props> = ({ language }) => {
   const [activeTab, setActiveTab] = useState<'HR' | 'ACCOUNTING' | 'TRAINING' | 'EMAIL' | 'VAULT'>('HR');
 
   const handleHRAction = async (type: AlertType) => {
-    const details = prompt(`Initiating [${type}]: Enter tactical request details:`);
+    const details = prompt(`Initiating [${type}]: Details:`);
     if (details) {
       await hrService.submitHRRequest({ type, details, staffId: 'P1' });
-      alert(`SIGNAL_LOCKED: Request transmitted to Resource Core.`);
+      alert("SIGNAL_LOCKED.");
     }
   };
 
   const handleSupplyReq = async () => {
-    const item = prompt("Specify item needed (Gloves, Wound Kits, PPE, etc.):");
+    const item = prompt("Item needed:");
     const qty = prompt("Quantity:");
     if (item && qty) {
       await financialService.submitSupplyRequest({ staffId: 'P1', item, quantity: parseInt(qty) });
-      alert("SIGNAL_LOCKED: Supply directive routed to Accounting.");
-    }
-  };
-
-  const handleBookOff = async (urgent: boolean) => {
-    const reason = prompt(urgent ? "URGENT_BOOK_OFF (<24h notice): Reason:" : "ADVANCE_BOOK_OFF: Reason:");
-    if (reason) {
-      await coordinationService.signalBookOff({ staffId: 'P1', reason, isUrgent: urgent });
-      alert(urgent ? "⚠️ ALERT: Schedule revision request broadcast to Dispatch." : "Request queued for coordination review.");
+      alert("SIGNAL_LOCKED.");
     }
   };
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-700 pb-24 max-w-6xl mx-auto">
+    <div className="space-y-12 animate-in fade-in duration-700 pb-24 max-w-6xl mx-auto px-4">
       <div className="flex bg-slate-900 p-1.5 rounded-[2.5rem] border border-white/10 backdrop-blur-xl overflow-x-auto scrollbar-hide shadow-2xl">
         {[
           { id: 'HR', label: 'HR_Center', icon: Briefcase },
@@ -61,10 +52,6 @@ const PSWSelfService: React.FC<Props> = ({ language }) => {
       </div>
 
       <div className="min-h-[600px] bg-slate-900/50 border border-white/5 rounded-[4rem] p-12 shadow-2xl backdrop-blur-3xl overflow-hidden relative">
-        <div className="absolute top-0 right-0 p-12 opacity-5 font-black italic text-9xl text-white pointer-events-none uppercase">
-           <Translate target={language}>{activeTab}</Translate>
-        </div>
-        
         {activeTab === 'HR' && (
           <div className="space-y-12 relative z-10 animate-in slide-in-from-bottom-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -75,15 +62,9 @@ const PSWSelfService: React.FC<Props> = ({ language }) => {
                 { label: 'Payroll_Dispute', type: 'PAYROLL_DISPUTE', icon: '⚖️' },
                 { label: 'Insurance_Q', type: 'INSURANCE_Q', icon: '🛡️' }
               ].map((item, i) => (
-                <button 
-                  key={i} 
-                  onClick={() => handleHRAction(item.type as AlertType)}
-                  className="p-10 bg-white/5 border border-white/5 rounded-[3rem] text-center group hover:bg-white/10 transition-all shadow-xl"
-                >
-                  <div className="text-4xl mb-6 group-hover:scale-110 transition-transform">{item.icon}</div>
-                  <p className="text-[10px] font-black text-white uppercase tracking-widest">
-                     <Translate target={language}>{item.label}</Translate>
-                  </p>
+                <button key={i} onClick={() => handleHRAction(item.type as AlertType)} className="p-10 bg-white/5 border border-white/5 rounded-[3rem] text-center group hover:bg-white/10 transition-all">
+                  <div className="text-4xl mb-6">{item.icon}</div>
+                  <p className="text-[10px] font-black text-white uppercase tracking-widest"><Translate target={language}>{item.label}</Translate></p>
                 </button>
               ))}
             </div>
@@ -98,27 +79,18 @@ const PSWSelfService: React.FC<Props> = ({ language }) => {
                   </p>
                </div>
                <div className="flex gap-4">
-                  <button onClick={() => handleBookOff(false)} className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-2xl font-black text-[9px] uppercase tracking-widest">
-                     <Translate target={language}>Advance_24h</Translate>
-                  </button>
-                  <button onClick={() => handleBookOff(true)} className="px-8 py-4 bg-rose-600 text-white rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-xl animate-pulse">
-                     <Translate target={language}>Urgent_24h</Translate>
-                  </button>
+                  <button onClick={() => coordinationService.signalBookOff({ staffId: 'P1', reason: 'Advance', isUrgent: false })} className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-2xl font-black text-[9px] uppercase tracking-widest"><Translate target={language}>Advance_24h</Translate></button>
+                  <button onClick={() => coordinationService.signalBookOff({ staffId: 'P1', reason: 'Urgent', isUrgent: true })} className="px-8 py-4 bg-rose-600 text-white rounded-2xl font-black text-[9px] uppercase tracking-widest animate-pulse"><Translate target={language}>Urgent_24h</Translate></button>
                </div>
             </div>
           </div>
         )}
 
         {activeTab === 'ACCOUNTING' && (
-          <div className="flex flex-col items-center justify-center h-full space-y-12 relative z-10 animate-in zoom-in">
-             <div className="w-40 h-40 bg-indigo-600/10 border-4 border-indigo-500/30 rounded-full flex items-center justify-center text-6xl shadow-[0_0_50px_rgba(99,102,241,0.2)]">🛒</div>
+          <div className="flex flex-col items-center justify-center h-full space-y-12 relative z-10">
              <div className="text-center space-y-4">
-                <h3 className="text-3xl font-black text-white italic tracking-tighter uppercase leading-none">
-                   <Translate target={language}>Supply_Requisition</Translate>
-                </h3>
-                <p className="text-sm text-slate-400 font-medium italic max-w-sm">
-                   <Translate target={language}>Request_Nitrile_Gloves_Wound_Kits_or_Hardware_for_your_sector_via_Accounting</Translate>
-                </p>
+                <h3 className="text-3xl font-black text-white italic tracking-tighter uppercase leading-none"><Translate target={language}>Supply_Requisition</Translate></h3>
+                <p className="text-sm text-slate-400 font-medium italic max-w-sm"><Translate target={language}>Request_Nitrile_Gloves_Wound_Kits_or_Hardware_for_your_sector_via_Accounting</Translate></p>
              </div>
              <button onClick={handleSupplyReq} className="px-16 py-6 bg-emerald-600 text-white rounded-[2.5rem] font-black text-xs uppercase tracking-[0.4em] shadow-2xl hover:bg-emerald-500 transition-all flex items-center gap-4">
                <ShoppingCart size={20} /> <Translate target={language}>INITIATE_ORDER</Translate>
@@ -132,58 +104,13 @@ const PSWSelfService: React.FC<Props> = ({ language }) => {
                 <Translate target={language}>Mandatory_Compliance_Forge</Translate>
              </h3>
              <div className="space-y-4">
-                {[
-                  { title: 'Safe_Lifts_Hoyer_Protocol_v5', due: '7_Days', urgent: true },
-                  { title: 'Infection_Control_2025', due: '14_Days', urgent: false },
-                  { title: 'Dementia_Behavioral_Shield', due: 'Completed', urgent: false }
-                ].map((tr, i) => (
-                  <div key={i} className={`p-8 rounded-[2.5rem] border flex justify-between items-center ${tr.urgent ? 'bg-rose-500/5 border-rose-500/30 shadow-xl' : 'bg-white/[0.02] border-white/5'}`}>
+                {[ { title: 'Safe_Lifts_Hoyer_Protocol_v5', due: '7_Days', urgent: true } ].map((tr, i) => (
+                  <div key={i} className={`p-8 rounded-[2.5rem] border flex justify-between items-center ${tr.urgent ? 'bg-rose-500/5 border-rose-500/30' : 'bg-white/[0.02] border-white/5'}`}>
                      <div>
-                        <p className="text-lg font-black text-white uppercase italic tracking-tighter">
-                           <Translate target={language}>{tr.title}</Translate>
-                        </p>
-                        <p className={`text-[9px] font-bold uppercase mt-2 ${tr.urgent ? 'text-rose-500' : 'text-slate-500'}`}>
-                           <Translate target={language}>Status</Translate>: <Translate target={language}>{tr.due}</Translate>
-                        </p>
+                        <p className="text-lg font-black text-white uppercase italic tracking-tighter"><Translate target={language}>{tr.title}</Translate></p>
+                        <p className={`text-[9px] font-bold uppercase mt-2 ${tr.urgent ? 'text-rose-500' : 'text-slate-500'}`}><Translate target={language}>Status</Translate>: <Translate target={language}>{tr.due}</Translate></p>
                      </div>
-                     <button className="px-8 py-3 bg-white text-black rounded-xl text-[9px] font-black uppercase tracking-widest shadow-xl">
-                        <Translate target={language}>Launch</Translate>
-                     </button>
-                  </div>
-                ))}
-             </div>
-          </div>
-        )}
-
-        {activeTab === 'EMAIL' && (
-          <div className="h-[550px] flex flex-col relative z-10 animate-in fade-in">
-             <div className="flex justify-between items-center mb-10 border-b border-white/10 pb-8">
-                <h3 className="text-xl font-black text-white italic tracking-tighter uppercase leading-none">
-                   <Translate target={language}>Internal_Operative_Mail</Translate>
-                </h3>
-                <button className="w-12 h-12 bg-sky-600 rounded-xl flex items-center justify-center text-white shadow-xl hover:scale-110 transition-all"><Plus size={20} /></button>
-             </div>
-             <div className="flex-1 overflow-y-auto space-y-4 scrollbar-hide pr-2">
-                {[
-                  { from: 'DOC_Oversight', sub: 'New_Lift_Protocol_Robert_Johnson', time: '08:12', read: false },
-                  { from: 'Accounting', sub: 'Supply_Order_REQ_992_Confirmed', time: 'Yesterday', read: true },
-                  { from: 'HR_Specialist', sub: 'T4_Documentation_Uploaded', time: 'Oct_12', read: true }
-                ].map((mail, i) => (
-                  <div key={i} className={`p-6 rounded-[2.5rem] border flex items-center gap-6 transition-all cursor-pointer ${!mail.read ? 'bg-sky-600/5 border-sky-500/30' : 'bg-white/[0.02] border-white/5 hover:bg-white/5'}`}>
-                     <div className={`w-3 h-3 rounded-full ${!mail.read ? 'bg-sky-400 animate-pulse' : 'bg-slate-700'}`}></div>
-                     <div className="flex-1">
-                        <div className="flex justify-between items-center mb-1">
-                           <p className="text-xs font-black text-white uppercase tracking-tighter">
-                              <Translate target={language}>{mail.from}</Translate>
-                           </p>
-                           <span className="text-[8px] font-bold text-slate-500 uppercase">
-                              <Translate target={language}>{mail.time}</Translate>
-                           </span>
-                        </div>
-                        <p className="text-[11px] text-slate-400 font-medium italic">
-                           "<Translate target={language}>{mail.sub}</Translate>"
-                        </p>
-                     </div>
+                     <button className="px-8 py-3 bg-white text-black rounded-xl text-[9px] font-black uppercase tracking-widest"><Translate target={language}>Launch</Translate></button>
                   </div>
                 ))}
              </div>
@@ -192,25 +119,14 @@ const PSWSelfService: React.FC<Props> = ({ language }) => {
 
         {activeTab === 'VAULT' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10 animate-in zoom-in">
-             {[
-               { label: 'T4_Statement_2024', icon: FileText },
-               { label: 'Recent_Paystub', icon: Clock },
-               { label: 'Insurance_Policy', icon: ShieldAlert },
-               { label: 'Credentials_Scan', icon: CheckCircle2 }
-             ].map((doc, i) => (
+             {[ { label: 'T4_Statement_2024' }, { label: 'Recent_Paystub' }, { label: 'Insurance_Policy' } ].map((doc, i) => (
                <div key={i} className="p-10 bg-white/5 border border-white/10 rounded-[3rem] text-center flex flex-col items-center justify-between group hover:bg-white/10 transition-all h-72 shadow-2xl">
-                  <div className="w-16 h-16 rounded-2xl bg-indigo-600/10 border-2 border-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-all"><doc.icon size={24} /></div>
-                  <p className="text-[11px] font-black text-white italic tracking-tighter">
-                     <Translate target={language}>{doc.label}</Translate>
-                  </p>
-                  <button className="px-6 py-2 bg-white text-black rounded-xl text-[9px] font-black uppercase tracking-widest shadow-xl">
-                     <Translate target={language}>Download</Translate>
-                  </button>
+                  <p className="text-[11px] font-black text-white italic tracking-tighter"><Translate target={language}>{doc.label}</Translate></p>
+                  <button className="px-6 py-2 bg-white text-black rounded-xl text-[9px] font-black uppercase tracking-widest shadow-xl"><Translate target={language}>Download</Translate></button>
                </div>
              ))}
           </div>
         )}
-
       </div>
     </div>
   );

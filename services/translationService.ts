@@ -4,8 +4,7 @@ class TranslationService {
   private ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
 
   /**
-   * Translates any UI string, data attribute, or numeric magnitude.
-   * Calibrated for institutional healthcare terminology and regional number systems.
+   * Translates institutional healthcare strings and regional data.
    */
   async translate(text: string, targetLanguage: string): Promise<string> {
     if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') {
@@ -22,14 +21,12 @@ class TranslationService {
         
         Mandatory Rules:
         - Output ONLY the translated string.
-        - CLINICAL JARGON: Terms like "Complex Wound Care", "Registered Nurse", "PSW", "Acuity", "ADL Support", "Hoyer Lift", and "Geofence" MUST use their professional medical equivalents in "${targetLanguage}".
-        - NUMERIC LOCALIZATION: If the text is a number (e.g., "15", "94.2"), a measurement (e.g., "40h", "80 Units"), or a financial magnitude (e.g., "$14.2k", "$1,420.00"), translate the digits, separators, units, and suffixes to the standard form used in "${targetLanguage}".
-        - CURRENCY FORMATTING: Ensure currency symbol placement and decimal separators (commas vs dots) follow the conventions of "${targetLanguage}".
-        - Maintain the formal, high-tech, professional tone of a global healthcare CEO ERP.
-        - If the text is a sector name (e.g. "North York", "Mississauga"), translate it to its local name in "${targetLanguage}".`,
+        - CLINICAL JARGON: Terms like "Complex Wound Care", "Registered Nurse", "PSW", "Acuity", "ADL", "Hoyer Lift", and "Geofence" MUST use their professional medical equivalents in "${targetLanguage}".
+        - NUMERIC LOCALIZATION: Localize digits, separators, and financial magnitudes (e.g., "$14.2k") to "${targetLanguage}" conventions.
+        - Maintain the formal, high-tech, professional tone of a global healthcare CEO ERP.`,
         config: { 
           temperature: 0.0,
-          systemInstruction: "You are the CareSync Universal Translation Node. Accuracy in medical terminology and regional localization is your primary objective."
+          systemInstruction: "You are the CareSync Universal Translation Node. Accuracy in medical terminology and regional number formatting is your primary objective."
         }
       });
 

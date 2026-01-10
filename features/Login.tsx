@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { CareRole, User } from '../types';
 import { Fingerprint, ShieldCheck } from 'lucide-react';
@@ -21,7 +20,6 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
 
   return (
     <div className="h-full flex flex-col items-center justify-center p-6 bg-[#020617] relative overflow-hidden">
-      {/* Background Decor */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/5 blur-[120px] rounded-full"></div>
       
       <div className="absolute top-10 right-10 z-50">
@@ -35,7 +33,9 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
           <div className="w-20 h-20 bg-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-indigo-600/40">
             <Fingerprint size={40} className="text-white" />
           </div>
-          <h1 className="text-3xl font-black text-white tracking-tighter uppercase italic leading-none">CareSync_Pro</h1>
+          <h1 className="text-3xl font-black text-white tracking-tighter uppercase italic leading-none">
+            <Translate target={language}>CareSync_Pro</Translate>
+          </h1>
           <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em] mt-3">
              <Translate target={language}>IDENTITY_VALIDATION_REQUIRED</Translate>
           </p>

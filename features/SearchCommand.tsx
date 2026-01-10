@@ -1,6 +1,5 @@
-
 import React, { useState, useMemo } from 'react';
-import { Search, User, Users, ArrowRight, Shield } from 'lucide-react';
+import { Search, ArrowRight, Shield } from 'lucide-react';
 import { MOCK_STAFF, MOCK_CLIENTS } from '../data/careData';
 import { StaffMember, Client } from '../types';
 import Translate, { useTranslate } from '../components/Translate';
@@ -14,8 +13,6 @@ interface Props {
 const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClient }) => {
   const [query, setQuery] = useState('');
   const { translated: placeholder } = useTranslate("Search by Personnel Name or Patient ID", language);
-  const { translated: resultsHeaderStaff } = useTranslate("Personnel Records Found", language);
-  const { translated: resultsHeaderClients } = useTranslate("Census Matrix Found", language);
 
   const results = useMemo(() => {
     if (query.length < 2) return { staff: [], clients: [] };
@@ -47,7 +44,9 @@ const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClien
       {(results.staff.length > 0 || results.clients.length > 0) ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-top-4 duration-500">
           <div className="space-y-4">
-            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-6">{resultsHeaderStaff}</h4>
+            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-6">
+              <Translate target={language}>Personnel_Records_Found</Translate>
+            </h4>
             {results.staff.map(s => (
               <button 
                 key={s.id}
@@ -66,7 +65,9 @@ const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClien
           </div>
 
           <div className="space-y-4">
-            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-6">{resultsHeaderClients}</h4>
+            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-6">
+              <Translate target={language}>Census_Matrix_Found</Translate>
+            </h4>
             {results.clients.map(c => (
               <button 
                 key={c.id}

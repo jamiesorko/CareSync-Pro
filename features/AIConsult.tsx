@@ -1,9 +1,7 @@
-
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoogleGenAI, Modality, LiveServerMessage } from '@google/genai';
 import { decode, encode, decodeAudioData } from '../utils/audioHelpers';
 import { CareRole } from '../types';
-/* Changed default import to named import for Translate */
 import { Translate } from '../components/Translate';
 
 interface Props {
@@ -14,7 +12,7 @@ interface Props {
 
 const AIConsult: React.FC<Props> = ({ role, onClose, language }) => {
   const [isActive, setIsActive] = useState(false);
-  const [status, setStatus] = useState('Neural Core Idle');
+  const [status, setStatus] = useState('Neural_Core_Idle');
   const [transcript, setTranscript] = useState<string[]>([]);
   
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -28,18 +26,16 @@ const AIConsult: React.FC<Props> = ({ role, onClose, language }) => {
       sessionRef.current = null;
     }
     setIsActive(false);
-    setStatus('Connection Severed');
+    setStatus('Connection_Severed');
   }, []);
 
   const startSession = async () => {
     try {
-      setStatus('Calibrating Neural Sync...');
+      setStatus('Calibrating_Neural_Sync');
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      
       const inputCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
       const outputCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
       audioContextRef.current = inputCtx;
-
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       
       const sessionPromise = ai.live.connect({
@@ -47,37 +43,24 @@ const AIConsult: React.FC<Props> = ({ role, onClose, language }) => {
         callbacks: {
           onopen: () => {
             setIsActive(true);
-            setStatus('Neural Link: Active');
+            setStatus('Neural_Link_Active');
             const source = inputCtx.createMediaStreamSource(stream);
             const scriptProcessor = inputCtx.createScriptProcessor(4096, 1, 1);
-            
             scriptProcessor.onaudioprocess = (e) => {
               const inputData = e.inputBuffer.getChannelData(0);
               const int16 = new Int16Array(inputData.length);
-              for (let i = 0; i < inputData.length; i++) {
-                int16[i] = inputData[i] * 32768;
-              }
-              const pcmBlob = {
-                data: encode(new Uint8Array(int16.buffer)),
-                mimeType: 'audio/pcm;rate=16000',
-              };
+              for (let i = 0; i < inputData.length; i++) int16[i] = inputData[i] * 32768;
+              const pcmBlob = { data: encode(new Uint8Array(int16.buffer)), mimeType: 'audio/pcm;rate=16000' };
               sessionPromise.then(session => session.sendRealtimeInput({ media: pcmBlob }));
             };
-            
             source.connect(scriptProcessor);
             scriptProcessor.connect(inputCtx.destination);
           },
           onmessage: async (message: LiveServerMessage) => {
             const content = message.serverContent;
             if (!content) return;
-
-            if (content.outputTranscription?.text) {
-              setTranscript(prev => [...prev.slice(-10), `[CORE]: ${content.outputTranscription?.text}`]);
-            }
-            if (content.inputTranscription?.text) {
-              setTranscript(prev => [...prev.slice(-10), `[OPERATOR]: ${content.inputTranscription?.text}`]);
-            }
-
+            if (content.outputTranscription?.text) setTranscript(prev => [...prev.slice(-10), `[CORE]: ${content.outputTranscription?.text}`]);
+            if (content.inputTranscription?.text) setTranscript(prev => [...prev.slice(-10), `[OPERATOR]: ${content.inputTranscription?.text}`]);
             const modelTurn = content.modelTurn;
             if (modelTurn?.parts && modelTurn.parts.length > 0) {
               const base64Audio = modelTurn.parts[0].inlineData?.data;
@@ -93,16 +76,13 @@ const AIConsult: React.FC<Props> = ({ role, onClose, language }) => {
                 sourcesRef.current.add(source);
               }
             }
-
             if (content.interrupted) {
-              sourcesRef.current.forEach(s => {
-                try { s.stop(); } catch(err) {}
-              });
+              sourcesRef.current.forEach(s => { try { s.stop(); } catch(err) {} });
               sourcesRef.current.clear();
               nextStartTimeRef.current = 0;
             }
           },
-          onerror: () => setStatus('Link Interrupted'),
+          onerror: () => setStatus('Link_Interrupted'),
           onclose: () => setIsActive(false)
         },
         config: {
@@ -112,17 +92,13 @@ const AIConsult: React.FC<Props> = ({ role, onClose, language }) => {
           systemInstruction: `You are the high-tech Neural Core Assistant for a ${role}. Provide rapid clinical insights.`
         }
       });
-
       sessionRef.current = await sessionPromise;
     } catch (err) {
-      console.error(err);
-      setStatus('Calibration Failure');
+      setStatus('Calibration_Failure');
     }
   };
 
-  useEffect(() => {
-    return () => { if (sessionRef.current) sessionRef.current.close(); };
-  }, []);
+  useEffect(() => { return () => { if (sessionRef.current) sessionRef.current.close(); }; }, []);
 
   return (
     <div className="fixed inset-0 bg-slate-950/90 backdrop-blur-xl flex items-center justify-center p-4 z-[100] animate-in fade-in duration-500">
@@ -130,7 +106,9 @@ const AIConsult: React.FC<Props> = ({ role, onClose, language }) => {
         <div className="p-8 border-b border-white/5 flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <div className={`w-3 h-3 rounded-full ${isActive ? 'bg-sky-500 animate-ping' : 'bg-slate-700'}`}></div>
-            <h3 className="text-xl font-black text-white uppercase">Neural_Consult</h3>
+            <h3 className="text-xl font-black text-white uppercase italic tracking-tighter">
+              <Translate target={language}>Neural_Consult</Translate>
+            </h3>
           </div>
           <button onClick={onClose} className="text-slate-500 font-bold hover:text-white transition-colors">✕</button>
         </div>
@@ -138,16 +116,23 @@ const AIConsult: React.FC<Props> = ({ role, onClose, language }) => {
         <div className="flex-1 overflow-y-auto p-10 space-y-6 scrollbar-hide">
           {transcript.map((line, i) => (
             <div key={i} className={`p-4 rounded-2xl text-[11px] font-medium border ${line.startsWith('[OPERATOR]') ? 'bg-sky-500/10 border-sky-500/20 text-sky-100 ml-12' : 'bg-white/5 border-white/10 text-slate-300 mr-12'}`}>
-              {line}
+              <Translate target={language}>{line}</Translate>
             </div>
           ))}
-          {transcript.length === 0 && <p className="text-slate-600 text-center mt-20 italic">Awaiting neural signal...</p>}
+          {transcript.length === 0 && <p className="text-slate-600 text-center mt-20 italic">
+            <Translate target={language}>Awaiting_neural_signal</Translate>...
+          </p>}
         </div>
 
         <div className="p-10 border-t border-white/5">
           <button onClick={isActive ? stopSession : startSession} className={`w-full py-6 rounded-2xl font-black text-xs tracking-[0.3em] transition-all ${isActive ? 'bg-rose-500/20 text-rose-500 animate-pulse' : 'bg-white text-black hover:scale-[1.01] active:scale-95 transition-all'}`}>
             <Translate target={language}>{isActive ? 'TERMINATE_SIGNAL' : 'OPEN_NEURAL_LINK'}</Translate>
           </button>
+          <div className="mt-4 text-center">
+            <p className="text-[9px] font-black text-slate-700 uppercase tracking-widest">
+              <Translate target={language}>{status}</Translate>
+            </p>
+          </div>
         </div>
       </div>
     </div>
