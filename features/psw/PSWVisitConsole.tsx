@@ -48,19 +48,23 @@ const PSWVisitConsole: React.FC<Props> = ({ client, onClockOut, onAlert, languag
            <div className="flex items-center gap-10">
               <div className={`w-32 h-32 rounded-full border-4 flex items-center justify-center relative shadow-2xl ${isNurse ? 'border-sky-500/30' : isSocial ? 'border-purple-500/30' : 'border-orange-500/30'}`}>
                  <div className={`absolute inset-0 rounded-full animate-pulse opacity-10 ${isNurse ? 'bg-sky-500' : isSocial ? 'bg-purple-500' : 'bg-orange-500'}`}></div>
-                 <p className="text-4xl font-black italic text-white font-mono tracking-tighter">{formatTime(elapsed)}</p>
+                 <p className="text-4xl font-black italic text-white font-mono tracking-tighter">
+                   <Translate target={language}>{formatTime(elapsed)}</Translate>
+                 </p>
               </div>
               <div className="space-y-3">
                  <div className="flex items-center gap-2">
                    {isNurse ? <Stethoscope className="text-sky-400" size={14} /> : isSocial ? <HeartPulse className="text-purple-400" size={14} /> : <UserCheck className="text-orange-500" size={14} />}
                    <span className={`text-[8px] font-black uppercase tracking-widest ${isNurse ? 'text-sky-400' : isSocial ? 'text-purple-400' : 'text-orange-500'}`}>
-                     <Translate target={language}>{role}</Translate>_ENCOUNTER
+                     <Translate target={language}>{role}</Translate>_<Translate target={language}>ENCOUNTER</Translate>
                    </span>
                  </div>
                  <h2 className="text-4xl font-black text-white italic tracking-tighter uppercase leading-none">{client.name}</h2>
                  <div className="flex items-center gap-2 text-slate-500">
                     <MapPin size={12} />
-                    <p className="text-[10px] font-bold uppercase tracking-widest">{client.address}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest">
+                       <Translate target={language}>{client.address}</Translate>
+                    </p>
                  </div>
               </div>
            </div>

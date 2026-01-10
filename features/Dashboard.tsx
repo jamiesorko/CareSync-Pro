@@ -2,14 +2,16 @@ import React from 'react';
 import { Translate } from '../components/Translate';
 import { Activity, Zap, TrendingUp, ShieldCheck, MapPin } from 'lucide-react';
 import { Client } from '../types';
+import CommandGrid from './dashboard/CommandGrid';
 
 interface Props {
   lang: string;
   staffName?: string;
   clients?: Client[];
+  setActiveTab: (tab: any) => void;
 }
 
-export const Dashboard: React.FC<Props> = ({ lang, staffName, clients }) => {
+export const Dashboard: React.FC<Props> = ({ lang, staffName, clients, setActiveTab }) => {
   const stats = [
     { label: 'Agency_Health', val: '98.4%', icon: ShieldCheck, color: 'text-emerald-400' },
     { label: 'Fleet_Velocity', val: '92.1%', icon: Zap, color: 'text-sky-400' },
@@ -18,7 +20,7 @@ export const Dashboard: React.FC<Props> = ({ lang, staffName, clients }) => {
   ];
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-700 h-full overflow-y-auto scrollbar-hide pb-20">
+    <div className="space-y-12 animate-in fade-in duration-700 h-full overflow-y-auto scrollbar-hide pb-20">
       <div className="bg-indigo-600/10 border border-indigo-500/20 rounded-[3.5rem] p-12 relative overflow-hidden group">
         <div className="relative z-10 space-y-4">
           <p className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.4em] mb-2">
@@ -50,6 +52,8 @@ export const Dashboard: React.FC<Props> = ({ lang, staffName, clients }) => {
           </div>
         ))}
       </div>
+
+      <CommandGrid setActiveTab={setActiveTab} language={lang} />
 
       <div className="bg-white/5 border border-white/10 rounded-[4rem] p-12 relative overflow-hidden">
         <h3 className="text-xl font-black italic uppercase tracking-tighter text-white mb-10">

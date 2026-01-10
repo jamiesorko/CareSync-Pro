@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Client, HuddleSignal } from '../../types';
 import { clinicalTruthFusionService } from '../../services/clinicalTruthFusionService';
+import { Translate } from '../../components/Translate';
 
 interface Props {
   language: string;
@@ -36,8 +37,12 @@ const NeuralHuddleRoom: React.FC<Props> = ({ language, clients }) => {
     <div className="space-y-12 animate-in fade-in duration-1000">
       <div className="flex justify-between items-end">
         <div>
-          <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none text-indigo-400">Neural_Huddle</h2>
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">Multimodal Consensus & Truth Synthesis</p>
+          <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none text-indigo-400">
+            <Translate target={language}>Neural_Huddle</Translate>
+          </h2>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">
+            <Translate target={language}>Multimodal_Consensus_&_Truth_Synthesis</Translate>
+          </p>
         </div>
         <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10">
            {clients.slice(0, 3).map(c => (
@@ -52,21 +57,33 @@ const NeuralHuddleRoom: React.FC<Props> = ({ language, clients }) => {
            {loading ? (
              <div className="flex-1 flex flex-col items-center justify-center space-y-10">
                 <div className="w-20 h-20 border-4 border-indigo-500/10 border-t-indigo-500 rounded-full animate-spin"></div>
-                <p className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.5em] animate-pulse">Fusing_Signal_Vectors</p>
+                <p className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.5em] animate-pulse">
+                  <Translate target={language}>Fusing_Signal_Vectors</Translate>
+                </p>
              </div>
            ) : signal && (
-             <div className="space-y-12 relative z-10 animate-in slide-in-from-bottom-8">
+             <div className="space-y-12 relative z-10 animate-in slide-in-from-bottom-8 duration-700">
                 <div className="p-10 bg-white/[0.03] border border-white/5 rounded-[3.5rem]">
-                   <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-6">Consensus_Dossier</p>
-                   <p className="text-2xl font-bold text-white leading-relaxed italic uppercase tracking-tighter">"{signal.truthSynthesis}"</p>
+                   <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-6">
+                    <Translate target={language}>Consensus_Dossier</Translate>
+                   </p>
+                   <p className="text-2xl font-bold text-white leading-relaxed italic uppercase tracking-tighter">
+                     "<Translate target={language}>{signal.truthSynthesis}</Translate>"
+                   </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                    <div className="p-8 bg-white/[0.03] border border-white/5 rounded-3xl">
-                      <p className="text-[9px] font-black text-slate-500 uppercase mb-4 tracking-widest">Contradiction Detected</p>
-                      <span className={`px-2 py-1 rounded text-[8px] font-black uppercase ${signal.contradictionDetected ? 'bg-rose-500' : 'bg-emerald-500'} text-white`}>{signal.contradictionDetected ? 'YES' : 'NO'}</span>
+                      <p className="text-[9px] font-black text-slate-500 uppercase mb-4 tracking-widest">
+                        <Translate target={language}>Contradiction_Detected</Translate>
+                      </p>
+                      <span className={`px-2 py-1 rounded text-[8px] font-black uppercase ${signal.contradictionDetected ? 'bg-rose-500' : 'bg-emerald-500'} text-white`}>
+                        {signal.contradictionDetected ? <Translate target={language}>YES</Translate> : <Translate target={language}>NO</Translate>}
+                      </span>
                    </div>
                    <div className="p-8 bg-white/[0.03] border border-white/5 rounded-3xl">
-                      <p className="text-[9px] font-black text-slate-500 uppercase mb-4 tracking-widest">Confidence Score</p>
+                      <p className="text-[9px] font-black text-slate-500 uppercase mb-4 tracking-widest">
+                        <Translate target={language}>Confidence_Score</Translate>
+                      </p>
                       <p className="text-3xl font-black text-indigo-400 italic">{Math.round(signal.confidence * 100)}%</p>
                    </div>
                 </div>
@@ -74,9 +91,15 @@ const NeuralHuddleRoom: React.FC<Props> = ({ language, clients }) => {
            )}
         </div>
         <div className="lg:col-span-4 bg-indigo-600 p-10 rounded-[3rem] text-white shadow-2xl">
-           <h3 className="text-xs font-black uppercase tracking-widest mb-10 opacity-60">Intercept_Directive</h3>
-           <p className="text-lg font-bold italic leading-tight mb-10">"{signal?.remediationDirective || "Awaiting consensus..."}"</p>
-           <button onClick={() => alert("Directing RN supervisor to intervene.")} className="w-full py-5 bg-white text-indigo-600 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl">AUTHORIZE_INTERCEPT</button>
+           <h3 className="text-xs font-black uppercase tracking-widest mb-10 opacity-60">
+             <Translate target={language}>Intercept_Directive</Translate>
+           </h3>
+           <p className="text-lg font-bold italic leading-tight mb-10">
+             "<Translate target={language}>{signal?.remediationDirective || "Awaiting_consensus"}</Translate>"
+           </p>
+           <button onClick={() => alert("Directing RN supervisor to intervene.")} className="w-full py-5 bg-white text-indigo-600 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl">
+             <Translate target={language}>AUTHORIZE_INTERCEPT</Translate>
+           </button>
         </div>
       </div>
     </div>

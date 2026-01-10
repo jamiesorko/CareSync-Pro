@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { logisticsThroughputService, ThroughputMetric } from '../../services/logisticsThroughputService';
 import Translate from '../../components/Translate';
