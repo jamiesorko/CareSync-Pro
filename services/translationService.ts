@@ -22,14 +22,14 @@ class TranslationService {
         
         Mandatory Rules:
         - Output ONLY the translated string.
-        - CLINICAL JARGON: Terms like "Complex Wound Care", "Acuity", "ADL Support", "Hoyer Lift", and "Geofence" MUST use their professional medical/technical equivalents in "${targetLanguage}".
-        - NUMERIC LOCALIZATION: If the text is a number (e.g., "15", "94.2"), a measurement (e.g., "40h", "80 Units"), or a financial magnitude (e.g., "$14.2k", "$1,420.00"), translate the digits, separators, units, and suffixes to the standard form used in "${targetLanguage}".
-        - FORMATTING: Ensure decimal separators (commas vs dots) and currency symbol placement follow the conventions of "${targetLanguage}".
+        - CLINICAL JARGON: Terms like "Complex Wound Care", "Registered Nurse", "PSW", "Acuity", and "Geofence" MUST use their professional medical equivalents in "${targetLanguage}".
+        - NUMERIC LOCALIZATION: If the text is a number (e.g., "15", "94.2"), a measurement (e.g., "40h"), or a financial magnitude (e.g., "$14.2k", "$1,420.00"), translate the digits, separators, units, and suffixes to the standard form used in "${targetLanguage}".
+        - CURRENCY FORMATTING: Ensure currency symbol placement and decimal separators (commas vs dots) follow the conventions of "${targetLanguage}".
         - Maintain the formal, high-tech, professional tone of a global healthcare CEO ERP.
-        - If the source is snake_case or specific dashboard labels (e.g., FISCAL_HEALTH_COCKPIT), translate it as a user-friendly label in "${targetLanguage}".`,
+        - Translate snake_case keys (e.g., FISCAL_HEALTH_COCKPIT) into user-friendly localized labels.`,
         config: { 
           temperature: 0.0,
-          systemInstruction: "You are the CareSync Universal Translation Node. Accuracy, regional number localization, and healthcare terminology are your primary objectives."
+          systemInstruction: "You are the CareSync Universal Translation Node. Accuracy in medical terminology and regional number formatting is your primary objective."
         }
       });
 
