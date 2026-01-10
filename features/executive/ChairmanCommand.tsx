@@ -86,7 +86,7 @@ const ChairmanCommand: React.FC<Props> = ({ language }) => {
                       <Translate target={language}>Market_Grounded_Outlook</Translate>
                    </p>
                    <div className="p-10 bg-sky-600/5 border border-sky-500/10 rounded-[3rem]">
-                      <p className="text-lg text-slate-200 leading-relaxed font-medium italic">
+                      <p className="text-lg text-slate-200 leading-relaxed font-medium italic italic">
                          <Translate target={language}>{mandate.marketSentimentGrounded}</Translate>
                       </p>
                    </div>
@@ -105,7 +105,7 @@ const ChairmanCommand: React.FC<Props> = ({ language }) => {
                    <Translate target={language}>{String(mandate?.strategicRiskIndex || '--')}</Translate>
                  </p>
                  <span className="text-xs font-black opacity-40 uppercase">
-                    <Translate target={language}>Current_Risk</Translate>
+                    <Translate target={language}>Safe</Translate>
                  </span>
               </div>
               <p className="text-sm font-bold italic leading-relaxed opacity-80 mb-10">

@@ -24,9 +24,9 @@ class TranslationService {
         - Output ONLY the translated string.
         - CLINICAL JARGON: Terms like "Complex Wound Care", "Acuity", "ADL Support", "Hoyer Lift", and "Geofence" MUST use their professional medical/technical equivalents in "${targetLanguage}".
         - NUMERIC LOCALIZATION: If the text is a number (e.g., "15", "94.2"), a measurement (e.g., "40h", "80 Units"), or a financial magnitude (e.g., "$14.2k", "$1,420.00"), translate the digits, separators, units, and suffixes to the standard form used in "${targetLanguage}".
-        - FORMATTING: Ensure decimal separators (commas vs dots) and currency symbol placement follow the conventions of "${targetLanguage}". For example, in French, "$14.2k" might become "14,2 k$".
+        - FORMATTING: Ensure decimal separators (commas vs dots) and currency symbol placement follow the conventions of "${targetLanguage}".
         - Maintain the formal, high-tech, professional tone of a global healthcare CEO ERP.
-        - If the source is snake_case or specific dashboard labels (e.g., FISCAL_HEALTH_COCKPIT), translate it as a user-friendly label in "${targetLanguage}".`,
+        - If the source is snake_case (e.g., OVERTIME_REQUIRED), translate it as a user-friendly label.`,
         config: { 
           temperature: 0.0,
           systemInstruction: "You are the CareSync Universal Translation Node. Accuracy, regional number localization, and healthcare terminology are your primary objectives."
