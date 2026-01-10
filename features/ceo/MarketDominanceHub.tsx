@@ -73,7 +73,9 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
                       />
                       <div className="mt-2 flex items-center gap-2">
                         <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest"><Translate target={language}>Currently_Analyzing</Translate>:</span>
-                        <span className="text-[8px] font-black text-amber-500 uppercase tracking-widest italic"><Translate target={language}>{service}</Translate></span>
+                        <span className="text-[8px] font-black text-amber-500 uppercase tracking-widest italic">
+                          <Translate target={language}>{service}</Translate>
+                        </span>
                       </div>
                     </div>
                  </div>
@@ -86,7 +88,7 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
                    <Translate target={language}>Bid_Confidence_Score</Translate>
                 </p>
                 <p className="text-8xl font-black italic tracking-tighter">
-                   <Translate target={language}>{`${strategy.bidConfidence}%`}</Translate>
+                   <Translate target={language}>{String(strategy.bidConfidence)}</Translate>%
                 </p>
              </div>
            )}
