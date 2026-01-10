@@ -111,7 +111,7 @@ const FiscalHealthCockpit: React.FC<Props> = ({ language }) => {
 
         {/* Forensic Interrogation Sidebar */}
         <div className="lg:col-span-4 space-y-6 flex flex-col">
-           <div className="bg-[#1e1b4b] border border-white/10 p-10 rounded-[3rem] shadow-2xl relative overflow-hidden flex-1 flex flex-col">
+           <div className="bg-[#1e1b4b] border border-white/10 p-10 rounded-[3rem] shadow-2xl relative overflow-hidden flex flex-col">
               <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
                 <span className="text-7xl font-black italic uppercase">Vault</span>
               </div>
