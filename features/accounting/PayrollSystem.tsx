@@ -13,7 +13,7 @@ const PayrollSystem: React.FC<Props> = ({ language }) => {
 
   return (
     <div className="space-y-10 animate-in fade-in duration-700">
-      <div className="bg-slate-900 border border-white/10 rounded-[4rem] p-12 shadow-2xl relative overflow-hidden">
+      <div className="bg-slate-900 border border-white/10 rounded-[4rem] p-12 shadow-2xl relative overflow-hidden text-slate-200">
         <div className="absolute top-0 right-0 p-12 opacity-5"><DollarSign size={200} /></div>
         
         <h3 className="text-3xl font-black text-white italic tracking-tighter uppercase mb-12">

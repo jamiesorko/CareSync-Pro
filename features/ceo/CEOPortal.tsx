@@ -11,9 +11,10 @@ interface Props {
   language: string;
   clients: Client[];
   staff: StaffMember[];
+  user: User;
 }
 
-const CEOPortal: React.FC<Props> = ({ language, clients, staff }) => {
+const CEOPortal: React.FC<Props> = ({ language, clients, staff, user }) => {
   const [activeView, setActiveView] = useState<'MACRO' | 'SEARCH' | 'STRATEGY' | 'DOMINANCE'>('MACRO');
 
   const tabs = [

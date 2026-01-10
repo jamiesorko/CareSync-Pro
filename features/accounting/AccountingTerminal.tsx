@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Client } from '../../types';
 import { Translate } from '../../components/Translate';
@@ -75,7 +74,7 @@ const AccountingTerminal: React.FC<Props> = ({ language, staffName, clients }) =
         ))}
       </div>
 
-      <div className="min-h-[600px] px-4 pb-24 font-mono">
+      <div className="min-h-[600px] px-4 pb-24 font-mono text-slate-200">
         {activeSubTab === 'PAYROLL' && <PayrollSystem language={language} />}
         {activeSubTab === 'HEALTH' && <FiscalHealthCockpit language={language} />}
         {activeSubTab === 'RECOVERY' && <RevenueRecoveryNexus language={language} />}

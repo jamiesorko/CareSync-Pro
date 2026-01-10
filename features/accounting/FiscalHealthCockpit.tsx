@@ -31,7 +31,7 @@ const FiscalHealthCockpit: React.FC<Props> = ({ language }) => {
   }, []);
 
   return (
-    <div className="h-full space-y-12 animate-in fade-in duration-1000 pb-24">
+    <div className="h-full space-y-12 animate-in fade-in duration-1000 pb-24 text-slate-200">
       <div className="flex justify-between items-end">
         <div>
           <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none text-indigo-400">
@@ -83,7 +83,7 @@ const FiscalHealthCockpit: React.FC<Props> = ({ language }) => {
                     </div>
                     <div className="text-right">
                        <p className={`text-xl font-black italic ${s.type === 'UPCODING' ? 'text-emerald-500' : 'text-rose-500'}`}>
-                         <Translate target={language}>{`${s.type === 'UPCODING' ? '+' : '-'}${(s.estimatedLoss || 0).toLocaleString()}`}</Translate>
+                         <Translate target={language}>{`${s.type === 'UPCODING' ? '+' : '-'}$${(s.estimatedLoss || 0).toLocaleString()}`}</Translate>
                        </p>
                        <p className="text-[7px] font-bold text-slate-600 uppercase mt-1">
                           <Translate target={language}>Capital_Drift</Translate>

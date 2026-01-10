@@ -105,7 +105,7 @@ const ChairmanCommand: React.FC<Props> = ({ language }) => {
                    <Translate target={language}>{String(mandate?.strategicRiskIndex || '--')}</Translate>
                  </p>
                  <span className="text-xs font-black opacity-40 uppercase">
-                    <Translate target={language}>Safe</Translate>
+                    <Translate target={language}>Risk_Level</Translate>
                  </span>
               </div>
               <p className="text-sm font-bold italic leading-relaxed opacity-80 mb-10">
