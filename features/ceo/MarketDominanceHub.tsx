@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { marketDominanceService } from '../../services/marketDominanceService';
 import { DominanceStrategy } from '../../types';
@@ -65,14 +66,17 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
                     <label className="block text-[8px] font-black text-slate-600 uppercase tracking-widest mb-3">
                        <Translate target={language}>Specialized_Service_Pivot</Translate>
                     </label>
-                    <input 
-                      value={service}
-                      onChange={(e) => setService(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-sm text-white focus:outline-none"
-                    />
-                    <p className="mt-2 text-[8px] font-black text-slate-600 uppercase">
-                      <Translate target={language}>Current_Filter</Translate>: <Translate target={language}>{service}</Translate>
-                    </p>
+                    <div className="relative">
+                      <input 
+                        value={service}
+                        onChange={(e) => setService(e.target.value)}
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-sm text-white focus:outline-none"
+                      />
+                      <div className="mt-2 flex items-center gap-2">
+                        <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest"><Translate target={language}>Currently_Analyzing</Translate>:</span>
+                        <span className="text-[8px] font-black text-amber-500 uppercase tracking-widest italic"><Translate target={language}>{service}</Translate></span>
+                      </div>
+                    </div>
                  </div>
               </div>
            </div>

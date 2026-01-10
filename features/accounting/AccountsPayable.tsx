@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Translate } from '../../components/Translate';
 import { MOCK_PAYABLES, MOCK_SUPPLY_REQUESTS, PayableRecord, SupplyRequest } from '../../data/accountingData';
