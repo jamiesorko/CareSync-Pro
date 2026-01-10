@@ -88,7 +88,7 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
                    <Translate target={language}>Bid_Confidence_Score</Translate>
                 </p>
                 <p className="text-8xl font-black italic tracking-tighter">
-                   <Translate target={language}>{String(strategy.bidConfidence)}</Translate>%
+                   <Translate target={language}>{`${strategy.bidConfidence}%`}</Translate>
                 </p>
              </div>
            )}
