@@ -1,13 +1,13 @@
 
 import React from 'react';
-import { CareRole, User } from '../types';
+import { CareRole, User } from '../types/system';
 import { Fingerprint, ShieldCheck } from 'lucide-react';
 import LanguageSelector from '../components/LanguageSelector';
 import Translate from '../components/Translate';
 
 interface Props {
   onLogin: (user: User) => void;
-  // Added optional props for language management
+  // Fixed: Added missing props expected by app/page.tsx
   language?: string;
   onLanguageChange?: (lang: string) => void;
 }
@@ -28,10 +28,10 @@ const Login: React.FC<Props> = ({ onLogin }) => {
         <LanguageSelector />
       </div>
 
-      <div className="w-full max-w-md bg-white/5 border border-white/10 p-12 rounded-[4rem] backdrop-blur-2xl shadow-2xl relative overflow-hidden">
+      <div className="w-full max-w-md bg-white/5 border border-white/10 p-12 rounded-[4rem] backdrop-blur-2xl shadow-2xl relative overflow-hidden text-center">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500 to-transparent animate-pulse"></div>
         
-        <div className="text-center mb-12">
+        <div className="mb-12">
           <div className="w-20 h-20 bg-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-indigo-600/40">
             <Fingerprint size={40} className="text-white" />
           </div>

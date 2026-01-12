@@ -27,6 +27,9 @@ const ClientApp: React.FC<Props> = ({ user, onLogout }) => {
   // Use global translation context instead of local state
   const { language } = useTranslation();
   
+  // Fixed: Added missing activeTab state and setter
+  const [activeTab, setActiveTab] = useState<'HOME' | 'CONCERNS'>('HOME');
+  
   // Mock data for the demonstration
   // Fixed: explicitly typed useState with ClientVisit[] to allow status updates from confirmed to cancelled
   const [visits, setVisits] = useState<ClientVisit[]>([
@@ -54,7 +57,6 @@ const ClientApp: React.FC<Props> = ({ user, onLogout }) => {
         </div>
 
         <div className="flex items-center gap-6">
-          {/* Removed unsupported currentLanguage and onLanguageChange props from LanguageSelector */}
           <LanguageSelector />
           <button 
             onClick={onLogout}
@@ -72,14 +74,12 @@ const ClientApp: React.FC<Props> = ({ user, onLogout }) => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="text-center md:text-left">
               <h2 className="text-5xl font-black text-white tracking-tighter uppercase leading-none italic mb-4">
-                {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
                 <Translate target={language}>Welcome_Back</Translate>,<br/>
                 <span className="text-teal-500">{user.name.split(' ')[0]}</span>
               </h2>
               <div className="flex items-center gap-4 text-slate-500 justify-center md:justify-start">
                 <ShieldCheck size={14} className="text-emerald-500" />
                 <p className="text-[10px] font-black uppercase tracking-widest">
-                  {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
                   <Translate target={language}>Sovereign_Protocol_Active</Translate>
                 </p>
               </div>
@@ -90,14 +90,12 @@ const ClientApp: React.FC<Props> = ({ user, onLogout }) => {
                 onClick={() => setActiveTab('HOME')}
                 className={`px-10 py-4 rounded-3xl text-[10px] font-black uppercase transition-all flex items-center gap-3 ${activeTab === 'HOME' ? 'bg-teal-600 text-white' : 'text-slate-500'}`}
               >
-                {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
                 <Home size={16} /> <Translate target={language}>Care_Hub</Translate>
               </button>
               <button 
                 onClick={() => setActiveTab('CONCERNS')}
                 className={`px-10 py-4 rounded-3xl text-[10px] font-black uppercase transition-all flex items-center gap-3 ${activeTab === 'CONCERNS' ? 'bg-rose-600 text-white' : 'text-slate-500'}`}
               >
-                {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
                 <MessageSquare size={16} /> <Translate target={language}>Direct_Help</Translate>
               </button>
             </div>
@@ -123,7 +121,6 @@ const ClientApp: React.FC<Props> = ({ user, onLogout }) => {
                 <div className="glass-card p-8 rounded-[3rem] text-center">
                   <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4 italic">Institutional Integrity Check</p>
                   <p className="text-sm font-medium italic text-slate-300">
-                    {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
                     <Translate target={language}>The team is on-site and verified via GPS geofence.</Translate>
                   </p>
                 </div>
@@ -139,8 +136,8 @@ const ClientApp: React.FC<Props> = ({ user, onLogout }) => {
 
       {/* Navigation Footer for Mobile */}
       <footer className="fixed bottom-8 left-1/2 -translate-x-1/2 flex bg-black/80 backdrop-blur-2xl border border-white/10 p-2 rounded-[3rem] shadow-[0_0_50px_rgba(0,0,0,0.8)] md:hidden">
-        <button className="w-16 h-16 rounded-full flex items-center justify-center text-teal-400 bg-white/5"><Home size={24} /></button>
-        <button className="w-16 h-16 rounded-full flex items-center justify-center text-slate-500"><MessageSquare size={24} /></button>
+        <button onClick={() => setActiveTab('HOME')} className={`w-16 h-16 rounded-full flex items-center justify-center ${activeTab === 'HOME' ? 'text-teal-400 bg-white/5' : 'text-slate-500'}`}><Home size={24} /></button>
+        <button onClick={() => setActiveTab('CONCERNS')} className={`w-16 h-16 rounded-full flex items-center justify-center ${activeTab === 'CONCERNS' ? 'text-rose-400 bg-white/5' : 'text-slate-500'}`}><MessageSquare size={24} /></button>
       </footer>
     </div>
   );

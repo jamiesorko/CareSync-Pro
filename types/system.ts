@@ -19,6 +19,7 @@ export enum CareRole {
   HR_SPECIALIST = 'HR Specialist'
 }
 
+// Fixed: Synchronized with root types.ts to include all operational tabs
 export enum AppTab {
   DASHBOARD = 'Ops_Dashboard',
   STRATEGY = 'Strategic_Tabletop',
@@ -29,7 +30,12 @@ export enum AppTab {
   WELLNESS = 'Patient_Wellness',
   RESOURCE = 'Resource_Core',
   LIVE = 'Direct_Link',
-  ORG_COMMAND = 'Strategic_Moat'
+  ORG_COMMAND = 'Strategic_Moat',
+  SCHEDULE = 'Roster_Deployment',
+  CLINICAL_COMMAND = 'Clinical_Intel',
+  COORDINATION = 'Census_Matrix',
+  HR_HUB = 'Resource_Core_Node',
+  FINANCE = 'Fiscal_Ledger_Node'
 }
 
 export interface User {

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { AppTab, CareRole } from '../types';
+import { AppTab, CareRole } from '../types/system';
 import Translate from './Translate';
 import { 
   LayoutDashboard, Shield, Zap, Wallet, Database, 
@@ -12,29 +12,20 @@ interface SidebarProps {
   setActive: (tab: AppTab) => void;
   role: CareRole;
   onLogout: () => void;
-  // Added lang prop to interface
-  lang?: string;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout }) => {
   const menuItems = [
-    { id: AppTab.DASHBOARD, label: 'Ops_Dashboard', icon: LayoutDashboard },
-    { id: AppTab.STRATEGY, label: 'Strategic_Tabletop', icon: Cpu },
-    { id: AppTab.CLINICAL, label: 'Clinical_Governance', icon: Shield },
-    { id: AppTab.LOGISTICS, label: 'Fleet_Command', icon: Zap },
-    { id: AppTab.FISCAL, label: 'Fiscal_Ledger', icon: Wallet },
-    { id: AppTab.VAULT, label: 'Neural_Vault', icon: Database },
-    { id: AppTab.WELLNESS, label: 'Patient_Wellness', icon: Heart },
-    { id: AppTab.RESOURCE, label: 'Resource_Core', icon: Briefcase },
-    { id: AppTab.LIVE, label: 'Direct_Link', icon: Radio },
-  ].filter(item => {
-    if (item.id === AppTab.FISCAL && role === CareRole.DOC) return false;
-    return true;
-  });
-
-  if ([CareRole.CEO, CareRole.COO, CareRole.DOC].includes(role)) {
-    menuItems.splice(1, 0, { id: AppTab.ORG_COMMAND, label: 'Strategic_Moat', icon: Target });
-  }
+    { id: AppTab.DASHBOARD, label: 'OPS_DASHBOARD', icon: LayoutDashboard },
+    { id: AppTab.STRATEGY, label: 'STRATEGIC_TABLETOP', icon: Cpu },
+    { id: AppTab.CLINICAL, label: 'CLINICAL_GOVERNANCE', icon: Shield },
+    { id: AppTab.LOGISTICS, label: 'FLEET_COMMAND', icon: Zap },
+    { id: AppTab.FISCAL, label: 'FISCAL_LEDGER', icon: Wallet },
+    { id: AppTab.VAULT, label: 'NEURAL_VAULT', icon: Database },
+    { id: AppTab.WELLNESS, label: 'PATIENT_WELLNESS', icon: Heart },
+    { id: AppTab.RESOURCE, label: 'RESOURCE_CORE', icon: Briefcase },
+    { id: AppTab.LIVE, label: 'DIRECT_LINK', icon: Radio },
+  ];
 
   return (
     <aside className="w-64 bg-black/40 border-r border-white/5 flex flex-col backdrop-blur-xl shrink-0 h-full">
@@ -51,7 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout }) 
             onClick={() => setActive(item.id)}
             className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all ${
               active === item.id 
-                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' 
+                ? 'bg-indigo-600 text-white shadow-lg' 
                 : 'text-slate-500 hover:text-white hover:bg-white/5'
             }`}
           >
