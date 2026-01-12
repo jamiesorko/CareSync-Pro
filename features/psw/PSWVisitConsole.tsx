@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Client, CareRole, AlertType } from '../../types';
 import { Translate } from '../../components/Translate';
+import { translationService } from '../../services/translationService';
 import NeuralScribe from '../rn/NeuralScribe';
 import { ShieldAlert, Clock, MapPin, CheckCircle2, Stethoscope, Activity, HeartPulse, UserCheck, Edit3 } from 'lucide-react';
 
@@ -28,8 +29,9 @@ const PSWVisitConsole: React.FC<Props> = ({ client, onClockOut, onAlert, languag
     onClockOut();
   };
 
-  const triggerSignal = (type: AlertType, promptTxt: string) => {
-    const detail = prompt(promptTxt);
+  const triggerSignal = async (type: AlertType, promptTxt: string) => {
+    const localizedPrompt = await translationService.translate(promptTxt, language);
+    const detail = prompt(localizedPrompt);
     if (detail) {
       onAlert(type, detail);
     }

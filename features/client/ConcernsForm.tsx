@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { Send, MessageCircle, AlertTriangle } from 'lucide-react';
-import Translate from '../../components/Translate';
+import Translate, { useTranslate } from '../../components/Translate';
 import { geminiService } from '../../services/geminiService';
 
 interface Props {
@@ -12,6 +11,7 @@ interface Props {
 const ConcernsForm: React.FC<Props> = ({ language, onSent }) => {
   const [text, setText] = useState('');
   const [isTransmitting, setIsTransmitting] = useState(false);
+  const { translated: placeholderText } = useTranslate("Describe your concern in your own language...", language);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,12 +19,8 @@ const ConcernsForm: React.FC<Props> = ({ language, onSent }) => {
 
     setIsTransmitting(true);
     try {
-      // LOGIC: Translate the user's input (any language) to English for the main supervisor
       const englishReport = await geminiService.translateToEnglish(text);
-      
-      // Simulation of transmission to office
       console.log("[SUPERVISOR_LINK]: Report received in English:", englishReport);
-      
       alert("Transmission_Complete: Your report has been translated and sent to the clinical office.");
       setText('');
       onSent();
@@ -43,11 +39,9 @@ const ConcernsForm: React.FC<Props> = ({ language, onSent }) => {
         </div>
         <div>
           <h3 className="text-xl font-black text-white italic tracking-tighter uppercase leading-none">
-            {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
             <Translate target={language}>Direct_Supervisor_Link</Translate>
           </h3>
           <p className="text-[9px] font-bold text-rose-400 uppercase tracking-widest mt-1 italic">
-             {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
              <Translate target={language}>Global_to_English_Relay</Translate>
           </p>
         </div>
@@ -57,14 +51,13 @@ const ConcernsForm: React.FC<Props> = ({ language, onSent }) => {
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Describe your concern in your own language..."
+          placeholder={placeholderText}
           className="w-full h-40 p-8 bg-black/40 border border-white/10 rounded-[3rem] text-sm text-white focus:outline-none focus:border-rose-500 transition-all italic placeholder:text-slate-800"
         />
         
         <div className="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/5">
           <AlertTriangle size={14} className="text-amber-500" />
           <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">
-            {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
             <Translate target={language}>Your message will be translated into English for clinical review.</Translate>
           </p>
         </div>
@@ -73,7 +66,7 @@ const ConcernsForm: React.FC<Props> = ({ language, onSent }) => {
           disabled={isTransmitting || !text.trim()}
           className="w-full py-6 bg-white text-black rounded-3xl font-black text-xs uppercase tracking-[0.4em] shadow-xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-30 flex items-center justify-center gap-4"
         >
-          {isTransmitting ? 'TRANSMITTING...' : 'SEND_REPORT'}
+          {isTransmitting ? 'TRANSMITTING...' : <Translate target={language}>SEND_REPORT</Translate>}
           <Send size={16} />
         </button>
       </form>

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Client, StaffMember } from '../../types';
 import { Translate } from '../../components/Translate';
@@ -14,7 +13,9 @@ const FinancePortal: React.FC<Props> = ({ language }) => {
   return (
     <div className="space-y-12 pb-20">
       <div>
-        <h1 className="text-5xl font-black tracking-tighter uppercase italic text-emerald-500">FISCAL_LEDGER</h1>
+        <h1 className="text-5xl font-black tracking-tighter uppercase italic text-emerald-500">
+           <Translate target={language}>FISCAL_LEDGER</Translate>
+        </h1>
         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em] mt-2">
           <Translate target={language}>Capital Forensics & Automated Revenue Reclamation</Translate>
         </p>

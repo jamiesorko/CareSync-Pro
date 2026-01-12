@@ -7,6 +7,8 @@ import ScheduleGrid from './ScheduleGrid';
 import PSWCard from './PSWCard';
 import ConcernsForm from './ConcernsForm';
 import { LogOut, Home, MessageSquare, ShieldCheck } from 'lucide-react';
+// Imported useTranslation to synchronize with global language state
+import { useTranslation } from '../../contexts/TranslationContext';
 
 interface Props {
   user: User;
@@ -22,8 +24,8 @@ interface ClientVisit {
 }
 
 const ClientApp: React.FC<Props> = ({ user, onLogout }) => {
-  const [language, setLanguage] = useState('English');
-  const [activeTab, setActiveTab] = useState<'HOME' | 'CONCERNS'>('HOME');
+  // Use global translation context instead of local state
+  const { language } = useTranslation();
   
   // Mock data for the demonstration
   // Fixed: explicitly typed useState with ClientVisit[] to allow status updates from confirmed to cancelled
@@ -52,7 +54,8 @@ const ClientApp: React.FC<Props> = ({ user, onLogout }) => {
         </div>
 
         <div className="flex items-center gap-6">
-          <LanguageSelector currentLanguage={language} onLanguageChange={setLanguage} />
+          {/* Removed unsupported currentLanguage and onLanguageChange props from LanguageSelector */}
+          <LanguageSelector />
           <button 
             onClick={onLogout}
             className="p-4 bg-white/5 border border-white/10 rounded-2xl text-rose-500 hover:bg-rose-500/10 transition-all"

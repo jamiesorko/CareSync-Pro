@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Client } from '../../types';
 import { Translate } from '../../components/Translate';
@@ -14,7 +13,9 @@ const HSSPortal: React.FC<Props> = ({ language, clients }) => {
   return (
     <div className="space-y-12 pb-20">
       <div>
-        <h1 className="text-5xl font-black tracking-tighter uppercase italic text-purple-400">HUMAN_NEXUS</h1>
+        <h1 className="text-5xl font-black tracking-tighter uppercase italic text-purple-400">
+           <Translate target={language}>HUMAN_NEXUS</Translate>
+        </h1>
         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em] mt-2">
           <Translate target={language}>Bio-Social Intercept & Neighborhood Surveillance</Translate>
         </p>

@@ -11,11 +11,12 @@ interface SidebarProps {
   active: AppTab;
   setActive: (tab: AppTab) => void;
   role: CareRole;
-  lang: string;
   onLogout: () => void;
+  // Added lang prop to interface
+  lang?: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, lang, onLogout }) => {
+const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout }) => {
   const menuItems = [
     { id: AppTab.DASHBOARD, label: 'Ops_Dashboard', icon: LayoutDashboard },
     { id: AppTab.STRATEGY, label: 'Strategic_Tabletop', icon: Cpu },
@@ -56,7 +57,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, lang, onLogo
           >
             <item.icon size={18} />
             <span className="text-[10px] font-black uppercase tracking-widest">
-              <Translate target={lang}>{item.label}</Translate>
+              <Translate>{item.label}</Translate>
             </span>
           </button>
         ))}
@@ -68,7 +69,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, lang, onLogo
           className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-rose-500 hover:bg-rose-500/10 transition-all font-black text-[10px] uppercase tracking-widest"
         >
           <Power size={18} />
-          <Translate target={lang}>SIGN_OUT</Translate>
+          <Translate>SIGN_OUT</Translate>
         </button>
       </div>
     </aside>

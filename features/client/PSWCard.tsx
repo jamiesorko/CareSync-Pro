@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Star, ShieldOff, Heart, AlertCircle } from 'lucide-react';
 import Translate from '../../components/Translate';
@@ -24,12 +23,13 @@ const PSWCard: React.FC<Props> = ({ pswName, isNew, language, onBlacklist, onRat
         <div>
           {isNew && (
             <span className="px-3 py-1 bg-amber-500/20 border border-amber-500/30 text-amber-500 text-[8px] font-black rounded-lg uppercase mb-4 inline-block tracking-widest animate-pulse">
-              {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
               <Translate target={language}>NEW_WORKER_TO_HOME</Translate>
             </span>
           )}
           <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter leading-none">{pswName}</h3>
-          <p className="text-[10px] font-bold text-slate-500 uppercase mt-1 tracking-widest">Active Care Professional</p>
+          <p className="text-[10px] font-bold text-slate-500 uppercase mt-1 tracking-widest">
+            <Translate target={language}>Active_Care_Professional</Translate>
+          </p>
         </div>
         
         <button 
@@ -37,13 +37,14 @@ const PSWCard: React.FC<Props> = ({ pswName, isNew, language, onBlacklist, onRat
           className="p-4 bg-rose-600/10 border border-rose-500/20 text-rose-500 rounded-2xl hover:bg-rose-600 hover:text-white transition-all shadow-lg group/btn"
         >
           <ShieldOff size={20} />
-          <div className="absolute top-full right-0 mt-2 hidden group-hover/btn:block bg-black text-white text-[8px] font-black uppercase p-2 rounded whitespace-nowrap z-50">Restrict_Staff</div>
+          <div className="absolute top-full right-0 mt-2 hidden group-hover/btn:block bg-black text-white text-[8px] font-black uppercase p-2 rounded whitespace-nowrap z-50">
+             <Translate target={language}>Restrict_Staff</Translate>
+          </div>
         </button>
       </div>
 
       <div className="bg-white/5 border border-white/5 p-8 rounded-[2.5rem] text-center">
         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6 italic">
-          {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
           <Translate target={language}>Rate_This_Worker's_Performance</Translate>
         </p>
         <div className="flex justify-center gap-4">

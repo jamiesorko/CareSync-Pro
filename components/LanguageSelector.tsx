@@ -1,14 +1,16 @@
+
 import React, { useState, useMemo } from 'react';
 import { Search, Globe, Plus, X, Zap, Check } from 'lucide-react';
+import Translate, { useTranslate } from './Translate';
+import { useTranslation } from '../contexts/TranslationContext';
 
-interface Props {
-  currentLanguage: string;
-  onLanguageChange: (lang: string) => void;
-}
-
-const LanguageSelector: React.FC<Props> = ({ currentLanguage, onLanguageChange }) => {
+const LanguageSelector: React.FC = () => {
+  const { language: currentLanguage, setLanguage } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
+  
+  // Translate the placeholder dynamically
+  const { translated: placeholderText } = useTranslate("Search or type ANY language...");
 
   const commonLanguages = [
     "English", "Spanish", "French", "Chinese", "Hindi", "Arabic", "Portuguese", 
@@ -22,7 +24,7 @@ const LanguageSelector: React.FC<Props> = ({ currentLanguage, onLanguageChange }
   }, [query]);
 
   const handleSelect = (lang: string) => {
-    onLanguageChange(lang);
+    setLanguage(lang);
     setIsOpen(false);
     setQuery('');
   };
@@ -37,7 +39,9 @@ const LanguageSelector: React.FC<Props> = ({ currentLanguage, onLanguageChange }
       >
         <Globe size={18} className="text-indigo-400 group-hover:rotate-45 transition-transform duration-500" />
         <div className="text-left">
-          <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Global_Linguist</p>
+          <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">
+             <Translate>Global_Linguist</Translate>
+          </p>
           <p className="text-[11px] font-black uppercase text-white tracking-tighter">{currentLanguage}</p>
         </div>
       </button>
@@ -45,7 +49,9 @@ const LanguageSelector: React.FC<Props> = ({ currentLanguage, onLanguageChange }
       {isOpen && (
         <div className="absolute top-full right-0 mt-4 w-80 bg-slate-950 border border-white/10 rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.9)] z-[1000] p-6 animate-in fade-in zoom-in-95 duration-200">
           <div className="flex items-center justify-between mb-6 px-2">
-            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Language_Registry</p>
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
+               <Translate>Language_Registry</Translate>
+            </p>
             <button onClick={() => setIsOpen(false)} className="text-slate-600 hover:text-white">
               <X size={14} />
             </button>
@@ -56,7 +62,7 @@ const LanguageSelector: React.FC<Props> = ({ currentLanguage, onLanguageChange }
             <input 
               autoFocus
               type="text"
-              placeholder="Search or type ANY language..."
+              placeholder={placeholderText}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-xs text-white outline-none focus:border-indigo-500 transition-colors italic"
@@ -73,10 +79,14 @@ const LanguageSelector: React.FC<Props> = ({ currentLanguage, onLanguageChange }
                 className="w-full text-left p-4 rounded-2xl bg-indigo-600/10 border border-indigo-500/20 group hover:bg-indigo-600/20 transition-all mb-4"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-black text-white uppercase tracking-widest italic">Forge: "{query}"</span>
+                  <span className="text-xs font-black text-white uppercase tracking-widest italic">
+                     <Translate>Forge</Translate>: "{query}"
+                  </span>
                   <Plus size={12} className="text-indigo-400 animate-pulse" />
                 </div>
-                <p className="text-[8px] text-slate-500 mt-1 uppercase font-bold">Initiate neural dialect vector</p>
+                <p className="text-[8px] text-slate-500 mt-1 uppercase font-bold">
+                   <Translate>Initiate neural dialect vector</Translate>
+                </p>
               </button>
             )}
 
@@ -96,7 +106,9 @@ const LanguageSelector: React.FC<Props> = ({ currentLanguage, onLanguageChange }
           
           <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-center gap-2">
              <Zap size={10} className="text-indigo-400" />
-             <p className="text-[8px] text-slate-600 font-bold uppercase tracking-widest">Supporting Every Global Dialect</p>
+             <p className="text-[8px] text-slate-600 font-bold uppercase tracking-widest">
+                <Translate>Supporting Every Global Dialect</Translate>
+             </p>
           </div>
         </div>
       )}

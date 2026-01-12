@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Client, StaffMember } from '../../types';
 import { Translate } from '../../components/Translate';
@@ -16,7 +15,9 @@ const COOPortal: React.FC<Props> = ({ language, clients, staff }) => {
   return (
     <div className="space-y-12 pb-20">
       <div>
-        <h1 className="text-5xl font-black tracking-tighter uppercase italic text-cyan-400">OPS_COMMAND</h1>
+        <h1 className="text-5xl font-black tracking-tighter uppercase italic text-cyan-400">
+           <Translate target={language}>OPS_COMMAND</Translate>
+        </h1>
         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em] mt-2">
           <Translate target={language}>Fleet Orchestration & Throughput Optimization</Translate>
         </p>
