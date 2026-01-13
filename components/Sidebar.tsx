@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { AppTab, CareRole } from '../types/system';
+import { AppTab, CareRole } from '../types';
 import Translate from './Translate';
 import { 
   LayoutDashboard, Shield, Zap, Wallet, Database, 
@@ -12,11 +12,10 @@ interface SidebarProps {
   setActive: (tab: AppTab) => void;
   role: CareRole;
   onLogout: () => void;
-  // Added: lang prop used by parent components
   lang?: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, lang }) => {
+const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout }) => {
   const menuItems = [
     { id: AppTab.DASHBOARD, label: 'OPS_DASHBOARD', icon: LayoutDashboard },
     { id: AppTab.STRATEGY, label: 'STRATEGIC_TABLETOP', icon: Cpu },
@@ -50,8 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, la
           >
             <item.icon size={18} />
             <span className="text-[10px] font-black uppercase tracking-widest">
-              {/* Pass lang to Translate if available */}
-              <Translate target={lang}>{item.label}</Translate>
+              <Translate>{item.label}</Translate>
             </span>
           </button>
         ))}
@@ -63,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, la
           className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-rose-500 hover:bg-rose-500/10 transition-all font-black text-[10px] uppercase tracking-widest"
         >
           <Power size={18} />
-          <Translate target={lang}>SIGN_OUT</Translate>
+          <Translate>SIGN_OUT</Translate>
         </button>
       </div>
     </aside>

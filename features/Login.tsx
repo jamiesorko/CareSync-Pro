@@ -1,18 +1,17 @@
 
 import React from 'react';
-import { CareRole, User } from '../types/system';
+import { CareRole, User } from '../types';
 import { Fingerprint, ShieldCheck } from 'lucide-react';
 import LanguageSelector from '../components/LanguageSelector';
 import Translate from '../components/Translate';
 
 interface Props {
   onLogin: (user: User) => void;
-  // Added: language and onLanguageChange props for localization
   language?: string;
   onLanguageChange?: (lang: string) => void;
 }
 
-const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
+const Login: React.FC<Props> = ({ onLogin }) => {
   const personas: User[] = [
     { name: 'Jamie Sorko', role: CareRole.CEO },
     { name: 'Sarah Walker', role: CareRole.DOC },
@@ -36,10 +35,10 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
             <Fingerprint size={40} className="text-white" />
           </div>
           <h1 className="text-3xl font-black text-white tracking-tighter uppercase italic leading-none">
-            <Translate target={language}>CareSync_Pro</Translate>
+            <Translate>CareSync_Pro</Translate>
           </h1>
           <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em] mt-3">
-             <Translate target={language}>IDENTITY_VALIDATION_REQUIRED</Translate>
+             <Translate>IDENTITY_VALIDATION_REQUIRED</Translate>
           </p>
         </div>
 
@@ -54,7 +53,7 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
                 <p className="text-sm font-black text-white uppercase italic tracking-tight">{p.name}</p>
                 <p className="text-[8px] font-bold text-slate-500 uppercase flex items-center gap-2 mt-1">
                   <ShieldCheck size={10} className="text-indigo-400" /> 
-                  <Translate target={language}>{p.role}</Translate>
+                  <Translate>{p.role}</Translate>
                 </p>
               </div>
               <span className="text-xs text-indigo-500 opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">→</span>
@@ -64,7 +63,7 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
       </div>
       
       <p className="mt-8 text-[10px] font-bold text-slate-600 uppercase tracking-widest italic opacity-50">
-        <Translate target={language}>Precision_Enterprise_Healthcare_Node_v6.4_Global_Build</Translate>
+        <Translate>Precision_Enterprise_Healthcare_Node_v6.4_Global_Build</Translate>
       </p>
     </div>
   );

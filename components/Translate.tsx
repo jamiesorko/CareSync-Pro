@@ -8,7 +8,8 @@ import { useTranslation } from '../contexts/TranslationContext';
  */
 const normalizeText = (val: string) => {
   if (!val) return "";
-  if (val === val.toUpperCase() && val.includes('_')) {
+  // Check if it's a technical key: UPPER_CASE or contains underscores
+  if ((val === val.toUpperCase() && val.includes('_')) || val.includes('_')) {
     return val.split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
@@ -19,37 +20,47 @@ const normalizeText = (val: string) => {
 /**
  * useTranslate Hook
  * Returns a translated version of the input string based on current global language.
- * Added: target parameter to allow overriding global language.
  */
-export const useTranslate = (text: string, target?: string) => {
-  const { language: globalLanguage } = useTranslation();
-  // Use provided target or fall back to global language
-  const language = target || globalLanguage;
+export const useTranslate = (text: string, targetOverride?: string) => {
+  const { language: contextLanguage } = useTranslation();
+  const language = targetOverride || contextLanguage;
   const [translated, setTranslated] = useState(normalizeText(text));
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const normalizedSource = normalizeText(text);
 
+    // Default to normalized source if English or empty
     if (!normalizedSource || (language && language.toLowerCase() === 'english')) {
-      setTranslated(normalizedSource);
+      setTranslated(normalizedSource || text);
       return;
     }
 
     const run = async () => {
-      const cacheKey = `cs_v8_${language}_${normalizedSource}`;
+      const cacheKey = `cs_v9_${language}_${normalizedSource}`;
       const cached = localStorage.getItem(cacheKey);
+      
       if (cached) {
         setTranslated(cached);
         return;
       }
 
       setLoading(true);
-      const res = await translationService.translate(normalizedSource, language);
-      localStorage.setItem(cacheKey, res);
-      setTranslated(res);
-      setLoading(false);
+      try {
+        const res = await translationService.translate(normalizedSource, language);
+        if (res && res !== normalizedSource) {
+          localStorage.setItem(cacheKey, res);
+          setTranslated(res);
+        } else {
+          setTranslated(normalizedSource);
+        }
+      } catch (e) {
+        setTranslated(normalizedSource);
+      } finally {
+        setLoading(false);
+      }
     };
+
     run();
   }, [text, language]);
 
@@ -58,8 +69,8 @@ export const useTranslate = (text: string, target?: string) => {
 
 /**
  * Translate Component
- * The primary way to internationalize UI strings.
- * Added: target prop to allow local language override.
+ * The primary way to internationalize UI strings. 
+ * Automatically handles strings, keys, and React context updates.
  */
 export const Translate: React.FC<{ children?: React.ReactNode; target?: string }> = ({ children, target }) => {
   const sourceText = typeof children === 'string' ? children : String(children || '');
