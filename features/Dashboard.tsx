@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Translate } from '../components/Translate';
 import { Activity, Zap, TrendingUp, ShieldCheck, MapPin } from 'lucide-react';
@@ -5,13 +6,15 @@ import { Client } from '../types';
 import CommandGrid from './dashboard/CommandGrid';
 
 interface Props {
-  lang: string;
   staffName?: string;
   clients?: Client[];
   setActiveTab: (tab: any) => void;
+  // Added lang prop to satisfy IntrinsicAttributes requirements in app/page.tsx
+  lang?: string;
 }
 
-export const Dashboard: React.FC<Props> = ({ lang, staffName, clients, setActiveTab }) => {
+// Destructured lang from props to support localized Dashboard rendering
+export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab, lang }) => {
   const stats = [
     { label: 'Agency_Health', val: '98.4%', icon: ShieldCheck, color: 'text-emerald-400' },
     { label: 'Fleet_Velocity', val: '92.1%', icon: Zap, color: 'text-sky-400' },
@@ -24,6 +27,7 @@ export const Dashboard: React.FC<Props> = ({ lang, staffName, clients, setActive
       <div className="bg-indigo-600/10 border border-indigo-500/20 rounded-[3.5rem] p-12 relative overflow-hidden group">
         <div className="relative z-10 space-y-4">
           <p className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.4em] mb-2">
+            {/* Added lang target to Translate components */}
             <Translate target={lang}>AUTHENTICATED_NODE_HANDSHAKE</Translate>
           </p>
           <h2 className="text-6xl font-black text-white uppercase italic tracking-tighter leading-none mb-6">
@@ -53,7 +57,8 @@ export const Dashboard: React.FC<Props> = ({ lang, staffName, clients, setActive
         ))}
       </div>
 
-      <CommandGrid setActiveTab={setActiveTab} language={lang} />
+      {/* Passing the language prop to the CommandGrid component */}
+      <CommandGrid setActiveTab={setActiveTab} language={lang || "English"} />
 
       <div className="bg-white/5 border border-white/10 rounded-[4rem] p-12 relative overflow-hidden">
         <h3 className="text-xl font-black italic uppercase tracking-tighter text-white mb-10">

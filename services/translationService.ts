@@ -2,11 +2,14 @@
 import { GoogleGenAI } from "@google/genai";
 
 class TranslationService {
-  private ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+  // Initialize AI client. Key is obtained from the environment as per guidelines.
+  private getAI() {
+    return new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+  }
 
   /**
    * Universal Neural Translation Vector
-   * Refined for institutional accuracy in roles and technical UI terminology.
+   * Optimized for formal healthcare terminology.
    */
   async translate(text: string, targetLanguage: string): Promise<string> {
     if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') {
@@ -14,28 +17,27 @@ class TranslationService {
     }
 
     try {
-      const response = await this.ai.models.generateContent({
+      const ai = this.getAI();
+      const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Act as a master medical ERP linguist. Translate this text into exactly: "${targetLanguage}".
+        contents: `Translate the following clinical/business text into ${targetLanguage}: "${text}"
         
-        Text: "${text}"
-        
-        Rules:
-        1. Output ONLY the translated string. No explanations.
-        2. Format: Preserve all caps if the source is all caps.
-        3. ROLES: "Director of Care", "RN", "PSW", "HSS", "CEO", "Accountant" must use their formal professional translations.
-        4. UI KEYS: Snake_case or Title_Case keys like "OPS_DASHBOARD" or "Neural_Vault" must be translated as user-friendly labels.
-        5. Tone: Maintain a high-tech, formal, institutional healthcare tone.`,
+        Mandatory Rules:
+        1. Output ONLY the translated string. Do not include quotes or explanations.
+        2. Tone: Formal, Institutional, High-tech Healthcare ERP.
+        3. Professional Roles: "PSW", "RN", "RPN", "DOC", "CEO", "HSS" must remain as their professional localized equivalents.
+        4. Consistency: Ensure technical terms like "Geofence", "Roster", or "Telemetry" are translated consistently.`,
         config: { 
           temperature: 0.0,
-          systemInstruction: "You are the primary translation engine for CareSync Pro. Absolute precision in clinical and executive roles is mandatory."
+          systemInstruction: "You are the primary translation engine for CareSync Pro, a world-class healthcare ERP. Precision is vital."
         }
       });
 
-      return response.text?.trim() || text;
+      const translatedText = response.text?.trim();
+      return translatedText || text;
     } catch (error) {
       console.error("[NEURAL_LINGUIST_SIGNAL_LOST]:", error);
-      return text; 
+      return text; // Graceful fallback to source text
     }
   }
 }
