@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { Search, ArrowRight, Shield } from 'lucide-react';
 import { MOCK_STAFF, MOCK_CLIENTS } from '../data/careData';
@@ -12,7 +13,7 @@ interface Props {
 
 const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClient }) => {
   const [query, setQuery] = useState('');
-  const { translated: placeholder } = useTranslate("Search by Personnel Name or Patient ID", language);
+  const { translated: placeholder } = useTranslate("Search by Personnel Name or Patient ID");
 
   const results = useMemo(() => {
     if (query.length < 2) return { staff: [], clients: [] };
@@ -45,7 +46,7 @@ const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClien
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-top-4 duration-500">
           <div className="space-y-4">
             <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-6">
-              <Translate target={language}>Personnel_Records_Found</Translate>
+              <Translate>Personnel_Records_Found</Translate>
             </h4>
             {results.staff.map(s => (
               <button 
@@ -56,7 +57,7 @@ const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClien
                 <div>
                   <p className="text-lg font-black text-white uppercase italic tracking-tighter">{s.name}</p>
                   <p className="text-[9px] font-bold text-slate-500 uppercase mt-1">
-                    <Translate target={language}>{s.role}</Translate> • <Translate target={language}>{s.homeSector}</Translate>
+                    <Translate>{String(s.role)}</Translate> • <Translate>{s.homeSector}</Translate>
                   </p>
                 </div>
                 <ArrowRight size={18} className="text-slate-700 group-hover:text-indigo-400 transition-colors" />
@@ -66,7 +67,7 @@ const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClien
 
           <div className="space-y-4">
             <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-6">
-              <Translate target={language}>Census_Matrix_Found</Translate>
+              <Translate>Census_Matrix_Found</Translate>
             </h4>
             {results.clients.map(c => (
               <button 
@@ -77,7 +78,7 @@ const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClien
                 <div>
                   <p className="text-lg font-black text-white uppercase italic tracking-tighter">{c.name}</p>
                   <p className="text-[9px] font-bold text-slate-500 uppercase mt-1">
-                    <Translate target={language}>{c.sector}</Translate>
+                    <Translate>{c.sector}</Translate>
                   </p>
                 </div>
                 <ArrowRight size={18} className="text-slate-700 group-hover:text-emerald-400 transition-colors" />
@@ -87,13 +88,13 @@ const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClien
         </div>
       ) : query.length >= 2 ? (
         <div className="p-24 text-center opacity-30 italic">
-          <Translate target={language}>No signals found in the registry.</Translate>
+          <Translate>No signals found in the registry.</Translate>
         </div>
       ) : (
         <div className="p-32 text-center opacity-10 flex flex-col items-center">
           <Shield size={64} strokeWidth={1} className="mb-6" />
           <p className="text-sm font-black uppercase tracking-widest italic">
-            <Translate target={language}>Enter credentials to interrogate registry</Translate>
+            <Translate>Enter credentials to interrogate registry</Translate>
           </p>
         </div>
       )}

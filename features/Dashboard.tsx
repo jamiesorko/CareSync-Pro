@@ -12,7 +12,7 @@ interface Props {
   lang?: string;
 }
 
-export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab }) => {
+export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab, lang }) => {
   const stats = [
     { label: 'Agency_Health', val: '98.4%', icon: ShieldCheck, color: 'text-emerald-400' },
     { label: 'Fleet_Velocity', val: '92.1%', icon: Zap, color: 'text-sky-400' },
@@ -54,7 +54,7 @@ export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab })
         ))}
       </div>
 
-      <CommandGrid setActiveTab={setActiveTab} language="English" />
+      <CommandGrid setActiveTab={setActiveTab} language={lang || "English"} />
 
       <div className="bg-white/5 border border-white/10 rounded-[4rem] p-12 relative overflow-hidden">
         <h3 className="text-xl font-black italic uppercase tracking-tighter text-white mb-10">
