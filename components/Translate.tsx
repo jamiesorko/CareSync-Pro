@@ -4,40 +4,41 @@ import { translationService } from '../services/translationService';
 import { useTranslation } from '../contexts/TranslationContext';
 
 /**
+ * Normalizes technical keys (e.g., 'OPS_DASHBOARD') into readable phrases.
+ */
+const normalizeText = (val: string) => {
+  if (!val) return "";
+  if (val === val.toUpperCase() && val.includes('_')) {
+    return val.split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  }
+  return val;
+};
+
+/**
  * useTranslate Hook
  * Returns a translated version of the input string based on current global language.
- * Now includes normalization for technical keys.
+ * Added: target parameter to allow overriding global language.
  */
-export const useTranslate = (text: string, targetOverride?: string) => {
-  const { language: contextLanguage } = useTranslation();
-  const language = targetOverride || contextLanguage;
-  const [translated, setTranslated] = useState(text);
+export const useTranslate = (text: string, target?: string) => {
+  const { language: globalLanguage } = useTranslation();
+  // Use provided target or fall back to global language
+  const language = target || globalLanguage;
+  const [translated, setTranslated] = useState(normalizeText(text));
   const [loading, setLoading] = useState(false);
 
-  // Normalizes keys like "OPS_DASHBOARD" to "Ops Dashboard"
-  const normalizeKey = (val: string) => {
-    if (!val) return "";
-    // If it looks like a technical key (UPPER_CASE)
-    if (val === val.toUpperCase() && val.includes('_')) {
-      return val.split('_')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-        .join(' ');
-    }
-    return val;
-  };
-
   useEffect(() => {
-    const normalizedSource = normalizeKey(text);
+    const normalizedSource = normalizeText(text);
 
     if (!normalizedSource || (language && language.toLowerCase() === 'english')) {
-      setTranslated(normalizedSource || text);
+      setTranslated(normalizedSource);
       return;
     }
 
     const run = async () => {
-      const cacheKey = `cs_v7_${language}_${normalizedSource}`;
+      const cacheKey = `cs_v8_${language}_${normalizedSource}`;
       const cached = localStorage.getItem(cacheKey);
-      
       if (cached) {
         setTranslated(cached);
         return;
@@ -45,16 +46,10 @@ export const useTranslate = (text: string, targetOverride?: string) => {
 
       setLoading(true);
       const res = await translationService.translate(normalizedSource, language);
-      
-      if (res && res !== normalizedSource) {
-        localStorage.setItem(cacheKey, res);
-        setTranslated(res);
-      } else {
-        setTranslated(normalizedSource);
-      }
+      localStorage.setItem(cacheKey, res);
+      setTranslated(res);
       setLoading(false);
     };
-
     run();
   }, [text, language]);
 
@@ -63,7 +58,8 @@ export const useTranslate = (text: string, targetOverride?: string) => {
 
 /**
  * Translate Component
- * Wraps hardcoded UI strings for automatic translation.
+ * The primary way to internationalize UI strings.
+ * Added: target prop to allow local language override.
  */
 export const Translate: React.FC<{ children?: React.ReactNode; target?: string }> = ({ children, target }) => {
   const sourceText = typeof children === 'string' ? children : String(children || '');

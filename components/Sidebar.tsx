@@ -12,11 +12,10 @@ interface SidebarProps {
   setActive: (tab: AppTab) => void;
   role: CareRole;
   onLogout: () => void;
-  // Added optional lang prop to satisfy IntrinsicAttributes requirements in Layout and AppShell
+  // Added: lang prop used by parent components
   lang?: string;
 }
 
-// Destructured lang from props to support manual language overrides in translations
 const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, lang }) => {
   const menuItems = [
     { id: AppTab.DASHBOARD, label: 'OPS_DASHBOARD', icon: LayoutDashboard },
@@ -51,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, la
           >
             <item.icon size={18} />
             <span className="text-[10px] font-black uppercase tracking-widest">
-              {/* Passed lang to Translate to ensure UI labels match global selection */}
+              {/* Pass lang to Translate if available */}
               <Translate target={lang}>{item.label}</Translate>
             </span>
           </button>
@@ -64,7 +63,6 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, la
           className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-rose-500 hover:bg-rose-500/10 transition-all font-black text-[10px] uppercase tracking-widest"
         >
           <Power size={18} />
-          {/* Passed lang to Translate for consistent localization */}
           <Translate target={lang}>SIGN_OUT</Translate>
         </button>
       </div>
