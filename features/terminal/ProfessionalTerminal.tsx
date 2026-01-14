@@ -29,10 +29,9 @@ const ProfessionalTerminal: React.FC<Props> = ({ clients, role, staffName, langu
 
   const getRoleBranding = () => {
     switch (role) {
-      case CareRole.RN: return { title: 'CLINICAL_INTEL_NODE', color: 'text-sky-400', theme: 'bg-sky-600', sub: 'Nursing Leadership & Critical Assessment' };
-      case CareRole.RPN: return { title: 'CLINICAL_PRACTICE_NODE', color: 'text-cyan-400', theme: 'bg-cyan-600', sub: 'Nursing Practice & Stabilization' };
-      case CareRole.HSS: return { title: 'BIO_SOCIAL_NEXUS', color: 'text-purple-400', theme: 'bg-purple-600', sub: 'Social Determinants & Resource Linkage' };
-      default: return { title: 'FIELD_STATION_ALPHA', color: 'text-orange-500', theme: 'bg-orange-600', sub: 'Personal Support & ADL Care' };
+      case CareRole.RN: return { title: 'RN_CLINICAL_INTEL', color: 'text-sky-400', theme: 'bg-sky-600', sub: 'Nursing Leadership & Complex Assessment' };
+      case CareRole.RPN: return { title: 'RPN_PRACTICE_NODE', color: 'text-cyan-400', theme: 'bg-cyan-600', sub: 'Clinical Stabilization & Routine Care' };
+      default: return { title: 'PROFESSIONAL_TERMINAL', color: 'text-orange-500', theme: 'bg-orange-600', sub: 'Standard Field Node' };
     }
   };
 
@@ -45,12 +44,10 @@ const ProfessionalTerminal: React.FC<Props> = ({ clients, role, staffName, langu
           <div className="flex items-center gap-3">
              <div className={`w-2 h-2 rounded-full ${branding.color.replace('text-', 'bg-')} animate-pulse`}></div>
              <h1 className={`text-5xl font-black tracking-tighter uppercase italic leading-none ${branding.color}`}>
-               {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
                <Translate target={language}>{branding.title}</Translate>
              </h1>
           </div>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em]">
-            {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
             <Translate target={language}>{branding.sub}</Translate> • {staffName}
           </p>
         </div>
@@ -60,22 +57,19 @@ const ProfessionalTerminal: React.FC<Props> = ({ clients, role, staffName, langu
             onClick={() => setView('ROSTER')}
             className={`px-10 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${view === 'ROSTER' ? `${branding.theme} text-white shadow-xl` : 'text-slate-500 hover:text-white'}`}
           >
-            {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
-            <Translate target={language}>My_Roster</Translate>
+            <Translate target={language}>Deployment_Grid</Translate>
           </button>
           <button 
             onClick={() => setView('SELF')}
             className={`px-10 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${view === 'SELF' ? `${branding.theme} text-white shadow-xl` : 'text-slate-500 hover:text-white'}`}
           >
-            {/* Fix: Changed targetLanguage to target to match components/Translate.tsx props */}
-            <Translate target={language}>Self_Service</Translate>
+            <Translate target={language}>Staff_Hub</Translate>
           </button>
         </div>
       </div>
 
       <div className="min-h-[700px]">
         {view === 'ROSTER' && (
-          /* Pass the required language prop to PSWRoster */
           <PSWRoster 
             clients={clients} 
             onStartVisit={handleStartVisit} 

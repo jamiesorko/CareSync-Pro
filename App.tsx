@@ -8,7 +8,7 @@ import Login from './features/Login';
 // Portals
 import CEOPortal from './features/ceo/CEOPortal';
 import COOTerminal from './features/executive/COOTerminal';
-import DOCPortal from './features/clinical/DOCPortal';
+import RNPortal from './features/rn/RNPortal';
 import ProfessionalTerminal from './features/terminal/ProfessionalTerminal';
 import AccountingTerminal from './features/accounting/AccountingTerminal';
 import ClientPortal from './features/client/ClientPortal';
@@ -44,42 +44,43 @@ export default function App() {
   };
 
   /**
-   * Universal Routing Switch
-   * Handles both functional global tabs and role-specific defaults.
+   * Global Content Resolver
+   * Maps navigation intent to specific modular portals.
    */
   const renderContent = () => {
-    // 1. Specialized Global Tabs
-    if (activeTab === AppTab.STRATEGY) return <StrategicSimulator language={language} />;
-    if (activeTab === AppTab.VAULT) return <DocumentVault {...baseProps} />;
-    if (activeTab === AppTab.WELLNESS) return <VideoLab language={language} />;
-    if (activeTab === AppTab.LIVE) return <LiveLab language={language} />;
-    
-    // 2. Functional Business Nodes
-    if (activeTab === AppTab.FISCAL || activeTab === AppTab.FINANCE) return <AccountingTerminal {...baseProps} />;
-    if (activeTab === AppTab.RESOURCE || activeTab === AppTab.HR_HUB) return <HRTerminal {...baseProps} />;
-    if (activeTab === AppTab.LOGISTICS || activeTab === AppTab.SCHEDULE || activeTab === AppTab.COORDINATION) return <CoordinationHub language={language} />;
-    
-    // 3. Fallback: Role-Based Dashboard Portals
-    switch (user.role) {
-      case CareRole.CEO:
-        return <CEOPortal {...baseProps} />;
-      case CareRole.COO:
-        return <COOTerminal {...baseProps} />;
-      case CareRole.DOC:
-        return <DOCPortal {...baseProps} />;
-      case CareRole.ACCOUNTANT:
-        return <AccountingTerminal {...baseProps} />;
-      case CareRole.CLIENT:
-        return <ClientPortal {...baseProps} />;
-      case CareRole.HSS:
-        return <HSSPortal {...baseProps} />;
-      case CareRole.COORDINATOR:
+    // 1. Explicit Tab Mapping (Accessible by all authorized roles)
+    switch (activeTab) {
+      case AppTab.STRATEGY: 
+        return <StrategicSimulator language={language} />;
+      case AppTab.CLINICAL: 
+        // Handles RN/RPN specific clinical governance
+        return <RNPortal {...baseProps} />;
+      case AppTab.LOGISTICS: 
         return <CoordinationHub language={language} />;
-      case CareRole.HR_SPECIALIST:
+      case AppTab.FISCAL: 
+        return <AccountingTerminal {...baseProps} />;
+      case AppTab.RESOURCE: 
         return <HRTerminal {...baseProps} />;
+      case AppTab.VAULT: 
+        return <DocumentVault {...baseProps} />;
+      case AppTab.WELLNESS: 
+        return <ClientPortal {...baseProps} />;
+      case AppTab.LIVE: 
+        return <LiveLab language={language} />;
+      case AppTab.DASHBOARD:
       default:
-        // RN, RPN, PSW use the standard Professional Terminal
-        return <ProfessionalTerminal {...baseProps} />;
+        // Role-Based Default Dashboards
+        switch (user.role) {
+          case CareRole.CEO: return <CEOPortal {...baseProps} />;
+          case CareRole.COO: return <COOTerminal {...baseProps} />;
+          case CareRole.DOC: return <RNPortal {...baseProps} />;
+          case CareRole.ACCOUNTANT: return <AccountingTerminal {...baseProps} />;
+          case CareRole.CLIENT: return <ClientPortal {...baseProps} />;
+          case CareRole.HSS: return <HSSPortal {...baseProps} />;
+          case CareRole.COORDINATOR: return <CoordinationHub language={language} />;
+          case CareRole.HR_SPECIALIST: return <HRTerminal {...baseProps} />;
+          default: return <ProfessionalTerminal {...baseProps} />;
+        }
     }
   };
 

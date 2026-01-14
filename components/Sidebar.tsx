@@ -5,7 +5,7 @@ import Translate from './Translate';
 import Logo from './Logo';
 import { 
   LayoutDashboard, Shield, Zap, Wallet, Database, 
-  Heart, Cpu, Radio, Power, Briefcase 
+  Heart, Cpu, Radio, Power, Briefcase, Target 
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -50,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, la
             }`}
           >
             <item.icon size={18} />
-            <span className="text-[10px] font-black uppercase tracking-widest">
+            <span className="text-[10px] font-black uppercase tracking-widest text-left">
               <Translate>{item.label}</Translate>
             </span>
           </button>
