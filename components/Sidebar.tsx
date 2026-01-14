@@ -15,7 +15,7 @@ interface SidebarProps {
   lang?: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout }) => {
+const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, lang }) => {
   const menuItems = [
     { id: AppTab.DASHBOARD, label: 'OPS_DASHBOARD', icon: LayoutDashboard },
     { id: AppTab.STRATEGY, label: 'STRATEGIC_TABLETOP', icon: Cpu },
