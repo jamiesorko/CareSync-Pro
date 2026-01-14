@@ -5,7 +5,7 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Login from './features/Login';
 
-// Modular Portals
+// Portals
 import CEOPortal from './features/ceo/CEOPortal';
 import COOTerminal from './features/executive/COOTerminal';
 import DOCPortal from './features/clinical/DOCPortal';
@@ -16,7 +16,7 @@ import HSSPortal from './features/hss/HSSPortal';
 import HRTerminal from './features/hr/HRTerminal';
 import CoordinationHub from './features/CoordinationHub';
 
-// Shared Utilities
+// Features
 import VideoLab from './features/VideoLab';
 import LiveLab from './features/LiveLab';
 import DocumentVault from './features/DocumentVault';
@@ -44,24 +44,22 @@ export default function App() {
   };
 
   /**
-   * Universal Content Resolver
-   * Priority 1: High-Utility Special Modules (Vault, Live, Zen)
-   * Priority 2: Function-Specific Hubs (Accounting/Fiscal, Logistics, HR)
-   * Priority 3: Primary Role-Specific Dashboards
+   * Universal Routing Switch
+   * Handles both functional global tabs and role-specific defaults.
    */
   const renderContent = () => {
-    // 1. Explicit Module Overrides
-    if (activeTab === AppTab.LIVE) return <LiveLab language={language} />;
-    if (activeTab === AppTab.WELLNESS) return <VideoLab language={language} />;
-    if (activeTab === AppTab.VAULT) return <DocumentVault {...baseProps} />;
+    // 1. Specialized Global Tabs
     if (activeTab === AppTab.STRATEGY) return <StrategicSimulator language={language} />;
+    if (activeTab === AppTab.VAULT) return <DocumentVault {...baseProps} />;
+    if (activeTab === AppTab.WELLNESS) return <VideoLab language={language} />;
+    if (activeTab === AppTab.LIVE) return <LiveLab language={language} />;
     
-    // 2. High-Priority Functional Modules
-    if (activeTab === AppTab.FISCAL) return <AccountingTerminal {...baseProps} />;
-    if (activeTab === AppTab.RESOURCE) return <HRTerminal {...baseProps} />;
-    if (activeTab === AppTab.LOGISTICS) return <CoordinationHub language={language} />;
-
-    // 3. Role-Based Primary Navigation (Dashboard fallback)
+    // 2. Functional Business Nodes
+    if (activeTab === AppTab.FISCAL || activeTab === AppTab.FINANCE) return <AccountingTerminal {...baseProps} />;
+    if (activeTab === AppTab.RESOURCE || activeTab === AppTab.HR_HUB) return <HRTerminal {...baseProps} />;
+    if (activeTab === AppTab.LOGISTICS || activeTab === AppTab.SCHEDULE || activeTab === AppTab.COORDINATION) return <CoordinationHub language={language} />;
+    
+    // 3. Fallback: Role-Based Dashboard Portals
     switch (user.role) {
       case CareRole.CEO:
         return <CEOPortal {...baseProps} />;
@@ -80,7 +78,7 @@ export default function App() {
       case CareRole.HR_SPECIALIST:
         return <HRTerminal {...baseProps} />;
       default:
-        // RN, RPN, PSW fallback
+        // RN, RPN, PSW use the standard Professional Terminal
         return <ProfessionalTerminal {...baseProps} />;
     }
   };

@@ -4,23 +4,21 @@ import { translationService } from '../services/translationService';
 import { useTranslation } from '../contexts/TranslationContext';
 
 /**
- * Humanizes technical keys (SNAKE_CASE, UPPER_CASE) 
- * to ensure the AI receives natural language for translation.
+ * Normalizes keys and technical clinical phrases for the AI.
+ * Ensures 'COMPLEX_WOUND_CARE' becomes 'Complex Wound Care' before translation.
  */
 export const normalizeText = (val: any): string => {
   if (val === null || val === undefined) return "";
   const str = String(val).trim();
   if (!str) return "";
   
-  // Detect code-like strings: 'COMPLEX_WOUND_CARE', 'FISCAL_LEDGER', etc.
-  const isCode = (str.includes('_')) || 
-                 (str === str.toUpperCase() && str.length > 2 && !str.includes(' '));
-
-  if (isCode) {
+  // Detect technical keys: 'FISCAL_LEDGER', 'OPS_DASHBOARD'
+  if (str.includes('_') || (str === str.toUpperCase() && str.length > 2 && !str.includes(' '))) {
     return str.split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
   }
+  
   return str;
 };
 
@@ -33,14 +31,13 @@ export const useTranslate = (text: any, targetOverride?: string) => {
   useEffect(() => {
     const source = normalizeText(text);
 
-    // If English, return normalized text immediately
     if (!source || (language && language.toLowerCase() === 'english')) {
       setTranslated(source || String(text || ''));
       return;
     }
 
     const run = async () => {
-      const cacheKey = `cs_v70_${language}_${source}`;
+      const cacheKey = `cs_v90_${language}_${source}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
@@ -75,7 +72,7 @@ export const Translate: React.FC<{ children?: React.ReactNode; target?: string }
   const { translated, loading } = useTranslate(sourceText, target);
 
   return (
-    <span className={loading ? 'opacity-40 animate-pulse transition-opacity' : 'transition-opacity duration-300'}>
+    <span className={loading ? 'opacity-30 animate-pulse' : 'transition-opacity duration-500'}>
       {translated}
     </span>
   );

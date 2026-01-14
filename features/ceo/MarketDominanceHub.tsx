@@ -14,7 +14,7 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
   const [region, setRegion] = useState('Toronto East');
   const [service, setService] = useState('Complex Wound Care');
 
-  // Explicitly translate the dynamic input values
+  // Semantic Intercept for specific technical clinical phrases
   const { translated: translatedService } = useTranslate(service);
   const { translated: pivotLabel } = useTranslate("Specialized_Service_Pivot");
 
@@ -31,8 +31,8 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
   };
 
   return (
-    <div className="h-full space-y-12 animate-in fade-in duration-1000 pb-24">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 px-4">
+    <div className="h-full space-y-12 animate-in fade-in duration-1000 pb-24 px-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div>
           <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none text-amber-500">
              <Translate>Market_Dominance_Hub</Translate>
@@ -52,7 +52,7 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 px-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         <div className="lg:col-span-4 space-y-6 flex flex-col">
            <div className="bg-slate-900 border border-white/10 p-10 rounded-[3rem] shadow-2xl flex flex-col">
               <h3 className="text-xs font-black uppercase tracking-widest text-slate-500 mb-10 italic">
@@ -79,12 +79,10 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
                         onChange={(e) => setService(e.target.value)}
                         className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-sm text-white focus:outline-none"
                       />
-                      <div className="mt-2 flex items-center gap-2">
-                        <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">
-                          <Translate>Currently_Analyzing</Translate>:
-                        </span>
-                        <span className="text-[8px] font-black text-amber-500 uppercase tracking-widest italic">
-                          {translatedService}
+                      <div className="mt-4 flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/5">
+                        <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></div>
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">
+                          <Translate>Neural_Localized</Translate>: {translatedService}
                         </span>
                       </div>
                     </div>
@@ -110,7 +108,7 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
              <div className="flex-1 flex flex-col items-center justify-center space-y-10">
                 <div className="w-24 h-24 border-4 border-amber-500/10 border-t-amber-500 rounded-full animate-spin"></div>
                 <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.6em] animate-pulse">
-                   <Translate>Scanning_Global_Competitor_Landscape</Translate>
+                   <Translate>Interrogating_Competitive_Signal</Translate>
                 </p>
              </div>
            ) : strategy ? (
@@ -158,7 +156,7 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
              <div className="flex-1 flex flex-col items-center justify-center text-center opacity-20 px-12">
                 <span className="text-9xl mb-10">📈</span>
                 <p className="text-xl font-black text-white uppercase tracking-widest">
-                  <Translate>Awaiting_Dominance_Signal</Translate>
+                  <Translate>Awaiting_Strategic_Inference</Translate>
                 </p>
              </div>
            )}
