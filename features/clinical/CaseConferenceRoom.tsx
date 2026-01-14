@@ -3,7 +3,6 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoogleGenAI, Modality, LiveServerMessage } from '@google/genai';
 import { decode, encode, decodeAudioData } from '../../utils/audioHelpers';
 import { Client, CareRole } from '../../types';
-/* Changed default import to named import for Translate */
 import { Translate } from '../../components/Translate';
 
 interface Props {
@@ -45,7 +44,7 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
 
   const startSession = async () => {
     try {
-      setStatus('TUNING_CIRCLE_OF_CARE...');
+      setStatus('TUNING_CIRCLE_OF_CARE');
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const inputCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
@@ -55,7 +54,7 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       
       const sessionPromise = ai.live.connect({
-        model: 'gemini-2.5-flash-native-audio-preview-09-2025',
+        model: 'gemini-2.5-flash-native-audio-preview-12-2025',
         callbacks: {
           onopen: () => {
             setIsActive(true);
@@ -81,7 +80,6 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
             const content = message.serverContent;
             if (!content) return;
 
-            /* Corrected outputTranscription property naming */
             const text = content.outputTranscription?.text || content.inputTranscription?.text;
             if (text) {
               const lowerText = text.toLowerCase();
@@ -114,7 +112,6 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
           onclose: () => setIsActive(false)
         },
         config: {
-          /* Corrected typo: responseModalities */
           responseModalities: [Modality.AUDIO],
           outputAudioTranscription: {},
           inputAudioTranscription: {},
@@ -139,8 +136,12 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
     <div className="h-full space-y-12 animate-in fade-in duration-1000 pb-24">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 px-4">
         <div>
-          <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none text-rose-400">Neural_Huddle_Suite</h2>
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">Collaborative Consensus & Multi-Agent Case Conferencing</p>
+          <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none text-rose-400">
+             <Translate>Neural_Huddle_Suite</Translate>
+          </h2>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">
+             <Translate>Collaborative Consensus & Multi-Agent Case Conferencing</Translate>
+          </p>
         </div>
         <div className="flex bg-white/5 p-1.5 rounded-2xl border border-white/10">
            {clients.slice(0, 3).map((c) => (
@@ -148,7 +149,7 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
               key={c.id}
               disabled={isActive}
               onClick={() => setSelectedClient(c)}
-              className={`px-6 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${selectedClient.id === c.id ? 'bg-indigo-600 text-white' : 'text-slate-500 disabled:opacity-20'}`}
+              className={`px-6 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${selectedClient.id === c.id ? 'bg-indigo-600 text-white shadow-2xl shadow-sky-600/30' : 'text-slate-500 disabled:opacity-20'}`}
              >
                {c.name}
              </button>
@@ -172,9 +173,11 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
                   ></div>
                 ))}
                 <div className="text-center">
-                  <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Subject</p>
+                  <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2"><Translate>Subject</Translate></p>
                   <h3 className="text-2xl font-black text-white italic tracking-tighter uppercase">{selectedClient.name}</h3>
-                  <p className={`text-[8px] font-bold mt-2 uppercase ${isActive ? 'text-emerald-400' : 'text-slate-700'}`}>{status}</p>
+                  <p className={`text-[8px] font-bold mt-2 uppercase ${isActive ? 'text-emerald-400' : 'text-slate-700'}`}>
+                    <Translate>{status}</Translate>
+                  </p>
                 </div>
              </div>
           </div>
@@ -183,7 +186,7 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
               onClick={isActive ? stopSession : startSession}
               className={`w-full py-10 rounded-[2.5rem] font-black text-xs uppercase tracking-[0.6em] transition-all shadow-2xl ${isActive ? 'bg-rose-600 text-white' : 'bg-white text-black'}`}
             >
-              {isActive ? 'COMMIT_CONSENSUS_&_EXIT' : 'OPEN_NEURAL_CONFERENCE'}
+              <Translate>{isActive ? 'COMMIT_CONSENSUS_&_EXIT' : 'OPEN_NEURAL_CONFERENCE'}</Translate>
             </button>
           </div>
         </div>
@@ -192,29 +195,35 @@ const CaseConferenceRoom: React.FC<Props> = ({ language, clients, userRole }) =>
               <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
                 <span className="text-6xl font-black italic">AUTO</span>
               </div>
-              <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-10">Real-Time_Agent_Directives</h3>
+              <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-10">
+                 <Translate>Real-Time_Agent_Directives</Translate>
+              </h3>
               <div className="flex-1 overflow-y-auto space-y-6 scrollbar-hide pr-2">
                  {insights.length > 0 ? (
                    insights.map((insight, i) => (
                      <div key={i} className="p-6 bg-white/[0.03] border border-white/5 rounded-2xl animate-in slide-in-from-right-4">
                         <div className="flex items-center space-x-2 mb-3">
                            <div className={`w-1.5 h-1.5 rounded-full ${insight.color.replace('text-', 'bg-')}`}></div>
-                           <span className={`text-[8px] font-black uppercase tracking-widest ${insight.color}`}>Agent_{insight.agent}</span>
+                           <span className={`text-[8px] font-black uppercase tracking-widest ${insight.color}`}>Agent_<Translate>{insight.agent}</Translate></span>
                         </div>
-                        <p className="text-[11px] text-slate-200 font-medium italic leading-relaxed">"{insight.text}"</p>
+                        <p className="text-[11px] text-slate-200 font-medium italic leading-relaxed">
+                          "<Translate>{insight.text}</Translate>"
+                        </p>
                      </div>
                    ))
                  ) : (
                    <div className="h-full flex items-center justify-center text-center px-10 opacity-20 italic">
-                     Awaiting conference trigger. Agents monitor for logic drift...
+                     <Translate>Awaiting conference trigger. Agents monitor for logic drift...</Translate>
                    </div>
                  )}
               </div>
            </div>
            <div className="bg-indigo-600 p-10 rounded-[3rem] text-white shadow-2xl shadow-indigo-600/20">
-              <p className="text-[9px] font-black uppercase tracking-widest mb-4 opacity-60">Consensus_Protocol</p>
+              <p className="text-[9px] font-black uppercase tracking-widest mb-4 opacity-60">
+                 <Translate>Consensus_Protocol</Translate>
+              </p>
               <p className="text-sm font-bold italic leading-relaxed">
-                Acoustics are being analyzed by three clinical agents. Speak clearly to confirm care plan amendments.
+                 <Translate>Acoustics are being analyzed by three clinical agents. Speak clearly to confirm care plan amendments.</Translate>
               </p>
            </div>
         </div>

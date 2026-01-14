@@ -4,16 +4,19 @@ import { translationService } from '../services/translationService';
 import { useTranslation } from '../contexts/TranslationContext';
 
 /**
- * Normalizes technical keys (e.g., 'OPS_DASHBOARD' or 'Clinical_Intel') into readable phrases.
- * This is crucial for high-quality AI translation.
+ * Normalizes technical keys (e.g., 'OPS_DASHBOARD', 'PSW', 'Sector_4') into readable phrases.
  */
 export const normalizeText = (val: string | any): string => {
   if (val === null || val === undefined) return "";
   const str = String(val);
   if (!str) return "";
   
-  // Detect technical keys: UPPER_CASE with underscores or Camel_Case with underscores
-  if ((str === str.toUpperCase() && str.includes('_')) || (str.includes('_') && !str.includes(' '))) {
+  // Detect technical keys: UPPER_CASE with underscores, Camel_Case with underscores, or single-word UPPER_CASE codes
+  const isCode = (str === str.toUpperCase() && str.length <= 4) || 
+                 (str.includes('_')) || 
+                 (str === str.toUpperCase() && !str.includes(' '));
+
+  if (isCode) {
     return str.split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
@@ -24,6 +27,7 @@ export const normalizeText = (val: string | any): string => {
 /**
  * useTranslate Hook
  * Returns a translated version of the input string based on current global language.
+ * Crucial for attributes (placeholders, tooltips).
  */
 export const useTranslate = (text: string | any, targetOverride?: string) => {
   const { language: contextLanguage } = useTranslation();
@@ -40,7 +44,7 @@ export const useTranslate = (text: string | any, targetOverride?: string) => {
     }
 
     const run = async () => {
-      const cacheKey = `cs_v12_${language}_${normalizedSource}`;
+      const cacheKey = `cs_v14_${language}_${normalizedSource}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {

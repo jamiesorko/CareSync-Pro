@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Translate } from '../../components/Translate';
 import { CareRole } from '../../types';
@@ -78,7 +79,7 @@ const LiveMap: React.FC<Props> = ({ language }) => {
                 <div className="absolute top-6 left-1/2 -translate-x-1/2 whitespace-nowrap opacity-0 group-hover/node:opacity-100 transition-opacity">
                 <div className="bg-black/90 border border-white/10 px-2 py-1 rounded-lg backdrop-blur-md">
                     <p className="text-[8px] font-black text-white uppercase tracking-widest">
-                       <Translate target={language}>{node.name}</Translate>
+                       <Translate>{node.name}</Translate>
                     </p>
                 </div>
                 </div>
@@ -87,11 +88,11 @@ const LiveMap: React.FC<Props> = ({ language }) => {
         </div>
 
         {/* Map Control Cluster */}
-        <div className="absolute bottom-8 left-8 p-6 bg-black/60 border border-white/10 rounded-3xl backdrop-blur-md z-40">
+        <div className="absolute bottom-8 left-8 p-6 bg-black/60 border border-white/10 rounded-2xl backdrop-blur-md z-40">
             <div className="flex items-center space-x-3 mb-6">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
                 <p className="text-[9px] font-black text-white uppercase tracking-[0.4em]">
-                   <Translate target={language}>Fleet_Sovereignty_Grid</Translate>
+                   <Translate>Fleet_Sovereignty_Grid</Translate>
                 </p>
             </div>
             <div className="space-y-3">
@@ -103,7 +104,7 @@ const LiveMap: React.FC<Props> = ({ language }) => {
                 <div key={i} className="flex items-center space-x-4">
                 <div className={`w-1.5 h-1.5 rounded-sm ${item.color}`}></div>
                 <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">
-                   <Translate target={language}>{item.label}</Translate>
+                   <Translate>{item.label}</Translate>
                 </span>
                 </div>
             ))}
@@ -115,7 +116,7 @@ const LiveMap: React.FC<Props> = ({ language }) => {
       <div className="w-80 bg-black/40 border-l border-white/10 backdrop-blur-xl flex flex-col p-8 overflow-hidden">
          <div className="flex items-center justify-between mb-10">
             <h3 className="text-[10px] font-black text-sky-400 uppercase tracking-widest italic">
-               <Translate target={language}>Live_Telemetry_Stream</Translate>
+               <Translate>Live_Telemetry_Stream</Translate>
             </h3>
             <Radio size={14} className="text-rose-500 animate-pulse" />
          </div>
@@ -130,10 +131,10 @@ const LiveMap: React.FC<Props> = ({ language }) => {
                  <div className="flex justify-between items-start mb-4">
                     <div>
                        <p className="text-[11px] font-black text-white uppercase italic">
-                          <Translate target={language}>{node.name}</Translate>
+                          <Translate>{node.name}</Translate>
                        </p>
                        <p className="text-[8px] font-bold text-slate-500 uppercase">
-                          <Translate target={language}>{node.role}</Translate>
+                          <Translate>{node.role}</Translate>
                        </p>
                     </div>
                     <div className="flex flex-col items-end">
@@ -146,16 +147,16 @@ const LiveMap: React.FC<Props> = ({ language }) => {
                  </div>
 
                  <div className="font-mono text-[9px] text-slate-400 space-y-1">
-                    <p><Translate target={language}>LAT</Translate>: <Translate target={language}>{node.lat.toFixed(6)}</Translate></p>
-                    <p><Translate target={language}>LNG</Translate>: <Translate target={language}>{node.lng.toFixed(6)}</Translate></p>
+                    <p><Translate>LAT</Translate>: {node.lat.toFixed(6)}</p>
+                    <p><Translate>LNG</Translate>: {node.lng.toFixed(6)}</p>
                  </div>
 
                  <div className="mt-4 flex justify-between items-center">
                     <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded ${node.status === 'EMERGENCY' ? 'bg-rose-600 text-white animate-pulse' : 'bg-emerald-600 text-white'}`}>
-                      <Translate target={language}>{node.status}</Translate>
+                      <Translate>{node.status}</Translate>
                     </span>
                     <p className="text-[9px] font-black text-white italic">
-                       <Translate target={language}>{String(Math.round(node.signal))}</Translate>% <span className="opacity-30"><Translate target={language}>PULSE</Translate></span>
+                       {Math.round(node.signal)}% <span className="opacity-30"><Translate>PULSE</Translate></span>
                     </p>
                  </div>
               </div>
@@ -164,7 +165,7 @@ const LiveMap: React.FC<Props> = ({ language }) => {
 
          <div className="mt-8 pt-8 border-t border-white/5">
             <button className="w-full py-4 bg-sky-600 text-white rounded-xl font-black text-[9px] uppercase tracking-widest shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2">
-               <Zap size={12} /> <Translate target={language}>Broadcast_Intercept</Translate>
+               <Zap size={12} /> <Translate>Broadcast_Intercept</Translate>
             </button>
          </div>
       </div>
