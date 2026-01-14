@@ -17,15 +17,15 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, lang }) => {
   const menuItems = [
-    { id: AppTab.DASHBOARD, label: 'OPS_DASHBOARD', icon: LayoutDashboard },
-    { id: AppTab.STRATEGY, label: 'STRATEGIC_TABLETOP', icon: Cpu },
-    { id: AppTab.CLINICAL, label: 'CLINICAL_GOVERNANCE', icon: Shield },
-    { id: AppTab.LOGISTICS, label: 'FLEET_COMMAND', icon: Zap },
-    { id: AppTab.FISCAL, label: 'FISCAL_LEDGER', icon: Wallet },
-    { id: AppTab.VAULT, label: 'NEURAL_VAULT', icon: Database },
-    { id: AppTab.WELLNESS, label: 'PATIENT_WELLNESS', icon: Heart },
-    { id: AppTab.RESOURCE, label: 'RESOURCE_CORE', icon: Briefcase },
-    { id: AppTab.LIVE, label: 'DIRECT_LINK', icon: Radio },
+    { id: AppTab.DASHBOARD, label: 'Ops_Dashboard', icon: LayoutDashboard },
+    { id: AppTab.STRATEGY, label: 'Strategic_Tabletop', icon: Cpu },
+    { id: AppTab.CLINICAL, label: 'Clinical_Governance', icon: Shield },
+    { id: AppTab.LOGISTICS, label: 'Fleet_Command', icon: Zap },
+    { id: AppTab.FISCAL, label: 'Fiscal_Ledger', icon: Wallet },
+    { id: AppTab.VAULT, label: 'Neural_Vault', icon: Database },
+    { id: AppTab.WELLNESS, label: 'Patient_Wellness', icon: Heart },
+    { id: AppTab.RESOURCE, label: 'Resource_Core', icon: Briefcase },
+    { id: AppTab.LIVE, label: 'Direct_Link', icon: Radio },
   ];
 
   return (
@@ -61,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, la
           className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-rose-500 hover:bg-rose-500/10 transition-all font-black text-[10px] uppercase tracking-widest"
         >
           <Power size={18} />
-          <Translate>SIGN_OUT</Translate>
+          <Translate>Sign_Out</Translate>
         </button>
       </div>
     </aside>

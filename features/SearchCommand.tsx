@@ -13,7 +13,7 @@ interface Props {
 
 const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClient }) => {
   const [query, setQuery] = useState('');
-  const { translated: placeholder } = useTranslate("Search by Personnel Name or Patient ID");
+  const { translated: placeholderText } = useTranslate("Search by Personnel Name or Patient ID");
 
   const results = useMemo(() => {
     if (query.length < 2) return { staff: [], clients: [] };
@@ -36,7 +36,7 @@ const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClien
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={placeholder}
+            placeholder={placeholderText}
             className="flex-1 bg-transparent border-none text-xl font-black text-white outline-none placeholder:text-slate-700 italic px-4"
           />
         </div>
@@ -87,14 +87,14 @@ const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClien
           </div>
         </div>
       ) : query.length >= 2 ? (
-        <div className="p-24 text-center opacity-30 italic">
-          <Translate>No signals found in the registry.</Translate>
+        <div className="p-24 text-center opacity-30 italic text-white font-black uppercase tracking-widest text-[10px]">
+          <Translate>No_signals_found_in_the_registry</Translate>
         </div>
       ) : (
         <div className="p-32 text-center opacity-10 flex flex-col items-center">
           <Shield size={64} strokeWidth={1} className="mb-6" />
           <p className="text-sm font-black uppercase tracking-widest italic">
-            <Translate>Enter credentials to interrogate registry</Translate>
+            <Translate>Enter_credentials_to_interrogate_registry</Translate>
           </p>
         </div>
       )}

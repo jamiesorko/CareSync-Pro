@@ -4,16 +4,16 @@ import { translationService } from '../services/translationService';
 import { useTranslation } from '../contexts/TranslationContext';
 
 /**
- * Normalizes technical keys (e.g., 'OPS_DASHBOARD', 'PSW', 'Sector_4') into readable phrases.
- * This ensures the AI receives natural language for high-fidelity translation.
+ * Normalizes technical keys (e.g., 'OPS_DASHBOARD', 'PSW', 'Sector_4') 
+ * ensuring the AI receives natural language for better translation.
  */
-export const normalizeText = (val: string | any): string => {
+export const normalizeText = (val: any): string => {
   if (val === null || val === undefined) return "";
   const str = String(val).trim();
   if (!str) return "";
   
-  // Detect technical keys: UPPER_CASE_SNAKE, Camel_Case_Snake, or short UPPER case codes
-  const isCode = (str === str.toUpperCase() && str.length <= 5) || 
+  // Detect technical keys: UPPER_CASE_SNAKE or Camel_Case_Snake
+  const isCode = (str === str.toUpperCase() && str.length <= 6) || 
                  (str.includes('_')) || 
                  (str === str.toUpperCase() && !str.includes(' '));
 
@@ -27,24 +27,24 @@ export const normalizeText = (val: string | any): string => {
 
 /**
  * useTranslate Hook
- * Used for attributes (placeholders, tooltips) and dynamic logic within components.
+ * Used for attributes (placeholders, tooltips) and logic-level strings.
  */
-export const useTranslate = (text: string | any, targetOverride?: string) => {
+export const useTranslate = (text: any, targetOverride?: string) => {
   const { language: contextLanguage } = useTranslation();
   const language = targetOverride || contextLanguage;
   const [translated, setTranslated] = useState(normalizeText(text));
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const normalizedSource = normalizeText(text);
+    const source = normalizeText(text);
 
-    if (!normalizedSource || (language && language.toLowerCase() === 'english')) {
-      setTranslated(normalizedSource || String(text || ''));
+    if (!source || (language && language.toLowerCase() === 'english')) {
+      setTranslated(source || String(text || ''));
       return;
     }
 
     const run = async () => {
-      const cacheKey = `cs_v17_${language}_${normalizedSource}`;
+      const cacheKey = `cs_v20_${language}_${source}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
@@ -54,15 +54,15 @@ export const useTranslate = (text: string | any, targetOverride?: string) => {
 
       setLoading(true);
       try {
-        const res = await translationService.translate(normalizedSource, language);
-        if (res && res !== normalizedSource) {
+        const res = await translationService.translate(source, language);
+        if (res && res !== source) {
           localStorage.setItem(cacheKey, res);
           setTranslated(res);
         } else {
-          setTranslated(normalizedSource);
+          setTranslated(source);
         }
       } catch (e) {
-        setTranslated(normalizedSource);
+        setTranslated(source);
       } finally {
         setLoading(false);
       }
@@ -76,7 +76,7 @@ export const useTranslate = (text: string | any, targetOverride?: string) => {
 
 /**
  * Translate Component
- * The primary standard for localizing UI nodes. Standardizes the output to a span.
+ * The primary standard for localizing UI strings.
  */
 export const Translate: React.FC<{ children?: React.ReactNode; target?: string }> = ({ children, target }) => {
   const sourceText = typeof children === 'string' ? children : String(children || '');

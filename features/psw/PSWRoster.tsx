@@ -31,7 +31,7 @@ const PSWRoster: React.FC<Props> = ({ clients, onStartVisit, language }) => {
               <div className="flex flex-col gap-2 text-slate-400">
                  <div className="flex items-center gap-2">
                     <MapPin size={14} className="text-orange-500" />
-                    <p className="text-[11px] font-bold uppercase">
+                    <p className="text-[11px] font-bold uppercase italic">
                       <Translate>{client.address}</Translate>
                     </p>
                  </div>
@@ -50,7 +50,7 @@ const PSWRoster: React.FC<Props> = ({ clients, onStartVisit, language }) => {
           </div>
 
           <div className="p-8 bg-white/[0.03] border border-white/5 rounded-[2.5rem] mb-8 flex-1">
-             <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-4">
+             <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-4 italic">
                <Translate>Patient_Mobility_Vector</Translate>
              </p>
              
@@ -70,13 +70,13 @@ const PSWRoster: React.FC<Props> = ({ clients, onStartVisit, language }) => {
                 <div className="p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center gap-4 text-slate-300">
                    <Wind size={18} className="text-sky-400" />
                    <span className="text-[10px] font-black uppercase tracking-tighter">
-                     <Translate>Lift</Translate>: <Translate>{client.mobilityStatus.liftType || 'None'}</Translate>
+                     <Translate>Lift_Protocol</Translate>: <Translate>{client.mobilityStatus.liftType || 'None'}</Translate>
                    </span>
                 </div>
                 <div className="p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center gap-4 text-slate-300">
                    <UserCheck size={18} className="text-emerald-400" />
                    <span className="text-[10px] font-black uppercase tracking-tighter">
-                     <Translate>Method</Translate>: <Translate>{client.mobilityStatus.transferMethod || 'STD'}</Translate>
+                     <Translate>Transfer_Method</Translate>: <Translate>{client.mobilityStatus.transferMethod || 'STD'}</Translate>
                    </span>
                 </div>
              </div>
@@ -85,7 +85,7 @@ const PSWRoster: React.FC<Props> = ({ clients, onStartVisit, language }) => {
           <div className="flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
              <div className="flex gap-2">
                 {client.conditions.slice(0, 3).map(c => (
-                  <span key={c} className="text-[8px] font-black text-slate-500 uppercase tracking-widest">
+                  <span key={c} className="text-[8px] font-black text-slate-500 uppercase tracking-widest border border-white/5 px-2 py-0.5 rounded">
                     <Translate>{c}</Translate>
                   </span>
                 ))}
