@@ -31,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, la
   return (
     <aside className="w-64 bg-black/40 border-r border-white/5 flex flex-col backdrop-blur-xl shrink-0 h-full">
       <div className="p-8 border-b border-white/5">
-        <h1 className="text-xl font-black italic tracking-tighter text-white">
+        <h1 className="text-xl font-black italic tracking-tighter text-white uppercase">
           CARESYNC<span className="text-indigo-500">PRO</span>
         </h1>
       </div>

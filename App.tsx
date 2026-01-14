@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-// Consolidated imports to root types.ts to ensure enum compatibility (fixes Error on line 75)
 import { CareRole, AppTab, User } from './types';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -51,7 +50,8 @@ export default function App() {
     [AppTab.VAULT]: <DocumentVault {...baseProps} />,
     [AppTab.STRATEGY]: <StrategicSimulator language={language} />,
     [AppTab.RESOURCE]: <HRTerminal {...baseProps} />,
-    [AppTab.LOGISTICS]: <CoordinationHub language={language} />
+    [AppTab.LOGISTICS]: <CoordinationHub language={language} />,
+    [AppTab.FISCAL]: <AccountingTerminal {...baseProps} />
   };
 
   // 2. Resolve Role Portals

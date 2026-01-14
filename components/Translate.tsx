@@ -4,16 +4,16 @@ import { translationService } from '../services/translationService';
 import { useTranslation } from '../contexts/TranslationContext';
 
 /**
- * Normalizes technical keys (e.g., 'OPS_DASHBOARD', 'PSW', 'Sector_4') 
- * ensuring the AI receives natural language for better translation.
+ * Normalizes technical keys (e.g., 'FISCAL_LEDGER', 'PSW', 'Sector_GTA') 
+ * into readable phrases before translation.
  */
 export const normalizeText = (val: any): string => {
   if (val === null || val === undefined) return "";
   const str = String(val).trim();
   if (!str) return "";
   
-  // Detect technical keys: UPPER_CASE_SNAKE, short UPPER codes, or keys with underscores
-  const isCode = (str === str.toUpperCase() && str.length <= 6) || 
+  // Detect technical keys: UPPER_CASE_SNAKE or keys with underscores
+  const isCode = (str === str.toUpperCase() && str.length <= 8) || 
                  (str.includes('_')) || 
                  (str === str.toUpperCase() && !str.includes(' '));
 
@@ -27,7 +27,7 @@ export const normalizeText = (val: any): string => {
 
 /**
  * useTranslate Hook
- * Used for attributes (placeholders, tooltips) and logic-level strings.
+ * Used for dynamic attributes (placeholders, titles) and logic strings.
  */
 export const useTranslate = (text: any, targetOverride?: string) => {
   const { language: contextLanguage } = useTranslation();
@@ -44,7 +44,7 @@ export const useTranslate = (text: any, targetOverride?: string) => {
     }
 
     const run = async () => {
-      const cacheKey = `cs_v25_${language}_${source}`;
+      const cacheKey = `cs_v30_${language}_${source}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
