@@ -43,30 +43,44 @@ export default function App() {
     language 
   };
 
-  // 1. Resolve Global Tabs (Highest Priority)
-  const globalTabMap: Partial<Record<AppTab, React.ReactNode>> = {
-    [AppTab.LIVE]: <LiveLab language={language} />,
-    [AppTab.WELLNESS]: <VideoLab language={language} />,
-    [AppTab.VAULT]: <DocumentVault {...baseProps} />,
-    [AppTab.STRATEGY]: <StrategicSimulator language={language} />,
-    [AppTab.RESOURCE]: <HRTerminal {...baseProps} />,
-    [AppTab.LOGISTICS]: <CoordinationHub language={language} />,
-    [AppTab.FISCAL]: <AccountingTerminal {...baseProps} />
-  };
+  /**
+   * Universal Content Resolver
+   * Priority 1: Global Special Utilities (Live, Video, Strategy)
+   * Priority 2: Role-Specific Primary Portals (Dashboard view)
+   * Priority 3: Function-Specific Hubs (Fiscal, Logistics, Resource)
+   */
+  const renderContent = () => {
+    // Priority: Explicit Hub Selection
+    if (activeTab === AppTab.LIVE) return <LiveLab language={language} />;
+    if (activeTab === AppTab.WELLNESS) return <VideoLab language={language} />;
+    if (activeTab === AppTab.VAULT) return <DocumentVault {...baseProps} />;
+    if (activeTab === AppTab.STRATEGY) return <StrategicSimulator language={language} />;
+    if (activeTab === AppTab.RESOURCE) return <HRTerminal {...baseProps} />;
+    if (activeTab === AppTab.LOGISTICS) return <CoordinationHub language={language} />;
+    if (activeTab === AppTab.FISCAL) return <AccountingTerminal {...baseProps} />;
 
-  // 2. Resolve Role Portals
-  const rolePortalMap: Record<CareRole, React.ReactNode> = {
-    [CareRole.CEO]: <CEOPortal {...baseProps} />,
-    [CareRole.COO]: <COOTerminal {...baseProps} />,
-    [CareRole.DOC]: <DOCPortal {...baseProps} />,
-    [CareRole.ACCOUNTANT]: <AccountingTerminal {...baseProps} />,
-    [CareRole.CLIENT]: <ClientPortal {...baseProps} />,
-    [CareRole.HSS]: <HSSPortal {...baseProps} />,
-    [CareRole.COORDINATOR]: <CoordinationHub language={language} />,
-    [CareRole.HR_SPECIALIST]: <HRTerminal {...baseProps} />,
-    [CareRole.RN]: <ProfessionalTerminal {...baseProps} />,
-    [CareRole.RPN]: <ProfessionalTerminal {...baseProps} />,
-    [CareRole.PSW]: <ProfessionalTerminal {...baseProps} />,
+    // Fallback: Dashboard View (Role-Specific Logic)
+    switch (user.role) {
+      case CareRole.CEO:
+        return <CEOPortal {...baseProps} />;
+      case CareRole.COO:
+        return <COOTerminal {...baseProps} />;
+      case CareRole.DOC:
+        return <DOCPortal {...baseProps} />;
+      case CareRole.ACCOUNTANT:
+        return <AccountingTerminal {...baseProps} />;
+      case CareRole.CLIENT:
+        return <ClientPortal {...baseProps} />;
+      case CareRole.HSS:
+        return <HSSPortal {...baseProps} />;
+      case CareRole.COORDINATOR:
+        return <CoordinationHub language={language} />;
+      case CareRole.HR_SPECIALIST:
+        return <HRTerminal {...baseProps} />;
+      default:
+        // RN, RPN, PSW use the Professional Terminal
+        return <ProfessionalTerminal {...baseProps} />;
+    }
   };
 
   return (
@@ -76,12 +90,13 @@ export default function App() {
         setActive={setActiveTab} 
         role={user.role} 
         onLogout={() => { setUser(null); setActiveTab(AppTab.DASHBOARD); }}
+        lang={language}
       />
       <div className="flex-1 flex flex-col min-w-0 h-full relative">
-        <Header active={activeTab} user={user} />
+        <Header active={activeTab} user={user} lang={language} />
         <main className="flex-1 overflow-y-auto scrollbar-hide p-4 lg:p-8">
           <div className="max-w-7xl mx-auto h-full animate-fade-up">
-            {globalTabMap[activeTab] || rolePortalMap[user.role]}
+            {renderContent()}
           </div>
         </main>
       </div>
