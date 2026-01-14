@@ -44,7 +44,7 @@ export const useTranslate = (text: string | any, targetOverride?: string) => {
     }
 
     const run = async () => {
-      const cacheKey = `cs_v15_${language}_${normalizedSource}`;
+      const cacheKey = `cs_v16_${language}_${normalizedSource}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
