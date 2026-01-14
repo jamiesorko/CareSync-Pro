@@ -1,9 +1,10 @@
 
 import React from 'react';
 import { CareRole, User } from '../types';
-import { Fingerprint, ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 import LanguageSelector from '../components/LanguageSelector';
 import Translate from '../components/Translate';
+import Logo from '../components/Logo';
 
 interface Props {
   onLogin: (user: User) => void;
@@ -31,8 +32,8 @@ const Login: React.FC<Props> = ({ onLogin }) => {
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500 to-transparent animate-pulse"></div>
         
         <div className="mb-12">
-          <div className="w-20 h-20 bg-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-indigo-600/40">
-            <Fingerprint size={40} className="text-white" />
+          <div className="w-24 h-24 bg-white/5 border border-white/10 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl">
+            <Logo className="w-16 h-16" />
           </div>
           <h1 className="text-3xl font-black text-white tracking-tighter uppercase italic leading-none">
             <Translate>CareSync_Pro</Translate>
@@ -63,7 +64,7 @@ const Login: React.FC<Props> = ({ onLogin }) => {
       </div>
       
       <p className="mt-8 text-[10px] font-bold text-slate-600 uppercase tracking-widest italic opacity-50">
-        <Translate>Precision_Enterprise_Healthcare_Node_v6.4_Global_Build</Translate>
+        <Translate>Precision_Enterprise_Healthcare_Node_v7.0_Global_Build</Translate>
       </p>
     </div>
   );

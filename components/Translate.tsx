@@ -4,21 +4,24 @@ import { translationService } from '../services/translationService';
 import { useTranslation } from '../contexts/TranslationContext';
 
 /**
- * Normalizes technical keys and clinical phrases.
- * Ensures the AI receives human-readable strings for 100% translation accuracy.
+ * Humanizes technical keys (SNAKE_CASE, UPPER_CASE) 
+ * to ensure the AI receives natural language for translation.
  */
 export const normalizeText = (val: any): string => {
   if (val === null || val === undefined) return "";
   const str = String(val).trim();
   if (!str) return "";
   
-  // Handle technical constants: 'FISCAL_LEDGER' -> 'Fiscal Ledger'
-  if (str.includes('_') || (str === str.toUpperCase() && str.length > 2)) {
+  // Detect technical keys: UPPER_CASE_SNAKE or keys with underscores
+  const isCode = (str === str.toUpperCase() && str.length <= 10) || 
+                 (str.includes('_')) || 
+                 (str === str.toUpperCase() && !str.includes(' '));
+
+  if (isCode) {
     return str.split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
   }
-  
   return str;
 };
 
@@ -37,7 +40,7 @@ export const useTranslate = (text: any, targetOverride?: string) => {
     }
 
     const run = async () => {
-      const cacheKey = `cs_v40_${language}_${source}`;
+      const cacheKey = `cs_v50_${language}_${source}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
@@ -48,9 +51,11 @@ export const useTranslate = (text: any, targetOverride?: string) => {
       setLoading(true);
       try {
         const res = await translationService.translate(source, language);
-        if (res) {
+        if (res && res !== source) {
           localStorage.setItem(cacheKey, res);
           setTranslated(res);
+        } else {
+          setTranslated(source);
         }
       } catch (e) {
         setTranslated(source);
@@ -70,7 +75,7 @@ export const Translate: React.FC<{ children?: React.ReactNode; target?: string }
   const { translated, loading } = useTranslate(sourceText, target);
 
   return (
-    <span className={loading ? 'opacity-40 animate-pulse transition-opacity' : 'transition-opacity duration-300'}>
+    <span className={loading ? 'opacity-40 animate-pulse' : 'transition-opacity duration-300'}>
       {translated}
     </span>
   );

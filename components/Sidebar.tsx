@@ -2,6 +2,7 @@
 import React from 'react';
 import { AppTab, CareRole } from '../types';
 import Translate from './Translate';
+import Logo from './Logo';
 import { 
   LayoutDashboard, Shield, Zap, Wallet, Database, 
   Heart, Cpu, Radio, Power, Briefcase, Target 
@@ -30,7 +31,8 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, la
 
   return (
     <aside className="w-64 bg-black/40 border-r border-white/5 flex flex-col backdrop-blur-xl shrink-0 h-full">
-      <div className="p-8 border-b border-white/5">
+      <div className="p-8 border-b border-white/5 flex items-center gap-4">
+        <Logo className="w-10 h-10" />
         <h1 className="text-xl font-black italic tracking-tighter text-white uppercase">
           CARESYNC<span className="text-indigo-500">PRO</span>
         </h1>

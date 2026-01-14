@@ -4,7 +4,7 @@ import { GoogleGenAI } from "@google/genai";
 class TranslationService {
   /**
    * Universal Neural Translation Vector
-   * Optimized for high-fidelity clinical and fiscal terminology.
+   * Optimized for zero-skip localization of healthcare software.
    */
   async translate(text: string, targetLanguage: string): Promise<string> {
     if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') {
@@ -15,18 +15,18 @@ class TranslationService {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Act as the primary linguistic core for CareSync Pro. Translate this UI text into exactly: "${targetLanguage}".
+        contents: `Act as a master clinical ERP linguist. Translate this healthcare software UI text into exactly: "${targetLanguage}".
         
         Source Text: "${text}"
         
         STRICT RULES:
-        1. Output ONLY the translated string. No quotes, no markdown, no conversational filler.
-        2. DO NOT SKIP: Even if the text looks like code or an ID (e.g., 'FISCAL_LEDGER'), translate it into its natural professional equivalent.
-        3. Medical/Fiscal Context: Use formal, institutional terminology suitable for a healthcare ERP.
-        4. Consistency: Roles like PSW, RN, and DOC should be translated to their local professional equivalents.`,
+        1. Output ONLY the translated string. No quotes, no markdown, no explanations.
+        2. NO SKIP: Even if a word looks like a technical ID or a proper noun, translate it into its natural language equivalent in the target language.
+        3. Medical Accuracy: Maintain professional equivalents for clinical terms (e.g. "Complex Wound Care", "Dementia", "PSW").
+        4. Tone: Formal, institutional, professional.`,
         config: { 
-          temperature: 0.0, // High determinism
-          systemInstruction: "You are a professional enterprise translator. Accuracy and professional tone are mandatory for patient safety."
+          temperature: 0.0,
+          systemInstruction: "You are the primary linguistic engine for CareSync Pro. Absolute accuracy and professional tone are mandatory."
         }
       });
 
