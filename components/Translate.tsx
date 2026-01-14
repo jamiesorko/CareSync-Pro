@@ -12,7 +12,7 @@ export const normalizeText = (val: any): string => {
   const str = String(val).trim();
   if (!str) return "";
   
-  // Detect technical keys: UPPER_CASE_SNAKE or Camel_Case_Snake
+  // Detect technical keys: UPPER_CASE_SNAKE, short UPPER codes, or keys with underscores
   const isCode = (str === str.toUpperCase() && str.length <= 6) || 
                  (str.includes('_')) || 
                  (str === str.toUpperCase() && !str.includes(' '));
@@ -44,7 +44,7 @@ export const useTranslate = (text: any, targetOverride?: string) => {
     }
 
     const run = async () => {
-      const cacheKey = `cs_v20_${language}_${source}`;
+      const cacheKey = `cs_v25_${language}_${source}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
@@ -83,7 +83,7 @@ export const Translate: React.FC<{ children?: React.ReactNode; target?: string }
   const { translated, loading } = useTranslate(sourceText, target);
 
   return (
-    <span className={loading ? 'opacity-40 animate-pulse transition-opacity' : 'transition-opacity duration-300'}>
+    <span className={loading ? 'opacity-40 animate-pulse' : 'transition-opacity duration-300'}>
       {translated}
     </span>
   );

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Translate } from '../../components/Translate';
 import { PayrollRecord } from '../../data/accountingData';
 
@@ -83,33 +83,6 @@ const PayrollTable: React.FC<Props> = ({ records, language }) => {
             ))}
           </tbody>
         </table>
-      </div>
-      
-      <div className="bg-white/[0.03] p-6 border-t border-white/10 grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div>
-          <p className="text-[8px] font-black text-slate-500 uppercase mb-1"><Translate>Total Gross Payroll</Translate></p>
-          <p className="text-lg font-black text-white tracking-tighter">
-            <Translate>{formatCurrency(records.reduce((acc, r) => acc + r.grossPay, 0))}</Translate>
-          </p>
-        </div>
-        <div>
-          <p className="text-[8px] font-black text-slate-500 uppercase mb-1 text-rose-400"><Translate>Total Statutory Deductions</Translate></p>
-          <p className="text-lg font-black text-rose-400 tracking-tighter">
-            <Translate>{`-${formatCurrency(records.reduce((acc, r) => acc + r.taxFederal + r.taxProvincial + r.cpp + r.ei, 0))}`}</Translate>
-          </p>
-        </div>
-        <div>
-          <p className="text-[8px] font-black text-slate-500 uppercase mb-1 text-indigo-400"><Translate>Total Other Deductions</Translate></p>
-          <p className="text-lg font-black text-indigo-400 tracking-tighter">
-            <Translate>{`-${formatCurrency(records.reduce((acc, r) => acc + r.insuranceDeductible + r.unionDues, 0))}`}</Translate>
-          </p>
-        </div>
-        <div className="text-right">
-          <p className="text-[8px] font-black text-emerald-400 uppercase mb-1"><Translate>Total Net Disbursement</Translate></p>
-          <p className="text-2xl font-black text-emerald-400 tracking-tighter">
-            <Translate>{formatCurrency(records.reduce((acc, r) => acc + r.netPay, 0))}</Translate>
-          </p>
-        </div>
       </div>
     </div>
   );
