@@ -45,19 +45,23 @@ export default function App() {
 
   /**
    * Universal Content Resolver
-   * Restored FISCAL ledger and mapped all global tabs explicitly.
+   * Priority 1: High-Utility Special Modules (Vault, Live, Zen)
+   * Priority 2: Function-Specific Hubs (Accounting/Fiscal, Logistics, HR)
+   * Priority 3: Primary Role-Specific Dashboards
    */
   const renderContent = () => {
-    // 1. Special Utilities (Highest Priority)
+    // 1. Explicit Module Overrides
     if (activeTab === AppTab.LIVE) return <LiveLab language={language} />;
     if (activeTab === AppTab.WELLNESS) return <VideoLab language={language} />;
     if (activeTab === AppTab.VAULT) return <DocumentVault {...baseProps} />;
     if (activeTab === AppTab.STRATEGY) return <StrategicSimulator language={language} />;
+    
+    // 2. High-Priority Functional Modules
+    if (activeTab === AppTab.FISCAL) return <AccountingTerminal {...baseProps} />;
     if (activeTab === AppTab.RESOURCE) return <HRTerminal {...baseProps} />;
     if (activeTab === AppTab.LOGISTICS) return <CoordinationHub language={language} />;
-    if (activeTab === AppTab.FISCAL) return <AccountingTerminal {...baseProps} />;
 
-    // 2. Primary Dashboard View (Role-Specific)
+    // 3. Role-Based Primary Navigation (Dashboard fallback)
     switch (user.role) {
       case CareRole.CEO:
         return <CEOPortal {...baseProps} />;
@@ -76,7 +80,7 @@ export default function App() {
       case CareRole.HR_SPECIALIST:
         return <HRTerminal {...baseProps} />;
       default:
-        // RN, RPN, PSW fallback to Professional Terminal
+        // RN, RPN, PSW fallback
         return <ProfessionalTerminal {...baseProps} />;
     }
   };

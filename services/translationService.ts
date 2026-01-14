@@ -4,7 +4,7 @@ import { GoogleGenAI } from "@google/genai";
 class TranslationService {
   /**
    * Universal Neural Translation Vector
-   * Optimized for zero-skip localization of healthcare software.
+   * Specialized for Clinical, Fiscal, and Operational healthcare terminology.
    */
   async translate(text: string, targetLanguage: string): Promise<string> {
     if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') {
@@ -15,24 +15,24 @@ class TranslationService {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Act as a master clinical ERP linguist. Translate this healthcare software UI text into exactly: "${targetLanguage}".
+        contents: `Act as a world-class clinical enterprise linguist. Translate this specific software UI string into exactly: "${targetLanguage}".
         
         Source Text: "${text}"
         
-        STRICT RULES:
-        1. Output ONLY the translated string. No quotes, no markdown, no explanations.
-        2. NO SKIP: Even if a word looks like a technical ID or a proper noun, translate it into its natural language equivalent in the target language.
-        3. Medical Accuracy: Maintain professional equivalents for clinical terms (e.g. "Complex Wound Care", "Dementia", "PSW").
-        4. Tone: Formal, institutional, professional.`,
+        STRICT OPERATIONAL RULES:
+        1. Output ONLY the translated string. No conversational filler, no quotes.
+        2. DO NOT SKIP technical phrases or proper clinical nouns like "Complex Wound Care", "Director of Care", or "Fiscal Ledger".
+        3. Professional Tone: Use formal, institutional language suitable for a hospital or healthcare agency.
+        4. Consistency: Roles like "PSW" should be translated to their local professional equivalent (e.g., "Aide Soignant" for French, "PCP" for Spanish).`,
         config: { 
           temperature: 0.0,
-          systemInstruction: "You are the primary linguistic engine for CareSync Pro. Absolute accuracy and professional tone are mandatory."
+          systemInstruction: "You are the primary linguistic node for CareSync Pro. Absolute precision and professional tone are mandatory for clinician safety."
         }
       });
 
       return response.text?.trim() || text;
     } catch (error) {
-      console.error("[NEURAL_LINGUIST_SIGNAL_LOST]:", error);
+      console.error("[NEURAL_LINGUIST_DESYNC]:", error);
       return text; 
     }
   }

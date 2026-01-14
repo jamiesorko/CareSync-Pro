@@ -12,10 +12,9 @@ export const normalizeText = (val: any): string => {
   const str = String(val).trim();
   if (!str) return "";
   
-  // Detect technical keys: UPPER_CASE_SNAKE or keys with underscores
-  const isCode = (str === str.toUpperCase() && str.length <= 10) || 
-                 (str.includes('_')) || 
-                 (str === str.toUpperCase() && !str.includes(' '));
+  // Detect code-like strings: 'COMPLEX_WOUND_CARE', 'FISCAL_LEDGER', etc.
+  const isCode = (str.includes('_')) || 
+                 (str === str.toUpperCase() && str.length > 2 && !str.includes(' '));
 
   if (isCode) {
     return str.split('_')
@@ -34,13 +33,14 @@ export const useTranslate = (text: any, targetOverride?: string) => {
   useEffect(() => {
     const source = normalizeText(text);
 
+    // If English, return normalized text immediately
     if (!source || (language && language.toLowerCase() === 'english')) {
       setTranslated(source || String(text || ''));
       return;
     }
 
     const run = async () => {
-      const cacheKey = `cs_v50_${language}_${source}`;
+      const cacheKey = `cs_v70_${language}_${source}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
@@ -75,7 +75,7 @@ export const Translate: React.FC<{ children?: React.ReactNode; target?: string }
   const { translated, loading } = useTranslate(sourceText, target);
 
   return (
-    <span className={loading ? 'opacity-40 animate-pulse' : 'transition-opacity duration-300'}>
+    <span className={loading ? 'opacity-40 animate-pulse transition-opacity' : 'transition-opacity duration-300'}>
       {translated}
     </span>
   );

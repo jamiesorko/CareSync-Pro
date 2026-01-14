@@ -14,9 +14,9 @@ const MarketDominanceHub: React.FC<Props> = ({ language }) => {
   const [region, setRegion] = useState('Toronto East');
   const [service, setService] = useState('Complex Wound Care');
 
-  // Translate dynamic input values and labels
+  // Explicitly translate the dynamic input values
   const { translated: translatedService } = useTranslate(service);
-  const { translated: pivotLabel } = useTranslate("Specialized Service Pivot");
+  const { translated: pivotLabel } = useTranslate("Specialized_Service_Pivot");
 
   const runDominanceScan = async () => {
     setLoading(true);

@@ -5,7 +5,7 @@ import Translate from './Translate';
 import Logo from './Logo';
 import { 
   LayoutDashboard, Shield, Zap, Wallet, Database, 
-  Heart, Cpu, Radio, Power, Briefcase, Target 
+  Heart, Cpu, Radio, Power, Briefcase 
 } from 'lucide-react';
 
 interface SidebarProps {
