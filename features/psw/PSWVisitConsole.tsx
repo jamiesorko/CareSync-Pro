@@ -45,7 +45,7 @@ const PSWVisitConsole: React.FC<Props> = ({ client, onClockOut, onAlert, languag
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-in fade-in duration-700">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-in fade-in duration-700 px-4">
       <div className="lg:col-span-8 space-y-8">
         <div className="glass-card p-10 rounded-[4rem] shadow-2xl flex flex-col md:flex-row justify-between items-center gap-10">
            <div className="flex items-center gap-10">

@@ -21,7 +21,7 @@ export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab, l
   ];
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-700 h-full overflow-y-auto scrollbar-hide pb-20">
+    <div className="space-y-12 animate-in fade-in duration-700 h-full overflow-y-auto scrollbar-hide pb-20 px-4">
       <div className="bg-indigo-600/10 border border-indigo-500/20 rounded-[3.5rem] p-12 relative overflow-hidden group">
         <div className="relative z-10 space-y-4">
           <p className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.4em] mb-2">

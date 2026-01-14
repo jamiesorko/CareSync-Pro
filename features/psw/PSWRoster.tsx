@@ -12,7 +12,7 @@ interface Props {
 
 const PSWRoster: React.FC<Props> = ({ clients, onStartVisit, language }) => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-in slide-in-from-bottom-4 duration-500 pb-20">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-in slide-in-from-bottom-4 duration-500 pb-20 px-4">
       {clients.map((client) => (
         <div key={client.id} className="glass-card p-10 rounded-[3.5rem] shadow-2xl group border-orange-500/10 hover:border-orange-500/40 transition-all flex flex-col">
           <div className="flex justify-between items-start mb-8">

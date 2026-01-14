@@ -5,14 +5,15 @@ import { useTranslation } from '../contexts/TranslationContext';
 
 /**
  * Normalizes technical keys (e.g., 'OPS_DASHBOARD', 'PSW', 'Sector_4') into readable phrases.
+ * This ensures the AI receives natural language for better translation quality.
  */
 export const normalizeText = (val: string | any): string => {
   if (val === null || val === undefined) return "";
   const str = String(val);
   if (!str) return "";
   
-  // Detect technical keys: UPPER_CASE with underscores, Camel_Case with underscores, or single-word UPPER_CASE codes
-  const isCode = (str === str.toUpperCase() && str.length <= 4) || 
+  // Detect technical keys: UPPER_CASE with underscores, Camel_Case with underscores, or single-word codes
+  const isCode = (str === str.toUpperCase() && str.length <= 5) || 
                  (str.includes('_')) || 
                  (str === str.toUpperCase() && !str.includes(' '));
 
@@ -26,8 +27,7 @@ export const normalizeText = (val: string | any): string => {
 
 /**
  * useTranslate Hook
- * Returns a translated version of the input string based on current global language.
- * Crucial for attributes (placeholders, tooltips).
+ * Used for attributes like placeholders, tooltips, or dynamic data logic.
  */
 export const useTranslate = (text: string | any, targetOverride?: string) => {
   const { language: contextLanguage } = useTranslation();
@@ -44,7 +44,7 @@ export const useTranslate = (text: string | any, targetOverride?: string) => {
     }
 
     const run = async () => {
-      const cacheKey = `cs_v14_${language}_${normalizedSource}`;
+      const cacheKey = `cs_v15_${language}_${normalizedSource}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
@@ -76,7 +76,7 @@ export const useTranslate = (text: string | any, targetOverride?: string) => {
 
 /**
  * Translate Component
- * The primary standard for translating UI strings and dynamic data.
+ * The primary standard for translating UI strings and dynamic data nodes.
  */
 export const Translate: React.FC<{ children?: React.ReactNode; target?: string }> = ({ children, target }) => {
   const sourceText = typeof children === 'string' ? children : String(children || '');
