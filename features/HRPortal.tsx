@@ -16,7 +16,7 @@ interface Props {
 }
 
 const HRPortal: React.FC<Props> = ({ role, language }) => {
-  const [activeTab, setActiveTab] = useState<'NEXUS' | 'HIRING' | 'COMPLIANCE' | 'CAPACITY' | 'STAFF' | 'RETENTION'>('NEXUS');
+  const [activeTab, setActiveTab] = useState<'NEXUS' | 'HIRING' | 'COMPLIANCE' | 'STAFF' | 'RETENTION'>('NEXUS');
   const isHR = [CareRole.HR_SPECIALIST, CareRole.CEO, CareRole.COO].includes(role);
 
   const tabs = [
@@ -27,8 +27,7 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
   ];
 
   const adminTabs = [
-    { id: 'HIRING', label: 'Recruitment' },
-    { id: 'CAPACITY', label: 'Forecasting' },
+    { id: 'HIRING', label: 'Recruitment' }
   ];
 
   return (
@@ -36,12 +35,10 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 px-4">
         <div>
           <h2 className="text-5xl font-black text-white tracking-tighter uppercase leading-none italic text-indigo-400">
-             {/* Standardized Translate prop to target */}
              <Translate target={language}>RESOURCE_CORE</Translate>
           </h2>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-3 italic">
-             {/* Standardized Translate prop to target */}
-             <Translate target={language}>Institutional_Human_Capital_&_Financial_Stewardship</Translate>
+             <Translate target={language}>Institutional_Human_Capital_Oversight</Translate>
           </p>
         </div>
         <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 overflow-x-auto scrollbar-hide shadow-xl">
@@ -53,7 +50,6 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
                 activeTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'
               }`}
             >
-              {/* Standardized Translate prop to target */}
               <Translate target={language}>{tab.label}</Translate>
             </button>
           ))}
@@ -65,19 +61,17 @@ const HRPortal: React.FC<Props> = ({ role, language }) => {
                 activeTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'
               }`}
             >
-              {/* Standardized Translate prop to target */}
               <Translate target={language}>{tab.label}</Translate>
             </button>
           ))}
         </div>
       </div>
 
-      <div className="min-h-[600px] animate-in slide-in-from-bottom-4 duration-500">
+      <div className="min-h-[600px] animate-in slide-in-from-bottom-4 duration-500 px-4">
         {activeTab === 'NEXUS' && <WorkforceNexus staff={MOCK_STAFF} language={language} />}
         {activeTab === 'STAFF' && <StaffManager language={language} />}
         {activeTab === 'COMPLIANCE' && <ComplianceManager language={language} isHR={isHR} />}
-        {activeTab === 'HIRING' && isHR && <HiringHub language={language} />}
-        {activeTab === 'CAPACITY' && isHR && <CapacityPlanner language={language} />}
+        {activeTab === 'HIRING' && <HiringHub language={language} />}
         {activeTab === 'RETENTION' && <RetentionIntelligence staff={MOCK_STAFF} language={language} />}
       </div>
     </div>

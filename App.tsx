@@ -5,7 +5,7 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Login from './features/Login';
 
-// Portals
+// Portal Components
 import CEOPortal from './features/ceo/CEOPortal';
 import COOTerminal from './features/executive/COOTerminal';
 import RNPortal from './features/rn/RNPortal';
@@ -13,10 +13,10 @@ import ProfessionalTerminal from './features/terminal/ProfessionalTerminal';
 import AccountingTerminal from './features/accounting/AccountingTerminal';
 import ClientPortal from './features/client/ClientPortal';
 import HSSPortal from './features/hss/HSSPortal';
-import HRTerminal from './features/hr/HRTerminal';
+import HRPortal from './features/HRPortal'; // HR is HRPortal in the root features
 import CoordinationHub from './features/CoordinationHub';
 
-// Features
+// Specialized Features
 import VideoLab from './features/VideoLab';
 import LiveLab from './features/LiveLab';
 import DocumentVault from './features/DocumentVault';
@@ -44,32 +44,36 @@ export default function App() {
   };
 
   /**
-   * Global Content Resolver
-   * Maps navigation intent to specific modular portals.
+   * Deterministic Feature Resolver
+   * Priority: Explicit Sidebar Tab Selection -> Default Role Dashboard
    */
   const renderContent = () => {
-    // 1. Explicit Tab Mapping (Accessible by all authorized roles)
+    // 1. Check for explicit tab overrides
     switch (activeTab) {
-      case AppTab.STRATEGY: 
-        return <StrategicSimulator language={language} />;
-      case AppTab.CLINICAL: 
-        // Handles RN/RPN specific clinical governance
-        return <RNPortal {...baseProps} />;
-      case AppTab.LOGISTICS: 
-        return <CoordinationHub language={language} />;
       case AppTab.FISCAL: 
+      case AppTab.FINANCE:
         return <AccountingTerminal {...baseProps} />;
-      case AppTab.RESOURCE: 
-        return <HRTerminal {...baseProps} />;
-      case AppTab.VAULT: 
-        return <DocumentVault {...baseProps} />;
-      case AppTab.WELLNESS: 
+      case AppTab.RESOURCE:
+      case AppTab.HR_HUB:
+        return <HRPortal {...baseProps} />;
+      case AppTab.CLINICAL:
+      case AppTab.CLINICAL_COMMAND:
+        return <RNPortal {...baseProps} />;
+      case AppTab.WELLNESS:
         return <ClientPortal {...baseProps} />;
-      case AppTab.LIVE: 
+      case AppTab.LOGISTICS:
+      case AppTab.COORDINATION:
+      case AppTab.SCHEDULE:
+        return <CoordinationHub language={language} />;
+      case AppTab.STRATEGY:
+        return <StrategicSimulator language={language} />;
+      case AppTab.VAULT:
+        return <DocumentVault {...baseProps} />;
+      case AppTab.LIVE:
         return <LiveLab language={language} />;
       case AppTab.DASHBOARD:
       default:
-        // Role-Based Default Dashboards
+        // 2. Fallback to Primary Role Dashboard
         switch (user.role) {
           case CareRole.CEO: return <CEOPortal {...baseProps} />;
           case CareRole.COO: return <COOTerminal {...baseProps} />;
@@ -77,9 +81,14 @@ export default function App() {
           case CareRole.ACCOUNTANT: return <AccountingTerminal {...baseProps} />;
           case CareRole.CLIENT: return <ClientPortal {...baseProps} />;
           case CareRole.HSS: return <HSSPortal {...baseProps} />;
+          case CareRole.HR_SPECIALIST: return <HRPortal {...baseProps} />;
           case CareRole.COORDINATOR: return <CoordinationHub language={language} />;
-          case CareRole.HR_SPECIALIST: return <HRTerminal {...baseProps} />;
-          default: return <ProfessionalTerminal {...baseProps} />;
+          case CareRole.RN:
+          case CareRole.RPN:
+          case CareRole.PSW:
+            return <ProfessionalTerminal {...baseProps} />;
+          default:
+            return <CEOPortal {...baseProps} />;
         }
     }
   };

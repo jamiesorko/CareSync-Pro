@@ -4,20 +4,23 @@ import { translationService } from '../services/translationService';
 import { useTranslation } from '../contexts/TranslationContext';
 
 /**
- * Normalizes keys and technical clinical phrases for the AI.
- * Ensures 'COMPLEX_WOUND_CARE' becomes 'Complex Wound Care' before translation.
+ * Advanced Semantic Normalizer
+ * Humanizes SNAKE_CASE, UPPER_CASE, and complex medical strings before AI translation.
  */
 export const normalizeText = (val: any): string => {
   if (val === null || val === undefined) return "";
   const str = String(val).trim();
   if (!str) return "";
   
-  // Detect technical keys: 'FISCAL_LEDGER', 'OPS_DASHBOARD'
+  // 1. Handle typical keys: 'FISCAL_LEDGER', 'OPS_DASHBOARD'
   if (str.includes('_') || (str === str.toUpperCase() && str.length > 2 && !str.includes(' '))) {
     return str.split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
   }
+
+  // 2. Handle clinical phrases that are often passed as identifiers
+  if (str === "Complex Wound Care") return "Specialized Complex Wound Care";
   
   return str;
 };
@@ -31,13 +34,14 @@ export const useTranslate = (text: any, targetOverride?: string) => {
   useEffect(() => {
     const source = normalizeText(text);
 
+    // Skip AI if English is selected
     if (!source || (language && language.toLowerCase() === 'english')) {
       setTranslated(source || String(text || ''));
       return;
     }
 
     const run = async () => {
-      const cacheKey = `cs_v90_${language}_${source}`;
+      const cacheKey = `cs_v100_${language}_${source}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
