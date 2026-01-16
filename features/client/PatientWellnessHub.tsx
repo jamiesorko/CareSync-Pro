@@ -29,17 +29,17 @@ const PatientWellnessHub: React.FC<Props> = ({ language, clients }) => {
       <div className="max-w-7xl mx-auto space-y-12 pb-24">
         
         {/* Header / Big Clock */}
-        <div className="flex flex-col lg:flex-row justify-between items-center bg-white/5 border border-white/10 rounded-[4rem] p-10 backdrop-blur-2xl">
+        <div className="flex flex-col lg:flex-row justify-between items-center bg-white/5 border border-white/10 rounded-[4rem] p-10 backdrop-blur-2xl shadow-3xl">
            <div className="text-center lg:text-left">
               <p className="text-xl font-black text-slate-500 uppercase tracking-[0.4em] mb-2">
-                <Translate target={language}>Good_Afternoon</Translate>
+                <Translate target={language}>GOOD_AFTERNOON</Translate>
               </p>
               <h1 className="text-6xl font-black text-white tracking-tighter uppercase italic">{activeClient.name}</h1>
            </div>
            <div className="mt-8 lg:mt-0 text-center">
               <p className="text-7xl font-black text-white italic tracking-tighter">02:14<span className="text-2xl text-slate-600 ml-2">PM</span></p>
               <p className="text-xs font-bold text-amber-500 uppercase tracking-widest mt-2">
-                <Translate target={language}>Next_Visit</Translate>: 03:00 PM (PT Session)
+                <Translate target={language}>NEXT_VISIT</Translate>: 03:00 PM (<Translate target={language}>PHYSICAL_THERAPY</Translate>)
               </p>
            </div>
         </div>
@@ -58,7 +58,7 @@ const PatientWellnessHub: React.FC<Props> = ({ language, clients }) => {
               >
                  <div className="absolute top-0 right-0 p-12 opacity-20 pointer-events-none">
                     <span className="text-6xl font-black italic">
-                      <Translate target={language}>TALK</Translate>
+                      <Translate target={language}>CONVERSATION</Translate>
                     </span>
                  </div>
                  <div className="h-full flex flex-col items-center justify-center text-center space-y-8">
@@ -67,7 +67,7 @@ const PatientWellnessHub: React.FC<Props> = ({ language, clients }) => {
                     </div>
                     <div>
                        <h3 className="text-3xl font-black uppercase italic tracking-tighter leading-none">
-                         <Translate target={language}>Care_Voice</Translate>
+                         <Translate target={language}>CARE_VOICE_ASSISTANT</Translate>
                        </h3>
                     </div>
                  </div>
@@ -75,11 +75,11 @@ const PatientWellnessHub: React.FC<Props> = ({ language, clients }) => {
 
               <div className="bg-white/5 border border-white/10 rounded-[3rem] p-10 flex-1 flex flex-col items-center justify-center text-center space-y-6">
                  <span className="text-5xl">👨‍👩‍👧</span>
-                 <p className="text-xs font-bold text-slate-500 uppercase tracking-widest leading-relaxed px-10">
-                   <Translate target={language}>Your_daughter_Sarah_sent_you_a_photo_Would_you_like_to_see_it</Translate>
+                 <p className="text-xs font-bold text-slate-500 uppercase tracking-widest leading-relaxed px-10 italic">
+                   <Translate target={language}>FAMILY_NOTIFICATION: Daughter Sarah shared a memory vector.</Translate>
                  </p>
-                 <button className="px-8 py-3 bg-white text-black rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-xl">
-                   <Translate target={language}>Open_Gallery</Translate>
+                 <button className="px-8 py-4 bg-white text-black rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-xl">
+                   <Translate target={language}>OPEN_FAMILY_VAULT</Translate>
                  </button>
               </div>
            </div>

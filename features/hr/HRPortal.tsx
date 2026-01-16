@@ -19,11 +19,11 @@ const HRPortal: React.FC<Props> = ({ language, user, staff }) => {
   const [activeSubTab, setActiveSubTab] = useState<'NEXUS' | 'STAFF' | 'COMPLIANCE' | 'RECRUITMENT' | 'RETENTION'>('NEXUS');
 
   const tabs = [
-    { id: 'NEXUS', label: 'Workforce_Nexus', icon: UserRoundSearch },
-    { id: 'STAFF', label: 'Roster_Logic', icon: UsersRound },
-    { id: 'COMPLIANCE', label: 'Compliance', icon: ShieldCheck },
-    { id: 'RECRUITMENT', label: 'Recruitment', icon: GraduationCap },
-    { id: 'RETENTION', label: 'Retention', icon: BrainCircuit }
+    { id: 'NEXUS', label: 'WORKFORCE_NEXUS', icon: UserRoundSearch },
+    { id: 'STAFF', label: 'PERSONNEL_MASTER_LIST', icon: UsersRound },
+    { id: 'COMPLIANCE', label: 'REGULATORY_COMPLIANCE', icon: ShieldCheck },
+    { id: 'RECRUITMENT', label: 'RECRUITMENT_FORGE', icon: GraduationCap },
+    { id: 'RETENTION', label: 'RETENTION_INTELLIGENCE', icon: BrainCircuit }
   ];
 
   return (
@@ -33,20 +33,20 @@ const HRPortal: React.FC<Props> = ({ language, user, staff }) => {
           <div className="flex items-center gap-3">
              <div className="w-3 h-3 rounded-full bg-indigo-500 animate-pulse shadow-[0_0_15px_rgba(99,102,241,0.5)]"></div>
              <h1 className="text-5xl font-black tracking-tighter uppercase italic leading-none text-indigo-400">
-               RESOURCE_SIGMA
+                <Translate target={language}>RESOURCE_CORE_SIGMA</Translate>
              </h1>
           </div>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
-            Human_Capital_Stewardship • {user.name}
+            <Translate target={language}>HUMAN_CAPITAL_STEWARDSHIP</Translate> • {user.name}
           </p>
         </div>
         
-        <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl shadow-2xl">
+        <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl shadow-2xl overflow-x-auto scrollbar-hide">
           {tabs.map(tab => (
             <button 
               key={tab.id}
               onClick={() => setActiveSubTab(tab.id as any)}
-              className={`px-6 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeSubTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+              className={`px-8 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 whitespace-nowrap ${activeSubTab === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
             >
               <tab.icon size={14} />
               <Translate target={language}>{tab.label}</Translate>

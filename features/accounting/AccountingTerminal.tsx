@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Client } from '../../types';
 import { Translate } from '../../components/Translate';
@@ -18,18 +19,18 @@ const AccountingTerminal: React.FC<Props> = ({ language, staffName, clients }) =
   const [activeSubTab, setActiveSubTab] = useState<'PAYROLL' | 'HEALTH' | 'RECOVERY' | 'RECEIVABLE' | 'PAYABLE'>('PAYROLL');
 
   const tabs = [
-    { id: 'PAYROLL', label: 'Payroll_Core', icon: WalletMinimal },
-    { id: 'HEALTH', label: 'Fiscal_Health', icon: Landmark },
-    { id: 'RECOVERY', label: 'Revenue_Recovery', icon: HeartPulse },
-    { id: 'RECEIVABLE', label: 'Receivables', icon: ReceiptText },
-    { id: 'PAYABLE', label: 'Payables', icon: Truck }
+    { id: 'PAYROLL', label: 'PAYROLL_CORE', icon: WalletMinimal },
+    { id: 'HEALTH', label: 'FISCAL_HEALTH', icon: Landmark },
+    { id: 'RECOVERY', label: 'REVENUE_RECLAMATION', icon: HeartPulse },
+    { id: 'RECEIVABLE', label: 'ACCOUNTS_RECEIVABLE', icon: ReceiptText },
+    { id: 'PAYABLE', label: 'ACCOUNTS_PAYABLE', icon: Truck }
   ];
 
   const fiscalStats = [
-    { label: 'Unpaid_Invoices', val: '$14.2k', color: 'text-rose-400' },
-    { label: 'Current_Payroll', val: '$42,901', color: 'text-white' },
-    { label: 'Tax_Reserves', val: '$8.4k', color: 'text-sky-400' },
-    { label: 'Vacation_Liability', val: '$12,204', color: 'text-emerald-400' }
+    { label: 'UNPAID_INVOICES', val: '$14,204', color: 'text-rose-400' },
+    { label: 'ACTIVE_PAYROLL_LOAD', val: '$42,901', color: 'text-white' },
+    { label: 'TAX_RESERVE_NODE', val: '$8,410', color: 'text-sky-400' },
+    { label: 'VACATION_LIABILITY', val: '$12,204', color: 'text-emerald-400' }
   ];
 
   return (
@@ -43,7 +44,7 @@ const AccountingTerminal: React.FC<Props> = ({ language, staffName, clients }) =
              </h1>
           </div>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
-            <Translate target={language}>Institutional_Capital_Forensics</Translate> • <Translate target={language}>{staffName}</Translate>
+            <Translate target={language}>INSTITUTIONAL_CAPITAL_FORENSICS</Translate> • {staffName}
           </p>
         </div>
         
@@ -63,7 +64,7 @@ const AccountingTerminal: React.FC<Props> = ({ language, staffName, clients }) =
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-4 mb-10">
         {fiscalStats.map((stat, i) => (
-          <div key={i} className="bg-white/5 border border-white/10 p-8 rounded-[2rem] backdrop-blur-3xl text-center">
+          <div key={i} className="bg-white/5 border border-white/10 p-8 rounded-[2rem] backdrop-blur-3xl text-center flex flex-col items-center justify-center">
              <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4">
                 <Translate target={language}>{stat.label}</Translate>
              </p>
