@@ -3,8 +3,8 @@ import { GoogleGenAI } from "@google/genai";
 
 class TranslationService {
   /**
-   * Universal Neural Translation Vector
-   * Specialized for Clinical, Fiscal, and Operational healthcare terminology.
+   * Deep Neural Translation Vector v5.0
+   * Specialized for Clinical, Fiscal, and Cultural formatting.
    */
   async translate(text: string, targetLanguage: string): Promise<string> {
     if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') {
@@ -15,18 +15,20 @@ class TranslationService {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Act as a world-class clinical enterprise linguist. Translate this specific software UI string into exactly: "${targetLanguage}".
+        contents: `Act as a world-class localized clinical enterprise linguist for ${targetLanguage}. 
         
-        Source Text: "${text}"
+        SOURCE TEXT: "${text}"
         
-        STRICT OPERATIONAL RULES:
-        1. Output ONLY the translated string. No conversational filler, no quotes.
-        2. DO NOT SKIP technical phrases or proper clinical nouns like "Complex Wound Care", "Director of Care", or "Fiscal Ledger".
-        3. Professional Tone: Use formal, institutional language suitable for a hospital or healthcare agency.
-        4. Consistency: Roles like "PSW" should be translated to their local professional equivalent (e.g., "Aide Soignant" for French, "PCP" for Spanish).`,
+        STRICT LOCALIZATION RULES:
+        1. Output ONLY the translated string. No quotes or filler.
+        2. NUMBERS: Localize numerical formats (thousands separators, decimals) to ${targetLanguage} standards.
+        3. CURRENCY: Localize the "$" symbol or equivalent (e.g., use "€" or "₹" if and only if appropriate for the region, otherwise maintain currency context but localize the numeric placement).
+        4. DATES/TIME: Convert formats (e.g., "10:15 AM" or "2025-10-15") to the standard local representation.
+        5. CLINICAL NOUNS: Do not simplify technical terms. Use the formal professional equivalent used in ${targetLanguage} hospitals.
+        6. ACRONYMS: Maintain professional acronyms (RN, PSW, RPN) unless a widely used local equivalent exists.`,
         config: { 
           temperature: 0.0,
-          systemInstruction: "You are the primary linguistic node for CareSync Pro. Absolute precision and professional tone are mandatory for clinician safety."
+          systemInstruction: "You are the primary linguistic node for CareSync Pro. Absolute precision, professional tone, and numerical localization are mandatory."
         }
       });
 

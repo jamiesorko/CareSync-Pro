@@ -8,7 +8,6 @@ import Logo from '../components/Logo';
 
 interface Props {
   onLogin: (user: User) => void;
-  // Added optional language and onLanguageChange props to satisfy usage in app/page.tsx while maintaining compatibility with App.tsx
   language?: string;
   onLanguageChange?: (lang: string) => void;
 }
@@ -27,8 +26,8 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
   ];
 
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center p-6 bg-[#020617] relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-600/5 blur-[120px] rounded-full"></div>
+    <div className="h-full w-full flex flex-col items-center justify-center p-6 bg-[#020617] relative overflow-hidden fixed inset-0">
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-600/5 blur-[120px] rounded-full pointer-events-none"></div>
       
       <div className="absolute top-10 right-10 z-50">
         <LanguageSelector />
@@ -49,7 +48,7 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[450px] overflow-y-auto scrollbar-hide pr-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[40vh] overflow-y-auto scrollbar-hide pr-2">
           {personas.map(p => (
             <button
               key={p.role}
@@ -61,7 +60,9 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
                    <p.icon size={18} />
                 </div>
                 <div>
-                  <p className="text-xs font-black text-white uppercase italic tracking-tight">{p.name}</p>
+                  <p className="text-xs font-black text-white uppercase italic tracking-tight">
+                    <Translate>{p.name}</Translate>
+                  </p>
                   <p className="text-[8px] font-bold text-slate-500 uppercase mt-1">
                     <Translate>{p.role}</Translate>
                   </p>
@@ -74,7 +75,7 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
       </div>
       
       <p className="mt-8 text-[10px] font-bold text-slate-700 uppercase tracking-widest italic opacity-50">
-        <Translate>Institutional_Sovereignty_Node_v8.0</Translate>
+        <Translate>Institutional_Sovereignty_Node_v8.5</Translate>
       </p>
     </div>
   );
