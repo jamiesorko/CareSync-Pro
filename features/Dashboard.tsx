@@ -33,9 +33,6 @@ export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab, l
                <Translate>{staffName}</Translate>
              </span>
           </h2>
-          <p className="text-slate-400 text-sm font-medium italic border-l-2 border-white/10 pl-6 max-w-lg leading-relaxed">
-            <Translate>Operational_matrix_is_currently_synchronized_Sector_4_deployment_has_reached_its_24_hour_efficiency_peak</Translate>
-          </p>
         </div>
         <div className="absolute -right-20 -bottom-20 opacity-[0.03] pointer-events-none rotate-12 group-hover:rotate-6 transition-transform duration-1000">
            <Activity size={400} strokeWidth={1} />
@@ -58,7 +55,7 @@ export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab, l
 
       <div className="flex-1 min-h-0 flex flex-col space-y-8 pb-10">
         <CommandGrid setActiveTab={setActiveTab} language={lang || "English"} />
-
+        
         <div className="bg-white/5 border border-white/10 rounded-[4rem] p-12 relative overflow-hidden flex-1 flex flex-col min-h-[300px]">
           <h3 className="text-xl font-black italic uppercase tracking-tighter text-white mb-10">
             <Translate>GLOBAL_SIGNAL_LOG</Translate>
@@ -78,24 +75,12 @@ export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab, l
                            <span className="text-[9px] text-slate-500 uppercase font-bold">
                               <Translate>{c.sector}</Translate>
                            </span>
-                           <div className="w-1 h-1 bg-slate-800 rounded-full"></div>
-                           <div className="flex items-center gap-1.5">
-                              <MapPin size={10} className="text-emerald-500" />
-                              <span className="text-[9px] text-slate-500 uppercase font-bold">
-                                 <Translate>GEOFENCE_VERIFIED</Translate>
-                              </span>
-                           </div>
                         </div>
                      </div>
                   </div>
-                  <div className="flex items-center gap-6">
-                     <span className="text-[10px] font-black text-slate-500 uppercase italic">
-                        <Translate>{c.currentVisitStatus}</Translate>
-                     </span>
-                     <button className="px-6 py-2 bg-white/5 border border-white/10 rounded-xl text-[9px] font-black text-indigo-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all">
-                       <Translate>DOSSIER</Translate>
-                     </button>
-                  </div>
+                  <span className="text-[10px] font-black text-slate-500 uppercase italic">
+                     <Translate>{c.currentVisitStatus}</Translate>
+                  </span>
                </div>
              ))}
           </div>

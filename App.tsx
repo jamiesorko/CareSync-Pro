@@ -5,7 +5,7 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Login from './features/Login';
 
-// Portal Components
+// Portals
 import CEOPortal from './features/ceo/CEOPortal';
 import COOTerminal from './features/executive/COOTerminal';
 import RNPortal from './features/rn/RNPortal';
@@ -15,12 +15,6 @@ import ClientPortal from './features/client/ClientPortal';
 import HSSPortal from './features/hss/HSSPortal';
 import HRPortal from './features/HRPortal';
 import CoordinationHub from './features/CoordinationHub';
-
-// Specialized Features
-import VideoLab from './features/VideoLab';
-import LiveLab from './features/LiveLab';
-import DocumentVault from './features/DocumentVault';
-import StrategicSimulator from './features/ceo/StrategicSimulator';
 
 import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
 import { useTranslation } from './contexts/TranslationContext';
@@ -56,27 +50,14 @@ export default function App() {
         return <RNPortal {...baseProps} />;
       case AppTab.WELLNESS:
         return <ClientPortal {...baseProps} />;
-      case AppTab.LOGISTICS:
       case AppTab.COORDINATION:
-      case AppTab.SCHEDULE:
         return <CoordinationHub language={language} />;
-      case AppTab.STRATEGY:
-        return <StrategicSimulator language={language} />;
-      case AppTab.VAULT:
-        return <DocumentVault {...baseProps} />;
-      case AppTab.LIVE:
-        return <LiveLab language={language} />;
-      case AppTab.DASHBOARD:
       default:
         switch (user.role) {
           case CareRole.CEO: return <CEOPortal {...baseProps} />;
           case CareRole.COO: return <COOTerminal {...baseProps} />;
-          case CareRole.DOC: return <RNPortal {...baseProps} />;
           case CareRole.ACCOUNTANT: return <AccountingTerminal {...baseProps} />;
           case CareRole.CLIENT: return <ClientPortal {...baseProps} />;
-          case CareRole.HSS: return <HSSPortal {...baseProps} />;
-          case CareRole.HR_SPECIALIST: return <HRPortal {...baseProps} />;
-          case CareRole.COORDINATOR: return <CoordinationHub language={language} />;
           case CareRole.RN:
           case CareRole.RPN:
           case CareRole.PSW:
@@ -88,7 +69,7 @@ export default function App() {
   };
 
   return (
-    <div className="app-container bg-[#020617] text-slate-100 font-sans">
+    <div className="fixed inset-0 flex h-[100dvh] w-screen bg-[#020617] text-slate-100 overflow-hidden font-sans">
       <Sidebar 
         active={activeTab} 
         setActive={setActiveTab} 
@@ -96,10 +77,10 @@ export default function App() {
         onLogout={() => { setUser(null); setActiveTab(AppTab.DASHBOARD); }}
         lang={language}
       />
-      <div className="flex-1 flex flex-col min-w-0 h-full relative overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         <Header active={activeTab} user={user} lang={language} />
-        <main className="flex-1 overflow-y-auto scrollbar-hide px-4 lg:px-8">
-          <div className="max-w-[1600px] mx-auto py-6 lg:py-10 animate-fade-up">
+        <main className="flex-1 overflow-y-auto scrollbar-hide">
+          <div className="max-w-[1600px] mx-auto p-4 lg:p-8 animate-fade-up h-full">
             {renderContent()}
           </div>
         </main>
