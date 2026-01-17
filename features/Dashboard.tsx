@@ -17,7 +17,7 @@ export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab, l
     { label: 'Agency_Health', val: '98.4%', icon: ShieldCheck, color: 'text-emerald-400' },
     { label: 'Fleet_Velocity', val: '92.1%', icon: Zap, color: 'text-sky-400' },
     { label: 'Clinical_Drift', val: '-2.4%', icon: Activity, color: 'text-rose-400' },
-    { label: 'Fiscal_Delta', val: '+$14204', icon: TrendingUp, color: 'text-white' },
+    { label: 'Fiscal_Delta', val: '$14,204.00', icon: TrendingUp, color: 'text-white' },
   ];
 
   return (
@@ -56,7 +56,7 @@ export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab, l
         ))}
       </div>
 
-      <div className="flex-1 min-h-0 flex flex-col space-y-8">
+      <div className="flex-1 min-h-0 flex flex-col space-y-8 pb-10">
         <CommandGrid setActiveTab={setActiveTab} language={lang || "English"} />
 
         <div className="bg-white/5 border border-white/10 rounded-[4rem] p-12 relative overflow-hidden flex-1 flex flex-col min-h-[300px]">

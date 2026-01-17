@@ -3,41 +3,41 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 241, 245, 249;
-  --background-start-rgb: 2, 6, 23;
-  --background-end-rgb: 2, 6, 23;
+@layer base {
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden; /* Prevent whole-page scrolling */
+    background: #020617;
+  }
+
+  #root {
+    height: 100%;
+    width: 100%;
+  }
+
+  body {
+    @apply text-slate-50 antialiased;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
 }
 
-* {
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-start-rgb));
-  font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
-}
-
+/* Custom scrollbars for internal content only */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Custom text selection */
-::selection {
-  background: rgba(99, 102, 241, 0.3);
-  color: #fff;
+.glass-node {
+  @apply backdrop-blur-3xl;
 }
 
-/* Glass panel reinforcement */
-.glass-card {
-  background: rgba(15, 23, 42, 0.3);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Smooth transitions for navigation */
-.nav-transition {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* Ensure the main layout fits exactly */
+.app-container {
+  display: flex;
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
 }
