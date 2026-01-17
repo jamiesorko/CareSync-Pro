@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { MOCK_STAFF } from '../../data/careData';
 import { hrService } from '../../services/hrService';
@@ -9,20 +10,18 @@ interface Props {
 }
 
 const PayrollSystem: React.FC<Props> = ({ language }) => {
-  const formatCAD = (n: number) => new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(n);
-
   return (
     <div className="space-y-10 animate-in fade-in duration-700">
       <div className="bg-slate-900 border border-white/10 rounded-[4rem] p-12 shadow-2xl relative overflow-hidden text-slate-200">
         <div className="absolute top-0 right-0 p-12 opacity-5"><DollarSign size={200} /></div>
         
         <h3 className="text-3xl font-black text-white italic tracking-tighter uppercase mb-12">
-          <Translate target={language}>Institutional_Disbursement_Engine</Translate>
+          <Translate target={language}>INSTITUTIONAL_DISBURSEMENT_ENGINE</Translate>
         </h3>
         
         <div className="space-y-6">
           {MOCK_STAFF.map(s => {
-            const payroll = hrService.calculateDetailedPayroll(s, 80); // Bi-weekly 80h default
+            const payroll = hrService.calculateDetailedPayroll(s, 80);
             return (
               <div key={s.id} className="p-10 bg-white/[0.03] border border-white/5 rounded-[3rem] group hover:bg-white/5 transition-all">
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
@@ -39,25 +38,25 @@ const PayrollSystem: React.FC<Props> = ({ language }) => {
                     <div className="text-center md:text-left">
                        <p className="text-[8px] font-black text-slate-600 uppercase mb-1"><Translate target={language}>Gross_Liquid</Translate></p>
                        <p className="text-xl font-black text-white">
-                         <Translate target={language}>{formatCAD(payroll.gross)}</Translate>
+                         <Translate target={language}>{payroll.gross.toFixed(2)}</Translate>
                        </p>
                     </div>
                     <div className="text-center md:text-left">
                        <p className="text-[8px] font-black text-rose-500 uppercase mb-1"><Translate target={language}>Stat_Deductions</Translate></p>
                        <p className="text-xl font-black text-rose-400">
-                         <Translate target={language}>{`-${formatCAD(payroll.deductions)}`}</Translate>
+                         <Translate target={language}>{`-${payroll.deductions.toFixed(2)}`}</Translate>
                        </p>
                     </div>
                     <div className="text-center md:text-left">
                        <p className="text-[8px] font-black text-indigo-400 uppercase mb-1"><Translate target={language}>Union_&_Ins</Translate></p>
                        <p className="text-xl font-black text-indigo-400">
-                         <Translate target={language}>{`-${formatCAD(payroll.breakdown.unionDues + payroll.breakdown.insurance)}`}</Translate>
+                         <Translate target={language}>{`-${(payroll.breakdown.unionDues + payroll.breakdown.insurance).toFixed(2)}`}</Translate>
                        </p>
                     </div>
                     <div className="text-center md:text-right">
                        <p className="text-[8px] font-black text-emerald-400 uppercase mb-1"><Translate target={language}>Net_Disbursement</Translate></p>
                        <p className="text-3xl font-black text-emerald-400 italic">
-                         <Translate target={language}>{formatCAD(payroll.net)}</Translate>
+                         <Translate target={language}>{`$${payroll.net.toFixed(2)}`}</Translate>
                        </p>
                     </div>
                   </div>

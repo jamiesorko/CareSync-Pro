@@ -29,11 +29,9 @@ const WorkforceNexus: React.FC<Props> = ({ staff, language }) => {
       <div className="flex justify-between items-end">
         <div>
           <h2 className="text-2xl font-black text-white tracking-tighter uppercase italic leading-none">
-            {/* Standardized Translate prop to target */}
             <Translate target={language}>Workforce_Nexus</Translate>
           </h2>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">
-            {/* Standardized Translate prop to target */}
             <Translate target={language}>Neural Synergy & Resilience Mapping</Translate>
           </p>
         </div>
@@ -42,12 +40,11 @@ const WorkforceNexus: React.FC<Props> = ({ staff, language }) => {
           disabled={loading}
           className="px-6 py-2 bg-indigo-600 text-white rounded-xl text-[9px] font-black uppercase shadow-xl hover:scale-105 active:scale-95 transition-all"
         >
-          {/* Standardized Translate prop to target */}
           <Translate target={language}>{loading ? 'CALIBRATING...' : 'SYNC_PAIRINGS'}</Translate>
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 h-full">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         <div className="lg:col-span-12 bg-slate-950 border border-white/10 rounded-[4rem] p-10 shadow-2xl relative overflow-hidden flex flex-col min-h-[500px]">
            <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat"></div>
            <div className="flex-1 space-y-6 overflow-y-auto scrollbar-hide pr-2 relative z-10">
@@ -60,9 +57,8 @@ const WorkforceNexus: React.FC<Props> = ({ staff, language }) => {
                         <div className="flex items-center space-x-4">
                            <div className="w-10 h-10 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-[10px] font-black text-white italic">M</div>
                            <div>
-                              <p className="text-sm font-black text-white uppercase italic">{mentor?.name || 'Lead Node'}</p>
+                              <p className="text-sm font-black text-white uppercase italic"><Translate target={language}>{mentor?.name || 'Lead Node'}</Translate></p>
                               <p className="text-[8px] font-bold text-slate-600 uppercase tracking-widest">
-                                {/* Standardized Translate prop to target */}
                                 <Translate target={language}>Master Lead</Translate>
                               </p>
                            </div>
@@ -70,9 +66,8 @@ const WorkforceNexus: React.FC<Props> = ({ staff, language }) => {
                         <div className="w-8 h-px bg-white/10"></div>
                         <div className="flex items-center space-x-4 text-right">
                            <div>
-                              <p className="text-sm font-black text-white uppercase italic">{mentee?.name || 'Field Node'}</p>
+                              <p className="text-sm font-black text-white uppercase italic"><Translate target={language}>{mentee?.name || 'Field Node'}</Translate></p>
                               <p className="text-[8px] font-bold text-slate-600 uppercase tracking-widest">
-                                {/* Standardized Translate prop to target */}
                                 <Translate target={language}>Clinical Operative</Translate>
                               </p>
                            </div>
@@ -83,18 +78,15 @@ const WorkforceNexus: React.FC<Props> = ({ staff, language }) => {
                      <div className="flex justify-between items-center">
                         <div className="space-y-1">
                            <p className="text-[9px] font-black text-sky-400 uppercase tracking-widest">
-                             {/* Standardized Translate prop to target */}
                              <Translate target={language}>Focus</Translate>: <Translate target={language}>{p.focusArea}</Translate>
                            </p>
                            <p className="text-[11px] text-slate-400 italic font-medium leading-relaxed max-w-md">
-                             {/* Standardized Translate prop to target */}
                              "<Translate target={language}>{p.reason}</Translate>"
                            </p>
                         </div>
                         <div className="text-right">
-                           <p className="text-2xl font-black text-indigo-400 italic">{p.synergyScore}%</p>
+                           <p className="text-2xl font-black text-indigo-400 italic"><Translate target={language}>{p.synergyScore}</Translate>%</p>
                            <p className="text-[7px] font-black text-slate-600 uppercase">
-                             {/* Standardized Translate prop to target */}
                              <Translate target={language}>Match Score</Translate>
                            </p>
                         </div>
@@ -103,7 +95,6 @@ const WorkforceNexus: React.FC<Props> = ({ staff, language }) => {
                 );
               }) : (
                 <div className="h-full flex items-center justify-center opacity-30 italic uppercase text-xs tracking-widest">
-                  {/* Standardized Translate prop to target */}
                   <Translate target={language}>Awaiting Neural Link Calibration...</Translate>
                 </div>
               )}

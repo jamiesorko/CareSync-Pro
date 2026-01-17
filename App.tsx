@@ -88,7 +88,7 @@ export default function App() {
   };
 
   return (
-    <div className="flex h-screen w-full bg-[#020617] text-slate-100 overflow-hidden font-sans fixed inset-0">
+    <div className="flex h-[100dvh] w-full bg-[#020617] text-slate-100 overflow-hidden font-sans fixed inset-0">
       <Sidebar 
         active={activeTab} 
         setActive={setActiveTab} 
@@ -99,7 +99,7 @@ export default function App() {
       <div className="flex-1 flex flex-col min-w-0 h-full relative overflow-hidden">
         <Header active={activeTab} user={user} lang={language} />
         <main className="flex-1 overflow-y-auto scrollbar-hide">
-          <div className="max-w-7xl mx-auto h-full p-4 lg:p-8 animate-fade-up">
+          <div className="max-w-7xl mx-auto min-h-full p-4 lg:p-8 animate-fade-up">
             {renderContent()}
           </div>
         </main>

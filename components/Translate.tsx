@@ -4,19 +4,19 @@ import { translationService } from '../services/translationService';
 import { useTranslation } from '../contexts/TranslationContext';
 
 /**
- * Advanced Semantic Normalizer
- * Prepares all content, including numbers and units, for deep localization.
+ * Universal Normalizer
+ * Prepares raw keys and technical values for high-fidelity translation.
  */
 export const normalizeText = (val: any): string => {
   if (val === null || val === undefined) return "";
   
-  // If it's a number, return it as a string to be localized by the AI
+  // Cast numbers to strings so the AI can localize them (e.g. 1.5 -> 1,5)
   if (typeof val === 'number') return val.toString();
   
   const str = String(val).trim();
   if (!str) return "";
   
-  // Handle technical SNAKE_CASE keys
+  // Handle technical keys (e.g., FISCAL_LEDGER)
   if (str.includes('_') || (str === str.toUpperCase() && str.length > 2 && !str.includes(' '))) {
     return str.split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
@@ -35,13 +35,13 @@ export const useTranslate = (text: any, targetOverride?: string) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!source || language.toLowerCase() === 'english') {
+    if (!source || !language || language.toLowerCase() === 'english') {
       setTranslated(source);
       return;
     }
 
     const run = async () => {
-      const cacheKey = `csp_deep_v2_${language}_${source}`;
+      const cacheKey = `csp_full_v3_${language}_${source}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
@@ -71,11 +71,15 @@ export const useTranslate = (text: any, targetOverride?: string) => {
   return { translated, loading };
 };
 
+/**
+ * The Translate Component
+ * Use this to wrap ANY text or number in the app.
+ */
 export const Translate: React.FC<{ children?: React.ReactNode; target?: string }> = ({ children, target }) => {
   const { translated, loading } = useTranslate(children, target);
 
   return (
-    <span className={`${loading ? 'opacity-30' : 'transition-opacity duration-300'} inline`}>
+    <span className={`${loading ? 'opacity-30' : 'transition-opacity duration-300'} inline-block`}>
       {translated}
     </span>
   );
