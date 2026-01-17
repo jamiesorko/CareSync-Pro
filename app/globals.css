@@ -9,13 +9,17 @@
     padding: 0;
     height: 100%;
     width: 100%;
-    overflow: hidden; /* Prevent whole-page scrolling */
+    overflow: hidden !important; /* Total viewport lock */
     background: #020617;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
   }
 
   #root {
     height: 100%;
     width: 100%;
+    display: flex;
+    overflow: hidden;
   }
 
   body {
@@ -24,16 +28,15 @@
   }
 }
 
-/* Custom scrollbars for internal content only */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
 .glass-node {
-  @apply backdrop-blur-3xl;
+  @apply backdrop-blur-3xl bg-white/[0.02] border border-white/10;
 }
 
-/* Ensure the main layout fits exactly */
-.app-container {
+/* Rigid App Shell */
+.sovereign-shell {
   display: flex;
   height: 100dvh;
   width: 100vw;

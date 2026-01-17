@@ -69,7 +69,7 @@ export default function App() {
   };
 
   return (
-    <div className="fixed inset-0 flex h-[100dvh] w-screen bg-[#020617] text-slate-100 overflow-hidden font-sans">
+    <div className="sovereign-shell bg-[#020617] text-slate-100 font-sans">
       <Sidebar 
         active={activeTab} 
         setActive={setActiveTab} 
@@ -77,10 +77,10 @@ export default function App() {
         onLogout={() => { setUser(null); setActiveTab(AppTab.DASHBOARD); }}
         lang={language}
       />
-      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden relative">
         <Header active={activeTab} user={user} lang={language} />
         <main className="flex-1 overflow-y-auto scrollbar-hide">
-          <div className="max-w-[1600px] mx-auto p-4 lg:p-8 animate-fade-up h-full">
+          <div className="max-w-[1600px] mx-auto p-4 lg:p-10 animate-fade-up min-h-full">
             {renderContent()}
           </div>
         </main>

@@ -30,7 +30,7 @@ const PayrollSystem: React.FC<Props> = ({ language }) => {
                        <Translate target={language}>{s.name}</Translate>
                     </h4>
                     <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                      <Translate target={language}>{String(s.role)}</Translate> • <Translate target={language}>80.00 Units</Translate>
+                      <Translate target={language}>{String(s.role)}</Translate> • <Translate target={language}>80</Translate> <Translate target={language}>Units</Translate>
                     </p>
                   </div>
 
@@ -48,7 +48,7 @@ const PayrollSystem: React.FC<Props> = ({ language }) => {
                        </p>
                     </div>
                     <div className="text-center md:text-left">
-                       <p className="text-[8px] font-black text-indigo-400 uppercase mb-1"><Translate target={language}>Union_&_Ins</Translate></p>
+                       <p className="text-[8px] font-black text-indigo-400 uppercase mb-1"><Translate target={language}>Union_Dues</Translate></p>
                        <p className="text-xl font-black text-indigo-400">
                          <Translate target={language}>{`-${(payroll.breakdown.unionDues + payroll.breakdown.insurance).toFixed(2)}`}</Translate>
                        </p>
@@ -56,16 +56,10 @@ const PayrollSystem: React.FC<Props> = ({ language }) => {
                     <div className="text-center md:text-right">
                        <p className="text-[8px] font-black text-emerald-400 uppercase mb-1"><Translate target={language}>Net_Disbursement</Translate></p>
                        <p className="text-3xl font-black text-emerald-400 italic">
-                         <Translate target={language}>{`$${payroll.net.toFixed(2)}`}</Translate>
+                         $<Translate target={language}>{payroll.net.toFixed(2)}</Translate>
                        </p>
                     </div>
                   </div>
-                </div>
-                
-                <div className="mt-8 pt-8 border-t border-white/5 flex flex-wrap gap-6 opacity-40 group-hover:opacity-100 transition-opacity">
-                   <div className="flex items-center gap-2"><FileText size={12} /> <span className="text-[9px] font-bold uppercase"><Translate target={language}>Tax_T4_Vector</Translate></span></div>
-                   <div className="flex items-center gap-2"><ShieldCheck size={12} /> <span className="text-[9px] font-bold uppercase"><Translate target={language}>Insurance_Sync</Translate></span></div>
-                   <div className="flex items-center gap-2"><Users size={12} /> <span className="text-[9px] font-bold uppercase"><Translate target={language}>Union_Checkoff_Logged</Translate></span></div>
                 </div>
               </div>
             );
