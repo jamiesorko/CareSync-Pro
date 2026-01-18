@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,12 +10,7 @@
     <title>CareSync Pro | Strategic Node</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      // Global polyfill for process.env to prevent ReferenceError in browser
-      window.process = {
-        env: {
-          API_KEY: "" // Will be handled by the client initialization
-        }
-      };
+      window.process = { env: { API_KEY: "" } };
     </script>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
@@ -28,6 +24,7 @@
         background: #020617;
         font-family: 'Plus Jakarta Sans', sans-serif;
         color: #f8fafc;
+        position: fixed; /* Lock viewport */
       }
 
       #root {
@@ -54,8 +51,8 @@
     "@google/genai": "https://esm.sh/@google/genai@0.2.1",
     "lucide-react": "https://esm.sh/lucide-react@0.453.0",
     "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.47.10",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "vite": "https://esm.sh/vite@^7.3.1",
     "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
   }

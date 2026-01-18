@@ -3,18 +3,15 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { translationService } from '../services/translationService';
 import { useTranslation } from '../contexts/TranslationContext';
 
-/**
- * Text Normalizer
- * Prepares raw values, numbers, and keys for the AI pipeline.
- */
 export const normalizeText = (val: any): string => {
   if (val === null || val === undefined) return "";
+  
+  // Cast raw numbers to strings so the AI can format them (e.g. 10.5 -> 10,5)
   if (typeof val === 'number') return val.toString();
   
   const str = String(val).trim();
   if (!str) return "";
   
-  // Handle technical keys (e.g., FISCAL_LEDGER)
   if (str.includes('_') || (str === str.toUpperCase() && str.length > 2 && !str.includes(' '))) {
     return str.split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
@@ -33,13 +30,14 @@ export const useTranslate = (text: any, target?: string) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    // Reset to source if language is English
     if (!source || !language || language.toLowerCase() === 'english') {
       setTranslated(source);
       return;
     }
 
     const run = async () => {
-      const cacheKey = `csp_v9_${language}_${source}`;
+      const cacheKey = `csp_v10_${language}_${source}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
@@ -70,7 +68,8 @@ export const useTranslate = (text: any, target?: string) => {
 };
 
 export const Translate: React.FC<{ children?: React.ReactNode; target?: string }> = ({ children, target }) => {
-  const { language } = useTranslation();
+  const { language: contextLanguage } = useTranslation();
+  const language = target || contextLanguage;
   const { translated, loading } = useTranslate(children, target);
 
   return (

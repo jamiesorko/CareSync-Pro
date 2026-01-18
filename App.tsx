@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { CareRole, AppTab, User } from './types';
 import Sidebar from './components/Sidebar';
@@ -38,9 +39,8 @@ export default function App() {
   };
 
   const renderContent = () => {
-    // Shared Dashboard view for all roles unless specific tab selected
     if (activeTab === AppTab.DASHBOARD) {
-      return <Dashboard {...baseProps} setActiveTab={setActiveTab} />;
+      return <Dashboard lang={language} staffName={user.name} clients={MOCK_CLIENTS} setActiveTab={setActiveTab} />;
     }
 
     switch (activeTab) {
@@ -60,16 +60,11 @@ export default function App() {
       case AppTab.SCHEDULE:
         return <CoordinationHub language={language} />;
       default:
-        // Role-based defaults if tab doesn't match specific feature
         switch (user.role) {
           case CareRole.CEO: return <CEOPortal {...baseProps} />;
           case CareRole.COO: return <COOTerminal {...baseProps} />;
-          case CareRole.DOC: return <RNPortal {...baseProps} />;
           case CareRole.ACCOUNTANT: return <AccountingTerminal {...baseProps} />;
           case CareRole.CLIENT: return <ClientPortal {...baseProps} />;
-          case CareRole.HSS: return <HSSPortal {...baseProps} />;
-          case CareRole.HR_SPECIALIST: return <HRPortal {...baseProps} />;
-          case CareRole.COORDINATOR: return <CoordinationHub language={language} />;
           case CareRole.RN:
           case CareRole.RPN:
           case CareRole.PSW:
@@ -81,7 +76,7 @@ export default function App() {
   };
 
   return (
-    <div className="fixed inset-0 flex h-[100dvh] w-screen bg-[#020617] text-slate-100 overflow-hidden font-sans">
+    <div className="fixed inset-0 flex h-full w-full bg-[#020617] text-slate-100 overflow-hidden font-sans">
       <Sidebar 
         active={activeTab} 
         setActive={setActiveTab} 
@@ -89,10 +84,10 @@ export default function App() {
         onLogout={() => { setUser(null); setActiveTab(AppTab.DASHBOARD); }}
         lang={language}
       />
-      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden relative">
         <Header active={activeTab} user={user} lang={language} />
-        <main className="flex-1 overflow-y-auto scrollbar-hide bg-[#020617]">
-          <div className="max-w-[1600px] mx-auto p-4 lg:p-8 animate-fade-up">
+        <main className="flex-1 overflow-y-auto scrollbar-hide bg-[#020617] relative">
+          <div className="max-w-[1600px] mx-auto p-4 lg:p-10 animate-fade-up min-h-full">
             {renderContent()}
           </div>
         </main>
