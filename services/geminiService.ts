@@ -1,10 +1,14 @@
 import { GoogleGenAI, Modality, GenerateContentResponse } from "@google/genai";
 
 export class GeminiService {
-  private ai: GoogleGenAI;
+  private _ai: GoogleGenAI | null = null;
 
-  constructor() {
-    this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+  private get ai(): GoogleGenAI {
+    if (!this._ai) {
+      const apiKey = process.env.API_KEY || "";
+      this._ai = new GoogleGenAI({ apiKey });
+    }
+    return this._ai;
   }
 
   /**
@@ -22,8 +26,7 @@ export class GeminiService {
         - Output ONLY the translated text.
         - No quotes, explanations, or meta-talk.
         - Maintain formal, institutional, high-tech tone.
-        - If technical terms like "Geofence" or "Neural" are used, find the closest professional equivalent.
-        - If the target language is a specific dialect or obscure language, ensure semantic accuracy.`,
+        - If technical terms like "Geofence" or "Neural" are used, find the closest professional equivalent.`,
         config: { 
           systemInstruction: "You are a professional multi-dialect healthcare enterprise translator.",
           temperature: 0.1 

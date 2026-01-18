@@ -1,13 +1,14 @@
 
 import React from 'react';
 import { CareRole, User } from '../types';
-import { ShieldCheck, UserCircle, Users, Activity, HeartPulse, Wallet, GraduationCap } from 'lucide-react';
+import { ShieldCheck, UserCircle, Users, Activity, HeartPulse, Wallet, GraduationCap, ChevronRight } from 'lucide-react';
 import LanguageSelector from '../components/LanguageSelector';
 import Translate from '../components/Translate';
 import Logo from '../components/Logo';
 
 interface Props {
   onLogin: (user: User) => void;
+  // Added optional language and onLanguageChange props to fix type error in app/page.tsx
   language?: string;
   onLanguageChange?: (lang: string) => void;
 }
@@ -26,7 +27,7 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
   ];
 
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center p-6 bg-[#020617] relative overflow-hidden fixed inset-0">
+    <div className="fixed inset-0 h-full w-full flex flex-col items-center justify-center p-6 bg-[#020617] overflow-hidden">
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-600/5 blur-[120px] rounded-full pointer-events-none"></div>
       
       <div className="absolute top-10 right-10 z-50">
@@ -51,7 +52,7 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[40vh] overflow-y-auto scrollbar-hide pr-2">
           {personas.map(p => (
             <button
-              key={p.role}
+              key={p.role + p.name}
               onClick={() => onLogin({ name: p.name, role: p.role })}
               className="p-5 bg-white/[0.02] border border-white/5 rounded-2xl flex justify-between items-center hover:bg-white/[0.08] hover:border-indigo-500/30 transition-all group text-left"
             >
@@ -64,18 +65,18 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
                     <Translate>{p.name}</Translate>
                   </p>
                   <p className="text-[8px] font-bold text-slate-500 uppercase mt-1">
-                    <Translate>{p.role}</Translate>
+                    <Translate>{String(p.role)}</Translate>
                   </p>
                 </div>
               </div>
-              <span className="text-xs text-indigo-500 opacity-0 group-hover:opacity-100 transition-all">→</span>
+              <ChevronRight size={14} className="text-indigo-500 opacity-0 group-hover:opacity-100 transition-all" />
             </button>
           ))}
         </div>
       </div>
       
       <p className="mt-8 text-[10px] font-bold text-slate-700 uppercase tracking-widest italic opacity-50">
-        <Translate>Institutional_Sovereignty_Node_v8.5</Translate>
+        <Translate>Institutional_Sovereignty_Node_v9.0</Translate>
       </p>
     </div>
   );

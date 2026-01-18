@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { CareRole, AppTab, User } from './types';
 import Sidebar from './components/Sidebar';
@@ -15,6 +14,7 @@ import ClientPortal from './features/client/ClientPortal';
 import HSSPortal from './features/hss/HSSPortal';
 import HRPortal from './features/HRPortal';
 import CoordinationHub from './features/CoordinationHub';
+import { Dashboard } from './features/Dashboard';
 
 import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
 import { useTranslation } from './contexts/TranslationContext';
@@ -38,6 +38,11 @@ export default function App() {
   };
 
   const renderContent = () => {
+    // Shared Dashboard view for all roles unless specific tab selected
+    if (activeTab === AppTab.DASHBOARD) {
+      return <Dashboard {...baseProps} setActiveTab={setActiveTab} />;
+    }
+
     switch (activeTab) {
       case AppTab.FISCAL: 
       case AppTab.FINANCE:
@@ -50,26 +55,33 @@ export default function App() {
         return <RNPortal {...baseProps} />;
       case AppTab.WELLNESS:
         return <ClientPortal {...baseProps} />;
+      case AppTab.LOGISTICS:
       case AppTab.COORDINATION:
+      case AppTab.SCHEDULE:
         return <CoordinationHub language={language} />;
       default:
+        // Role-based defaults if tab doesn't match specific feature
         switch (user.role) {
           case CareRole.CEO: return <CEOPortal {...baseProps} />;
           case CareRole.COO: return <COOTerminal {...baseProps} />;
+          case CareRole.DOC: return <RNPortal {...baseProps} />;
           case CareRole.ACCOUNTANT: return <AccountingTerminal {...baseProps} />;
           case CareRole.CLIENT: return <ClientPortal {...baseProps} />;
+          case CareRole.HSS: return <HSSPortal {...baseProps} />;
+          case CareRole.HR_SPECIALIST: return <HRPortal {...baseProps} />;
+          case CareRole.COORDINATOR: return <CoordinationHub language={language} />;
           case CareRole.RN:
           case CareRole.RPN:
           case CareRole.PSW:
             return <ProfessionalTerminal {...baseProps} />;
           default:
-            return <CEOPortal {...baseProps} />;
+            return <Dashboard {...baseProps} setActiveTab={setActiveTab} />;
         }
     }
   };
 
   return (
-    <div className="sovereign-shell bg-[#020617] text-slate-100 font-sans">
+    <div className="fixed inset-0 flex h-[100dvh] w-screen bg-[#020617] text-slate-100 overflow-hidden font-sans">
       <Sidebar 
         active={activeTab} 
         setActive={setActiveTab} 
@@ -77,10 +89,10 @@ export default function App() {
         onLogout={() => { setUser(null); setActiveTab(AppTab.DASHBOARD); }}
         lang={language}
       />
-      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden relative">
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         <Header active={activeTab} user={user} lang={language} />
-        <main className="flex-1 overflow-y-auto scrollbar-hide">
-          <div className="max-w-[1600px] mx-auto p-4 lg:p-10 animate-fade-up min-h-full">
+        <main className="flex-1 overflow-y-auto scrollbar-hide bg-[#020617]">
+          <div className="max-w-[1600px] mx-auto p-4 lg:p-8 animate-fade-up">
             {renderContent()}
           </div>
         </main>
