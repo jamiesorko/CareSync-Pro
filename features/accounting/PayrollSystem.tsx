@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { MOCK_STAFF } from '../../data/careData';
 import { hrService } from '../../services/hrService';
@@ -37,19 +38,19 @@ const PayrollSystem: React.FC<Props> = ({ language }) => {
                     <div className="text-center md:text-left">
                        <p className="text-[8px] font-black text-slate-600 uppercase mb-1"><Translate target={language}>Gross_Liquid</Translate></p>
                        <p className="text-xl font-black text-white">
-                         <Translate target={language}>{payroll.gross.toFixed(2)}</Translate>
+                         <Translate target={language}>$</Translate><Translate target={language}>{payroll.gross.toFixed(2)}</Translate>
                        </p>
                     </div>
                     <div className="text-center md:text-left">
                        <p className="text-[8px] font-black text-rose-500 uppercase mb-1"><Translate target={language}>Stat_Deductions</Translate></p>
                        <p className="text-xl font-black text-rose-400">
-                         <Translate target={language}>{`-${payroll.deductions.toFixed(2)}`}</Translate>
+                         <Translate target={language}>-$</Translate><Translate target={language}>{payroll.deductions.toFixed(2)}</Translate>
                        </p>
                     </div>
                     <div className="text-center md:text-left">
                        <p className="text-[8px] font-black text-indigo-400 uppercase mb-1"><Translate target={language}>Union_Dues</Translate></p>
                        <p className="text-xl font-black text-indigo-400">
-                         <Translate target={language}>{`-${(payroll.breakdown.unionDues + payroll.breakdown.insurance).toFixed(2)}`}</Translate>
+                         <Translate target={language}>-$</Translate><Translate target={language}>{(payroll.breakdown.unionDues + payroll.breakdown.insurance).toFixed(2)}</Translate>
                        </p>
                     </div>
                     <div className="text-center md:text-right">

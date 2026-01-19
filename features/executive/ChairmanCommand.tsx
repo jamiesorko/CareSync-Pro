@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { boardGovernanceService } from '../../services/boardGovernanceService';
 import { ChairmanMandate } from '../../types';
@@ -102,7 +103,7 @@ const ChairmanCommand: React.FC<Props> = ({ language }) => {
               </h3>
               <div className="flex items-baseline space-x-3 mb-10">
                  <p className={`text-9xl font-black italic tracking-tighter ${mandate && mandate.strategicRiskIndex > 50 ? 'text-rose-500' : 'text-emerald-400'}`}>
-                   <Translate target={language}>{String(mandate?.strategicRiskIndex || '--')}</Translate>
+                   <Translate target={language}>{mandate?.strategicRiskIndex || '--'}</Translate>
                  </p>
                  <span className="text-xs font-black opacity-40 uppercase">
                     <Translate target={language}>Risk_Level</Translate>

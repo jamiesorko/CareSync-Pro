@@ -12,6 +12,7 @@ export const normalizeText = (val: any): string => {
   const str = String(val).trim();
   if (!str) return "";
   
+  // Handle technical keys like "FLEET_VELOCITY"
   if (str.includes('_') || (str === str.toUpperCase() && str.length > 2 && !str.includes(' '))) {
     return str.split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
@@ -30,14 +31,13 @@ export const useTranslate = (text: any, target?: string) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Reset to source if language is English
     if (!source || !language || language.toLowerCase() === 'english') {
       setTranslated(source);
       return;
     }
 
     const run = async () => {
-      const cacheKey = `csp_v10_${language}_${source}`;
+      const cacheKey = `csp_v12_${language}_${source}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
@@ -75,7 +75,7 @@ export const Translate: React.FC<{ children?: React.ReactNode; target?: string }
   return (
     <span 
       key={`${language}-${translated}`} 
-      className={`${loading ? 'opacity-40 animate-pulse' : 'transition-opacity duration-300'} inline`}
+      className={`${loading ? 'opacity-40 animate-pulse' : 'transition-opacity duration-300'} inline whitespace-nowrap`}
     >
       {translated}
     </span>
