@@ -12,15 +12,15 @@ interface Props {
   setLang?: (lang: string) => void;
 }
 
-const Header: React.FC<Props> = ({ active, user }) => {
+const Header: React.FC<Props> = ({ active, user, lang }) => {
   return (
     <header className="h-24 bg-transparent border-b border-white/5 flex items-center justify-between px-8 z-40 shrink-0">
       <div className="flex flex-col">
         <p className="text-[9px] font-black text-indigo-500 uppercase tracking-[0.4em]">
-          <Translate>ACTIVE_NODE</Translate>
+          <Translate target={lang}>ACTIVE_NODE</Translate>
         </p>
         <h2 className="text-sm font-black uppercase tracking-widest text-white italic leading-none mt-1">
-          <Translate>{active}</Translate>
+          <Translate target={lang}>{active}</Translate>
         </h2>
       </div>
 
@@ -33,10 +33,10 @@ const Header: React.FC<Props> = ({ active, user }) => {
           </div>
           <div className="text-left">
             <p className="text-[8px] font-black text-slate-500 uppercase leading-none mb-1">
-              <Translate>AUTHENTICATED</Translate>
+              <Translate target={lang}>AUTHENTICATED</Translate>
             </p>
             <p className="text-[11px] font-black text-white uppercase tracking-tighter italic">
-               {user?.name || <Translate>AUTHORIZED_OPERATIVE</Translate>}
+               <Translate target={lang}>{user?.name || "AUTHORIZED_OPERATIVE"}</Translate>
             </p>
           </div>
         </div>

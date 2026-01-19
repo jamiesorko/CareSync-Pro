@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { Translate } from '../components/Translate';
-import { Activity, Zap, TrendingUp, ShieldCheck, MapPin } from 'lucide-react';
+import { ShieldCheck, Zap, Activity, TrendingUp } from 'lucide-react';
 import { Client } from '../types';
 import CommandGrid from './dashboard/CommandGrid';
 import HeroNode from './dashboard/HeroNode';
@@ -72,7 +73,7 @@ export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab, l
         <CommandGrid setActiveTab={setActiveTab} language={language} />
         
         <div className="bg-white/5 border border-white/10 rounded-[4rem] p-12 relative overflow-hidden flex-1 flex flex-col min-h-[400px] shadow-3xl">
-          <div className="flex justify-between items-center mb-10">
+          <div className="flex justify-between items-center mb-10 relative z-10">
              <h3 className="text-xl font-black italic uppercase tracking-tighter text-white">
                 <Translate target={language}>GLOBAL_SIGNAL_LOG</Translate>
              </h3>
@@ -84,7 +85,7 @@ export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab, l
              </div>
           </div>
           
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 overflow-hidden relative z-10">
              <SignalLog clients={clients || []} language={language} />
           </div>
         </div>

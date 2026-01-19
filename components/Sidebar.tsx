@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { AppTab, CareRole } from '../types';
 import Translate from './Translate';
@@ -48,8 +49,8 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, la
                 : 'text-slate-500 hover:text-white hover:bg-white/5'
             }`}
           >
-            <item.icon size={18} />
-            <span className="text-[10px] font-black uppercase tracking-widest text-left whitespace-nowrap">
+            <item.icon size={18} className="shrink-0" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-left whitespace-nowrap overflow-hidden">
               <Translate target={lang}>{item.label}</Translate>
             </span>
           </button>
@@ -61,8 +62,8 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, la
           onClick={onLogout}
           className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-rose-500 hover:bg-rose-500/10 transition-all font-black text-[10px] uppercase tracking-widest"
         >
-          <Power size={18} />
-          <Translate target={lang}>Sign_Out</Translate>
+          <Power size={18} className="shrink-0" />
+          <span className="whitespace-nowrap"><Translate target={lang}>Sign_Out</Translate></span>
         </button>
       </div>
     </aside>

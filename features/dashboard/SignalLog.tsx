@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Client } from '../../types';
 import { Translate } from '../../components/Translate';
@@ -9,8 +10,8 @@ interface Props {
 }
 
 const SignalLog: React.FC<Props> = ({ clients, language }) => (
-  <div className="overflow-x-auto scrollbar-hide">
-    <table className="w-full text-left border-collapse">
+  <div className="overflow-x-auto scrollbar-hide h-full">
+    <table className="w-full text-left border-collapse min-w-[800px]">
       <thead>
         <tr className="border-b border-white/5">
           <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">
@@ -32,17 +33,17 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
           <tr key={client.id} className="hover:bg-white/[0.03] transition-all group cursor-pointer">
             <td className="px-8 py-5">
               <div className="flex items-center gap-5">
-                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-500 group-hover:border-indigo-500/50 group-hover:text-indigo-400 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-500 group-hover:border-indigo-500/50 group-hover:text-indigo-400 transition-all shrink-0">
                   <Binary size={18} />
                 </div>
-                <div>
-                  <p className="text-[14px] font-black text-white tracking-tight leading-none mb-1.5 uppercase italic group-hover:text-indigo-400 transition-all">
+                <div className="min-w-0">
+                  <p className="text-[14px] font-black text-white tracking-tight leading-none mb-1.5 uppercase italic group-hover:text-indigo-400 transition-all truncate">
                      <Translate target={language}>{client.name}</Translate>
                   </p>
                   <div className="flex items-center gap-3">
-                    <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">{client.anonymizedId}</span>
-                    <div className="w-1 h-1 bg-slate-800 rounded-full"></div>
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest shrink-0">{client.anonymizedId}</span>
+                    <div className="w-1 h-1 bg-slate-800 rounded-full shrink-0"></div>
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">
                        <Translate target={language}>{client.sector}</Translate>
                     </span>
                   </div>
@@ -51,21 +52,21 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
             </td>
             <td className="px-8 py-5">
               <div className="flex items-center gap-3">
-                <Clock size={14} className="text-indigo-500/40" />
-                <p className="text-[13px] font-black text-slate-300 font-mono">
+                <Clock size={14} className="text-indigo-500/40 shrink-0" />
+                <p className="text-[13px] font-black text-slate-300 font-mono whitespace-nowrap">
                   <Translate target={language}>{client.time}</Translate>
                 </p>
               </div>
               <div className="flex items-center gap-2 mt-1.5 ml-6">
-                <div className="w-1.5 h-1.5 rounded-sm bg-emerald-500/20 border border-emerald-500/30"></div>
-                <p className="text-[9px] text-slate-600 font-bold uppercase tracking-widest">
+                <div className="w-1.5 h-1.5 rounded-sm bg-emerald-500/20 border border-emerald-500/30 shrink-0"></div>
+                <p className="text-[9px] text-slate-600 font-bold uppercase tracking-widest whitespace-nowrap">
                   <Translate target={language}>VERIFIED_SYNC</Translate>
                 </p>
               </div>
             </td>
             <td className="px-8 py-5">
               <div className="flex items-center gap-4">
-                <div className={`w-2.5 h-2.5 rounded-full relative ${
+                <div className={`w-2.5 h-2.5 rounded-full relative shrink-0 ${
                   client.currentVisitStatus === 'COMPLETED' ? 'bg-indigo-500' :
                   client.currentVisitStatus === 'IN_PROGRESS' 
                     ? 'bg-emerald-500 shadow-[0_0_12px_#10b981]' 
@@ -75,7 +76,7 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
                     <div className="absolute inset-0 bg-emerald-500 rounded-full animate-ping opacity-40"></div>
                   )}
                 </div>
-                <span className={`text-[11px] font-black uppercase tracking-[0.2em] ${
+                <span className={`text-[11px] font-black uppercase tracking-[0.2em] whitespace-nowrap ${
                   client.currentVisitStatus === 'IN_PROGRESS' ? 'text-emerald-400 italic' : 'text-slate-600'
                 }`}>
                   <Translate target={language}>
