@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Translate } from '../components/Translate';
 import { Activity, Zap, TrendingUp, ShieldCheck, MapPin } from 'lucide-react';

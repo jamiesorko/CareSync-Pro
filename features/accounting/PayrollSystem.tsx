@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MOCK_STAFF } from '../../data/careData';
 import { hrService } from '../../services/hrService';
