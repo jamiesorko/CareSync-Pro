@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { StaffMember } from '../../types';
 import { Translate } from '../../components/Translate';
