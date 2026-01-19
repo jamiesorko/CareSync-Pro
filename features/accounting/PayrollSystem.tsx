@@ -26,7 +26,7 @@ const PayrollSystem: React.FC<Props> = ({ language }) => {
               <div key={s.id} className="p-10 bg-white/[0.03] border border-white/5 rounded-[3rem] group hover:bg-white/5 transition-all">
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
                   <div className="space-y-2">
-                    <h4 className="text-2xl font-black text-white italic uppercase tracking-tighter">
+                    <h4 className="text-2xl font-black text-white italic uppercase tracking-tighter leading-none">
                        <Translate target={language}>{s.name}</Translate>
                     </h4>
                     <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
@@ -56,7 +56,7 @@ const PayrollSystem: React.FC<Props> = ({ language }) => {
                     <div className="text-center md:text-right">
                        <p className="text-[8px] font-black text-emerald-400 uppercase mb-1"><Translate target={language}>Net_Disbursement</Translate></p>
                        <p className="text-3xl font-black text-emerald-400 italic">
-                         $<Translate target={language}>{payroll.net.toFixed(2)}</Translate>
+                         <Translate target={language}>$</Translate><Translate target={language}>{payroll.net.toFixed(2)}</Translate>
                        </p>
                     </div>
                   </div>

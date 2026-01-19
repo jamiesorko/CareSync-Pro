@@ -30,9 +30,11 @@ const MetricNode: React.FC<Props> = ({ label, value, suffix, icon: Icon, trend, 
     </p>
     <h4 className="text-4xl font-black text-white italic tracking-tighter leading-none">
       <Translate target={language}>{value}</Translate>
-      <span className="text-sm opacity-30 not-italic ml-1">
-        {suffix && <Translate target={language}>{suffix}</Translate>}
-      </span>
+      {suffix && (
+        <span className="text-sm opacity-30 not-italic ml-1">
+          <Translate target={language}>{suffix}</Translate>
+        </span>
+      )}
     </h4>
   </div>
 );

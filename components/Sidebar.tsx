@@ -34,7 +34,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, la
       <div className="p-8 border-b border-white/5 flex items-center gap-4">
         <Logo className="w-10 h-10" />
         <h1 className="text-xl font-black italic tracking-tighter text-white uppercase">
-          CARESYNC<span className="text-indigo-500">PRO</span>
+          <Translate target={lang}>CARESYNC</Translate><span className="text-indigo-500"><Translate target={lang}>PRO</Translate></span>
         </h1>
       </div>
       
@@ -50,8 +50,8 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, la
             }`}
           >
             <item.icon size={18} />
-            <span className="text-[10px] font-black uppercase tracking-widest text-left">
-              <Translate>{item.label}</Translate>
+            <span className="text-[10px] font-black uppercase tracking-widest text-left whitespace-nowrap">
+              <Translate target={lang}>{item.label}</Translate>
             </span>
           </button>
         ))}
@@ -63,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, la
           className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-rose-500 hover:bg-rose-500/10 transition-all font-black text-[10px] uppercase tracking-widest"
         >
           <Power size={18} />
-          <Translate>Sign_Out</Translate>
+          <Translate target={lang}>Sign_Out</Translate>
         </button>
       </div>
     </aside>

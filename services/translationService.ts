@@ -3,8 +3,8 @@ import { GoogleGenAI } from "@google/genai";
 
 class TranslationService {
   /**
-   * Universal Neural Translation Vector v10.0
-   * Specialized for Total UI Coverage including Numbers, Currencies, and Units.
+   * Neural Translation Vector v11.0
+   * Specialized for Total UI Sovereignty (Clinical + Fiscal + Technical).
    */
   async translate(text: string, targetLanguage: string): Promise<string> {
     if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') {
@@ -18,18 +18,17 @@ class TranslationService {
       const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Localize the following healthcare UI value for ${targetLanguage}: "${text}"
+        contents: `Localize the following value for a high-tech healthcare ERP into ${targetLanguage}: "${text}"
         
         STRICT LOCALIZATION RULES:
-        1. Output ONLY the localized result. No explanations.
-        2. NUMBERS: Format decimals and thousands separators (e.g., 1,000.50 -> 1.000,50) according to ${targetLanguage} regional standards.
-        3. CURRENCY: Position the "$" or local symbol correctly (e.g., "100 €" vs "$100").
-        4. DATES/TIME: Convert formats to local standards (e.g., DD/MM/YYYY).
-        5. UNITS: Localize "h" (hours), "min" (minutes), and "%" if necessary.
-        6. FORMALITY: Use high-tech, institutional healthcare terminology.`,
+        1. Output ONLY the translated result.
+        2. NUMBERS: Format decimals and thousands separators according to ${targetLanguage} standards (e.g. 1,000.50 -> 1.000,50).
+        3. CURRENCY: Position currency symbols correctly ($100 or 100€).
+        4. CLINICAL: Use formal hospital terminology for that region.
+        5. KEYS: If input is a technical key like "FLEET_VELOCITY", convert to a natural, professional phrase in ${targetLanguage}.`,
         config: { 
           temperature: 0.0,
-          systemInstruction: "You are a professional clinical localization engine. Precision in numeric and cultural formatting is mandatory."
+          systemInstruction: "You are the primary UI localization engine for CareSync Pro. Absolute precision in clinical and numeric formatting is mandatory."
         }
       });
 

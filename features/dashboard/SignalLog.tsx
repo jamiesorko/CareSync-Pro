@@ -15,16 +15,16 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
       <thead>
         <tr className="border-b border-white/5">
           <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">
-            <Translate>TARGET_DOSSIER</Translate>
+            <Translate target={language}>TARGET_DOSSIER</Translate>
           </th>
           <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">
-            <Translate>TEMPORAL_WINDOW</Translate>
+            <Translate target={language}>TEMPORAL_WINDOW</Translate>
           </th>
           <th className="px-8 py-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">
-            <Translate>ACUITY_STATE</Translate>
+            <Translate target={language}>ACUITY_STATE</Translate>
           </th>
           <th className="px-8 py-4 text-right text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">
-            <Translate>ACTION</Translate>
+            <Translate target={language}>ACTION</Translate>
           </th>
         </tr>
       </thead>
@@ -37,12 +37,14 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
                   <Binary size={18} />
                 </div>
                 <div>
-                  <p className="text-[14px] font-black text-white tracking-tight leading-none mb-1.5 uppercase italic group-hover:text-indigo-400 transition-all">{client.name}</p>
+                  <p className="text-[14px] font-black text-white tracking-tight leading-none mb-1.5 uppercase italic group-hover:text-indigo-400 transition-all">
+                     <Translate target={language}>{client.name}</Translate>
+                  </p>
                   <div className="flex items-center gap-3">
                     <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">{client.anonymizedId}</span>
                     <div className="w-1 h-1 bg-slate-800 rounded-full"></div>
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                       <Translate>{client.sector}</Translate>
+                       <Translate target={language}>{client.sector}</Translate>
                     </span>
                   </div>
                 </div>
@@ -51,12 +53,14 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
             <td className="px-8 py-5">
               <div className="flex items-center gap-3">
                 <Clock size={14} className="text-indigo-500/40" />
-                <p className="text-[13px] font-black text-slate-300 font-mono"><Translate>{client.time}</Translate></p>
+                <p className="text-[13px] font-black text-slate-300 font-mono">
+                  <Translate target={language}>{client.time}</Translate>
+                </p>
               </div>
               <div className="flex items-center gap-2 mt-1.5 ml-6">
                 <div className="w-1.5 h-1.5 rounded-sm bg-emerald-500/20 border border-emerald-500/30"></div>
                 <p className="text-[9px] text-slate-600 font-bold uppercase tracking-widest">
-                  <Translate>VERIFIED_SYNC</Translate>
+                  <Translate target={language}>VERIFIED_SYNC</Translate>
                 </p>
               </div>
             </td>
@@ -75,7 +79,7 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
                 <span className={`text-[11px] font-black uppercase tracking-[0.2em] ${
                   client.currentVisitStatus === 'IN_PROGRESS' ? 'text-emerald-400 italic' : 'text-slate-600'
                 }`}>
-                  <Translate>
+                  <Translate target={language}>
                     {client.currentVisitStatus || 'STANDBY'}
                   </Translate>
                 </span>
