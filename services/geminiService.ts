@@ -1,4 +1,5 @@
 import { GoogleGenAI, Modality, GenerateContentResponse } from "@google/genai";
+import { translationService } from './translationService';
 
 export class GeminiService {
   private _ai: GoogleGenAI | null = null;
@@ -12,31 +13,10 @@ export class GeminiService {
   }
 
   /**
-   * Universal Neural Translation Vector
-   * Optimized for high-fidelity healthcare institutional terminology.
+   * Delegates to specialized translation service with retry logic.
    */
   async translate(text: string, targetLang: string): Promise<string> {
-    if (!text || !targetLang || targetLang.toLowerCase() === 'english') return text;
-    try {
-      const response = await this.ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: `Translate the following healthcare enterprise UI text exactly to ${targetLang}: "${text}".
-        
-        Guidelines:
-        - Output ONLY the translated text.
-        - No quotes, explanations, or meta-talk.
-        - Maintain formal, institutional, high-tech tone.
-        - If technical terms like "Geofence" or "Neural" are used, find the closest professional equivalent.`,
-        config: { 
-          systemInstruction: "You are a professional multi-dialect healthcare enterprise translator.",
-          temperature: 0.1 
-        }
-      });
-      return response.text?.trim() || text;
-    } catch (err) {
-      console.error("[NEURAL_LINGUIST_SIGNAL_LOST]:", err);
-      return text;
-    }
+    return translationService.translate(text, targetLang);
   }
 
   async generateImage(prompt: string): Promise<string> {

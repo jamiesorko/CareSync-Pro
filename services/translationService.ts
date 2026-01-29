@@ -1,12 +1,11 @@
-
 import { GoogleGenAI } from "@google/genai";
 
 class TranslationService {
   /**
-   * Neural Localization Vector v14.0
-   * Specialized for Total UI Coverage (Clinical + Fiscal + Technical).
+   * Neural Localization Vector v15.0
+   * Specialized for Total UI Coverage with Rate-Limit Resilience.
    */
-  async translate(text: string, targetLanguage: string): Promise<string> {
+  async translate(text: string, targetLanguage: string, attempt: number = 0): Promise<string> {
     if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') {
       return text;
     }
@@ -15,26 +14,36 @@ class TranslationService {
       const apiKey = process.env.API_KEY || "";
       if (!apiKey) return text;
 
+      // Always create fresh instance to avoid stale key issues
       const ai = new GoogleGenAI({ apiKey });
+      
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Localize the following UI value for a high-tech healthcare ERP into ${targetLanguage}: "${text}"
+        contents: `Localize the following value for a high-tech healthcare ERP into ${targetLanguage}: "${text}"
         
         STRICT LOCALIZATION RULES:
-        1. Output ONLY the translated result. No talk or quotes.
-        2. NUMBERS: Format decimals and thousands separators correctly for ${targetLanguage} (e.g., 1,000.50 -> 1.000,50).
-        3. CURRENCY: Position symbols correctly for the locale (e.g., 100 € instead of €100 if applicable).
-        4. TECHNICAL: If the input is a key like "OPS_DASHBOARD", convert it to a natural professional phrase in ${targetLanguage}.
-        5. CLINICAL: Use formal hospital terminology relevant to that region.
-        6. PERCENTAGES: Ensure % placement is correct for the region.`,
+        1. Output ONLY the translated result. No conversational filler.
+        2. NUMBERS: Format decimals and separators correctly for ${targetLanguage}.
+        3. CURRENCY/PERCENTAGE: Localize symbol placement (e.g., "$100" -> "100 $" or "100 €").
+        4. TECHNICAL: Convert keys like "OPS_DASHBOARD" to natural professional phrases.
+        5. CLINICAL: Use region-specific formal medical terminology.`,
         config: { 
           temperature: 0.0,
           systemInstruction: "You are the primary UI localization engine for CareSync Pro. Absolute precision in cultural, numeric, and clinical formatting is mandatory."
         }
       });
 
-      return response.text?.trim() || text;
-    } catch (error) {
+      const result = response.text?.trim();
+      return result || text;
+
+    } catch (error: any) {
+      // Exponential backoff for 429 (Rate Limit) errors
+      if (attempt < 3 && (error?.status === 429 || error?.message?.includes('429'))) {
+        const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return this.translate(text, targetLanguage, attempt + 1);
+      }
+      
       console.error("[NEURAL_LINGUIST_SIGNAL_LOST]:", error);
       return text; 
     }
