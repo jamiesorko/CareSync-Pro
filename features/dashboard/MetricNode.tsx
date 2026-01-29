@@ -5,14 +5,13 @@ import Translate from '../../components/Translate';
 interface Props {
   label: string;
   value: string;
-  suffix?: string;
   icon: LucideIcon;
   trend: string;
   trendType: 'positive' | 'negative' | 'neutral';
   language: string;
 }
 
-const MetricNode: React.FC<Props> = ({ label, value, suffix, icon: Icon, trend, trendType, language }) => (
+const MetricNode: React.FC<Props> = ({ label, value, icon: Icon, trend, trendType, language }) => (
   <div className="glass-card p-8 rounded-[2.5rem] hover:bg-white/[0.05] transition-all border border-white/5 shadow-2xl group flex flex-col justify-between overflow-hidden">
     <div className="flex justify-between items-start mb-8">
       <div className="p-3 bg-indigo-500/10 rounded-xl text-indigo-400 group-hover:scale-110 transition-transform">
@@ -28,13 +27,8 @@ const MetricNode: React.FC<Props> = ({ label, value, suffix, icon: Icon, trend, 
       <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">
         <Translate target={language}>{label}</Translate>
       </p>
-      <h4 className="text-4xl font-black text-white italic tracking-tighter leading-none flex items-baseline gap-1">
+      <h4 className="text-4xl font-black text-white italic tracking-tighter leading-none">
         <Translate target={language}>{value}</Translate>
-        {suffix && (
-          <span className="text-sm opacity-30 not-italic">
-            <Translate target={language}>{suffix}</Translate>
-          </span>
-        )}
       </h4>
     </div>
   </div>

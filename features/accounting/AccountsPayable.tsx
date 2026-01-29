@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Translate } from '../../components/Translate';
 import { MOCK_PAYABLES, MOCK_SUPPLY_REQUESTS, PayableRecord, SupplyRequest } from '../../data/accountingData';
@@ -38,8 +37,9 @@ const AccountsPayable: React.FC<Props> = ({ language }) => {
                 </div>
               </div>
               <div className="text-right flex items-center space-x-4">
+                {/* Entire currency string is translated so AI can handle punctuation and symbol position */}
                 <p className="text-lg font-black text-white tracking-tighter">
-                   <Translate target={language}>{`-$${p.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}</Translate>
+                   <Translate target={language}>{`-$${p.amount.toFixed(2)}`}</Translate>
                 </p>
                 <div className="flex space-x-2">
                   {p.status === 'UNVERIFIED' && <button onClick={() => verifyPayable(p.id)} className="px-4 py-2 bg-sky-600 text-white rounded-lg text-[9px] font-black uppercase"><Translate target={language}>Verify</Translate></button>}

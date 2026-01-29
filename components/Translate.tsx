@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { translationService } from '../services/translationService';
 import { useTranslation } from '../contexts/TranslationContext';
@@ -6,14 +5,17 @@ import { useTranslation } from '../contexts/TranslationContext';
 export const normalizeText = (val: any): string => {
   if (val === null || val === undefined) return "";
   
-  // Cast numbers and stats to strings so the AI can localize punctuation
+  // Cast numbers to strings with context preservation
   if (typeof val === 'number') return val.toString();
   
   const str = String(val).trim();
   if (!str) return "";
   
-  // Handle technical keys like "FLEET_VELOCITY"
+  // Handle technical keys but preserve symbols like $ or %
   if (str.includes('_') || (str === str.toUpperCase() && str.length > 2 && !str.includes(' '))) {
+    // If it looks like a price or percentage, leave the symbols but clean the key
+    if (/[%$]/.test(str)) return str;
+    
     return str.split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
@@ -37,7 +39,7 @@ export const useTranslate = (text: any, target?: string) => {
     }
 
     const runTranslation = async () => {
-      const cacheKey = `csp_v17_${language}_${source}`;
+      const cacheKey = `csp_v19_${language}_${source}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {

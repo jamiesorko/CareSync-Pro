@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Translate } from '../../components/Translate';
 import { PayrollRecord } from '../../data/accountingData';
@@ -10,7 +9,8 @@ interface Props {
 }
 
 const PayrollTable: React.FC<Props> = ({ records, language }) => {
-  const formatCurrency = (num: number) => new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(num);
+  // Whole string mapping for AI to handle regional symbol placement and decimals
+  const money = (val: number) => `$${val.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
 
   const StatusBadge = ({ status }: { status: string }) => {
     const colors = {
@@ -21,7 +21,7 @@ const PayrollTable: React.FC<Props> = ({ records, language }) => {
     };
     return (
       <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase border ${colors[status as keyof typeof colors]}`}>
-        <Translate>{status}</Translate>
+        <Translate target={language}>{status}</Translate>
       </span>
     );
   };
@@ -32,16 +32,16 @@ const PayrollTable: React.FC<Props> = ({ records, language }) => {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-white/[0.03] border-b border-white/10">
-              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest"><Translate>Employee_ID</Translate></th>
-              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest"><Translate>Gross_Earnings</Translate></th>
-              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest text-rose-400"><Translate>Fed_Tax</Translate></th>
-              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest text-rose-400"><Translate>Prov_Tax</Translate></th>
-              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest text-amber-400"><Translate>CPP</Translate></th>
-              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest text-amber-400"><Translate>EI</Translate></th>
-              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest text-indigo-400"><Translate>Ins_&_Union</Translate></th>
-              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest text-emerald-400"><Translate>Net_Liquid</Translate></th>
-              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest"><Translate>Status</Translate></th>
-              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest text-center"><Translate>Audit</Translate></th>
+              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest"><Translate target={language}>Employee_ID</Translate></th>
+              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest"><Translate target={language}>Gross_Earnings</Translate></th>
+              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest text-rose-400"><Translate target={language}>Fed_Tax</Translate></th>
+              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest text-rose-400"><Translate target={language}>Prov_Tax</Translate></th>
+              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest text-amber-400"><Translate target={language}>CPP</Translate></th>
+              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest text-amber-400"><Translate target={language}>EI</Translate></th>
+              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest text-indigo-400"><Translate target={language}>Ins_&_Union</Translate></th>
+              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest text-emerald-400"><Translate target={language}>Net_Liquid</Translate></th>
+              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest"><Translate target={language}>Status</Translate></th>
+              <th className="p-5 text-[9px] font-black text-slate-500 uppercase tracking-widest text-center"><Translate target={language}>Audit</Translate></th>
             </tr>
           </thead>
           <tbody className="text-[10px] font-medium text-slate-300">
@@ -51,32 +51,32 @@ const PayrollTable: React.FC<Props> = ({ records, language }) => {
                   <div className="flex flex-col">
                     <span className="font-black text-white text-xs tracking-tighter uppercase italic">{record.staffName}</span>
                     <span className="text-[8px] text-slate-600 font-bold uppercase">
-                      <Translate>{record.role}</Translate> • {record.hours}<Translate>HRS</Translate> @ <Translate>{`$${record.rate}`}</Translate>
+                      <Translate target={language}>{record.role}</Translate> • <Translate target={language}>{`${record.hours} HRS`}</Translate> @ <Translate target={language}>{`$${record.rate}`}</Translate>
                     </span>
                   </div>
                 </td>
-                <td className="p-5 font-bold text-white whitespace-nowrap"><Translate>{formatCurrency(record.grossPay)}</Translate></td>
-                <td className="p-5 text-rose-400/80 font-mono whitespace-nowrap"><Translate>{`-${formatCurrency(record.taxFederal)}`}</Translate></td>
-                <td className="p-5 text-rose-400/80 font-mono whitespace-nowrap"><Translate>{`-${formatCurrency(record.taxProvincial)}`}</Translate></td>
-                <td className="p-5 text-amber-400/80 font-mono whitespace-nowrap"><Translate>{`-${formatCurrency(record.cpp)}`}</Translate></td>
-                <td className="p-5 text-amber-400/80 font-mono whitespace-nowrap"><Translate>{`-${formatCurrency(record.ei)}`}</Translate></td>
+                <td className="p-5 font-bold text-white whitespace-nowrap"><Translate target={language}>{money(record.grossPay)}</Translate></td>
+                <td className="p-5 text-rose-400/80 font-mono whitespace-nowrap"><Translate target={language}>{`-${money(record.taxFederal)}`}</Translate></td>
+                <td className="p-5 text-rose-400/80 font-mono whitespace-nowrap"><Translate target={language}>{`-${money(record.taxProvincial)}`}</Translate></td>
+                <td className="p-5 text-amber-400/80 font-mono whitespace-nowrap"><Translate target={language}>{`-${money(record.cpp)}`}</Translate></td>
+                <td className="p-5 text-amber-400/80 font-mono whitespace-nowrap"><Translate target={language}>{`-${money(record.ei)}`}</Translate></td>
                 <td className="p-5 text-indigo-400/80 font-mono whitespace-nowrap">
                   <div className="flex flex-col">
-                    <span><Translate>{`-${formatCurrency(record.insuranceDeductible + record.unionDues)}`}</Translate></span>
+                    <span><Translate target={language}>{`-${money(record.insuranceDeductible + record.unionDues)}`}</Translate></span>
                     <span className="text-[7px] text-slate-600 uppercase">
-                      <Translate>Ins</Translate>: <Translate>{formatCurrency(record.insuranceDeductible)}</Translate> / <Translate>Un</Translate>: <Translate>{formatCurrency(record.unionDues)}</Translate>
+                      <Translate target={language}>Ins</Translate>: <Translate target={language}>{money(record.insuranceDeductible)}</Translate> / <Translate target={language}>Un</Translate>: <Translate target={language}>{money(record.unionDues)}</Translate>
                     </span>
                   </div>
                 </td>
                 <td className="p-5 whitespace-nowrap">
-                  <span className="text-sm font-black text-emerald-400 tracking-tighter"><Translate>{formatCurrency(record.netPay)}</Translate></span>
+                  <span className="text-sm font-black text-emerald-400 tracking-tighter"><Translate target={language}>{money(record.netPay)}</Translate></span>
                 </td>
                 <td className="p-5 whitespace-nowrap">
                   <StatusBadge status={record.status} />
                 </td>
                 <td className="p-5 text-center whitespace-nowrap">
                   <button className="opacity-0 group-hover:opacity-100 p-2 bg-white/5 border border-white/10 rounded-lg text-slate-400 hover:text-white transition-all text-[8px] font-black uppercase tracking-widest">
-                    <Translate>Adjust_Entry</Translate>
+                    <Translate target={language}>Adjust_Entry</Translate>
                   </button>
                 </td>
               </tr>

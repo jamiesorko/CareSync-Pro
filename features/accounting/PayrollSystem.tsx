@@ -1,7 +1,7 @@
 import React from 'react';
 import { MOCK_STAFF } from '../../data/careData';
 import { hrService } from '../../services/hrService';
-import { DollarSign, Users } from 'lucide-react';
+import { DollarSign } from 'lucide-react';
 import { Translate } from '../../components/Translate';
 
 interface Props {

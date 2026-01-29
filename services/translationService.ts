@@ -1,9 +1,8 @@
-
 import { GoogleGenAI } from "@google/genai";
 
 class TranslationService {
   /**
-   * Neural Localization Vector v17.0
+   * Neural Localization Vector v19.0
    * Specialized for Total UI Coverage (Data + Labels + Numbers).
    */
   async translate(text: string, targetLanguage: string, attempt: number = 0): Promise<string> {
@@ -19,17 +18,21 @@ class TranslationService {
       
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Localize the following professional UI value for a healthcare enterprise into ${targetLanguage}: "${text}"
+        contents: `Localize this healthcare UI value into ${targetLanguage}: "${text}"
         
-        CRITICAL RULES:
-        1. Output ONLY the localized result. No talk.
-        2. NUMBERS: Use the decimal and thousands separators specific to ${targetLanguage} (e.g., 1,000.50 -> 1.000,50).
-        3. SYMBOLS: Position % and currency symbols ($/€) as per local convention.
-        4. KEYS: If the input is a technical key like "OPS_DASHBOARD", translate it into a professional term.
-        5. DO NOT translate proper names if they are already in a universal format, but format the rest of the string.`,
+        CRITICAL FORMATTING RULES:
+        1. Output ONLY the localized result.
+        2. NUMBERS: Use the correct decimal and thousands separators for ${targetLanguage}. 
+           - Example (English to French/German): "1,234.56" -> "1.234,56"
+        3. CURRENCY: Move symbols ($/€/£) to the correct position.
+           - Example (English to French): "$100.00" -> "100,00 $"
+        4. PERCENTAGES: Adjust spacing and punctuation.
+           - Example (English to German): "98.4%" -> "98,4 %"
+        5. KEYS: Technical keys like "FLEET_VELOCITY" must be translated into professional healthcare terms.
+        6. DO NOT translate proper names.`,
         config: { 
           temperature: 0.0,
-          systemInstruction: "You are the primary localization engine for CareSync Pro. Precision in cultural, numeric, and medical formatting is mandatory."
+          systemInstruction: "You are the primary locale formatting engine for CareSync Pro. Precision in regional punctuation and currency placement is your highest priority."
         }
       });
 
@@ -40,7 +43,6 @@ class TranslationService {
         await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
         return this.translate(text, targetLanguage, attempt + 1);
       }
-      console.error("[NEURAL_LINGUIST_SIGNAL_LOST]:", error);
       return text; 
     }
   }
