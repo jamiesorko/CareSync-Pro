@@ -31,7 +31,7 @@ const CommandGrid: React.FC<Props> = ({ setActiveTab, language }) => {
       <div className="flex items-center gap-3 px-4">
         <Cpu size={14} className="text-slate-500" />
         <h3 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.4em]">
-          <Translate target={language}>Sovereign_Command_Grid</Translate>
+          <Translate target={language}>SOVEREIGN_COMMAND_GRID</Translate>
         </h3>
       </div>
       
@@ -62,7 +62,7 @@ const CommandGrid: React.FC<Props> = ({ setActiveTab, language }) => {
             
             <div className="mt-8 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity relative z-10">
               <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest italic">
-                <Translate target={language}>Authorization_Locked</Translate>
+                <Translate target={language}>AUTHORIZATION_LOCKED</Translate>
               </span>
               <span className="text-xs text-slate-600">→</span>
             </div>

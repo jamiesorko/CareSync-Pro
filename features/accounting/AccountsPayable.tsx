@@ -18,13 +18,15 @@ const AccountsPayable: React.FC<Props> = ({ language }) => {
     <div className="space-y-10">
       <section className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8">
         <h3 className="text-xl font-black text-white mb-6 italic tracking-tighter uppercase leading-none">
-           <Translate target={language}>Vendor_Invoice_Verification</Translate>
+           <Translate target={language}>VENDOR_INVOICE_VERIFICATION</Translate>
         </h3>
         <div className="space-y-4">
           {payables.map(p => (
             <div key={p.id} className="p-6 bg-white/[0.03] border border-white/5 rounded-2xl flex justify-between items-center group">
               <div>
-                <p className="text-sm font-black text-white uppercase italic">{p.vendor}</p>
+                <p className="text-sm font-black text-white uppercase italic">
+                  <Translate target={language}>{p.vendor}</Translate>
+                </p>
                 <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">
                   <Translate target={language}>{p.category}</Translate> • <Translate target={language}>Due</Translate>: <Translate target={language}>{p.date}</Translate>
                 </p>
@@ -35,7 +37,9 @@ const AccountsPayable: React.FC<Props> = ({ language }) => {
                 </div>
               </div>
               <div className="text-right flex items-center space-x-4">
-                <p className="text-lg font-black text-white tracking-tighter">-${p.amount}</p>
+                <p className="text-lg font-black text-white tracking-tighter">
+                   <Translate target={language}>{`-$${p.amount}`}</Translate>
+                </p>
                 <div className="flex space-x-2">
                   {p.status === 'UNVERIFIED' && <button onClick={() => verifyPayable(p.id)} className="px-4 py-2 bg-sky-600 text-white rounded-lg text-[9px] font-black uppercase"><Translate target={language}>Verify</Translate></button>}
                   {p.status === 'VERIFIED' && <button onClick={() => processPayment(p.id)} className="px-4 py-2 bg-white text-black rounded-lg text-[9px] font-black uppercase"><Translate target={language}>Pay_Bill</Translate></button>}
@@ -48,7 +52,7 @@ const AccountsPayable: React.FC<Props> = ({ language }) => {
 
       <section className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8">
         <h3 className="text-xl font-black text-white mb-6 italic tracking-tighter uppercase leading-none">
-           <Translate target={language}>Field_Supply_Requisitions</Translate>
+           <Translate target={language}>FIELD_SUPPLY_REQUISITIONS</Translate>
         </h3>
         <div className="space-y-4">
           {supplyRequests.map(r => (
@@ -58,7 +62,7 @@ const AccountsPayable: React.FC<Props> = ({ language }) => {
                   <Translate target={language}>{r.item}</Translate> (x{r.quantity})
                 </p>
                 <p className="text-[9px] text-slate-500 font-bold uppercase">
-                   <Translate target={language}>Requested_by</Translate>: <Translate target={language}>{r.staffName}</Translate>
+                   <Translate target={language}>Requested by</Translate>: <Translate target={language}>{r.staffName}</Translate>
                 </p>
               </div>
               {r.status === 'PENDING' && <button onClick={() => orderSupplies(r.id)} className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-[9px] font-black uppercase"><Translate target={language}>Fulfill</Translate></button>}

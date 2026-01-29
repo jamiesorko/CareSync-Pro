@@ -2,8 +2,8 @@ import { GoogleGenAI } from "@google/genai";
 
 class TranslationService {
   /**
-   * Neural Localization Vector v15.0
-   * Specialized for Total UI Coverage with Rate-Limit Resilience.
+   * Neural Localization Vector v16.0
+   * Specialized for Total UI Coverage including Clinical, Fiscal, and Data leaf-nodes.
    */
   async translate(text: string, targetLanguage: string, attempt: number = 0): Promise<string> {
     if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') {
@@ -14,37 +14,31 @@ class TranslationService {
       const apiKey = process.env.API_KEY || "";
       if (!apiKey) return text;
 
-      // Always create fresh instance to avoid stale key issues
       const ai = new GoogleGenAI({ apiKey });
       
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Localize the following value for a high-tech healthcare ERP into ${targetLanguage}: "${text}"
+        contents: `Localize the following value into ${targetLanguage}: "${text}"
         
-        STRICT LOCALIZATION RULES:
-        1. Output ONLY the translated result. No conversational filler.
-        2. NUMBERS: Format decimals and separators correctly for ${targetLanguage}.
-        3. CURRENCY/PERCENTAGE: Localize symbol placement (e.g., "$100" -> "100 $" or "100 €").
-        4. TECHNICAL: Convert keys like "OPS_DASHBOARD" to natural professional phrases.
-        5. CLINICAL: Use region-specific formal medical terminology.`,
+        RULES:
+        1. Output ONLY the localized result. 
+        2. NUMBERS: Use the correct decimal and thousands separators for ${targetLanguage} (e.g., 1.5 -> 1,5).
+        3. CURRENCY/PERCENT: Position symbols correctly ($100 or 100 €).
+        4. KEYS: If the text is a technical key like "FLEET_VELOCITY", translate it into a professional healthcare term in ${targetLanguage}.
+        5. DO NOT translate proper names unless they have a standard equivalent.`,
         config: { 
           temperature: 0.0,
-          systemInstruction: "You are the primary UI localization engine for CareSync Pro. Absolute precision in cultural, numeric, and clinical formatting is mandatory."
+          systemInstruction: "You are the primary localization engine for CareSync Pro. Precision in cultural, numeric, and medical formatting is mandatory."
         }
       });
 
-      const result = response.text?.trim();
-      return result || text;
+      return response.text?.trim() || text;
 
     } catch (error: any) {
-      // Exponential backoff for 429 (Rate Limit) errors
-      if (attempt < 3 && (error?.status === 429 || error?.message?.includes('429'))) {
-        const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
-        await new Promise(resolve => setTimeout(resolve, delay));
+      if (attempt < 2 && (error?.status === 429)) {
+        await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
         return this.translate(text, targetLanguage, attempt + 1);
       }
-      
-      console.error("[NEURAL_LINGUIST_SIGNAL_LOST]:", error);
       return text; 
     }
   }

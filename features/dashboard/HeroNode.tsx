@@ -8,16 +8,18 @@ const HeroNode = ({ staffName, language }: { staffName: string; language: string
       <div className="flex items-center gap-3">
         <ShieldCheck size={18} className="text-indigo-400" />
         <p className="text-[11px] font-black text-indigo-400 uppercase tracking-[0.5em]">
-           <Translate target={language}>Identity_Handshake_Validated</Translate>
+           <Translate target={language}>IDENTITY_HANDSHAKE_VALIDATED</Translate>
         </p>
       </div>
       <h3 className="text-8xl font-black text-white tracking-tighter uppercase italic leading-[0.8] mb-4">
-        <Translate target={language}>Welcome_Back</Translate>,<br/>
-        <span className="text-indigo-500 opacity-30 not-italic font-black text-7xl tracking-normal">{staffName.split(' ')[0]}</span>
+        <Translate target={language}>WELCOME_BACK</Translate>,<br/>
+        <span className="text-indigo-500 opacity-30 not-italic font-black text-7xl tracking-normal">
+          <Translate target={language}>{staffName.split(' ')[0]}</Translate>
+        </span>
       </h3>
       <div className="max-w-xl">
         <p className="text-slate-400 text-base font-medium italic border-l-2 border-white/10 pl-8 leading-relaxed">
-           <Translate target={language}>Operational_matrix_is_currently_synchronized_Sector_4_deployment_has_reached_its_24_hour_efficiency_peak</Translate>
+           <Translate target={language}>Operational matrix is currently synchronized. Sector 4 deployment has reached its 24 hour efficiency peak.</Translate>
         </p>
       </div>
     </div>
