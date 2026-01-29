@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Translate } from '../../components/Translate';
 import { MOCK_PAYABLES, MOCK_SUPPLY_REQUESTS, PayableRecord, SupplyRequest } from '../../data/accountingData';
@@ -38,7 +39,7 @@ const AccountsPayable: React.FC<Props> = ({ language }) => {
               </div>
               <div className="text-right flex items-center space-x-4">
                 <p className="text-lg font-black text-white tracking-tighter">
-                   <Translate target={language}>{`-$${p.amount}`}</Translate>
+                   <Translate target={language}>{`-$${p.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}</Translate>
                 </p>
                 <div className="flex space-x-2">
                   {p.status === 'UNVERIFIED' && <button onClick={() => verifyPayable(p.id)} className="px-4 py-2 bg-sky-600 text-white rounded-lg text-[9px] font-black uppercase"><Translate target={language}>Verify</Translate></button>}
@@ -59,7 +60,7 @@ const AccountsPayable: React.FC<Props> = ({ language }) => {
             <div key={r.id} className="p-6 bg-white/[0.03] border border-white/5 rounded-2xl flex justify-between items-center">
               <div>
                 <p className="text-sm font-black text-white italic">
-                  <Translate target={language}>{r.item}</Translate> (x{r.quantity})
+                  <Translate target={language}>{r.item}</Translate> (x<Translate target={language}>{r.quantity}</Translate>)
                 </p>
                 <p className="text-[9px] text-slate-500 font-bold uppercase">
                    <Translate target={language}>Requested by</Translate>: <Translate target={language}>{r.staffName}</Translate>

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { translationService } from '../services/translationService';
 import { useTranslation } from '../contexts/TranslationContext';
@@ -5,7 +6,7 @@ import { useTranslation } from '../contexts/TranslationContext';
 export const normalizeText = (val: any): string => {
   if (val === null || val === undefined) return "";
   
-  // Cast numbers to strings so the AI can format them regionally
+  // Cast numbers and stats to strings so the AI can localize punctuation
   if (typeof val === 'number') return val.toString();
   
   const str = String(val).trim();
@@ -36,7 +37,7 @@ export const useTranslate = (text: any, target?: string) => {
     }
 
     const runTranslation = async () => {
-      const cacheKey = `csp_v15_${language}_${source}`;
+      const cacheKey = `csp_v17_${language}_${source}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
@@ -74,7 +75,7 @@ export const Translate: React.FC<{ children?: React.ReactNode; target?: string }
   return (
     <span 
       key={`${language}-${translated}`} 
-      className={`${loading ? 'opacity-40 animate-pulse' : 'transition-opacity duration-300'} inline whitespace-nowrap`}
+      className={`${loading ? 'opacity-40 animate-pulse' : 'transition-opacity duration-300'} inline whitespace-nowrap min-w-[1ch]`}
     >
       {translated}
     </span>
