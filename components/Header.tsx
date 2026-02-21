@@ -35,7 +35,7 @@ const Header: React.FC<Props> = ({ active, user, lang }) => {
               <Translate target={lang}>AUTHENTICATED</Translate>
             </p>
             <p className="text-[11px] font-black text-white uppercase tracking-tighter italic">
-               <Translate target={lang}>{user?.name || "AUTHORIZED_OPERATIVE"}</Translate>
+               <Translate target={lang}>{user?.name}</Translate>
             </p>
           </div>
         </div>

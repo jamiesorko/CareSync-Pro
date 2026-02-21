@@ -16,7 +16,6 @@ export const useTranslate = (text: any, target?: string) => {
   const { language: contextLanguage } = useTranslation();
   const language = target || contextLanguage;
   const source = useMemo(() => stringifyNode(text).trim(), [text]);
-  
   const [translated, setTranslated] = useState(source);
   const [loading, setLoading] = useState(false);
 
@@ -26,47 +25,31 @@ export const useTranslate = (text: any, target?: string) => {
       return;
     }
 
-    const runTranslation = async () => {
-      const cacheKey = `csp_v25.1_${language}_${source}`;
-      const cached = localStorage.getItem(cacheKey);
-      
-      if (cached) {
-        setTranslated(cached);
-        return;
-      }
+    const cacheKey = `v26_${language}_${source}`;
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      setTranslated(cached);
+      return;
+    }
 
-      setLoading(true);
-      try {
-        const res = await translationService.translate(source, language);
-        if (res && res !== source) {
-          localStorage.setItem(cacheKey, res);
-          setTranslated(res);
-        } else {
-          setTranslated(source);
-        }
-      } catch (e) {
-        setTranslated(source);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    runTranslation();
+    setLoading(true);
+    translationService.translate(source, language).then(res => {
+      localStorage.setItem(cacheKey, res);
+      setTranslated(res);
+      setLoading(false);
+    }).catch(() => {
+      setTranslated(source);
+      setLoading(false);
+    });
   }, [source, language]);
 
   return { translated, loading };
 };
 
 export const Translate: React.FC<{ children?: React.ReactNode; target?: string }> = ({ children, target }) => {
-  const { language: contextLanguage } = useTranslation();
-  const language = target || contextLanguage;
   const { translated, loading } = useTranslate(children, target);
-
   return (
-    <span 
-      key={`${language}-${translated}`} 
-      className={`${loading ? 'opacity-40 animate-pulse' : 'transition-opacity duration-300'} inline-block`}
-    >
+    <span className={`${loading ? 'opacity-40 animate-pulse' : 'transition-opacity duration-300'} inline-block`}>
       {translated}
     </span>
   );

@@ -1,6 +1,4 @@
-
 import React, { useState } from 'react';
-// Corrected import path for User interface (fixes Error on line 3)
 import { Client, StaffMember, User } from '../../types';
 import { Translate } from '../../components/Translate';
 import StrategicSimulator from './StrategicSimulator';
@@ -37,7 +35,7 @@ const CEOPortal: React.FC<Props> = ({ language, clients, staff, user }) => {
               className={`px-8 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeView === tab.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
             >
               <tab.icon size={14} />
-              <Translate>{tab.label}</Translate>
+              <Translate target={language}>{tab.label}</Translate>
             </button>
           ))}
         </div>

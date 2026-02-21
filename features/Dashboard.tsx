@@ -30,42 +30,32 @@ export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab, l
         <HeroNode staffName={staffName || "Operative"} language={language} />
         
         <div className="lg:col-span-4 grid grid-cols-1 gap-6">
-          <MetricNode 
-            label={stats[0].label} 
-            value={stats[0].val} 
-            icon={stats[0].icon} 
-            trend={stats[0].trend} 
-            trendType={stats[0].trendType} 
-            language={language}
-          />
-          <MetricNode 
-            label={stats[1].label} 
-            value={stats[1].val} 
-            icon={stats[1].icon} 
-            trend={stats[1].trend} 
-            trendType={stats[1].trendType} 
-            language={language}
-          />
+          {stats.slice(0, 2).map((s, i) => (
+            <MetricNode 
+              key={i}
+              label={s.label} 
+              value={s.val} 
+              icon={s.icon} 
+              trend={s.trend} 
+              trendType={s.trendType} 
+              language={language}
+            />
+          ))}
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 shrink-0">
+        {stats.slice(2, 4).map((s, i) => (
           <MetricNode 
-            label={stats[2].label} 
-            value={stats[2].val} 
-            icon={stats[2].icon} 
-            trend={stats[2].trend} 
-            trendType={stats[2].trendType} 
+            key={i}
+            label={s.label} 
+            value={s.val} 
+            icon={s.icon} 
+            trend={s.trend} 
+            trendType={s.trendType} 
             language={language}
           />
-          <MetricNode 
-            label={stats[3].label} 
-            value={stats[3].val} 
-            icon={stats[3].icon} 
-            trend={stats[3].trend} 
-            trendType={stats[3].trendType} 
-            language={language}
-          />
+        ))}
       </div>
 
       <div className="flex-1 min-h-0 flex flex-col space-y-8 pb-10">

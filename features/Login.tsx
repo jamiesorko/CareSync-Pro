@@ -75,7 +75,7 @@ const Login: React.FC<Props> = ({ onLogin }) => {
       </div>
       
       <p className="mt-8 text-[10px] font-bold text-slate-700 uppercase tracking-widest italic opacity-50">
-        <Translate target={language}>Institutional_Sovereignty_Node_v24.0</Translate>
+        <Translate target={language}>Institutional_Sovereignty_Node_v26.0</Translate>
       </p>
     </div>
   );
