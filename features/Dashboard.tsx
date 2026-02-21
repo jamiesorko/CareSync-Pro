@@ -18,10 +18,10 @@ export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab, l
   const language = lang || "English";
   
   const stats = [
-    { label: 'Agency_Health', val: '98.4%', icon: ShieldCheck, trend: '+0.2%', trendType: 'positive' as const },
-    { label: 'Fleet_Velocity', val: '92.1%', icon: Zap, trend: 'NOMINAL', trendType: 'positive' as const },
-    { label: 'Clinical_Drift', val: '-2.4%', icon: Activity, trend: 'SECURE', trendType: 'positive' as const },
-    { label: 'Fiscal_Delta', val: '$14,204.00', icon: TrendingUp, trend: 'RECLAIMED', trendType: 'positive' as const },
+    { label: 'AGENCY_HEALTH', val: '98.4%', icon: ShieldCheck, trend: '+0.2%', trendType: 'positive' as const },
+    { label: 'FLEET_VELOCITY', val: '92.1%', icon: Zap, trend: 'NOMINAL', trendType: 'positive' as const },
+    { label: 'CLINICAL_DRIFT', val: '-2.4%', icon: Activity, trend: 'SECURE', trendType: 'positive' as const },
+    { label: 'FISCAL_DELTA', val: '$14,204.00', icon: TrendingUp, trend: 'RECLAIMED', trendType: 'positive' as const },
   ];
 
   return (

@@ -2,8 +2,8 @@ import { GoogleGenAI } from "@google/genai";
 
 class TranslationService {
   /**
-   * Neural Localization Vector v22.0
-   * Specialized for Total UI Coverage & Eastern Arabic Digit Script.
+   * Neural Localization Vector v23.0
+   * Specialized for 100% UI Coverage, Numeric Scripting, and Fiscal Formatting.
    */
   async translate(text: string, targetLanguage: string, attempt: number = 0): Promise<string> {
     if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') {
@@ -18,21 +18,20 @@ class TranslationService {
       
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Localize this healthcare UI value into ${targetLanguage}: "${text}"
+        contents: `Localize this UI value into ${targetLanguage}: "${text}"
         
         STRICT FORMATTING RULES:
-        1. Output ONLY the localized result. No conversational text.
-        2. ARABIC DIGITS: If target is Arabic, you MUST convert 0123456789 into ٠١٢٣٤٥٦٧٨٩.
+        1. Output ONLY the localized result. No conversational filler or explanations.
+        2. DIGIT SCRIPT: If target is Arabic, you MUST convert ALL Western digits (0123456789) to Eastern Arabic digits (٠١٢٣٤٥٦٧٨٩).
            Example: "98.4%" -> "٩٨,٤٪"
-        3. NUMBERS: Apply correct decimal/thousands separators for ${targetLanguage}.
-           Example (to French/German): "1,234.56" -> "1.234,56"
-        4. CURRENCY: Move symbols ($/€/£/%) to the culturally correct position.
-           Example (to French): "$100.00" -> "100,00 $"
-        5. ABBREVIATIONS: Translate units like "HRS", "Units", "mins".
-        6. TECHNICAL: Technical keys like "AGENCY_HEALTH" should be translated into professional terms.`,
+        3. NUMERICS: Use regional punctuation (e.g., swap dots and commas if required by ${targetLanguage} standards).
+        4. SYMBOLS: Move % and currency symbols ($/€/£) to the correct regional position. 
+           Example (to French): "$14,204.00" -> "14 204,00 $"
+        5. TECHNICAL KEYS: If the input is "AGENCY_HEALTH", translate it to a professional, title-cased term.
+        6. UNITS: Translate "HRS", "Units", "mins", "h".`,
         config: { 
           temperature: 0.0,
-          systemInstruction: "You are the primary localization engine for CareSync Pro. Your mission is 100% cultural and numeric accuracy in every string provided."
+          systemInstruction: "You are the primary localization engine. You must ensure 100% cultural, numeric, and script accuracy for every string provided."
         }
       });
 
@@ -43,7 +42,6 @@ class TranslationService {
         await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
         return this.translate(text, targetLanguage, attempt + 1);
       }
-      console.error("[LOCALIZATION_FAILURE]:", error);
       return text; 
     }
   }
