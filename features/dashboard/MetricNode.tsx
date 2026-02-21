@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { LucideIcon } from 'lucide-react';
-import Translate from '../../components/Translate';
+import { Translate } from '../../components/Translate';
 
 interface Props {
   label: string;
