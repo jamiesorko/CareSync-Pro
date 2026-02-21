@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AppTab, User } from '../types';
 import Translate from './Translate';

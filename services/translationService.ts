@@ -2,8 +2,8 @@ import { GoogleGenAI } from "@google/genai";
 
 class TranslationService {
   /**
-   * Neural Localization Vector v23.0
-   * Specialized for 100% UI Coverage, Numeric Scripting, and Fiscal Formatting.
+   * Neural Localization Vector v24.0
+   * MANDATORY: Digit script conversion and total UI parity.
    */
   async translate(text: string, targetLanguage: string, attempt: number = 0): Promise<string> {
     if (!text || !targetLanguage || targetLanguage.toLowerCase() === 'english') {
@@ -18,20 +18,19 @@ class TranslationService {
       
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Localize this UI value into ${targetLanguage}: "${text}"
+        contents: `LOCALIZE this healthcare UI value into ${targetLanguage}: "${text}"
         
-        STRICT FORMATTING RULES:
-        1. Output ONLY the localized result. No conversational filler or explanations.
-        2. DIGIT SCRIPT: If target is Arabic, you MUST convert ALL Western digits (0123456789) to Eastern Arabic digits (٠١٢٣٤٥٦٧٨٩).
+        CRITICAL FORMATTING DECREE:
+        1. Output ONLY the localized result. 
+        2. ARABIC SCRIPT: If target is Arabic, you MUST convert all Western digits (0-9) to Eastern Arabic digits (٠١٢٣٤٥٦٧٨٩). 
            Example: "98.4%" -> "٩٨,٤٪"
-        3. NUMERICS: Use regional punctuation (e.g., swap dots and commas if required by ${targetLanguage} standards).
-        4. SYMBOLS: Move % and currency symbols ($/€/£) to the correct regional position. 
-           Example (to French): "$14,204.00" -> "14 204,00 $"
-        5. TECHNICAL KEYS: If the input is "AGENCY_HEALTH", translate it to a professional, title-cased term.
-        6. UNITS: Translate "HRS", "Units", "mins", "h".`,
+        3. PUNCTUATION: Swap dots and commas for European locales (e.g., 1.234,56).
+        4. CURRENCY: Position symbols ($/€/£) and spaces exactly as required by ${targetLanguage} rules.
+        5. KEYS: If input is snake_case (e.g., FISCAL_LEDGER), translate to professional Title Case in ${targetLanguage}.
+        6. UNITS: Localize "h", "hrs", "mins", "units", "delta".`,
         config: { 
           temperature: 0.0,
-          systemInstruction: "You are the primary localization engine. You must ensure 100% cultural, numeric, and script accuracy for every string provided."
+          systemInstruction: "You are the primary localization engine. Total accuracy of text, digits, and regional formatting is non-negotiable."
         }
       });
 

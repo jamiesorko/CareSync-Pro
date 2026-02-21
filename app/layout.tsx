@@ -1,6 +1,7 @@
 
 import React from 'react';
 import "./globals.css";
+import { TranslationProvider } from '../contexts/TranslationContext';
 
 export const metadata = {
   title: "CareSync Pro | Institutional ERP",
@@ -15,7 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased bg-slate-950 text-slate-50 selection:bg-indigo-500/30">
-        {children}
+        {/* Wrap in TranslationProvider to provide global language context to client components */}
+        <TranslationProvider initialLanguage="English">
+          {children}
+        </TranslationProvider>
       </body>
     </html>
   );

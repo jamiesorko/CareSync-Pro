@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -8,14 +9,18 @@ import { Dashboard } from '../features/Dashboard';
 import ScheduleView from '../features/ScheduleView';
 import RNCommandCenter from '../features/rn/RNCommandCenter';
 import { MOCK_CLIENTS, MOCK_STAFF } from '../data/careData';
+import { useTranslation } from '../contexts/TranslationContext';
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState<AppTab>(AppTab.DASHBOARD);
-  const [language, setLanguage] = useState<string>('English');
+  // Fixed: useTranslation hook instead of local state to stay synchronized with global language changes
+  const { language, setLanguage } = useTranslation();
 
   if (!user) {
-    return <Login onLogin={(u: User) => setUser(u)} language={language} onLanguageChange={setLanguage} />;
+    /* Fixed: Removed invalid language and onLanguageChange props from Login usage. 
+       Login component handles localization internally via TranslationContext. */
+    return <Login onLogin={(u: User) => setUser(u)} />;
   }
 
   const renderContent = () => {

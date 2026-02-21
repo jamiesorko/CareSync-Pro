@@ -1,19 +1,18 @@
-
 import React from 'react';
 import { CareRole, User } from '../types';
 import { ShieldCheck, UserCircle, Users, Activity, HeartPulse, Wallet, GraduationCap, ChevronRight } from 'lucide-react';
 import LanguageSelector from '../components/LanguageSelector';
 import Translate from '../components/Translate';
 import Logo from '../components/Logo';
+import { useTranslation } from '../contexts/TranslationContext';
 
 interface Props {
   onLogin: (user: User) => void;
-  // Added optional language and onLanguageChange props to fix type error in app/page.tsx
-  language?: string;
-  onLanguageChange?: (lang: string) => void;
 }
 
-const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
+const Login: React.FC<Props> = ({ onLogin }) => {
+  const { language } = useTranslation();
+  
   const personas: (User & { icon: any, color: string })[] = [
     { name: 'Jamie Sorko', role: CareRole.CEO, icon: Activity, color: 'text-indigo-400' },
     { name: 'Sarah Walker', role: CareRole.DOC, icon: ShieldCheck, color: 'text-rose-400' },
@@ -42,10 +41,10 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
             <Logo className="w-14 h-14" />
           </div>
           <h1 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none">
-            <Translate>CareSync_Pro</Translate>
+            <Translate target={language}>CARESYNC_PRO</Translate>
           </h1>
           <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mt-3">
-             <Translate>IDENTITY_VALIDATION_REQUIRED</Translate>
+             <Translate target={language}>IDENTITY_VALIDATION_REQUIRED</Translate>
           </p>
         </div>
 
@@ -62,10 +61,10 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
                 </div>
                 <div>
                   <p className="text-xs font-black text-white uppercase italic tracking-tight">
-                    <Translate>{p.name}</Translate>
+                    <Translate target={language}>{p.name}</Translate>
                   </p>
                   <p className="text-[8px] font-bold text-slate-500 uppercase mt-1">
-                    <Translate>{String(p.role)}</Translate>
+                    <Translate target={language}>{String(p.role)}</Translate>
                   </p>
                 </div>
               </div>
@@ -76,7 +75,7 @@ const Login: React.FC<Props> = ({ onLogin, language, onLanguageChange }) => {
       </div>
       
       <p className="mt-8 text-[10px] font-bold text-slate-700 uppercase tracking-widest italic opacity-50">
-        <Translate>Institutional_Sovereignty_Node_v9.0</Translate>
+        <Translate target={language}>Institutional_Sovereignty_Node_v24.0</Translate>
       </p>
     </div>
   );

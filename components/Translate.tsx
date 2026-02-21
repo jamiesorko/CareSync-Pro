@@ -4,8 +4,17 @@ import { useTranslation } from '../contexts/TranslationContext';
 
 export const normalizeText = (val: any): string => {
   if (val === null || val === undefined) return "";
+  
+  // Handle arrays or React elements passed as children
+  if (Array.isArray(val)) {
+    return val.map(v => normalizeText(v)).join("");
+  }
+  
+  if (typeof val === 'object' && val.props && val.props.children) {
+    return normalizeText(val.props.children);
+  }
+
   const str = String(val).trim();
-  // Return raw string; let the AI handle snake_case conversion and formatting
   return str;
 };
 
@@ -24,8 +33,8 @@ export const useTranslate = (text: any, target?: string) => {
     }
 
     const runTranslation = async () => {
-      // v23 cache bust to force new numeric/Arabic digit rules
-      const cacheKey = `csp_v23_${language}_${source}`;
+      // Bumping to v24 to clear any old English-digit cached results
+      const cacheKey = `csp_v24_${language}_${source}`;
       const cached = localStorage.getItem(cacheKey);
       
       if (cached) {
