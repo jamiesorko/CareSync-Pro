@@ -9,8 +9,8 @@ const LanguageSelector: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   
-  // Translate the placeholder dynamically
-  const { translated: placeholderText } = useTranslate("Search or type ANY language...");
+  // Fix: useTranslate returns a string directly, not an object with a 'translated' property
+  const placeholderText = useTranslate("Search or type ANY language...");
 
   const commonLanguages = [
     "English", "Spanish", "French", "Chinese", "Hindi", "Arabic", "Portuguese", 

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Translate } from '../components/Translate';
 import { ShieldCheck, Zap, Activity, TrendingUp } from 'lucide-react';
 import { Client } from '../types';
+import { useTranslation } from '../contexts/TranslationContext';
 import CommandGrid from './dashboard/CommandGrid';
 import HeroNode from './dashboard/HeroNode';
 import MetricNode from './dashboard/MetricNode';
@@ -15,7 +16,7 @@ interface Props {
 }
 
 export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab, lang }) => {
-  const language = lang || "English";
+  const { translateBatch, language } = useTranslation();
   
   const stats = [
     { label: 'AGENCY_HEALTH', val: '98.4%', icon: ShieldCheck, trend: '+0.2%', trendType: 'positive' as const },
@@ -23,6 +24,18 @@ export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab, l
     { label: 'CLINICAL_DRIFT', val: '-2.4%', icon: Activity, trend: 'SECURE', trendType: 'positive' as const },
     { label: 'FISCAL_DELTA', val: '$14,204.00', icon: TrendingUp, trend: 'RECLAIMED', trendType: 'positive' as const },
   ];
+
+  // Pre-fetch all static strings for this view
+  useEffect(() => {
+    const stringsToTranslate = [
+      ...stats.map(s => s.label),
+      ...stats.map(s => s.val),
+      ...stats.map(s => s.trend),
+      'GLOBAL_SIGNAL_LOG',
+      'REALTIME_INTERCEPT_ACTIVE'
+    ];
+    translateBatch(stringsToTranslate);
+  }, [language]);
 
   return (
     <div className="space-y-12 animate-in fade-in duration-700 h-full flex flex-col">
@@ -64,12 +77,12 @@ export const Dashboard: React.FC<Props> = ({ staffName, clients, setActiveTab, l
         <div className="bg-white/5 border border-white/10 rounded-[4rem] p-12 relative overflow-hidden flex-1 flex flex-col min-h-[400px] shadow-3xl">
           <div className="flex justify-between items-center mb-10 relative z-10">
              <h3 className="text-xl font-black italic uppercase tracking-tighter text-white">
-                <Translate target={language}>GLOBAL_SIGNAL_LOG</Translate>
+                <Translate>GLOBAL_SIGNAL_LOG</Translate>
              </h3>
              <div className="flex items-center gap-3">
                 <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                   <Translate target={language}>REALTIME_INTERCEPT_ACTIVE</Translate>
+                   <Translate>REALTIME_INTERCEPT_ACTIVE</Translate>
                 </span>
              </div>
           </div>

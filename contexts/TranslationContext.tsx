@@ -7,6 +7,7 @@ interface TranslationContextType {
   language: string;
   setLanguage: (lang: string) => void;
   t: (text: string) => string;
+  translateBatch: (strings: string[]) => Promise<void>;
   isTranslating: boolean;
 }
 
@@ -18,19 +19,14 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode, initialL
   const [isTranslating, setIsTranslating] = useState(false);
 
   const t = useCallback((text: string) => {
-    if (language.toLowerCase() === 'english') return text;
+    if (!text || language.toLowerCase() === 'english') return text;
     return dictionary[text] || text;
   }, [dictionary, language]);
 
-  // Clean dictionary on language shift to prevent term collision
-  useEffect(() => {
-    setDictionary({});
-  }, [language]);
-
-  const translateMany = useCallback(async (strings: string[]) => {
+  const translateBatch = useCallback(async (strings: string[]) => {
     if (language.toLowerCase() === 'english') return;
     
-    const missing = strings.filter(s => !dictionary[s]);
+    const missing = strings.filter(s => s && !dictionary[s]);
     if (missing.length === 0) return;
 
     setIsTranslating(true);
@@ -42,8 +38,13 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode, initialL
     }
   }, [dictionary, language]);
 
+  // Flush dictionary on language change to ensure fresh AI context
+  useEffect(() => {
+    setDictionary({});
+  }, [language]);
+
   return (
-    <TranslationContext.Provider value={{ language, setLanguage, t, isTranslating }}>
+    <TranslationContext.Provider value={{ language, setLanguage, t, translateBatch, isTranslating }}>
       {children}
     </TranslationContext.Provider>
   );

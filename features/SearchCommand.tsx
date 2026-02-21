@@ -13,7 +13,8 @@ interface Props {
 
 const SearchCommand: React.FC<Props> = ({ language, onSelectStaff, onSelectClient }) => {
   const [query, setQuery] = useState('');
-  const { translated: placeholderText } = useTranslate("Search by Personnel Name or Patient ID");
+  // Fix: useTranslate returns a string directly, not an object with a 'translated' property
+  const placeholderText = useTranslate("Search by Personnel Name or Patient ID");
 
   const results = useMemo(() => {
     if (query.length < 2) return { staff: [], clients: [] };

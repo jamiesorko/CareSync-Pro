@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Send, MessageCircle, AlertTriangle } from 'lucide-react';
 import Translate, { useTranslate } from '../../components/Translate';
@@ -11,7 +12,8 @@ interface Props {
 const ConcernsForm: React.FC<Props> = ({ language, onSent }) => {
   const [text, setText] = useState('');
   const [isTransmitting, setIsTransmitting] = useState(false);
-  const { translated: placeholderText } = useTranslate("Describe your concern in your own language...", language);
+  // Fix: useTranslate returns a string directly and only expects 1 argument
+  const placeholderText = useTranslate("Describe your concern in your own language...");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

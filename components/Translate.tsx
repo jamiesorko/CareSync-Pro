@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useTranslation } from '../contexts/TranslationContext';
 import { translationService } from '../services/translationService';
 
@@ -13,38 +12,38 @@ export const stringifyNode = (node: any): string => {
   return String(node);
 };
 
-// Fixed: Added useTranslate hook for programmatic translation which was missing in exports
-export const useTranslate = (source: string, target?: string) => {
-  const { language, t } = useTranslation();
-  const lang = target || language;
-  const [translated, setTranslated] = useState(source);
+/**
+ * Hook for programmatic localization (Attributes, Alerts, Prompts)
+ */
+export const useTranslate = (text: string) => {
+  const { language, t, translateBatch } = useTranslation();
+  const [translated, setTranslated] = useState(text);
 
   useEffect(() => {
-    if (!source || lang.toLowerCase() === 'english') {
-      setTranslated(source);
+    if (!text || language.toLowerCase() === 'english') {
+      setTranslated(text);
       return;
     }
 
-    const dictValue = t(source);
-    if (dictValue !== source) {
-      setTranslated(dictValue);
+    const val = t(text);
+    if (val !== text) {
+      setTranslated(val);
     } else {
-      translationService.translateSingle(source, lang).then(setTranslated);
+      // If missing from global dict, fetch specifically
+      translationService.translateSingle(text, language).then(setTranslated);
     }
-  }, [source, lang, t]);
+  }, [text, language, t]);
 
-  return { translated };
+  return translated;
 };
 
-export const Translate: React.FC<{ children?: React.ReactNode; target?: string }> = ({ children, target }) => {
+export const Translate: React.FC<{ children?: React.ReactNode; target?: string }> = ({ children }) => {
   const { language, t } = useTranslation();
-  // Fixed: Use provided target language or fallback to context language
-  const lang = target || language;
-  const source = stringifyNode(children).trim();
+  const source = useMemo(() => stringifyNode(children).trim(), [children]);
   const [localTranslation, setLocalTranslation] = useState(source);
 
   useEffect(() => {
-    if (!source || lang.toLowerCase() === 'english') {
+    if (!source || language.toLowerCase() === 'english') {
       setLocalTranslation(source);
       return;
     }
@@ -53,12 +52,11 @@ export const Translate: React.FC<{ children?: React.ReactNode; target?: string }
     if (dictValue !== source) {
       setLocalTranslation(dictValue);
     } else {
-      // If not in global dictionary yet, fetch it specifically
-      translationService.translateSingle(source, lang).then(setLocalTranslation);
+      translationService.translateSingle(source, language).then(setLocalTranslation);
     }
-  }, [source, lang, t]);
+  }, [source, language, t]);
 
-  return <span>{localTranslation}</span>;
+  return <>{localTranslation}</>;
 };
 
 export default Translate;
