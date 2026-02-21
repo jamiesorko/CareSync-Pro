@@ -1,19 +1,17 @@
-
 import React, { useState } from 'react';
 import { CareRole, AppTab, User } from './types';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Login from './features/Login';
 
-// Portals
+// Import optimized feature nodes
 import CEOPortal from './features/ceo/CEOPortal';
 import COOTerminal from './features/executive/COOTerminal';
 import RNPortal from './features/rn/RNPortal';
 import ProfessionalTerminal from './features/terminal/ProfessionalTerminal';
 import AccountingTerminal from './features/accounting/AccountingTerminal';
 import ClientPortal from './features/client/ClientPortal';
-import HSSPortal from './features/hss/HSSPortal';
-import HRPortal from './features/HRPortal';
+import HRPortal from './features/hr/HRPortal';
 import CoordinationHub from './features/CoordinationHub';
 import { Dashboard } from './features/Dashboard';
 
@@ -33,12 +31,11 @@ export default function App() {
     clients: MOCK_CLIENTS, 
     staff: MOCK_STAFF, 
     user, 
-    role: user.role, 
-    staffName: user.name,
     language 
   };
 
   const renderContent = () => {
+    // Priority 1: Direct Tab Overrides
     if (activeTab === AppTab.DASHBOARD) {
       return <Dashboard lang={language} staffName={user.name} clients={MOCK_CLIENTS} setActiveTab={setActiveTab} />;
     }
@@ -46,7 +43,7 @@ export default function App() {
     switch (activeTab) {
       case AppTab.FISCAL: 
       case AppTab.FINANCE:
-        return <AccountingTerminal {...baseProps} />;
+        return <AccountingTerminal language={language} staffName={user.name} clients={MOCK_CLIENTS} />;
       case AppTab.RESOURCE:
       case AppTab.HR_HUB:
         return <HRPortal {...baseProps} />;
@@ -59,24 +56,24 @@ export default function App() {
       case AppTab.COORDINATION:
       case AppTab.SCHEDULE:
         return <CoordinationHub language={language} />;
+      
+      // Priority 2: Role-based Default Portals
       default:
         switch (user.role) {
           case CareRole.CEO: return <CEOPortal {...baseProps} />;
-          case CareRole.COO: return <COOTerminal {...baseProps} />;
-          case CareRole.ACCOUNTANT: return <AccountingTerminal {...baseProps} />;
-          case CareRole.CLIENT: return <ClientPortal {...baseProps} />;
+          case CareRole.COO: return <COOTerminal {...baseProps} staffName={user.name} />;
           case CareRole.RN:
           case CareRole.RPN:
           case CareRole.PSW:
-            return <ProfessionalTerminal {...baseProps} />;
+            return <ProfessionalTerminal {...baseProps} role={user.role} staffName={user.name} />;
           default:
-            return <Dashboard {...baseProps} setActiveTab={setActiveTab} />;
+            return <Dashboard {...baseProps} staffName={user.name} setActiveTab={setActiveTab} />;
         }
     }
   };
 
   return (
-    <div className="fixed inset-0 flex h-full w-full bg-[#020617] text-slate-100 overflow-hidden font-sans">
+    <div className="fixed inset-0 flex h-full w-full bg-[#020617] text-slate-100 overflow-hidden font-sans selection:bg-indigo-500/30">
       <Sidebar 
         active={activeTab} 
         setActive={setActiveTab} 

@@ -1,2 +1,3 @@
 
-export { default, Translate, useTranslate, normalizeText } from './components/Translate';
+// Fixed: Aliased stringifyNode to normalizeText as components/Translate exports stringifyNode but not normalizeText.
+export { default, Translate, useTranslate, stringifyNode as normalizeText } from './components/Translate';

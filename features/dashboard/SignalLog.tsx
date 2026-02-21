@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Client } from '../../types';
 import { Translate } from '../../components/Translate';
@@ -41,7 +40,9 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
                      <Translate target={language}>{client.name}</Translate>
                   </p>
                   <div className="flex items-center gap-3">
-                    <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest shrink-0">{client.anonymizedId}</span>
+                    <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest shrink-0">
+                      <Translate target={language}>{client.anonymizedId}</Translate>
+                    </span>
                     <div className="w-1 h-1 bg-slate-800 rounded-full shrink-0"></div>
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">
                        <Translate target={language}>{client.sector}</Translate>
@@ -53,7 +54,7 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
             <td className="px-8 py-5">
               <div className="flex items-center gap-3">
                 <Clock size={14} className="text-indigo-500/40 shrink-0" />
-                <p className="text-[13px] font-black text-slate-300 font-mono whitespace-nowrap">
+                <p className="text-[13px] font-black text-slate-300 font-mono whitespace-nowrap leading-none">
                   <Translate target={language}>{client.time}</Translate>
                 </p>
               </div>
@@ -68,16 +69,16 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
               <div className="flex items-center gap-4">
                 <div className={`w-2.5 h-2.5 rounded-full relative shrink-0 ${
                   client.currentVisitStatus === 'COMPLETED' ? 'bg-indigo-500' :
-                  client.currentVisitStatus === 'IN_PROGRESS' 
+                  client.currentVisitStatus === 'IN_PROGRESS' || client.currentVisitStatus === 'ACTIVE'
                     ? 'bg-emerald-500 shadow-[0_0_12px_#10b981]' 
                     : 'bg-slate-700'
                 }`}>
-                  {client.currentVisitStatus === 'IN_PROGRESS' && (
+                  {(client.currentVisitStatus === 'IN_PROGRESS' || client.currentVisitStatus === 'ACTIVE') && (
                     <div className="absolute inset-0 bg-emerald-500 rounded-full animate-ping opacity-40"></div>
                   )}
                 </div>
                 <span className={`text-[11px] font-black uppercase tracking-[0.2em] whitespace-nowrap ${
-                  client.currentVisitStatus === 'IN_PROGRESS' ? 'text-emerald-400 italic' : 'text-slate-600'
+                  (client.currentVisitStatus === 'IN_PROGRESS' || client.currentVisitStatus === 'ACTIVE') ? 'text-emerald-400 italic' : 'text-slate-600'
                 }`}>
                   <Translate target={language}>
                     {client.currentVisitStatus || 'STANDBY'}
@@ -87,12 +88,10 @@ const SignalLog: React.FC<Props> = ({ clients, language }) => (
             </td>
             <td className="px-8 py-5 text-right">
               <div className="flex items-center gap-2 justify-end opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
-                  <button className="p-2.5 text-slate-500 hover:text-white hover:bg-white/5 rounded-xl transition-all">
-                    <Activity size={18} />
-                  </button>
-                  <button className="p-2.5 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all">
+                  <Activity size={18} className="text-slate-500" />
+                  <div className="p-2.5 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-500/20">
                     <ChevronRight size={18} />
-                  </button>
+                  </div>
               </div>
             </td>
           </tr>

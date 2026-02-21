@@ -23,11 +23,11 @@ const MetricNode: React.FC<Props> = ({ label, value, icon: Icon, trend, trendTyp
         <Translate target={language}>{trend}</Translate>
       </span>
     </div>
-    <div>
-      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">
+    <div className="space-y-1">
+      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest leading-none">
         <Translate target={language}>{label}</Translate>
       </p>
-      <h4 className="text-4xl font-black text-white italic tracking-tighter leading-none">
+      <h4 className="text-4xl font-black text-white italic tracking-tighter uppercase leading-none">
         <Translate target={language}>{value}</Translate>
       </h4>
     </div>
