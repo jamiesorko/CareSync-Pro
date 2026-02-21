@@ -31,7 +31,8 @@ const PSWVisitConsole: React.FC<Props> = ({ client, onClockOut, onAlert, languag
   };
 
   const triggerSignal = async (type: AlertType, promptTxt: string) => {
-    const localizedPrompt = await translationService.translate(promptTxt, language);
+    // Fixed: calling correct method translateSingle instead of non-existent translate
+    const localizedPrompt = await translationService.translateSingle(promptTxt, language);
     const detail = prompt(localizedPrompt);
     if (detail) {
       onAlert(type, detail);

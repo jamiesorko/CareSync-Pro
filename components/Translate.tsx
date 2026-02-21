@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { translationService } from '../services/translationService';
+
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from '../contexts/TranslationContext';
+import { translationService } from '../services/translationService';
 
 export const stringifyNode = (node: any): string => {
   if (node === null || node === undefined) return "";
@@ -12,47 +13,52 @@ export const stringifyNode = (node: any): string => {
   return String(node);
 };
 
-export const useTranslate = (text: any, target?: string) => {
-  const { language: contextLanguage } = useTranslation();
-  const language = target || contextLanguage;
-  const source = useMemo(() => stringifyNode(text).trim(), [text]);
+// Fixed: Added useTranslate hook for programmatic translation which was missing in exports
+export const useTranslate = (source: string, target?: string) => {
+  const { language, t } = useTranslation();
+  const lang = target || language;
   const [translated, setTranslated] = useState(source);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!source || !language || language.toLowerCase() === 'english') {
+    if (!source || lang.toLowerCase() === 'english') {
       setTranslated(source);
       return;
     }
 
-    const cacheKey = `v26_${language}_${source}`;
-    const cached = localStorage.getItem(cacheKey);
-    if (cached) {
-      setTranslated(cached);
-      return;
+    const dictValue = t(source);
+    if (dictValue !== source) {
+      setTranslated(dictValue);
+    } else {
+      translationService.translateSingle(source, lang).then(setTranslated);
     }
+  }, [source, lang, t]);
 
-    setLoading(true);
-    translationService.translate(source, language).then(res => {
-      localStorage.setItem(cacheKey, res);
-      setTranslated(res);
-      setLoading(false);
-    }).catch(() => {
-      setTranslated(source);
-      setLoading(false);
-    });
-  }, [source, language]);
-
-  return { translated, loading };
+  return { translated };
 };
 
 export const Translate: React.FC<{ children?: React.ReactNode; target?: string }> = ({ children, target }) => {
-  const { translated, loading } = useTranslate(children, target);
-  return (
-    <span className={`${loading ? 'opacity-40 animate-pulse' : 'transition-opacity duration-300'} inline-block`}>
-      {translated}
-    </span>
-  );
+  const { language, t } = useTranslation();
+  // Fixed: Use provided target language or fallback to context language
+  const lang = target || language;
+  const source = stringifyNode(children).trim();
+  const [localTranslation, setLocalTranslation] = useState(source);
+
+  useEffect(() => {
+    if (!source || lang.toLowerCase() === 'english') {
+      setLocalTranslation(source);
+      return;
+    }
+
+    const dictValue = t(source);
+    if (dictValue !== source) {
+      setLocalTranslation(dictValue);
+    } else {
+      // If not in global dictionary yet, fetch it specifically
+      translationService.translateSingle(source, lang).then(setLocalTranslation);
+    }
+  }, [source, lang, t]);
+
+  return <span>{localTranslation}</span>;
 };
 
 export default Translate;

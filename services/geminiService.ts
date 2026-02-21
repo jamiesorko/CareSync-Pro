@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Modality, GenerateContentResponse } from "@google/genai";
 import { translationService } from './translationService';
 
@@ -16,7 +17,8 @@ export class GeminiService {
    * Delegates to specialized translation service with retry logic.
    */
   async translate(text: string, targetLang: string): Promise<string> {
-    return translationService.translate(text, targetLang);
+    // Fixed: calling correct method translateSingle instead of non-existent translate
+    return translationService.translateSingle(text, targetLang);
   }
 
   async generateImage(prompt: string): Promise<string> {

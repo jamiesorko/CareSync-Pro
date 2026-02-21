@@ -4,7 +4,7 @@ import Translate from './Translate';
 import Logo from './Logo';
 import { 
   LayoutDashboard, Shield, Zap, Wallet, Database, 
-  Heart, Cpu, Radio, Power, Briefcase
+  Heart, Cpu, Radio, Power, Briefcase, Target
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -33,7 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, la
       <div className="p-8 border-b border-white/5 flex items-center gap-4">
         <Logo className="w-10 h-10" />
         <h1 className="text-xl font-black italic tracking-tighter text-white uppercase">
-          <Translate target={lang}>CARESYNC</Translate><span className="text-indigo-500"><Translate target={lang}>PRO</Translate></span>
+          <Translate>CARESYNC</Translate><span className="text-indigo-500"><Translate>PRO</Translate></span>
         </h1>
       </div>
       
@@ -49,20 +49,24 @@ const Sidebar: React.FC<SidebarProps> = ({ active, setActive, role, onLogout, la
             }`}
           >
             <item.icon size={18} className="shrink-0" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-left whitespace-nowrap overflow-hidden">
-              <Translate target={lang}>{item.label}</Translate>
+            <span className="text-[10px] font-black uppercase tracking-widest text-left">
+              <Translate>{item.label}</Translate>
             </span>
           </button>
         ))}
       </nav>
 
       <div className="p-4 border-t border-white/5">
+        <div className="px-5 py-4 mb-4 bg-white/5 rounded-2xl border border-white/5">
+            <p className="text-[8px] font-black text-slate-500 uppercase mb-1"><Translate>AUTHENTICATED_ROLE</Translate></p>
+            <p className="text-[10px] font-black text-white uppercase italic"><Translate>{role}</Translate></p>
+        </div>
         <button 
           onClick={onLogout}
           className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-rose-500 hover:bg-rose-500/10 transition-all font-black text-[10px] uppercase tracking-widest"
         >
           <Power size={18} className="shrink-0" />
-          <span className="whitespace-nowrap"><Translate target={lang}>Sign_Out</Translate></span>
+          <span><Translate>Sign_Out</Translate></span>
         </button>
       </div>
     </aside>
