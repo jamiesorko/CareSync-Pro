@@ -7,9 +7,12 @@ import Login from './features/Login';
 // Import optimized feature nodes
 import CEOPortal from './features/ceo/CEOPortal';
 import COOTerminal from './features/executive/COOTerminal';
+import RNPortal from './features/rn/RNPortal';
 import ProfessionalTerminal from './features/terminal/ProfessionalTerminal';
 import AccountingTerminal from './features/accounting/AccountingTerminal';
 import ClientPortal from './features/client/ClientPortal';
+import HRPortal from './features/hr/HRPortal';
+import CoordinationHub from './features/CoordinationHub';
 import { Dashboard } from './features/Dashboard';
 
 import { MOCK_CLIENTS, MOCK_STAFF } from './data/careData';
@@ -22,11 +25,6 @@ export default function App() {
 
   if (!user) {
     return <Login onLogin={setUser} />;
-  }
-
-  // Special handling for Client role to provide a focused, standalone experience
-  if (user.role === CareRole.CLIENT) {
-    return <ClientPortal user={user} clients={MOCK_CLIENTS} language={language} />;
   }
 
   const baseProps = { 
@@ -45,14 +43,25 @@ export default function App() {
     switch (activeTab) {
       case AppTab.FISCAL: 
       case AppTab.FINANCE:
-        return <AccountingTerminal language={language} staffName={user.name} clients={MOCK_CLIENTS} staff={MOCK_STAFF} />;
+        return <AccountingTerminal language={language} staffName={user.name} clients={MOCK_CLIENTS} />;
+      case AppTab.RESOURCE:
+      case AppTab.HR_HUB:
+        return <HRPortal {...baseProps} />;
+      case AppTab.CLINICAL:
+      case AppTab.CLINICAL_COMMAND:
+        return <RNPortal {...baseProps} />;
+      case AppTab.WELLNESS:
+        return <ClientPortal {...baseProps} />;
+      case AppTab.LOGISTICS:
+      case AppTab.COORDINATION:
+      case AppTab.SCHEDULE:
+        return <CoordinationHub language={language} />;
       
       // Priority 2: Role-based Default Portals
       default:
         switch (user.role) {
           case CareRole.CEO: return <CEOPortal {...baseProps} />;
           case CareRole.COO: return <COOTerminal {...baseProps} staffName={user.name} />;
-          case CareRole.ACCOUNTANT: return <AccountingTerminal language={language} staffName={user.name} clients={MOCK_CLIENTS} staff={MOCK_STAFF} />;
           case CareRole.RN:
           case CareRole.RPN:
           case CareRole.PSW:
